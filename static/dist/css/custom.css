@@ -1,0 +1,49 @@
+a:hover{text-decoration: none;color: #0066AA;}
+a{color: #0066AA;}
+
+.nomargin{
+    margin: 0;
+}
+.nopadding{
+    padding: 0;
+}
+
+.dikti-header .top-header{
+    padding: 8px 0;
+    background-color: #FDFDFD;
+    color: #0066AA;
+    border-bottom: 5px solid #0066AA;
+}
+.dikti-header .top-header .container img{
+    width: 36px;
+    margin-right: 10px;
+    display: table-cell;
+    vertical-align: middle;
+}
+.dikti-header .top-header .container a{
+    display: table;
+}
+.dikti-header .top-header h3.logo, .dikti-header .top-header h4.tagline, .dikti-agenda h3{
+    font-weight: 100;
+    display: table-cell;
+    vertical-align: middle;
+}
+.logo-mini img{
+    width: 36px;
+}
+.logo-lg img{
+    width: 36px;
+}
+.navbar-nav>.notifications-menu>.dropdown-menu>li .menu, .navbar-nav>.messages-menu>.dropdown-menu>li .menu, .navbar-nav>.tasks-menu>.dropdown-menu>li .menu a{
+    background-color: whitesmoke;
+}
+
+.skin-blue .sidebar-menu>li:hover>form{
+    cursor: pointer;
+    color: #fff;
+    background: #11245B;
+    border-color:#0066AA;
+}
+.skin-blue .sidebar-menu>li>form{
+    border-left:3px solid transparent;
+}

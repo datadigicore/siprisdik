@@ -1,0 +1,26 @@
+<aside class="main-sidebar">
+  <section class="sidebar">
+    <div class="user-panel">
+      <div class="pull-left image">
+        <img src="<?php echo $url_rewrite;?>static/dist/img/risetdikti.png" class="img-circle" alt="User Image">
+      </div>
+      <div class="pull-left info">
+        <p>Username</p>
+        <small>Administrator Web</small>
+      </div>
+    </div>
+    <ul class="sidebar-menu">
+      <li class="header">MENU NAVIGATION</li>
+      <li class="active"><a href="#"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+      <li class="hand">
+        <form method="POST" action="content.php" style="padding: 12px 5px 12px 15px;">
+          <input type="hidden" name="content" value="table">
+          <a onclick="$(this).closest('form').submit()">
+            <i class="fa fa-table" style="width:20px"></i> <span>Data RAB</span>
+          </a>
+        </form>
+<!--         <a href="tables.html"><i class="fa fa-table"></i> <span>Data RAB</span></a> -->
+      </li>
+    </ul>
+  </section>
+</aside>
