@@ -11,8 +11,8 @@
     </div>
     <ul class="sidebar-menu">
       <li class="header">MENU NAVIGATION</li>
-      <li class="active"><a href="#"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
-      <form method="POST" action="content.php" style="padding: 12px 5px 12px 15px;">
+      <li class="active"><a href="<?php echo $url_rewrite;?>content/home"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+      <form method="POST" action="<?php echo $url_rewrite;?>content/table" style="padding: 12px 5px 12px 15px;">
       <li class="hand" onclick="$(this).closest('form').submit()">
           <input type="hidden" name="content" value="table">
           <a><i class="fa fa-table" style="width:20px"></i> <span>Data RAB</span></a>

@@ -12,14 +12,19 @@ else {
     $utility->location_goto(".");
   }
   else{
+    include ('view/include/meta.php');
+    include ('view/include/header.php');
+    include ('view/include/sidebar.php');
     switch ($data[1]) {
-      case 'home':
-        include "view/content.php";
+      case 'table':
+        include ('view/content/table.php');
       break;
       default:
-        header('HTTP/1.1 404 Not Found');
+        include ('view/content/home.php');
       break;
     }
+    include ('view/include/footer.php');
+    include ('view/include/javascript.php');
   }
 }  
 ?>
