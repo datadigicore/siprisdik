@@ -12,14 +12,12 @@
     <ul class="sidebar-menu">
       <li class="header">MENU NAVIGATION</li>
       <li class="active"><a href="#"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
-      <li class="hand">
-        <form method="POST" action="content.php" style="padding: 12px 5px 12px 15px;">
+      <form method="POST" action="content.php" style="padding: 12px 5px 12px 15px;">
+      <li class="hand" onclick="$(this).closest('form').submit()">
           <input type="hidden" name="content" value="table">
-          <a onclick="$(this).closest('form').submit()">
-            <i class="fa fa-table" style="width:20px"></i> <span>Data RAB</span>
-          </a>
-        </form>
+          <a><i class="fa fa-table" style="width:20px"></i> <span>Data RAB</span></a>
       </li>
+      </form>
     </ul>
   </section>
 </aside>

@@ -38,12 +38,12 @@ a{color: #0066AA;}
     background-color: whitesmoke;
 }
 
-.skin-blue .sidebar-menu>li:hover>form{
+.skin-blue .sidebar-menu>form:hover{
     cursor: pointer;
     color: #fff;
     background: #11245B;
     border-color:#0066AA;
 }
-.skin-blue .sidebar-menu>li>form{
+.skin-blue .sidebar-menu>form{
     border-left:3px solid transparent;
 }
