@@ -19,7 +19,6 @@
             <i class="fa fa-table" style="width:20px"></i> <span>Data RAB</span>
           </a>
         </form>
-<!--         <a href="tables.html"><i class="fa fa-table"></i> <span>Data RAB</span></a> -->
       </li>
     </ul>
   </section>
