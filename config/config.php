@@ -16,7 +16,7 @@
   $domain         = "localhost";
   $url_rewrite    = "http://localhost/dikti_rkakl/";
   $REQUEST        = "dikti_rkakl/content";
-  $PROSES_REQUEST = "dikti_rkakl/proses";
+  $PROSES_REQUEST = "dikti_rkakl/process";
   $path           = "/srv/www/htdocs/dikti_rkakl/";
   $path_upload    = "/srv/www/htdocs/dikti_rkakl/static/uploads/";
 

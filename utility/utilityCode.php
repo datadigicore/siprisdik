@@ -28,11 +28,26 @@ class utilityCode extends config {
           }
      }
 
-     public function location_goto($lokasi) {
+     public function location_goto($lokasi,$message) {
           $alamat = $this->url_rewrite_class;
-          echo("<script language=\"javascript\">
-                                   window.location.href=\"$alamat/$lokasi\";
-                                    </script>");
+          if (isset($message)) {
+             echo("<script language='javascript'>
+                    var f = document.createElement('form');
+                    f.setAttribute('method','post');
+                    f.setAttribute('action','".$alamat."/".$lokasi."');
+                    var i = document.createElement('input');
+                    i.setAttribute('type','text');
+                    i.setAttribute('name','message');
+                    i.setAttribute('value','".$message."');
+                    f.appendChild(i);
+                    f.submit();
+                   </script>");
+          }
+          else{
+               echo("<script language=\"javascript\">
+                    window.location.href=\"$alamat/$lokasi\";
+                   </script>");
+          }
      }
 
      public function sha512($string) {

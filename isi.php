@@ -19,13 +19,13 @@ else {
     if ($_SESSION['level'] == 0) {
       switch ($data[1]) {
         case 'user':
-          include ('view/content/pengguna.php');
+          include ('view/content/admin-pengguna.php');
         break;
         case 'adduser':
-          include ('view/content/addpengguna.php');
+          include ('view/content/admin-addpengguna.php');
         break;
         default:
-          include ('view/content/pengguna.php');
+          include ('view/content/admin-pengguna.php');
         break;
       }
     }

@@ -3,18 +3,20 @@
 
   class modelPengguna extends mysql_db {
     public function insertPengguna($data) {
-      $nama       = $data['nama'];
+      $nama       = $data['name'];
       $username   = $data['username'];
       $password   = $data['password'];
       $email      = $data['email'];
-      $keterangan = $data['keterangan'];
+      $level      = $data['level'];
+      $status     = $data['status'];
 
-      $query       = "INSERT INTO pengguna SET
-        nama       = '$nama',
-        username   = '$username',
-        password   = '$password',
-        email      = '$email',
-        keterangan = '$keterangan'
+      $query      = "INSERT INTO pengguna SET
+        nama      = '$nama',
+        username  = '$username',
+        password  = '$password',
+        email     = '$email',
+        level     = '$level',
+        status    = '$status'
       ";
 
       $result = $this->query($query);

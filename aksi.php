@@ -9,10 +9,8 @@
   }
   else {
     switch ($data[1]) {
-      case 'pengguna':
-        if ($data[2] == "hpengguna") {
-          $hapuspengguna = $purifier->purify($data[3]);
-        }
+      case 'user':
+        $process = $data[2]; 
         include "./core/pengguna/proses_pengguna.php";
       break;
       case 'example':
