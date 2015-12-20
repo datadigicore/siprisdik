@@ -11,13 +11,19 @@
     </div>
     <ul class="sidebar-menu">
       <li class="header">MENU NAVIGATION</li>
-      <li class="active"><a href="<?php echo $url_rewrite;?>content/home"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
-      <form method="POST" action="<?php echo $url_rewrite;?>content/table">
-      <li class="hand" onclick="$(this).closest('form').submit()"  style="padding: 12px 5px 12px 15px;">
-          <input type="hidden" name="content" value="table">
-          <a><i class="fa fa-table" style="width:20px"></i> <span>Data RAB</span></a>
-      </li>
-      </form>
+      <?php if ($_SESSION['level'] == 0): ?>
+        <li class="active"><a href="<?php echo $url_rewrite;?>content/home"><i class="fa fa-group"></i> <span>Data Pengguna</span></a></li>
+      <?php endif ?>
+      <?php if ($_SESSION['level'] == 1): ?>
+        <li class="active"><a href="<?php echo $url_rewrite;?>content/home"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+        <li><a href="<?php echo $url_rewrite;?>content/table"><i class="fa fa-table"></i> <span>Data RAB</span></a></li>
+        <li><a href="<?php echo $url_rewrite;?>content/report"><i class="fa fa-dashboard"></i> <span>Laporan</span></a></li>
+      <?php endif ?>
+      <?php if ($_SESSION['level'] == 2): ?>
+        <li class="active"><a href="<?php echo $url_rewrite;?>content/home"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+        <li><a href="<?php echo $url_rewrite;?>content/table"><i class="fa fa-table"></i> <span>Data RAB</span></a></li>
+        <li><a href="<?php echo $url_rewrite;?>content/report"><i class="fa fa-dashboard"></i> <span>Laporan</span></a></li>
+      <?php endif ?>
     </ul>
   </section>
 </aside>
