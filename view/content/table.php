@@ -1,3 +1,9 @@
+<style type="text/css">
+  div.dataTables_wrapper {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+</style>
 <div class="content-wrapper">
   <section class="content-header">
     <h1>

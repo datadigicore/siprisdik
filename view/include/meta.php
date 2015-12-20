@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="<?php echo $url_rewrite;?>static/plugins/font-awesome/css/font-awesome.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="<?php echo $url_rewrite;?>static/plugins/ionicons/css/ionicons.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="<?php echo $url_rewrite;?>static/plugins/datatables/media/css/dataTables.bootstrap.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="<?php echo $url_rewrite;?>static/dist/css/style.min.css">
   <link rel="stylesheet" href="<?php echo $url_rewrite;?>static/dist/css/custom.css">

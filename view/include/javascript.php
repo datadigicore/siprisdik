@@ -8,9 +8,12 @@
   </script>
   <!-- Bootstrap 3.3.5 -->
   <script src="<?php echo $url_rewrite;?>static/bootstrap/js/bootstrap.min.js"></script>
+  <!-- DataTables -->
+  <script src="<?php echo $url_rewrite;?>static/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+  <script src="<?php echo $url_rewrite;?>static/plugins/datatables/media/js/dataTables.bootstrap.min.js"></script>
   <!-- Morris.js charts -->
   <script src="<?php echo $url_rewrite;?>static/dist/js/raphael-min.js"></script>
-  <script src="<?php echo $url_rewrite;?>static/plugins/morris/morris.min.js"></script>
+  <script src="<?php echo $url_rewrite;?>static/plugins/morris/morris.min.js"></script>  
   <!-- Sparkline -->
   <script src="<?php echo $url_rewrite;?>static/plugins/sparkline/jquery.sparkline.min.js"></script>
   <!-- jvectormap -->
@@ -31,8 +34,17 @@
   <script src="<?php echo $url_rewrite;?>static/plugins/fastclick/fastclick.min.js"></script>
   <!-- AdminLTE App -->
   <script src="<?php echo $url_rewrite;?>static/dist/js/app.min.js"></script>
-  <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-  <script src="<?php echo $url_rewrite;?>static/dist/js/pages/dashboard.js"></script>
+  <?php if ($data[1] == "home"): ?>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="<?php echo $url_rewrite;?>static/dist/js/pages/dashboard.js"></script>
+  <?php endif ?>
   <!-- AdminLTE for demo purposes -->
   <script src="<?php echo $url_rewrite;?>static/dist/js/demo.js"></script>
+  <script>
+    $(function () {
+      $('#table').DataTable({
+        "scrollX": true
+      });
+    });
+  </script>
 </html>
