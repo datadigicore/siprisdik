@@ -13,6 +13,7 @@ else {
   }
   else {
     include ('view/include/meta.php');
+    include ('view/include/javascript.php');
     include ('view/include/header.php');
     include ('view/include/sidebar.php');
     if ($_SESSION['level'] == 0) {
@@ -39,7 +40,6 @@ else {
       }
     }
     include ('view/include/footer.php');
-    include ('view/include/javascript.php');
   }
 }  
 ?>

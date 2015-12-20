@@ -105,3 +105,10 @@
     </div>
   </section>
 </div>
+<script>
+  $(function () {
+    $('#table').DataTable({
+      "scrollX": true
+    });
+  });
+</script>

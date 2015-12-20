@@ -10,12 +10,14 @@ require_once __DIR__ ."/../library/security/HTMLPurifier.auto.php";
 
 // ============== TAMBAHKAN MODEL DISINI ==============
 require_once __DIR__ .'/../model/modelPengguna.php';
+require_once __DIR__ .'/../model/modelLogin.php';
 // ====================================================
 
 // ============== TAMBAHKAN CLASS DISINI ==============
 $config      = new config();
 $db          = new mysql_db();
 $utility     = new utilityCode();
+$login       = new modelLogin();
 $pengguna    = new modelPengguna();
 // ====================================================
 

@@ -40,11 +40,3 @@
   <?php endif ?>
   <!-- AdminLTE for demo purposes -->
   <script src="<?php echo $url_rewrite;?>static/dist/js/demo.js"></script>
-  <script>
-    $(function () {
-      $('#table').DataTable({
-        "scrollX": true
-      });
-    });
-  </script>
-</html>

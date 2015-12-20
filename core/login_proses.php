@@ -10,7 +10,7 @@
     $data  = array('username' => $username,
       'password' => $password
     );
-    $result = $pengguna->readPengguna($data);
+    $result = $login->readUser($data);
     if ($result == true) {
       $_SESSION['id']       = $result->id;
       $_SESSION['nama']     = $result->nama;

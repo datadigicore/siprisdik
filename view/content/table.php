@@ -20,7 +20,7 @@
         <div class="box">
           <div class="box-header">
             <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya</h3>
-            <a href="" class="btn btn-primary btn-sm pull-right">Tambah RAB</a>
+            <a href="" class="btn btn-success btn-sm pull-right">Tambah RAB</a>
           </div>
           <div class="box-body">
             <table id="table" class="display nowrap table table-bordered table-striped" cellspacing="0" width="100%">
@@ -105,3 +105,10 @@
     </div>
   </section>
 </div>
+<script>
+  $(function () {
+    $('#table').DataTable({
+      "scrollX": true
+    });
+  });
+</script>
