@@ -1,6 +1,6 @@
 RewriteEngine on
 
  Rewriterule ^content/?      \/dikti_rkakl/isi.php
- Rewriterule ^proses/?      \/dikti_rkakl/aksi.php
+ Rewriterule ^process/?      \/dikti_rkakl/aksi.php
  Rewriterule ^login/?      \/dikti_rkakl/core/login_proses.php
  Rewriterule ^signout/?      \/dikti_rkakl/logout.php

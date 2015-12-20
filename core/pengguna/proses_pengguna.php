@@ -22,7 +22,7 @@ $data_pengguna = array(
 switch ($process) {
   case 'add':
     $pengguna->insertPengguna($data_pengguna);
-    $utility->location_goto("content/adduser","Success! Data berhasil ditambahkan");
+    $utility->load("content/adduser","Success! Data berhasil ditambahkan");
   break;
   case 'edt':
     $pengguna->updatePengguna($data_pengguna);

@@ -5,6 +5,7 @@
   
   $username = $purifier->purify($_POST['username']);
   $password = $purifier->purify($_POST['password']);
+  $password = $utility->sha512($password);
 
   if (!isset($_SESSION['username'])) {
     $data  = array('username' => $username,

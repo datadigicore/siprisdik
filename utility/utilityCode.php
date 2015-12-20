@@ -28,7 +28,13 @@ class utilityCode extends config {
           }
      }
 
-     public function location_goto($lokasi,$message) {
+     public function location_goto($lokasi) {
+          $alamat = $this->url_rewrite_class;
+          echo("<script language=\"javascript\">
+               window.location.href=\"$alamat/$lokasi\";
+              </script>");
+     }
+     public function load($lokasi, $message) {
           $alamat = $this->url_rewrite_class;
           if (isset($message)) {
              echo("<script language='javascript'>
@@ -44,9 +50,7 @@ class utilityCode extends config {
                    </script>");
           }
           else{
-               echo("<script language=\"javascript\">
-                    window.location.href=\"$alamat/$lokasi\";
-                   </script>");
+               location_goto($lokasi);
           }
      }
 
