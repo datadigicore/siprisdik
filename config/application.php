@@ -5,6 +5,7 @@ ob_clean();
 require_once __DIR__ .'/config.php';
 require_once __DIR__ .'/../utility/database/mysql_db.php';
 require_once __DIR__ .'/../utility/utilityCode.php';
+require_once __DIR__ .'/../utility/datatable.php';
 require_once __DIR__ ."/../library/security/HTMLPurifier.auto.php";
 // ====================================================
 
@@ -17,6 +18,7 @@ require_once __DIR__ .'/../model/modelLogin.php';
 $config      = new config();
 $db          = new mysql_db();
 $utility     = new utilityCode();
+$datatable   = new datatable();
 $login       = new modelLogin();
 $pengguna    = new modelPengguna();
 // ====================================================

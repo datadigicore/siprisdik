@@ -20,6 +20,34 @@ $data_pengguna = array(
 );
 
 switch ($process) {
+  case 'table':
+    $table = "pengguna";
+    $key   = "id";
+    $column = array(
+      array( 'db' => 'id',      'dt' => 0 ),
+      array( 'db' => 'nama',  'dt' => 1 ),
+      array( 'db' => 'status',  'dt' => 2, 'formatter' => function($d,$row){ 
+        if($d==1){
+          return '<button id="aktif" class="btn btn-flat btn-success btn-xs"><i class="fa fa-check-circle"></i> Aktif</button>';
+        }
+        else{
+          return '<button id="nonaktif" class="btn btn-flat btn-danger btn-xs"><i class="fa fa-warning"></i> Belum Aktif</button>';
+        }
+      }),
+      array( 'db' => 'username',  'dt' => 3 ),
+      array( 'db' => 'email',   'dt' => 4 ),
+      array( 'db' => 'level', 'dt' => 5, 'formatter' => function($d,$row){ 
+        if($d==1){
+          return 'Bendahara';
+        }
+        else{
+          return 'BPP';
+        }
+      })
+    );
+    $where = "level != 0";
+    $datatable->get_table($table, $key, $column, $where);
+  break;
   case 'add':
     $pengguna->insertPengguna($data_pengguna);
     $utility->load("content/adduser","Success! Data berhasil ditambahkan");

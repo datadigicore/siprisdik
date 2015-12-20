@@ -34,6 +34,14 @@
       or die("Koneksi Database gagal");
       return $this->link_db;
     }
-    
+    public function sql_details() {
+      $this->sql_details = array(
+        'user' => $this->db_user,
+        'pass' => $this->db_pass,
+        'db'   => $this->database,
+        'host' => $this->db_host
+    );
+    return $this->sql_details;
+    }
   }
 ?>
