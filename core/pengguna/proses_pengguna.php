@@ -68,6 +68,9 @@ switch ($process) {
     $pengguna->deletePengguna($hapuspengguna);
     $utility->location_goto("content/setting");
   break;
+  case 'kuitansi':
+    $report->kuitansi($data_pengguna);
+  break;
   default:
     $utility->location_goto(".");
   break;

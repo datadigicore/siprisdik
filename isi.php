@@ -24,6 +24,9 @@ else {
         case 'adduser':
           include ('view/content/admin-addpengguna.php');
         break;
+        case 'report':
+          include ('view/content/report.php');
+        break;
         default:
           include ('view/content/admin-pengguna.php');
         break;

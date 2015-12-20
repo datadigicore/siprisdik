@@ -12,6 +12,7 @@ require_once __DIR__ ."/../library/security/HTMLPurifier.auto.php";
 // ============== TAMBAHKAN MODEL DISINI ==============
 require_once __DIR__ .'/../model/modelPengguna.php';
 require_once __DIR__ .'/../model/modelLogin.php';
+require_once __DIR__ .'/../model/modelReport.php';
 // ====================================================
 
 // ============== TAMBAHKAN CLASS DISINI ==============
@@ -21,6 +22,7 @@ $utility     = new utilityCode();
 $datatable   = new datatable();
 $login       = new modelLogin();
 $pengguna    = new modelPengguna();
+$report 	 = new modelReport();
 // ====================================================
 
 $config_security = HTMLPurifier_Config::createDefault();
