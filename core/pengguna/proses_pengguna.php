@@ -48,6 +48,14 @@ switch ($process) {
     $where = "level != 0";
     $datatable->get_table($table, $key, $column, $where);
   break;
+  case 'activate':
+    $id = $_POST['key'];
+    $pengguna->activatePengguna($id);
+  break;
+  case 'deactivate':
+    $id = $_POST['key'];
+    $pengguna->deactivatePengguna($id);
+  break;
   case 'add':
     $pengguna->insertPengguna($data_pengguna);
     $utility->load("content/adduser","Success! Data berhasil ditambahkan");

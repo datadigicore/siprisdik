@@ -34,7 +34,7 @@ class utilityCode extends config {
                window.location.href=\"$alamat/$lokasi\";
               </script>");
      }
-     public function load($lokasi, $message) {
+     public function load($lokasi, $alert, $message) {
           $alamat = $this->url_rewrite_class;
           if (isset($message)) {
              echo("<script language='javascript'>
@@ -43,9 +43,14 @@ class utilityCode extends config {
                     f.setAttribute('action','".$alamat."/".$lokasi."');
                     var i = document.createElement('input');
                     i.setAttribute('type','text');
-                    i.setAttribute('name','message');
-                    i.setAttribute('value','".$message."');
+                    i.setAttribute('name','alert');
+                    i.setAttribute('value','".$alert."');
+                    var j = document.createElement('input');
+                    j.setAttribute('type','text');
+                    j.setAttribute('name','message');
+                    j.setAttribute('value','".$message."');
                     f.appendChild(i);
+                    f.appendChild(j);
                     f.submit();
                    </script>");
           }

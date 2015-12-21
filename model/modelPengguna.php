@@ -49,7 +49,16 @@
       $result = $this->query($query);
       return $result;
     }
-
+    public function activatePengguna($id) {
+      $query = "update pengguna set status = 1 where id='$id'";
+      $result = $this->query($query);
+      return $result;
+    }
+    public function deactivatePengguna($id) {
+      $query = "update pengguna set status = 0 where id='$id'";
+      $result = $this->query($query);
+      return $result;
+    }
     public function readPengguna($data) {
       $where  = $this->where($data);
       $query  = "SELECT * from pengguna $where";

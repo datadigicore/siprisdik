@@ -69,5 +69,35 @@
       ],
       "order": [[ 0, "desc" ]]
     });
+    $(document).on("click", "#nonaktif", function (){
+      var tr = $(this).closest('tr');
+      tabrow = table.row( tr );
+      row_id = tabrow.data()[0];
+      $.ajax({
+        type: "post",
+        url : "<?php echo $url_rewrite;?>process/user/activate",
+        data: {key:row_id},
+        success: function(data)
+        {
+          table.draw();
+        }
+      });
+      return false;
+    });
+    $(document).on("click", "#aktif", function (){
+      var tr = $(this).closest('tr');
+      tabrow = table.row( tr );
+      row_id = tabrow.data()[0];
+      $.ajax({
+        type: "post",
+        url : "<?php echo $url_rewrite;?>process/user/deactivate",
+        data: {key:row_id},
+        success: function(data)
+        {
+          table.draw();
+        }
+      });
+      return false;
+    });
   });
 </script>
