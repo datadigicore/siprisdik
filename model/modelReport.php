@@ -201,8 +201,31 @@
         
     }
 
-    public function perjalanan_dinas($data) {
+    public function rekap_keg($data) {
       ob_start();
+      echo '<table>
+              <tr>
+                <th rowspan="2"></th>
+                <th rowspan="2"></th>
+                <th rowspan="2"></th>
+                <th rowspan="2"></th>
+                <th colspan="3"></th>
+                <th colspan="3"></th>
+                <th rowspan="2"></th>
+                <th rowspan="2"></th>
+                <th colspan="2"></th>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+          </table>';
       $html = ob_get_contents(); 
       $this->create_pdf("Rinc_perjalanan_dinas","A4",$html);
       
