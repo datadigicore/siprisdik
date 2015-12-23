@@ -22,17 +22,8 @@ $data_pengguna = array(
 switch ($process) {
   case 'table':
   break;
-  case 'add':
+  case 'kuitansi':
     $report->kuitansi($data_pengguna);
-    
-  break;
-  case 'edt':
-    $pengguna->updatePengguna($data_pengguna);
-    
-  break;
-  case 'del':
-    $pengguna->deletePengguna($hapuspengguna);
-    
   break;
   default:
     

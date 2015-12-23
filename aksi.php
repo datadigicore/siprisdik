@@ -13,6 +13,10 @@
         $process = $data[2]; 
         include "./core/pengguna/proses_pengguna.php";
       break;
+      case 'report':
+        $process = $data[2]; 
+        include "./core/pengguna/proses_report.php";
+      break;
       case 'example':
         if ($data[2] == "hapusexample") {
           $hapusdata = $purifier->purify($data[3]);

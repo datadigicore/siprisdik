@@ -11,34 +11,223 @@
         $mpdf->Output($name.".pdf" ,'I');
         exit;
     }
+    public function kuitansi($data){
+      ob_start();
+      echo '<p align="center" style="font-weight:bold; text-decoration: underline;">SURAT PERNYATAAN TANGGUNG JAWAB BELANJA</p>';
+      echo '<p align="center" style="font-weight:bold;">Nomor : </p>';
+      echo '<table style="width: 100%; font-size:0.65em;"  border="0">               
+              <tr>
+                <td align="left" width="1%">1.</td>
+                <td align="left" width="1%"></td>
+                <td align="left" width="30%">Kode Satuan Kerja</td>
+                <td align="left" width="2%">:</td>
+                <td align="left" >a</td>
+              </tr>
+              <tr>
+                <td align="left" width="1%">2.</td>
+                <td align="left" width="1%"></td>
+                <td align="left" width="30%">Nama Satuan Kerja</td>
+                <td align="left" width="2%">:</td>
+                <td align="left" >a</td>
+              </tr>
+              <tr>
+                <td align="left" width="1%">3.</td>
+                <td align="left" width="1%"></td>
+                <td align="left" width="30%">Tanggal/No.DIPA</td>
+                <td align="left" width="2%">:</td>
+                <td align="left" >a</td>
+              </tr>
+              <tr>
+                <td align="left" width="1%">4.</td>
+                <td align="left" width="1%"></td>
+                <td align="left" width="30%">Klasifikasi Mata Anggaran</td>
+                <td align="left" width="2%">:</td>
+                <td align="left" >a</td>
+              </tr>
+            </table>';
+      echo '<p align="center" style="font-weight:bold;">______________________________________________________________________________________________________</p>';
+      echo '<p align="left" style="font-size:0.65em;">Yang    bertandatangan  di    bawah  ini    atas  nama    Kuasa    Pengguna    Anggaran    Satuan Kerja Direktorat Jendral Kelembagaan Ilmu Pengetahuan Teknologi Dan Pendidikan Tinggi menyatakan  bahwa  saya  bertanggungjawab  secara  formal  dan  material  atas 
+            segala  pengeluaran  yang  telah  dibayar  lunas  oleh  Bendahara  Pengeluaran  kepada  yang  berhak menerima  serta  kebenaran  perhitungan  dan  setoran  pajak  yang  telah  dipungut  atas  pembayaran tersebut dengan perincian sebagai berikut:</p>';
+      
+      echo '<table border="1" style="width: 100%; font-size:0.6em; border-collapse: collapse;">
+            <tr>
+              <th rowspan="2">No.</th>
+              <th rowspan="2">Akun</th>
+              <th rowspan="2">Penerima</th>
+              <th rowspan="2">Uraian</th>
+              <th colspan="2">Bukti</th>
+              <th rowspan="2">Jumlah</th>
+              <th  colspan="2">Pajak yang dipungut Bendahara Pengeluaran</th>
+            </tr>
+            <tr>
+              <th>Tanggal</th>
+              <th>Nomor</th>
+              <th width="10%">PPN</th>
+              <th width="10%">PPH</th>
+            </tr>
+          </table>';
+          echo '<p align="left" style="font-size:0.65em;">Bukti-bukti  pengeluaran  anggaran  dan asli  setoran  pajak  (SSP/BPN)  tersebut  di  atas disimpan  oleh Pengguna  Anggaran/Kuasa  Pengguna  Anggaran  untuk  kelengkapan  administrasi  dan  pemeriksaan aparat pengawasan fungsional.</p>';
+          echo '<p align="left" style="font-size:0.65em;">Demikian surat pernyataan ini dibuat dengan sebenarnya</p>';
+          echo '<table style="text-align: justify; width: 98%; font-size:0.6em;" >
+                  <tr>
 
-    public function header_dikti(){
-      echo '<table style=" text-align: left; border-collapse: collapse; margin-left: auto; margin-right: auto; width: 100%; font-weight:bold; font-size:0.8em; font-family:serif; "  align="center">
-                <tr>
-                    <td rowspan="4" width="7%"><img src="<../../static/dist/img/risetdikti.png" height="8%" /></td>
-                    <td style= "vertical-align: bottom;">KEMENTERIAN RISET, TEKNOLOGI, DAN PENDIDIKAN TINGGI</td>
+                  <td></td>
+                  <td  width="10%"></td>
+                  <td>Jakarta, .............................................</td>
+                  </tr>
+
+                  <tr>
                     
-                </tr>
-                <tr>
-                    <td style= "vertical-align: bottom;">DIREKTORAT JENDERAL KELEMBAGAAN </td>
-                </tr>
-                <tr>
-                    <td style= "vertical-align: bottom;">ILMU PENGETAHUAN TEKNOLOGI DAN PENDIDIKAN TINGGI</td>
-                </tr>                       
-                </table>
-                <tr>
-                    <td style= "vertical-align: top;">________________________________________________________________________________________________________________________________</td>
-                </tr> 
-                
-                '; 
+                    <td>Direktorat Jendral Kelembagaan Iptek dan Dikti</td>
+                    <td></td>
+                    <td>Bendahara Pengeluaran</td>
+                  </tr>
+                  <tr>
+                    
+                    <td>Pejabat Pembuat Komitmen</td>
+                    <td></td>
+                  </tr>    
+                  <tr>
+                    <td><br></br><br></br><br></br><br></br></td>
+                    
+                    <td></td>
+                  </tr>
+                  <tr>
+                    
+                    <td style="font-weight:bold">Sudarsono</td>
+                    <td></td>
+                    <td style="font-weight:bold">Sugiharto</td>
+                  </tr>
+                  <tr>
+                    
+                    <td>NIP. 19640920 198403 1 001</td>
+                    <td></td>
+                    <td>NIP. 19750721 200912 1 001</td>
+                  </tr>  
+                  </table>';
+      $html = ob_get_contents();
+      $this->create_pdf("SPTB","A4",$html);
+
 
     }
 
-    public function kuitansi($data){
+    // DAFTAR RINCIAN PERMINTAAN PENGELUARAN
+    public function kuitansi6($data){
+      ob_start();
+      echo '<table border="1" style="width: 100%; font-size:0.9em; border-collapse: collapse;">
+              <tr>
+                <th colspan="7">DAFTAR RINCIAN<br></th>
+              </tr>
+              <tr>
+                <th colspan="7">PERMINTAAN PENGELUARAN<br></td>
+              </tr>
+              <tr>
+                <td >1. Kementrian / Lembaga<br></td>
+                <td colspan="2">:</td>
+                <td colspan="2">Jenis SPP<br></td>
+                <td>6. Nomor<br></td>
+                <td>:</td>
+              </tr>
+              <tr>
+                <td>2. Unit Organisasi<br></td>
+                <td colspan="2">:<br></td>
+                <td colspan="2"></td>
+                <td>7. KODE KEGIATAN<br></td>
+                <td>:</td>
+              </tr>
+              <tr>
+                <td>3. Lokasi<br></td>
+                <td colspan="2">:<br></td>
+                <td colspan="2">PAGU SUB KEGIATAN<br></td>
+                <td>8. KODE MAK<br></td>
+                <td>:</td>
+              </tr>
+              <tr>
+                <td>4. Kantor / Satuan Kerja<br></td>
+                <td colspan="2">:<br></td>
+                <td colspan="2" rowspan="2"></td>
+                <td>9. TAHUN ANGGARAN<br></td>
+                <td>:</td>
+              </tr>
+              <tr>
+                <td>5. Alamat<br></td>
+                <td colspan="2">:</td>
+                <td>10. Bulan<br></td>
+                <td>:</td>
+              </tr>
+              <tr>
+                <td  rowspan="2">No. Urut</td>
+                <td  colspan="2">BUKTI PENGELUARAN</td>
+                <td  rowspan="2">NPWP</td>
+                <td  rowspan="2">MAK</td>
+                <td  rowspan="2">NO BUKTI</td>
+                <td  rowspan="2">JUMLAH KOTOR YANG DIBAYARKAN (Rp)</td>
+              </tr>
+              <tr>
+                <td >TANGGAL PEMB</td>
+                <td >PENERIMA</td>
+              </tr>
+              <tr>
+                <td>Jumlah Lampiran :</td>
+                <td colspan="5">Jumlah SPP ini (Rp)</td>
+                <td colspan="5"></td>
+
+              </tr>
+              <tr>
+                <td>7</td>
+                <td colspan="5">SPM/SPP Sebelum SPP ini atas beban sub kegiatan ini</td>
+                <td colspan="5"></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td colspan="5">Jumlah s.d. SPP ini atas beban sub kegiatan ini</td>
+                <td colspan="5"></td>
+              </tr>
+            </table>';
+      echo '<table style="text-align: justify; width: 100%; font-size:84%;"  >
+            <tr>
+
+            <td></td>
+            <td width="30%"></td>
+            <td>Jakarta, .............................................</td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td width="60%"></td>
+              <td>Direktorat Kelembagaan dan Kerjasama</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td width="60%"></td>
+              <td>Pejabat Pembuat Komitmen</td>
+            </tr>    
+            <tr>
+              <td><br></br><br></br><br></br><br></br></td>
+              <td width="60%"></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td width="60%"></td>
+              <td style="font-weight:bold">Sudarsono</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td width="60%"></td>
+              <td>NIP. 19640920 198403 1 001</td>
+            </tr>  
+            </table>';
+            $html = ob_get_contents();
+            $this->create_pdf("Rincian_Permintaan_Pengeluaran","A4",$html);
+
+    }
+    //Kuitansi Honorarium
+    public function kuitansi5($data){
       ob_start();  
-      $this->header_dikti();
+      require_once __DIR__ . "/../utility/report/header_dikti.php";
       echo '  <p align="center">KUINTANSI</p>
-                    <table style="width: 100%; font-size:80%;"  border="0">               
+                    <table style="width: 100%; font-size:80%; border-collapse: collapse;"  border="0">               
                     <tr>
                         <td align="left">Sudah Terima Dari </td>
                         <td align="left" style="font-weight:bold">: Kuasa Pengguna Anggaran Direktorat Jenderal Kelembagaan IPTEK dan DIKTI</td>
@@ -51,7 +240,7 @@
                         <td align="left">Uang Sebesar</td>
                         <td align="left">: </td>
                     </tr>                
-          <tr>
+                    <tr>
                         <td align="left">Untuk Pembayaran</td>
                         <td align="left">: </td>
                     </tr>                
@@ -89,15 +278,15 @@
               </table>';
 
       $html = ob_get_contents();
-      $this->header_dikti();
       $this->create_pdf("SPPD","A4",$html);
 
     }
 
-    public function kuitansi4($data){
+    //SPPD SURAT PERINTAH PERJALANAN DINAS
+    public function kuitansix($data){
       ob_start();  
-      $this->header_dikti();
-      echo '  <table style="width: 50%; font-size:80%;"  border="0">               
+      require_once __DIR__ . "/../utility/report/header_dikti.php";
+      echo '  <table style="width: 50%; font-size:80%;"   border="0">               
                     <tr>
                         <td align="left">Lembar Ke</td>
                         <td align="left">: </td>
@@ -203,7 +392,7 @@
                 </table>
                 <p style="font-size:0.8em">*) Coret yang tidak perlu</p>';
         echo '
-              <table style="text-align: left; width: 100%; font-size:84%; font-family:serif"  >
+              <table style="text-align: left; width: 100%; font-size:84%; border-collapse: collapse; font-family:serif"  >
 
               <tr>
                 <td width="60%"></td>
@@ -224,7 +413,7 @@
 
     public function kuitansi3($data){
       ob_start();  
-      $this->header_dikti();
+      
       echo '<p align="center" style="font-weight:bold; font-size:1.0em">RINCIAN BIAYA PERJALANAN DINAS</p>';
       echo '  <table style="width: 40%; font-size:80%; font-weight:bold;"  border="0">     
         <tr>
@@ -345,7 +534,7 @@
 
     public function kuitansi2($data) {
         ob_start();  
-        $this->header_dikti();
+        require_once __DIR__ . "/../utility/report/header_dikti.php";
         echo ' <p align="center" style="font-weight:bold; font-size:1.2em">KUINTANSI</p>
                     <table style="width: 50%; font-size:80%;"  border="0">               
                     <tr>
