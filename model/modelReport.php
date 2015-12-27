@@ -11,7 +11,7 @@
         $mpdf->Output($name.".pdf" ,'I');
         exit;
     }
-    public function kuitansi($data){
+    public function SPTB($data){
       ob_start();
       echo '<p align="center" style="font-weight:bold; text-decoration: underline;">SURAT PERNYATAAN TANGGUNG JAWAB BELANJA</p>';
       echo '<p align="center" style="font-weight:bold;">Nomor : </p>';
@@ -112,7 +112,7 @@
     }
 
     // DAFTAR RINCIAN PERMINTAAN PENGELUARAN
-    public function kuitansi6($data){
+    public function Rincian_Permintaan_Pengeluaran($data){
       ob_start();
       echo '<table border="1" style="width: 100%; font-size:0.9em; border-collapse: collapse;">
               <tr>
@@ -223,7 +223,7 @@
 
     }
     //Kuitansi Honorarium
-    public function kuitansi5($data){
+    public function Kuitansi_Honorarium($data){
       ob_start();  
       require_once __DIR__ . "/../utility/report/header_dikti.php";
       echo '  <p align="center">KUINTANSI</p>
@@ -283,7 +283,7 @@
     }
 
     //SPPD SURAT PERINTAH PERJALANAN DINAS
-    public function kuitansix($data){
+    public function SPPD($data){
       ob_start();  
       require_once __DIR__ . "/../utility/report/header_dikti.php";
       echo '  <table style="width: 50%; font-size:80%;"   border="0">               
@@ -411,7 +411,8 @@
 
     }
 
-    public function kuitansi3($data){
+    //Rincian Biaya Perjalanan Dinas
+    public function Rincian_Biaya_PD($data){
       ob_start();  
       
       echo '<p align="center" style="font-weight:bold; font-size:1.0em">RINCIAN BIAYA PERJALANAN DINAS</p>';
@@ -532,7 +533,8 @@
 
     }
 
-    public function kuitansi2($data) {
+    //Kuitansi Honor Dan Uang Saku
+    public function Kuitansi_Honor_Uang_Saku($data) {
         ob_start();  
         require_once __DIR__ . "/../utility/report/header_dikti.php";
         echo ' <p align="center" style="font-weight:bold; font-size:1.2em">KUINTANSI</p>

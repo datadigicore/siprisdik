@@ -22,8 +22,22 @@ $data_pengguna = array(
 switch ($process) {
   case 'table':
   break;
-  case 'kuitansi':
-    $report->kuitansi($data_pengguna);
+  case 'Rincian_Biaya_PD':
+    $report->rincian_biaya_PD($data_pengguna);
+  break;
+  case 'Kuitansi_Honor_Uang_Saku':
+    $report->Kuitansi_Honor_Uang_Saku($data_pengguna);
+  break;
+  case 'Kuitansi_Honorarium':
+    $report->Kuitansi_Honorarium($data_pengguna);
+  break;
+  case 'SPPD':
+    $report->SPPD($data_pengguna);
+  break;
+  case 'SPTB':
+    $report->SPTB($data_pengguna);
+  break;case 'Rincian_Permintaan_Pengeluaran':
+    $report->Rincian_Permintaan_Pengeluaran($data_pengguna);
   break;
   default:
     
