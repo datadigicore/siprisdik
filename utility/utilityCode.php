@@ -34,6 +34,7 @@ class utilityCode extends config {
                window.location.href=\"$alamat/$lokasi\";
               </script>");
      }
+
      public function load($lokasi, $alert, $message) {
           $alamat = $this->url_rewrite_class;
           if (isset($message)) {
@@ -55,7 +56,7 @@ class utilityCode extends config {
                    </script>");
           }
           else{
-               location_goto($lokasi);
+               $this->location_goto($lokasi);
           }
      }
 

@@ -14,18 +14,18 @@
   $secretkey      = "sipdikti";
   $TITLE          = "Sistem Informasi Pelaporan";
   $domain         = "localhost";
-  $url_rewrite    = "http://localhost/dikti_rkakl/";
-  $REQUEST        = "dikti_rkakl/content";
-  $PROSES_REQUEST = "dikti_rkakl/process";
-  $path           = "/srv/www/htdocs/dikti_rkakl/";
-  $path_upload    = "/srv/www/htdocs/dikti_rkakl/static/uploads/";
+  $url_rewrite    = "http://localhost/siprisdik/";
+  $REQUEST        = "siprisdik/content";
+  $PROSES_REQUEST = "siprisdik/process";
+  $path           = "/srv/www/htdocs/siprisdik/";
+  $path_upload    = "/srv/www/htdocs/siprisdik/static/uploads/";
 
   class config {
     public $db_host              = "localhost";
     public $db_user              = "root";
     public $db_pass              = "";
     public $database             = "rkakl";
-    public $url_rewrite_class    = "http://localhost/dikti_rkakl";
+    public $url_rewrite_class    = "http://localhost/siprisdik";
     public $session_expired_time = "7200";
     public $hashing_number       = "d1kt1w4rr10r5";
     public $debug                = 1;
