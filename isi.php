@@ -19,16 +19,28 @@ else {
     if ($_SESSION['level'] == 0) {
       switch ($data[1]) {
         case 'user':
-          include ('view/content/admin-pengguna.php');
+          include ('view/content/pengguna.php');
         break;
         case 'adduser':
-          include ('view/content/admin-addpengguna.php');
+          include ('view/content/pengguna-add.php');
+        break;
+        case 'rkakl':
+          include ('view/content/rkakl.php');
+        break;
+        case 'insertrkakl':
+          include ('view/content/rkakl-insert.php');
+        break;
+        case 'rab':
+          include ('view/content/rab.php');
+        break;
+        case 'insertrab':
+          include ('view/content/rab-insert.php');
         break;
         case 'report':
           include ('view/content/report.php');
         break;
         default:
-          include ('view/content/admin-pengguna.php');
+          include ('view/content/home.php');
         break;
       }
     }

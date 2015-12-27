@@ -321,3 +321,4 @@
     </div>
   </section>
 </div>
+<script src="<?php echo $url_rewrite;?>static/dist/js/pages/dashboard.js"></script>

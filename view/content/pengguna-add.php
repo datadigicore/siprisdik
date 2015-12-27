@@ -25,26 +25,28 @@
                 </div>
               <?php endif ?>
               <div class="form-group">
-                <input type="text" class="form-control" name="name" placeholder="Nama Lengkap">
+                <input type="text" class="form-control" name="name" placeholder="Nama Lengkap" required>
               </div>
               <div class="form-group">
-                <input type="email" class="form-control" name="email" placeholder="Email">
+                <input type="email" class="form-control" name="email" placeholder="Email" required>
               </div>
               <div class="form-group">
-                <input type="text" class="form-control" name="username" placeholder="Username">
+                <input type="text" class="form-control" name="username" placeholder="Username" required>
               </div>
               <div class="form-group">
-                <input type="password" class="form-control" name="password" placeholder="Password">
+                <input type="password" class="form-control" name="password" placeholder="Password" required>
               </div>
               <div class="form-group">
-                <select class="form-control" name="level">
+                <select class="form-control" name="level" required>
                   <option value="" disabled selected>-- Pilih Kewenangan --</option>
-                  <option value="1">Bendahara</option>
-                  <option value="2">BPP</option>
+                  <option value="1">BP Bendahara Pengeluaran</option>
+                  <option value="2">OP-BP Bendahara Pengeluaran</option>
+                  <option value="3">BPP Bendahara Pengeluaran Pembantu</option>
+                  <option value="4">OP-BPP Bendahara Pengeluaran Pembantu</option>
                 </select>
               </div>
               <div class="form-group">
-                <select class="form-control" name="status">
+                <select class="form-control" name="status" required>
                   <option value="" disabled selected>-- Pilih Status Akun --</option>
                   <option value="1">Aktif</option>
                   <option value="0">Tidak Aktif</option>
