@@ -1,9 +1,3 @@
-<style type="text/css">
-  div.dataTables_wrapper {
-    max-width: 100%;
-    margin: 0 auto;
-  }
-</style>
 <div class="content-wrapper">
   <section class="content-header">
     <h1>
@@ -19,7 +13,7 @@
       <div class="col-xs-12">
         <div class="box">
           <div class="box-header with-border">
-            <h3 class="box-title" style="margin-top:6px;">Table Pengguna</h3>
+            <h3 class="box-title" style="margin-top:6px;">Tabel Pengguna</h3>
             <a href="<?php echo $url_rewrite;?>content/adduser" class="btn btn-flat btn-success btn-sm pull-right">Tambah Pengguna</a>
           </div>
           <div class="box-body">
@@ -52,34 +46,33 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <input type="text" class="form-control" name="name" placeholder="Nama Lengkap" required>
+          <input type="text" class="form-control" id="name" name="name" placeholder="Nama Lengkap" required>
         </div>
         <div class="form-group">
-          <input type="email" class="form-control" name="email" placeholder="Email" required>
-        </div>
-        <div class="form-group">
-          <div class="checkbox icheck" style="position:absolute;margin:6px;right:16px;background:white;">
-            <input type="checkbox">  
-          </div>
-          <input type="text" class="form-control" name="username" placeholder="Username" readonly>
+          <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
         </div>
         <div class="form-group">
           <div class="checkbox icheck" style="position:absolute;margin:6px;right:16px;background:white;">
-            <input type="checkbox">
+            <input type="checkbox" id="checkuser">  
           </div>
-          <input type="password" class="form-control" name="password" placeholder="Password" readonly>
+          <input type="text" class="form-control" id="username" name="username" placeholder="Username" readonly>
         </div>
         <div class="form-group">
-          <select class="form-control" name="level" required>
+          <div class="checkbox icheck" style="position:absolute;margin:6px;right:16px;background:white;">
+            <input type="checkbox" id="checkpass">
+          </div>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Password" readonly>
+        </div>
+        <div class="form-group">
+          <select class="form-control" id="level" name="level" required>
             <option value="" disabled selected>-- Pilih Kewenangan --</option>
-            <option value="1">BP Bendahara Pengeluaran</option>
-            <option value="2">OP-BP Bendahara Pengeluaran</option>
-            <option value="3">BPP Bendahara Pengeluaran Pembantu</option>
-            <option value="4">OP-BPP Bendahara Pengeluaran Pembantu</option>
+            <option value="1">Operator Bendahara Pengeluaran</option>
+            <option value="2">Bendahara Pengeluaran Pembantu</option>
+            <option value="3">Operator Bendahara Pengeluaran Pembantu</option>
           </select>
         </div>
         <div class="form-group">
-          <select class="form-control" name="status" required>
+          <select class="form-control" id="status" name="status" required>
             <option value="" disabled selected>-- Pilih Status Akun --</option>
             <option value="1">Aktif</option>
             <option value="0">Tidak Aktif</option>
@@ -95,6 +88,9 @@
 <script>
   $(function () {
     var table = $(".table").DataTable({
+      "oLanguage": {
+        "sInfoFiltered": ""
+      },
       "processing": true,
       "serverSide": true,
       "scrollX": true,
@@ -116,7 +112,11 @@
                               '<a style="margin:0 2px;" id="btn-edt" href="#editModal" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Edit</a>'+
                               '<a style="margin:0 2px;" id="btn-del" href="#modal-deleteProject" class="open-deleteProject btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-trash-o"></i> Hapus</a>'+
                             '</div>',
-         "targets": 6 }
+         "targets": 6 },
+         {"targets" : 7,
+         "visible" : false},
+         {"targets" : 8,
+         "visible" : false}
       ],
       "order": [[ 0, "desc" ]]
     });
@@ -149,6 +149,15 @@
         }
       });
       return false;
+    });
+    $(document).on("click", "#btn-edt", function (){
+      var tr = $(this).closest('tr');
+      tabrow = table.row( tr );
+      $("#name").val(tabrow.data()[1]);
+      $("#username").val(tabrow.data()[3]);
+      $("#email").val(tabrow.data()[4]);
+      $("#level").val(tabrow.data()[7]);
+      $("#status").val(tabrow.data()[8]);
     });
   });
 </script>

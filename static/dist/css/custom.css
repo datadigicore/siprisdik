@@ -47,3 +47,7 @@ a{color: #0066AA;}
 .skin-blue .sidebar-menu>form{
     border-left:3px solid transparent;
 }
+
+.table>tbody>tr>td { 
+    vertical-align: middle;
+}

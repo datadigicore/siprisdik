@@ -11,7 +11,7 @@ $level      = $purifier->purify($_POST[level]);
 $status     = $purifier->purify($_POST[status]);
 
 $data_pengguna = array(
-  "nama"       => $nama,
+  "name"       => $name,
   "username"   => $username,
   "password"   => $password,
   "email"      => $email,
@@ -38,12 +38,17 @@ switch ($process) {
       array( 'db' => 'email',   'dt' => 4 ),
       array( 'db' => 'level', 'dt' => 5, 'formatter' => function($d,$row){ 
         if($d==1){
-          return 'Bendahara';
+          return 'Operator Bendahara Pengeluaran';
         }
-        else{
-          return 'BPP';
+        else if ($d==2){
+          return 'Bendahara Pengeluaran Pembantu';
         }
-      })
+        else if ($d==3){
+          return 'Operator BPP';
+        }
+      }),
+      array( 'db' => 'level',   'dt' => 7 ),
+      array( 'db' => 'status',  'dt' => 8 )
     );
     $where = "level != 0";
     $datatable->get_table($table, $key, $column, $where);
@@ -58,7 +63,7 @@ switch ($process) {
   break;
   case 'add':
     $pengguna->insertPengguna($data_pengguna);
-    $utility->load("content/adduser","Success! Data berhasil ditambahkan");
+    $utility->load("content/adduser","success","Data berhasil ditambahkan");
   break;
   case 'edt':
     $pengguna->updatePengguna($data_pengguna);

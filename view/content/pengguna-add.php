@@ -39,10 +39,9 @@
               <div class="form-group">
                 <select class="form-control" name="level" required>
                   <option value="" disabled selected>-- Pilih Kewenangan --</option>
-                  <option value="1">BP Bendahara Pengeluaran</option>
-                  <option value="2">OP-BP Bendahara Pengeluaran</option>
-                  <option value="3">BPP Bendahara Pengeluaran Pembantu</option>
-                  <option value="4">OP-BPP Bendahara Pengeluaran Pembantu</option>
+                  <option value="1">Operator Bendahara Pengeluaran</option>
+                  <option value="2">Bendahara Pengeluaran Pembantu</option>
+                  <option value="3">Operator Bendahara Pengeluaran Pembantu</option>
                 </select>
               </div>
               <div class="form-group">

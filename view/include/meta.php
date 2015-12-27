@@ -31,6 +31,13 @@
   <!-- bootstrap wysihtml5 - text editor -->
   <link rel="stylesheet" href="<?php echo $url_rewrite;?>static/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
   <link rel="stylesheet" href="<?php echo $url_rewrite;?>static/dist/css/skins/skin-blue.min.css">
+  <style type="text/css">
+    div.dataTables_wrapper {
+      max-width: 100%;
+      margin: 0 auto;
+      vertical-align: middle;
+    }
+  </style>
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
