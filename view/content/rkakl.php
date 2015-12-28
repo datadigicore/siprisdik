@@ -14,7 +14,7 @@
         <div class="box">
           <div class="box-header">
             <h3 class="box-title" style="margin-top:6px;">Table Rencana Kerja dan Anggaran Kementerian/Lembaga</h3>
-            <a href="" class="btn btn-flat btn-success btn-sm pull-right">Import RKAKL</a>
+            <a href="#importModal" data-toggle="modal" class="btn btn-flat btn-success btn-sm pull-right">Import RKAKL</a>
           </div>
           <div class="box-body">
             <table id="table" class="display nowrap table table-bordered table-striped" cellspacing="0" width="100%">
@@ -99,8 +99,49 @@
     </div>
   </section>
 </div>
+<div class="modal fade" id="importModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="<?php echo $url_rewrite;?>process/rkakl/import" method="POST" enctype="multipart/form-data">
+        <div class="modal-header" style="background-color:#111F3F !important; color:white;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" style="color:white">×</span></button>
+          <h4 class="modal-title">Import Data RKAKL</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <input type="text" class="form-control" id="tglimport" name="tglimport" placeholder="Tanggal Import" readonly>
+          </div>
+          <div class="form-group">
+            <div class="checkbox icheck" style="position:absolute;margin:6px;right:16px;background:white;">
+              <input type="checkbox" id="checkrev">  
+            </div>
+            <input type="text" class="form-control" id="revisi" name="revisi" placeholder="Revisi RKAKL" readonly>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan" required>
+          </div>
+          <div class="form-group">
+            <input type="file" id="fileimport" name="fileimport" style="display:none;">
+            <a id="selectbtn" class="btn btn-flat btn-primary" style="position:absolute;right:16px;">Select File</a>
+            <input type="text" id="filename" class="form-control" placeholder="Pilih File .xls / .xlsx">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-flat btn-success">Import Data</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <script>
   $(function () {
+    $('#selectbtn').click(function () {
+      $("#fileimport").trigger('click');
+    });
+    $("#fileimport").change(function(){
+      $("#filename").attr('value', $(this).val().replace(/C:\\fakepath\\/i, ''));
+    });
     $('#table').DataTable({
       "scrollX": true
     });

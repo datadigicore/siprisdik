@@ -17,6 +17,10 @@
         $process = $data[2]; 
         include "./core/pengguna/proses_report.php";
       break;
+      case 'rkakl':
+        $process = $data[2]; 
+        include "./core/rkakl/proses_rkakl.php";
+      break;
       case 'example':
         if ($data[2] == "hapusexample") {
           $hapusdata = $purifier->purify($data[3]);
