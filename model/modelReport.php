@@ -224,7 +224,8 @@
     }
     //Kuitansi Honorarium
     public function Kuitansi_Honorarium($data){
-      ob_start();  
+      ob_start(); 
+      echo '  <p align="right">No...............................................</p>'; 
       require_once __DIR__ . "/../utility/report/header_dikti.php";
       echo '  <p align="center">KUINTANSI</p>
                     <table style="width: 100%; font-size:80%; border-collapse: collapse;"  border="0">               
@@ -248,32 +249,37 @@
                     </table>';
     
         echo '<br></br>
-              <table style="text-align: center; width: 100%; font-size:84%; font-family:serif"  >
+              <table style="text-align: left; width: 100%; font-size:84%; font-family:serif"  >
           
               <tr>
-                <td style="text-align: center;"> Mengetahui/Setuju dibayar  </td>
-                <td style="text-align: center;">Lunas Dibayar</td>
-                <td style="text-align: center;">........................ 2016</td>
+                <td> Mengetahui/Setuju dibayar  </td>
+                <td>Lunas Dibayar</td>
+                <td>........................ 2016</td>
               </tr>              
               <tr>
-                <td style="text-align: center;">Pejabat Pembuat Komitmen,</td>
-                <td style="text-align center;">Tgl...........................</td>
-                <td style="text-align: center;">Penerima</td>
+                <td>Pejabat Pembuat Komitmen,</td>
+                <td>Tgl...........................</td>
+                <td>Penerima</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>Bendahara Pengeluaran Pembantu,</td>
+                <td></td>
               </tr>
               <tr>
                 <td><br></br> <br></br> <br></br></td>
                 <td><br></br> <br></br> <br></br></td>
               </tr>
               <tr>
-                <td style="text-align: center;">'.'..................................'.'</td>
-                <td style="text-align: center;">'.'..................................'.'</td>
-                <td style="text-align: center;">'.'(..................................)'.'</td>
+                <td>'.'..................................'.'</td>
+                <td>'.'..................................'.'</td>
+                <td>'.'(..................................)'.'</td>
               </tr>              
 
               <tr>
-                <td style="text-align: center;">NIP'.'..........................'.'</td>
-                <td style="text-align: center;">NIP'." ".'..........................'.'</td>
-                <td style="text-align: center;"></td>
+                <td>NIP'.'..........................'.'</td>
+                <td>NIP'." ".'..........................'.'</td>
+                <td></td>
               </tr>
               </table>';
 
@@ -414,7 +420,7 @@
     //Rincian Biaya Perjalanan Dinas
     public function Rincian_Biaya_PD($data){
       ob_start();  
-      
+      require_once __DIR__ . "/../utility/report/header_dikti.php";
       echo '<p align="center" style="font-weight:bold; font-size:1.0em">RINCIAN BIAYA PERJALANAN DINAS</p>';
       echo '  <table style="width: 40%; font-size:80%; font-weight:bold;"  border="0">     
         <tr>
@@ -535,7 +541,8 @@
 
     //Kuitansi Honor Dan Uang Saku
     public function Kuitansi_Honor_Uang_Saku($data) {
-        ob_start();  
+        ob_start();
+        echo '  <p align="right">No...............................................</p>';  
         require_once __DIR__ . "/../utility/report/header_dikti.php";
         echo ' <p align="center" style="font-weight:bold; font-size:1.2em">KUINTANSI</p>
                     <table style="width: 50%; font-size:80%;"  border="0">               
@@ -591,7 +598,7 @@
 
                 echo '<table style=" text-align: left; border-collapse: collapse; margin-left: auto; margin-right: auto; width: 100%;  font-size:0.8em; font-family:serif; "  align="center">
                 <tr>
-                    <td rowspan="4" width="7%"><img src="<../../static/dist/img/dirjenpajak.png" height="8%" /></td>
+                    <td rowspan="4" width="13%"><img src="<../../static/dist/img/dirjenpajak.png" height="8%" /></td>
                     <td style= "vertical-align: bottom;">KEMENTERIAN KEUANGAN REPUBLIK INDONESIA</td>
                     
                 </tr>
@@ -607,48 +614,48 @@
                 
 
                 </table>';
-        echo '  <table style="width: 50%; font-size:80%;"  border="0">               
+        echo '  <table style="width: 100%; font-size:80%;"  border="0">               
                     <tr>
-                        <td align="left">Nama Wajib Pajak </td>
+                        <td align="left" width="17%">Nama Wajib Pajak </td>
                         <td align="left">: </td>
                     </tr> 
                     <tr>
-                        <td align="left">NPWP</td>
+                        <td align="left" width="17%">NPWP</td>
                         <td align="left">:</td>
                     </tr> 
                     <tr>
-                        <td align="left">Alamat</td>
+                        <td align="left" width="17%">Alamat</td>
                         <td align="left">: </td>
                     </tr>                             
 
                   </table>';
         echo '<br></br>
-              <table style="text-align: center; width: 100%; font-size:84%; font-family:serif"  >
+              <table style="text-align: left; width: 100%; font-size:84%; font-family:serif"  >
           
               <tr>
-                <td style="text-align: center;"> Penghasilan  </td>
-                <td style="text-align: center;">Jumlah</td>
-                <td style="text-align: center;">Tarif</td>
-                <td style="text-align: center;">Pph yang dipotong</td>
+                <td > Penghasilan </td>
+                <td >Jumlah</td>
+                <td >Tarif</td>
+                <td >Pph yang dipotong</td>
               </tr>              
               <tr>
-                <td style="text-align: center;">1. Honorarium</td>
+                <td >1. Honorarium</td>
                 <td style="text-align center;">Rp.................</td>
-                <td style="text-align: center;">................... %</td>
-                <td style="text-align: center;">Rp................... </td>
+                <td >................... %</td>
+                <td >Rp................... </td>
               </tr>
 
               <tr>
-                <td style="text-align: center;">2. Imbalan Lainnya</td>
+                <td >2. Imbalan Lainnya</td>
                 <td style="text-align center;">Rp.................</td>
-                <td style="text-align: center;">................... %</td>
-                <td style="text-align: center;">Rp................... </td>
+                <td >................... %</td>
+                <td >Rp................... </td>
               </tr>
               <tr>
-                <td style="text-align: center;"></td>
+                <td ></td>
                 <td style="text-align center;"></td>
-                <td style="text-align: center;">JUMLAH</td>
-                <td style="text-align: center;">Rp................... </td>
+                <td >JUMLAH</td>
+                <td >Rp................... </td>
               </tr>
               <tr>
                 <td style="text-align: center;"></td>
