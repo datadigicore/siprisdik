@@ -20,78 +20,15 @@
             <table id="table" class="display nowrap table table-bordered table-striped" cellspacing="0" width="100%">
               <thead style="background-color:#11245B;color:white;">
                 <tr>
-                  <th>No</th>
-                  <th>Nama</th>
-                  <th>Pajak</th>
-                  <th>Golongan</th>
-                  <th>Jabatan dlm Tugas</th>
-                  <th>Honor Output</th>
-                  <th>Honor Profesi</th>
-                  <th>Uang Saku</th>
-                  <th>Trans. Lokal</th>
-                  <th>Uang Harian</th>
-                  <th>Harga Tiket</th>
-                  <th>Biaya Akomodasi</th>
+                  <th>id</th>
+                  <th>Tanggal Import</th>
+                  <th>Nama File Import</th>
+                  <th>Keterangan</th>
+                  <th>Tahun RKAKL</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Agus Indarjo</td>
-                  <td>15</td>
-                  <td>II</td>
-                  <td>Narasumber</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Purwanto Subroto</td>
-                  <td>15</td>
-                  <td>II</td>
-                  <td>Pakar</td>
-                  <td></td>
-                  <td>6.108.480</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>25.760.000</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>Vivi Indra Amelia</td>
-                  <td>15</td>
-                  <td>II</td>
-                  <td>Pelaksana</td>
-                  <td></td>
-                  <td>6.094.340</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>26.630.000</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>Maryke Alelo</td>
-                  <td>15</td>
-                  <td>IV</td>
-                  <td>Tim</td>
-                  <td></td>
-                  <td>6.094.340</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>25.760.000</td>
-                  <td></td>
-                </tr>
-              </tbody>
             </table>
           </div>
         </div>        
@@ -110,21 +47,15 @@
         </div>
         <div class="modal-body">
           <div class="form-group">
-            <input type="text" class="form-control" id="tglimport" name="tglimport" placeholder="Tanggal Import" readonly>
+            <input type="text" class="form-control" id="tglimport" name="tglimport" placeholder="Tanggal Import" value="<?php echo 'Tanggal : '.(date("d-m-Y"));?>" readonly>
           </div>
           <div class="form-group">
-            <div class="checkbox icheck" style="position:absolute;margin:6px;right:16px;background:white;">
-              <input type="checkbox" id="checkrev">  
-            </div>
-            <input type="text" class="form-control" id="revisi" name="revisi" placeholder="Revisi RKAKL" readonly>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan" required>
+            <textarea rows="5" type="text" class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan" style="resize:none;" required></textarea>
           </div>
           <div class="form-group">
             <input type="file" id="fileimport" name="fileimport" style="display:none;">
             <a id="selectbtn" class="btn btn-flat btn-primary" style="position:absolute;right:16px;">Select File</a>
-            <input type="text" id="filename" class="form-control" placeholder="Pilih File .xls / .xlsx">
+            <input type="text" id="filename" class="form-control" placeholder="Pilih File .xls / .xlsx" readonly>
           </div>
         </div>
         <div class="modal-footer">
@@ -142,8 +73,34 @@
     $("#fileimport").change(function(){
       $("#filename").attr('value', $(this).val().replace(/C:\\fakepath\\/i, ''));
     });
-    $('#table').DataTable({
-      "scrollX": true
+    var table = $(".table").DataTable({
+      "oLanguage": {
+        "sInfoFiltered": ""
+      },
+      "processing": true,
+      "serverSide": true,
+      "scrollX": true,
+      "ajax": {
+        "url": "<?php echo $url_rewrite;?>process/rkakl/table",
+        "type": "POST"
+      },
+      "columnDefs" : [
+        {"targets" : 0,
+         "visible" : false},
+        {"targets" : 1},
+        {"targets" : 2},
+        {"targets" : 3},
+        {"targets" : 4},
+        {"targets" : 5},
+        {"orderable": false,
+         "data": null,
+         "defaultContent":  '<div class="text-center">'+
+                              '<a style="margin:0 2px;" id="btn-edt" href="#editModal" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Edit</a>'+
+                              '<a style="margin:0 2px;" id="btn-del" href="#modal-deleteProject" class="open-deleteProject btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-trash-o"></i> Hapus</a>'+
+                            '</div>',
+         "targets": 6 }
+      ],
+      "order": [[ 0, "desc" ]]
     });
   });
 </script>

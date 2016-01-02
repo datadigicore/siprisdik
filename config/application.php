@@ -13,6 +13,7 @@ require_once __DIR__ ."/../library/security/HTMLPurifier.auto.php";
 require_once __DIR__ .'/../model/modelPengguna.php';
 require_once __DIR__ .'/../model/modelLogin.php';
 require_once __DIR__ .'/../model/modelReport.php';
+require_once __DIR__ .'/../model/modelRkakl.php';
 // ====================================================
 
 // ============== TAMBAHKAN CLASS DISINI ==============
@@ -22,7 +23,8 @@ $utility     = new utilityCode();
 $datatable   = new datatable();
 $login       = new modelLogin();
 $pengguna    = new modelPengguna();
-$report 	 = new modelReport();
+$report      = new modelReport();
+$rkakl 	     = new modelRkakl();
 // ====================================================
 
 $config_security = HTMLPurifier_Config::createDefault();

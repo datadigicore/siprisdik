@@ -40,8 +40,8 @@
         'pass' => $this->db_pass,
         'db'   => $this->database,
         'host' => $this->db_host
-    );
-    return $this->sql_details;
+      );
+      return $this->sql_details;
     }
   }
 ?>
