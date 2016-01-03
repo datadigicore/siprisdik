@@ -34,9 +34,6 @@ switch ($process) {
               "keterangan" => $purifier->purify($_POST['keterangan']),
               "tahun"      => $purifier->purify($_POST['thang'])
             );
-            if ($thang == date("Y")+1 && $revisi == 'true') {
-              $data_insert["status"] = 0;
-            }
             if ($thang == date("Y")+1) {
               $data_insert["status"] = 2;
             }
