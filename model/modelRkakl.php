@@ -3,29 +3,34 @@
 
   class modelRkakl extends mysql_db {
     public function insertRkakl($data) {
-      $nama       = $data['name'];
-      $username   = $data['username'];
-      $password   = $data['password'];
-      $email      = $data['email'];
-      $level      = $data['level'];
-      $status     = $data['status'];
-
-      $query      = "INSERT INTO pengguna SET
-        nama      = '$nama',
-        username  = '$username',
-        password  = '$password',
-        email     = '$email',
-        level     = '$level',
-        status    = '$status'
+      $tanggal    = $data['tanggal'];
+      $filename   = $data['filename'];
+      $filesave   = $data['filesave'];
+      $keterangan = $data['keterangan'];
+      $tahun      = $data['tahun'];
+      $query      = "UPDATE rkakl_view SET
+        status    = '0'
       ";
+      $result = $this->query($query);
+      $query      = "INSERT INTO rkakl_view SET
+        tanggal   = '$tanggal',
+        filename  = '$filename',
+        filesave  = '$filesave',
+        keterangan= '$keterangan',
+        tahun     = '$tahun'
+      ";
+      $result = $this->query($query);
+      return $result;
+    }
 
+    public function clearRkakl() {
+      $query      = "TRUNCATE TABLE rkakl_full";
       $result = $this->query($query);
       return $result;
     }
 
     public function importRkakl($data) {
-      $arrayCount = count($data[1]);
-      echo $arrayCount;
+      $arrayCount = count($data);
       $string = "INSERT INTO rkakl_full (THANG,KDJENDOK,KDSATKER,KDDEPT,KDUNIT,KDPROGRAM,KDGIAT,NMGIAT,KDOUTPUT,NMOUTPUT,KDSOUTPUT,NMSOUTPUT,KDKMPNEN,NMKMPNEN,KDSKMPNEN,NMSKMPNEN,KDAKUN,NMAKUN,KDKPPN,KDBEBAN,KDJNSBAN,KDCTARIK,REGISTER,CARAHITUNG,HEADER1,HEADER2,KDHEADER,NOITEM,NMITEM,VOL1,SAT1,VOL2,SAT2,VOL3,SAT3,VOL4,SAT4,VOLKEG,SATKEG,HARGASAT,JUMLAH,JUMLAH2,PAGUPHLN,PAGURMP,PAGURKP,KDBLOKIR,BLOKIRPHLN,BLOKIRRMP,BLOKIRRKP,RPHBLOKIR,KDCOPY,KDABT,KDSBU,VOLSBK,VOLRKAKL,BLNKONTRAK,NOKONTRAK,TGKONTRAK,NILKONTRAK,JANUARI,PEBRUARI,MARET,APRIL,MEI,JUNI,JULI,AGUSTUS,SEPTEMBER,OKTOBER,NOPEMBER,DESEMBER,JMLTUNDA,KDLUNCURAN,JMLABT,NOREV,KDUBAH,KURS,INDEXKPJM,KDIB) VALUES ";
       for ($i=2; $i < $arrayCount; $i++) { 
         $THANG       = trim($data[$i]["A"]);
@@ -110,7 +115,6 @@
         $string .= "('".$THANG."','".$KDJENDOK."','".$KDSATKER."','".$KDDEPT."','".$KDUNIT."','".$KDPROGRAM."','".$KDGIAT."','".$NMGIAT."','".$KDOUTPUT."','".$NMOUTPUT."','".$KDSOUTPUT."','".$NMSOUTPUT."','".$KDKMPNEN."','".$NMKMPNEN."','".$KDSKMPNEN."','".$NMSKMPNEN."','".$KDAKUN."','".$NMAKUN."','".$KDKPPN."','".$KDBEBAN."','".$KDJNSBAN."','".$KDCTARIK."','".$REGISTER."','".$CARAHITUNG."','".$HEADER1."','".$HEADER2."','".$KDHEADER."','".$NOITEM."','".$NMITEM."','".$VOL1."','".$SAT1."','".$VOL2."','".$SAT2."','".$VOL3."','".$SAT3."','".$VOL4."','".$SAT4."','".$VOLKEG."','".$SATKEG."','".$HARGASAT."','".$JUMLAH."','".$JUMLAH2."','".$PAGUPHLN."','".$PAGURMP."','".$PAGURKP."','".$KDBLOKIR."','".$BLOKIRPHLN."','".$BLOKIRRMP."','".$BLOKIRRKP."','".$RPHBLOKIR."','".$KDCOPY."','".$KDABT."','".$KDSBU."','".$VOLSBK."','".$VOLRKAKL."','".$BLNKONTRAK."','".$NOKONTRAK."','".$TGKONTRAK."','".$NILKONTRAK."','".$JANUARI."','".$PEBRUARI."','".$MARET."','".$APRIL."','".$MEI."','".$JUNI."','".$JULI."','".$AGUSTUS."','".$SEPTEMBER."','".$OKTOBER."','".$NOPEMBER."','".$DESEMBER."','".$JMLTUNDA."','".$KDLUNCURAN."','".$JMLABT."','".$NOREV."','".$KDUBAH."','".$KURS."','".$INDEXKPJM."','".$KDIB."'),";
       }
       $query = substr($string,0,-1);
-      echo $query;
       $result = $this->query($query);
       return $result;
     }
