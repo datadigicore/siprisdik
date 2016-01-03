@@ -8,8 +8,10 @@
       $filesave   = $data['filesave'];
       $keterangan = $data['keterangan'];
       $tahun      = $data['tahun'];
+      $status     = $data['status'];
       $query      = "UPDATE rkakl_view SET
-        status    = '0'
+        status    = '0' WHERE
+        tahun     = '$tahun'
       ";
       $result = $this->query($query);
       $query      = "INSERT INTO rkakl_view SET
@@ -17,7 +19,8 @@
         filename  = '$filename',
         filesave  = '$filesave',
         keterangan= '$keterangan',
-        tahun     = '$tahun'
+        tahun     = '$tahun',
+        status    = '$status'
       ";
       $result = $this->query($query);
       return $result;
@@ -30,8 +33,10 @@
       return $result;
     }
 
-    public function clearRkakl() {
-      $query      = "TRUNCATE TABLE rkakl_full";
+    public function clearRkakl($data) {
+      $query  = "DELETE FROM rkakl_full WHERE
+        thang = '$data' or
+        thang = ''";
       $result = $this->query($query);
       return $result;
     }
