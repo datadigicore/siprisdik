@@ -17,6 +17,12 @@
             <a href="#importModal" data-toggle="modal" class="btn btn-flat btn-success btn-sm pull-right">Import RKAKL</a>
           </div>
           <div class="box-body">
+            <?php if (isset($_POST['message'])): ?>
+              <div class="alert alert-<?php echo $_POST['alert']; ?> alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <i class="icon fa fa-warning"></i><?php echo $_POST['message']; ?>
+              </div>
+            <?php endif ?>
             <table id="table" class="display nowrap table table-bordered table-striped" cellspacing="0" width="100%">
               <thead style="background-color:#11245B;color:white;">
                 <tr>
@@ -47,7 +53,14 @@
         </div>
         <div class="modal-body">
           <div class="form-group">
-            <input type="text" class="form-control" id="tglimport" name="tglimport" placeholder="Tanggal Import" value="<?php echo 'Tanggal : '.(date("d-m-Y"));?>" readonly>
+            <!-- <input type="text" class="form-control" id="tglimport" name="tglimport" placeholder="Tanggal Import" value="<?php //echo 'Tanggal : '.(date("d-m-Y"));?>" readonly> -->
+            <select class="form-control" name="thang" required>
+            <?php $already_selected_value = date('Y'); $earliest_year = date('Y')-1;
+            echo '<option  value="" disabled selected>-- Pilih Tahun Anggaran --</option>';
+            foreach (range(date('Y')+1, $earliest_year) as $x) {
+              echo '<option value="'.$x.'">'.$x.'</option>';
+            }?>
+            </select>
           </div>
           <div class="form-group">
             <textarea rows="5" type="text" class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan" style="resize:none;" required></textarea>
@@ -76,7 +89,7 @@
         </div>
         <div class="modal-body">
           <div class="form-group">
-            <input type="text" class="form-control" id="tglimport" name="tglimport" placeholder="Tanggal Import" value="<?php echo 'Tanggal : '.(date("d-m-Y"));?>" readonly>
+            <input type="text" class="form-control" id="tglimport" name="tglimport" placeholder="Tanggal Import" value="<?php echo 'Tahun Anggaran : '.(date("Y"));?>" readonly>
           </div>
           <div class="form-group">
             <textarea rows="5" type="text" class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan" style="resize:none;" required></textarea>
@@ -121,12 +134,13 @@
         {"targets" : 3},
         {"targets" : 4},
         {"targets" : 5},
-        {"orderable": false,
-         "data": null,
-         "defaultContent":  '<div class="text-center">'+
-                              '<a style="margin:0 2px;" id="btn-viw" href="#viewFile" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View</a>'+
-                              '<a style="margin:0 2px;" id="btn-edt" href="#editModal" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Revisi</a>'+
-                            '</div>',
+        {
+         // "orderable": false,
+         // "data": null,
+         // "defaultContent":  '<div class="text-center">'+
+         //                      '<a style="margin:0 2px;" id="btn-viw" href="#viewFile" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View</a>'+
+         //                      '<a style="margin:0 2px;" id="btn-edt" href="#editModal" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Revisi</a>'+
+         //                    '</div>',
          "targets": 6 }
       ],
       "order": [[ 0, "desc" ]]

@@ -3,16 +3,11 @@ require_once __DIR__ . '/../../utility/PHPExcel/IOFactory.php';
 
 switch ($process) {
   case 'import':
-    $arr = get_defined_functions();
-    // echo "Tes Case";
-    // print('<pre>');
-    // print_r($_FILES['fileimport']);
     if(isset($_POST) && !empty($_FILES['fileimport']['name'])) {
       $path = $_FILES['fileimport']['name'];
       $ext = pathinfo($path, PATHINFO_EXTENSION);
       if($ext != 'xls' && $ext != 'xlsx') {
-        echo '<p> Invalid File </p>';
-        $invalid = 1;
+        $utility->load("content/rkakl","danger","Jenis file yang di upload tidak sesuai");
       }
       else {
         $time = time();
@@ -35,12 +30,15 @@ switch ($process) {
             "keterangan" => $purifier->purify($_POST['keterangan']),
             "tahun"      => date("Y",$time)
           );
-          $rkakl->insertRkakl($data_insert);
           $rkakl->clearRkakl();
+          $rkakl->insertRkakl($data_insert);
           $rkakl->importRkakl($allDataInSheet);
-          $utility->load("content/rkakl","success","Data berhasil diimport");
+          $utility->load("content/rkakl","success","Data berhasil di import ke dalam database");
         }
       }
+    }
+    else {
+      $utility->load("content/rkakl","warning","Belum ada file excel rkakl yang di lampirkan");
     }
   break;
   case 'table':
@@ -48,18 +46,34 @@ switch ($process) {
     $key   = "id";
     $column = array(
       array( 'db' => 'id',      'dt' => 0 ),
-      array( 'db' => 'tanggal',  'dt' => 1 ),
+      array( 'db' => 'tanggal',  'dt' => 1, 'formatter' => function( $d, $row ) {
+            return date( 'j-M-Y \&\n\b\s\p\&\n\b\s\p\&\n\b\s\p H:i', strtotime($d));
+          }
+      ),
       array( 'db' => 'filename',  'dt' => 2),
       array( 'db' => 'keterangan',  'dt' => 3 ),
       array( 'db' => 'tahun',   'dt' => 4 ),
       array( 'db' => 'status', 'dt' => 5, 'formatter' => function($d,$row){ 
         if($d==1){
-          return 'Digunakan';
+          return '<i>Digunakan</i>';
         }
         else {
-          return '-';
+          return '<i>Direvisi</i>';
         }
-      })
+      }),
+      array( 'db' => 'status',  'dt' => 6, 'formatter' => function($d,$row){ 
+        if($d==1){
+          return  '<div class="text-center">'.
+                    '<a style="margin:0 2px;" id="btn-viw" href="#viewFile" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View</a>'.
+                    '<a style="margin:0 2px;" id="btn-edt" href="#editModal" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Revisi</a>'.
+                  '</div>';
+        }
+        else{
+          return  '<div class="text-center">'.
+                    '<a style="margin:0 2px;" id="btn-viw" href="#viewFile" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View</a>'.
+                  '</div>';
+        }
+      }),
     );
     $datatable->get_rkakl_view($table, $key, $column);
   break;

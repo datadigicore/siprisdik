@@ -1,12 +1,13 @@
 <?php
 error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 ob_clean();
+date_default_timezone_set('Asia/Jakarta');
 // ======== TAMBAHKAN UTILITY & LIBRARY DISINI ========
 require_once __DIR__ .'/config.php';
 require_once __DIR__ .'/../utility/database/mysql_db.php';
 require_once __DIR__ .'/../utility/utilityCode.php';
 require_once __DIR__ .'/../utility/datatable.php';
-require_once __DIR__ ."/../library/security/HTMLPurifier.auto.php";
+require_once __DIR__ .'/../library/security/HTMLPurifier.auto.php';
 // ====================================================
 
 // ============== TAMBAHKAN MODEL DISINI ==============
@@ -32,7 +33,7 @@ $config_security->set('URI.HostBlacklist', array('google.com'));
 $purifier = new HTMLPurifier($config_security);
 
 $cek  = $_SERVER['SCRIPT_NAME'];
-$temp = explode("/", $cek);
+$temp = explode('/', $cek);
 $file = end($temp);
 // if ($_SESSION["user_name"]=="") {
 //   if( isset($_COOKIE[$cookie_name])) { 
