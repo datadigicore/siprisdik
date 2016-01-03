@@ -134,14 +134,7 @@
         {"targets" : 3},
         {"targets" : 4},
         {"targets" : 5},
-        {
-         // "orderable": false,
-         // "data": null,
-         // "defaultContent":  '<div class="text-center">'+
-         //                      '<a style="margin:0 2px;" id="btn-viw" href="#viewFile" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View</a>'+
-         //                      '<a style="margin:0 2px;" id="btn-edt" href="#editModal" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Revisi</a>'+
-         //                    '</div>',
-         "targets": 6 }
+        {"targets": 6 }
       ],
       "order": [[ 0, "desc" ]]
     });

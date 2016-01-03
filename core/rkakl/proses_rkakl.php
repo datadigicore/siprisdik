@@ -3,43 +3,51 @@ require_once __DIR__ . '/../../utility/PHPExcel/IOFactory.php';
 
 switch ($process) {
   case 'import':
-    if(isset($_POST) && !empty($_FILES['fileimport']['name'])) {
-      $path = $_FILES['fileimport']['name'];
-      $ext = pathinfo($path, PATHINFO_EXTENSION);
-      if($ext != 'xls' && $ext != 'xlsx') {
-        $utility->load("content/rkakl","danger","Jenis file yang di upload tidak sesuai");
+    $thang = $purifier->purify($_POST['thang']);
+    $result = $rkakl->checkThang($thang);
+    if ($result->num_rows == 0) {
+      if(isset($_POST) && !empty($_FILES['fileimport']['name'])) {
+        $path = $_FILES['fileimport']['name'];
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+        if($ext != 'xls' && $ext != 'xlsx') {
+          $utility->load("content/rkakl","danger","Jenis file RKAKL yang di upload tidak sesuai");
+        }
+        else {
+          $time = time();
+          $target_dir = $path_upload;
+          $target_name = basename(date("Ymd-His-\R\K\A\K\L.",$time).$ext);
+          $target_file = $target_dir . $target_name;
+          $response = move_uploaded_file($_FILES['fileimport']['tmp_name'],$target_file);
+          if($response) {
+            try {
+              $objPHPExcel = PHPExcel_IOFactory::load($target_file);
+            }
+            catch(Exception $e) {
+              die('Kesalahan! Gagal dalam mengupload file : "'.pathinfo($_FILES['excelupload']['name'],PATHINFO_BASENAME).'": '.$e->getMessage());
+            }
+            $allDataInSheet = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+            $data_insert = array(
+              "tanggal"    => date("Y-m-d H:i:s",$time),
+              "filename"   => $path,
+              "filesave"   => $target_name,
+              "keterangan" => $purifier->purify($_POST['keterangan']),
+              "tahun"      => date("Y",$time)
+            );
+            $rkakl->clearRkakl();
+            $rkakl->insertRkakl($data_insert);
+            $rkakl->importRkakl($allDataInSheet);
+            $utility->load("content/rkakl","success","Data RKAKL berhasil di import ke dalam database");
+          }
+        }
       }
       else {
-        $time = time();
-        $target_dir = $path_upload;
-        $target_name = basename(date("Ymd-His-\R\K\A\K\L.",$time).$ext);
-        $target_file = $target_dir . $target_name;
-        $response = move_uploaded_file($_FILES['fileimport']['tmp_name'],$target_file);
-        if($response) {
-          try {
-            $objPHPExcel = PHPExcel_IOFactory::load($target_file);
-          }
-          catch(Exception $e) {
-            die('Kesalahan! Gagal dalam mengupload file : "'.pathinfo($_FILES['excelupload']['name'],PATHINFO_BASENAME).'": '.$e->getMessage());
-          }
-          $allDataInSheet = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-          $data_insert = array(
-            "tanggal"    => date("Y-m-d H:i:s",$time),
-            "filename"   => $path,
-            "filesave"   => $target_name,
-            "keterangan" => $purifier->purify($_POST['keterangan']),
-            "tahun"      => date("Y",$time)
-          );
-          $rkakl->clearRkakl();
-          $rkakl->insertRkakl($data_insert);
-          $rkakl->importRkakl($allDataInSheet);
-          $utility->load("content/rkakl","success","Data berhasil di import ke dalam database");
-        }
+        $utility->load("content/rkakl","warning","Belum ada file RKAKL yang di lampirkan");
       }
     }
     else {
-      $utility->load("content/rkakl","warning","Belum ada file excel rkakl yang di lampirkan");
+      $utility->load("content/rkakl","warning","Maaf data tahun anggaran ".$thang." sudah ada, jika ingin melakukan perubahan harap revisi");
     }
+    die();
   break;
   case 'table':
     $table = "rkakl_view";

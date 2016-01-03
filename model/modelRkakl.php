@@ -23,6 +23,13 @@
       return $result;
     }
 
+    public function checkThang($data) {
+      $query  = "SELECT tahun FROM rkakl_view WHERE
+        tahun = '$data'";
+      $result = $this->query($query);
+      return $result;
+    }
+
     public function clearRkakl() {
       $query      = "TRUNCATE TABLE rkakl_full";
       $result = $this->query($query);
