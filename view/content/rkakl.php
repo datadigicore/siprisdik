@@ -141,7 +141,9 @@
         {"targets" : 3},
         {"targets" : 4},
         {"targets" : 5},
-        {"targets" : 6}
+        {"targets" : 6},
+        {"targets" : 7,
+         "visible" : false},
       ],
       "order": [[ 0, "desc" ]]
     });
@@ -150,6 +152,20 @@
       tabrow = table.row(tr);
       $("#tglimport").val('Tahun Anggaran : '+tabrow.data()[4]);
       $("#thnanggaran").val(tabrow.data()[4]);
+    });
+    $(document).on("click", "#btn-viw", function (){
+      var tr = $(this).closest('tr');
+      tabrow = table.row(tr);
+      var f = document.createElement('form');
+      f.setAttribute('method','post');
+      f.setAttribute('target','_blank');
+      f.setAttribute('action','<?php echo $url_rewrite;?>process/rkakl/view');
+      var i = document.createElement('input');
+      i.setAttribute('type','text');
+      i.setAttribute('name','filename');
+      i.setAttribute('value', tabrow.data()[7]);
+      f.appendChild(i);
+      f.submit();
     });
   });
 </script>

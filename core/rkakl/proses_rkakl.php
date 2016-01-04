@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../utility/PHPExcel/IOFactory.php';
+require_once __DIR__ . '/../../utility/ExcelReader.php';
 
 switch ($process) {
   case 'import':
@@ -82,24 +83,44 @@ switch ($process) {
       array( 'db' => 'status',  'dt' => 6, 'formatter' => function($d,$row){ 
         if($d==1){
           return  '<div class="text-center">'.
-                    '<a style="margin:0 2px;" id="btn-viw" href="#viewFile" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View</a>'.
+                    '<a style="margin:0 2px;" id="btn-viw" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View</a>'.
                     '<a style="margin:0 2px;" id="btn-edt" href="#editModal" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Revisi</a>'.
                   '</div>';
         }
         if($d==2){
           return  '<div class="text-center">'.
-                    '<a style="margin:0 2px;" id="btn-viw" href="#viewFile" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View</a>'.
+                    '<a style="margin:0 2px;" id="btn-viw" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View</a>'.
                     '<a style="margin:0 2px;" id="btn-edt" href="#editModal" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Revisi</a>'.
                   '</div>';
         }
         else{
           return  '<div class="text-center">'.
-                    '<a style="margin:0 2px;" id="btn-viw" href="#viewFile" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View</a>'.
+                    '<a style="margin:0 2px;" id="btn-viw" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View</a>'.
                   '</div>';
         }
       }),
+      array( 'db' => 'filesave',  'dt' => 7),
     );
     $datatable->get_rkakl_view($table, $key, $column);
+  break;
+  case 'view':
+    ini_set('memory_limit', '-1');
+    $filesave = $purifier->purify($_POST['filename']);
+    $data = new Spreadsheet_Excel_Reader($path_upload.$filesave);
+    echo '<html>
+    <head>
+    <title>Sistem Informasi Pelaporan | Ristek Dikti</title>
+    <link rel="shortcut icon" type="image/png" href="'.$url_rewrite."static/dist/img/risetdikti.png".'"/>
+    <style>
+    table.excel {border-style:ridge;border-width:1;border-collapse:collapse;font-family:sans-serif;font-size:12px;}
+    table.excel thead th, table.excel tbody th {background:#CCCCCC;border-style:ridge;border-width:1;text-align: center;vertical-align:bottom;}
+    table.excel tbody th {text-align:center;width:20px;}
+    table.excel tbody td {vertical-align:bottom;}
+    table.excel tbody td {padding: 0 3px;border: 1px solid #EEEEEE;}
+    </style>
+    </head>
+    <body>'.$data->dump(true,true,1).'</body>
+    </html>';
   break;
   default:
     $utility->location_goto(".");
