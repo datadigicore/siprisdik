@@ -33,6 +33,9 @@ else {
         case 'rab':
           include ('view/content/rab.php');
         break;
+        case 'rabdetail':
+          include ('view/content/rabdetail.php');
+          break;
         case 'insertrab':
           include ('view/content/rab-insert.php');
         break;
