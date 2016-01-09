@@ -35,8 +35,21 @@ switch ($process) {
     $report->SPPD($data_pengguna);
   break;
   case 'SPTB':
-    $report->SPTB($data_pengguna);
-  break;case 'Rincian_Permintaan_Pengeluaran':
+    $kode_satker = $purifier->purify($_POST[kode_satker]);
+    $nama_satker = $purifier->purify($_POST[nama_satker]);
+    $tanggal_DIPA = $purifier->purify($_POST[tanggal_DIPA]);
+    $no_DIPA = $purifier->purify($_POST[no_DIPA]);
+    $klasifikasi_MA = $purifier->purify($_POST[klasifikasi_MA]); // Klasifikasi Mata Anggaran
+    $data = array(
+      "kode_satker"  => $kode_satker,
+      "nama_satker"  => $nama_satker,
+      "tanggal_DIPA" => $tanggal_DIPA,
+      "no_DIPA"      => $no_DIPA,
+      "klasifikasi_MA"=> $klasifikasi_MA
+    );
+    $report->SPTB($data);
+  break;
+  case 'Rincian_Permintaan_Pengeluaran':
     $report->Rincian_Permintaan_Pengeluaran($data_pengguna);
   break;
   default:
