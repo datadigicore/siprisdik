@@ -15,6 +15,7 @@ require_once __DIR__ .'/../model/modelPengguna.php';
 require_once __DIR__ .'/../model/modelLogin.php';
 require_once __DIR__ .'/../model/modelReport.php';
 require_once __DIR__ .'/../model/modelRkakl.php';
+require_once __DIR__ .'/../model/modelRab.php';
 // ====================================================
 
 // ============== TAMBAHKAN CLASS DISINI ==============
@@ -26,6 +27,7 @@ $login       = new modelLogin();
 $pengguna    = new modelPengguna();
 $report      = new modelReport();
 $rkakl 	     = new modelRkakl();
+$mdl_rab     = new modelRab();
 // ====================================================
 
 $config_security = HTMLPurifier_Config::createDefault();

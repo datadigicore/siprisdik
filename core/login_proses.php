@@ -19,6 +19,7 @@
         $_SESSION['username'] = $result->username;
         $_SESSION['email']    = $result->email;
         $_SESSION['level']    = $result->level;
+        $_SESSION['direktorat']    = $result->direktorat;
         $utility->location_goto("content/home");
       }
       else {

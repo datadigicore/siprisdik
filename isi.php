@@ -31,6 +31,8 @@ else {
           include ('view/content/rkakl-insert.php');
         break;
         case 'rab':
+          $direktorat = $_SESSION['direktorat'];
+          $program = $mdl_rab->getProg();
           include ('view/content/rab.php');
         break;
         case 'rabdetail':
@@ -51,6 +53,11 @@ else {
       switch ($data[1]) {
         case 'table':
           include ('view/content/table.php');
+        break;
+        case 'rab':
+          $direktorat = $_SESSION['direktorat'];
+          $program = $mdl_rab->getProg();
+          include ('view/content/rab.php');
         break;
         default:
           include ('view/content/home.php');
