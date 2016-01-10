@@ -31,7 +31,11 @@ else {
           include ('view/content/rkakl-insert.php');
         break;
         case 'rab':
-          include ('view/content/rab.php');
+          if($data[2]=='add'){
+            include ('view/content/rab-add.php');
+          } else {
+            include ('view/content/rab.php');
+          }
         break;
         case 'insertrab':
           include ('view/content/rab-insert.php');
@@ -56,5 +60,5 @@ else {
     }
     include ('view/include/footer.php');
   }
-}  
+}
 ?>
