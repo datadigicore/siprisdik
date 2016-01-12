@@ -33,10 +33,17 @@ else {
         case 'rab':
           if($data[2]=='add'){
             include ('view/content/rab-add.php');
+          } else if($data[2]=='add-rincian'){
+            include ('view/content/rab-add-rincian.php');
           } else {
+            $direktorat = $_SESSION['direktorat'];
+            $program = $mdl_rab->getProg();
             include ('view/content/rab.php');
           }
         break;
+        case 'rabdetail':
+          include ('view/content/rabdetail.php');
+          break;
         case 'insertrab':
           include ('view/content/rab-insert.php');
         break;
@@ -52,6 +59,11 @@ else {
       switch ($data[1]) {
         case 'table':
           include ('view/content/table.php');
+        break;
+        case 'rab':
+          $direktorat = $_SESSION['direktorat'];
+          $program = $mdl_rab->getProg();
+          include ('view/content/rab.php');
         break;
         default:
           include ('view/content/home.php');
