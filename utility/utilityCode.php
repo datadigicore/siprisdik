@@ -38,20 +38,22 @@ class utilityCode extends config {
      public function load($lokasi, $alert, $message) {
           $alamat = $this->url_rewrite_class;
           if (isset($message)) {
-             echo("<script language='javascript'>
+             echo("<body></body>
+                    <script language='javascript'>
                     var f = document.createElement('form');
                     f.setAttribute('method','post');
                     f.setAttribute('action','".$alamat."/".$lokasi."');
                     var i = document.createElement('input');
-                    i.setAttribute('type','text');
+                    i.setAttribute('type','hidden');
                     i.setAttribute('name','alert');
                     i.setAttribute('value','".$alert."');
                     var j = document.createElement('input');
-                    j.setAttribute('type','text');
+                    j.setAttribute('type','hidden');
                     j.setAttribute('name','message');
                     j.setAttribute('value','".$message."');
                     f.appendChild(i);
                     f.appendChild(j);
+                    document.body.appendChild(f);
                     f.submit();
                    </script>");
           }
