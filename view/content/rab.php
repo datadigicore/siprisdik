@@ -21,11 +21,17 @@
 
           </div>
           <div class="box-body">
+            <?php if (isset($_POST['message'])): ?>
+              <div class="alert alert-<?php echo $_POST['alert']; ?> alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <i class="icon fa fa-warning"></i><?php echo $_POST['message']; ?>
+              </div>
+            <?php endif ?>
             <table class="display table table-bordered table-striped" style="width:200px">
               <tr>
                 <td><label>Tahun</label></td>
                 <td>
-                  <select id="tahun" name="tahun" class="select2" onchange="search()">
+                  <select id="tahun" name="year" class="select2" onchange="search()">
                     <option value="2016">2016</option>
                     <option value="2017">2017</option>
                   </select>
@@ -56,35 +62,11 @@
                   <th>Uraian Acara</th>
                   <th>Tanggal</th>
                   <th>Lokasi</th>
-                  <!-- <th>Uang Muka Kegiatan</th>
-                  <th>Realisasi SPJ</th>
-                  <th>Realisasi Pajak</th>
-                  <th>Sisa Uang Muka</th> -->
+                  <th>Status</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>
-                    Program   : 06 <br>
-                    Output    : 10 <br>
-                    Suboutput : 10 <br>
-                    Komponen  : 10 <br>
-                  </td>
-                  <td>Uraian</td>
-                  <td>7 Jan 2016</td>
-                  <td>-</td>
-                  <!-- <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td> -->
-                  <td>
-                    <div class="text-center">
-                      <a style="margin:0 2px;" id="btn-edt" href="<?php echo $url_rewrite;?>content/rabdetail" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Add Transaksi</a>
-                    </div>
-                  </td>
-                </tr>
               </tbody>
             </table>
           </div>
@@ -104,6 +86,13 @@
         </div>
         <div class="modal-body">
           <div class="form-group">
+            <label>Tahun Anggaran</label>
+            <select class="form-control" name="tahun2" id="tahun2" required>
+              <option value="2016">2016</option>
+              <option value="2017">2017</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label>Program</label>
             <select class="form-control" name="prog" id="prog" onchange="chprog()" required>
               <option>-- Pilih Program --</option>
@@ -112,6 +101,20 @@
               }?>
             </select>
           </div>
+          <?php if ($_SESSION['direktorat'] == "") { ?>
+          <div class="form-group">
+            <label>Kode Kegiatan</label>
+            <select class="form-control" id="direktorat2" name="direktorat2" onchange="search()">
+                <option value="5696">5696</option>
+                <option value="5697">5697</option>
+                <option value="5698">5698</option>
+                <option value="5699">5699</option>
+                <option value="5700">5700</option>
+            </select>
+          </div>
+          <?php } else{ ?>
+          <input type="hidden" id="direktorat2" name="direktorat2" value="<?php echo $_SESSION['direktorat']; ?>" />
+          <?php } ?>
           <div class="form-group">
             <label>Output</label>
             <select class="form-control" id="output" name="output" onchange="chout()" required>
@@ -151,6 +154,52 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="ajuan">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="<?php echo $url_rewrite;?>process/rab/ajukan" method="POST">
+        <div class="modal-header" style="background-color:#111F3F !important; color:white;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" style="color:white">×</span></button>
+          <h4 class="modal-title">Dialog Box</h4>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="id_rab_aju" name="id_rab_aju" value="" />
+          <div class="form-group">
+            <label>Apakah Anda Yakin Ingin Melakukan Pengajuan ?</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" data-dismiss="modal" class="btn btn-flat btn-warning">Tidak</button>
+          <button type="submit" class="btn btn-flat btn-success">Ya</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="sahkan">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="<?php echo $url_rewrite;?>process/rab/sahkan" method="POST">
+        <div class="modal-header" style="background-color:#111F3F !important; color:white;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" style="color:white">×</span></button>
+          <h4 class="modal-title">Dialog Box</h4>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="id_rab_sah" name="id_rab_sah" value="" />
+          <div class="form-group">
+            <label>Apakah Anda Yakin Ingin Melakukan Pengesahan ?</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" data-dismiss="modal" class="btn btn-flat btn-warning">Tidak</button>
+          <button type="submit" class="btn btn-flat btn-success">Ya</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <script>
   $(function () {
     $( "#datepicker" ).datepicker({
@@ -160,20 +209,43 @@
     });
     var tahun = $('#tahun').val();
     var direktorat = $('#direktorat').val();
-    var table = $('#table').DataTable({
-      "scrollX": true,
-      // "bProcessing": true,
-      // "bServerSide": true,
-      // "sAjaxSource": "getRab",
-      "fnServerParams": function ( aoData ) {
-        aoData.push( { "name": "tahun", "value": tahun },
-                      { "name": "direktorat", "value": direktorat } );
-      }
+    var table = $("#table").DataTable({
+      "oLanguage": {
+        "sInfoFiltered": ""
+      },
+      "processing": true,
+      "serverSide": true,
+      // "scrollX": true,
+      "ajax": {
+        "url": "<?php echo $url_rewrite;?>process/rab/table",
+        "type": "POST"
+      },
+      "columnDefs" : [
+        {"targets" : 0,
+         "visible" : false},
+        {"targets" : 1},
+        {"targets" : 2},
+        {"targets" : 3},
+        {"targets" : 4},
+        {"targets" : 5},
+      ],
+      "order": [[ 0, "desc" ]]
+    });
+    $(document).on("click", "#btn-aju", function (){
+      var tr = $(this).closest('tr');
+      tabrow = table.row(tr);
+      $("#id_rab_aju").val(tabrow.data()[0]);
+    });
+    $(document).on("click", "#btn-sah", function (){
+      var tr = $(this).closest('tr');
+      tabrow = table.row(tr);
+      $("#id_rab_sah").val(tabrow.data()[0]);
     });
   });
 <<<<<<< HEAD
 </script>
 =======
+
 
   function search(){
     var tahun = $('#tahun').val();

@@ -165,6 +165,7 @@
       i.setAttribute('name','filename');
       i.setAttribute('value', tabrow.data()[7]);
       f.appendChild(i);
+      document.body.appendChild(f);
       f.submit();
     });
   });

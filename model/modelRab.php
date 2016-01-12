@@ -56,8 +56,8 @@
     }
 
     public function save($data){
-      $direktorat = $data['direktorat'];
-      $tahun = $data['tahun'];
+      $direktorat = $data['direktorat2'];
+      $tahun = $data['tahun2'];
       $prog = $data['prog'];
       $output = $data['output'];
       $soutput = $data['soutput'];
@@ -67,20 +67,46 @@
       $tgl=$t[2].'-'.$t[1].'-'.$t[0];
       $lokasi = $data['lokasi'];
 
-      $query      = "INSERT INTO rabview as r SET
-        r.thang       = '$tahun',
-        r.kdprogram   = '$prog',
-        r.kdgiat      = '$direktorat',
-        r.kdoutput    = '$output',
-        r.kdsoutput   = '$soutput',
-        r.kdkmpnen    = '$komp',
-        r.desc        = '$uraian',
-        r.tanggal     = '$tgl',
-        r.lokasi      = '$lokasi',
-        r.status      = '0'
+      $query      = "INSERT INTO rabview SET
+        thang       = '$tahun',
+        kdprogram   = '$prog',
+        kdgiat      = '$direktorat',
+        kdoutput    = '$output',
+        kdsoutput   = '$soutput',
+        kdkmpnen    = '$komp',
+        desk        = '$uraian',
+        tanggal     = '$tgl',
+        lokasi      = '$lokasi',
+        status      = '0'
       ";
       $result = $this->query($query);
       return $result;
+    }
+
+    public function ajukan($data){
+      $id_rab = $data['id_rab_aju'];
+      $query = "UPDATE rabview SET status='1' WHERE id = '$id_rab'";
+      $query2 = "UPDATE rabfull SET status='1' WHERE rabview_id = '$id_rab'";
+
+      $result = $this->query($query);
+      $result2 = $this->query($query2);
+
+      return array('result' => $result,
+                    'result2' => $result2
+                  );
+    }
+
+    public function sahkan($data){
+      $id_rab = $data['id_rab_sah'];
+      $query = "UPDATE rabview SET status='2' WHERE id = '$id_rab'";
+      $query2 = "UPDATE rabfull SET status='2' WHERE rabview_id = '$id_rab'";
+
+      $result = $this->query($query);
+      $result2 = $this->query($query2);
+
+      return array('result' => $result,
+                    'result2' => $result2
+                  );
     }
 
   }
