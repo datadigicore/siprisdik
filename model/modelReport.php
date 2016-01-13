@@ -3,6 +3,12 @@
   require_once __DIR__ . "/../library/mPDF/mpdf.php";
 
   class modelReport extends mysql_db {
+
+    public function get_kd_akun($id){
+      $result = $this->query("SELECT kdakun from rabfull where id='$id' ");
+      $array = $this->fetch_array($result);
+      return $array['kdakun'];
+    }
     
     public function create_pdf($name, $size, $html){
         ob_end_clean();
