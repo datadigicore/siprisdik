@@ -242,10 +242,6 @@
       $("#id_rab_sah").val(tabrow.data()[0]);
     });
   });
-<<<<<<< HEAD
-</script>
-=======
-
 
   function search(){
     var tahun = $('#tahun').val();
@@ -339,4 +335,3 @@
     });
   }
 </script>
->>>>>>> fd27e5c190fee33c2f298c31d88ef3641c1984e5

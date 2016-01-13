@@ -109,6 +109,64 @@
                   );
     }
 
+    public function getview($id){
+      $query  = "SELECT thang,kdprogram,kdgiat,kdoutput,kdsoutput,kdkmpnen,kdskmpnen, deskripsi,tanggal,lokasi
+                 FROM rabview as r where id = '$id'";
+      $result = $this->query($query);
+      $data  = $this->fetch_array($result);
+      // while($fetch  = $this->fetch_object($result)) {
+      //   $data[$i]['kdprogram'] = $fetch->kdprogram;
+      //   $data[$i]['kdoutput'] = $fetch->kdoutput;
+      //   $data[$i]['kdsoutput'] = $fetch->kdsoutput;
+      //   $data[$i]['kdkmpnen'] = $fetch->kdkmpnen;
+      //   $i++;
+      // }
+      return $data;
+    }
+
+    public function save_penerima($id_rab_view,$getview, $post){
+      // print_r($getview);die;
+      $thang      = $getview['thang'];
+      $kdprogram  = $getview['kdprogram'];
+      $kdgiat     = $getview['kdgiat'];
+      $kdoutput   = $getview['kdoutput'];
+      $kdsoutput  = $getview['kdsoutput'];
+      $kdkmpnen   = $getview['kdkmpnen'];
+      $kdskmpnen  = $getview['kdskmpnen'];
+      $deskripsi  = $getview['deskripsi'];
+      $tanggal    = $getview['tanggal'];
+      $lokasi     = $getview['lokasi'];
+
+      $jenis = $post['jenis-akun'];
+      $penerima = $post['penerima'];
+      $npwp = $post['npwp'];
+      $golongan = $post['golongan'];
+      $jabatan = $post['jabatan'];
+
+      $query      = "INSERT INTO rabfull SET
+        rabview_id  = '$id_rab_view',
+        thang       = '$thang',
+        kdprogram   = '$kdprogram',
+        kdgiat      = '$kdgiat',
+        kdoutput    = '$kdprogram',
+        kdsoutput   = '$kdsoutput',
+        kdkmpnen    = '$kdkmpnen',
+        kdskmpnen   = '$kdskmpnen',
+        deskripsi   = '$deskripsi',
+        tanggal     = '$tanggal',
+        lokasi      = '$lokasi',
+
+        jenis       = '$jenis',
+        penerima    = '$penerima',
+        npwp        = '$npwp',
+        golongan    = '$golongan',
+        jabatan     = '$jabatan',
+        status      = '0'
+      ";
+      $result = $this->query($query);
+      return $result;
+    }
+
   }
 
 ?>

@@ -8,9 +8,12 @@ switch ($process) {
     $column = array(
       array( 'db' => 'id',      'dt' => 0 ),
       array( 'db' => 'kdprogram',  'dt' => 1, 'formatter' => function($d,$row){ 
-          return 'Program : '.$d.'<br>'.'Output : ';
+          return 'Program : '.$row[1].
+                '<br>'.'Output : '.$row[7].
+                '<br>'.'Suboutput : '.$row[8].
+                '<br>'.'Komponen : '.$row[9];
       }),
-      array( 'db' => 'desk',  'dt' => 2),
+      array( 'db' => 'deskripsi',  'dt' => 2),
       array( 'db' => 'tanggal',  'dt' => 3, 'formatter' => function( $d, $row ) {
             return date( 'j M Y', strtotime($d));
           }
@@ -39,12 +42,12 @@ switch ($process) {
       array( 'db' => 'status',  'dt' => 6, 'formatter' => function($d,$row){ 
         if($d==0 && $_SESSION['level'] != 0){
           return  '<div class="text-center">'.
-                    '<a style="margin:0 2px;" id="btn-trans" href="#" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-list"></i> Add Transaksi</a>'.
+                    '<a style="margin:0 2px;" id="btn-trans" href="'.$url_rewrite.'content/rabdetail/'.$row[0].'/detail" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Add Transaksi</a>'.
                     '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Ajukan</a>'.
                   '</div>';
         }elseif ($d==0 && $_SESSION['level'] == 0) {
           return  '<div class="text-center">'.
-                    '<a style="margin:0 2px;" id="btn-trans" href="#" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-list"></i> Add Transaksi</a>'.
+                    '<a style="margin:0 2px;" id="btn-trans" href="rabdetail/'.$row[0].'/detail" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Add Transaksi</a>'.
                   '</div>';
         }
         if($d==1  && $_SESSION['level'] != 0){
@@ -64,9 +67,12 @@ switch ($process) {
                   '</div>';
         }
       }),
+      array( 'db' => 'kdoutput',  'dt' => 7),
+      array( 'db' => 'kdsoutput',  'dt' => 8),
+      array( 'db' => 'kdkmpnen',  'dt' => 9),
     );
     $datatable->get_table($table, $key, $column,$where="");
-  break;
+    break;
   case 'getout':
     $output = $mdl_rab->getout($_POST['prog'],$_POST['tahun'],$_POST['direktorat']);
     echo json_encode($output);

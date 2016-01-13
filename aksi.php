@@ -25,6 +25,10 @@
         $process = $data[2]; 
         include "./core/rab/proses_rab.php";
       break;
+      case 'rab_rinci':
+        $process = $data[2]; 
+        include "./core/rab/proses_rab_rinci.php";
+      break;
       case 'example':
         if ($data[2] == "hapusexample") {
           $hapusdata = $purifier->purify($data[3]);

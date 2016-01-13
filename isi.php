@@ -42,7 +42,16 @@ else {
           }
         break;
         case 'rabdetail':
-          include ('view/content/rabdetail.php');
+          if($data[2]=='akun'){
+            include ('view/content/rab-add.php');
+          }else{
+            $id_rab_view = $data[2];
+            include ('view/content/rabdetail.php');
+          }
+          break;
+        case 'rabakun':
+          $id_rab_full = $data[2];
+          include ('view/content/rab-add.php');
           break;
         case 'insertrab':
           include ('view/content/rab-insert.php');
@@ -61,9 +70,15 @@ else {
           include ('view/content/table.php');
         break;
         case 'rab':
-          $direktorat = $_SESSION['direktorat'];
-          $program = $mdl_rab->getProg();
-          include ('view/content/rab.php');
+          if($data[2]=='add'){
+            include ('view/content/rab-add.php');
+          } else if($data[2]=='add-rincian'){
+            include ('view/content/rab-add-rincian.php');
+          } else {
+            $direktorat = $_SESSION['direktorat'];
+            $program = $mdl_rab->getProg();
+            include ('view/content/rab.php');
+          }
         break;
         default:
           include ('view/content/home.php');
