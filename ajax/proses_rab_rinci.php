@@ -1,16 +1,7 @@
 <?php
-include 'config/application.php';
+include '../config/application.php';
 
-switch ($process) {
-	case 'save_penerima':
-		$id_rab_view = $_POST['id_rab_view'];
-		$getview = $mdl_rab->getview($id_rab_view);
-		// print_r($getview);die;
-		$mdl_rab->save_penerima($id_rab_view, $getview, $_POST);
-    	$utility->load("content/rabdetail/".$id_rab_view."/detail","success","Data berhasil dimasukkan ke dalam database");
-		break;
-	case 'table':
-		$rabview_id = $data[3];
+		$rabview_id = $_GET['id_rab_view'];
 	    $table = "rabfull";
 	    $key   = "id";
 	    $column = array(
@@ -31,17 +22,15 @@ switch ($process) {
 	      array( 'db' => 'status',  'dt' => 8, 'formatter' => function($d,$row){ 
 	        if($d==0 && $_SESSION['level'] != 0){
 	          return  '<div class="text-center">'.
-	                    '<a style="margin:0 2px;" id="btn-trans" href="'.$url_rewrite.'/content/rab/add-rincian/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Add Akun</a>'.
+	                    '<a style="margin:0 2px;" id="btn-trans" href="content/rab/add-rincian/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Add Akun</a>'.
 	                  '</div>';
 	        }elseif ($d==0 && $_SESSION['level'] == 0) {
-	          return  '<div class="text-center '.$url_rewrite_class.'">'.
-	                    '<a style="margin:0 2px;" id="btn-trans" href="'.$config->url_rewrite_class.'/content/rab/add-rincian/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> View Akun</a>'.
+	          return  '<div class="text-center ">'.
+	                    '<a style="margin:0 2px;" id="btn-trans" href="content/rab/add-rincian/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> View Akun</a>'.
 	                  '</div>';
 	        }
 	      }),
 	    );
 		$where = 'rabview_id = "'.$rabview_id.'"';
 	    $datatable->get_table($table, $key, $column,$where);
-	    break;
-}
 ?>

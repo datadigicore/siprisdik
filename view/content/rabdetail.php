@@ -30,7 +30,7 @@
                   <th>Nama</th>
                   <th>Keterangan</th>
                   <th>NPWP</th>
-                  <th>Golongan</th>
+                  <th>Golongan </th>
                   <th>Jabatan</th>
                   <th>Kode Akun</th>
                   <th>Total Dana RAB</th>
@@ -133,7 +133,7 @@
             </select>
           </div>
           <div class="form-group">
-            <label>Uraian Acara</label>
+            <label>Uraian Acara </label>
             <textarea rows="5" type="text" class="form-control" id="uraian" name="uraian" placeholder="Uraian Acara" style="resize:none;" required></textarea>
           </div>
           <div class="form-group">
@@ -165,8 +165,8 @@
       "serverSide": true,
       // "scrollX": true,
       "ajax": {
-        "url": "<?php echo $url_rewrite;?>process/rab_rinci/table/<?php echo $id_rab_view; ?>",
-        "type": "POST"
+        "url": "<?php echo $url_rewrite;?>api/proses_rab_rinci.php?id_rab_view=<?php echo $id_rab_view; ?>",
+        "type": "GET"
       },
       "columnDefs" : [
         {"targets" : 0,
