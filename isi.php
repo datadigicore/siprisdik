@@ -43,16 +43,12 @@ else {
           }
         break;
         case 'rabdetail':
-          if($data[3]=='akun'){
+          if($data[2]=='rabakun'){
             include ('view/content/rab-add.php');
           }else{
             $id_rab_view = $data[2];
             include ('view/content/rabdetail.php');
           }
-          break;
-        case 'rabakun':
-          $id_rab_full = $data[2];
-          include ('view/content/rab-add.php');
           break;
         case 'insertrab':
           include ('view/content/rab-insert.php');

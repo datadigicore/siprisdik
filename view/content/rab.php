@@ -31,9 +31,10 @@
               <tr>
                 <td><label>Tahun</label></td>
                 <td>
-                  <select id="tahun" name="year" class="select2" onchange="search()">
-                    <option value="2016">2016</option>
-                    <option value="2017">2017</option>
+                  <select class="form-control" name="tahun2" id="tahun2" required>
+                    <?php for ($i=0; $i < count($tahun); $i++) { 
+                      echo "<option value='".$tahun[$i]."'>".$tahun[$i].'</option>';
+                    }?>
                   </select>
                 </td>
               </tr>
@@ -41,7 +42,7 @@
               <tr>
                 <td><label>Direktorat</label></td>
                   <td>
-                    <select id="direktorat" name="direktorat" class="select2" onchange="search()">
+                    <select id="direktorat2" name="direktorat2" class="form-control" onchange="search()">
                       <option value="5696">5696</option>
                       <option value="5697">5697</option>
                       <option value="5698">5698</option>
@@ -53,6 +54,7 @@
               <?php } else{ ?>
               <input type="hidden" id="direktorat" name="direktorat" value="<?php echo $_SESSION['direktorat']; ?>" />
               <?php } ?>
+              <?php echo $url_rewrite;?>
             </table>
             <table id="table" class="display nowrap table table-bordered table-striped" cellspacing="0" width="100%">
               <thead style="background-color:#11245B;color:white;">
@@ -87,7 +89,7 @@
         <div class="modal-body">
           <div class="form-group">
             <label>Tahun Anggaran</label>
-            <select class="form-control" name="tahun2" id="tahun2" required>
+            <select class="form-control" name="tahun" id="tahun" required>
               <?php for ($i=0; $i < count($tahun); $i++) { 
                 echo "<option value='".$tahun[$i]."'>".$tahun[$i].'</option>';
               }?>
@@ -97,7 +99,7 @@
           <?php if ($_SESSION['direktorat'] == "") { ?>
           <div class="form-group">
             <label>Kode Kegiatan</label>
-            <select class="form-control" id="direktorat2" name="direktorat2" onchange="search()">
+            <select class="form-control" id="direktorat" name="direktorat" onchange="search()">
                 <option value="5696">5696</option>
                 <option value="5697">5697</option>
                 <option value="5698">5698</option>
@@ -106,7 +108,7 @@
             </select>
           </div>
           <?php } else{ ?>
-          <input type="hidden" id="direktorat2" name="direktorat2" value="<?php echo $_SESSION['direktorat']; ?>" />
+          <input type="hidden" id="direktorat" name="direktorat" value="<?php echo $_SESSION['direktorat']; ?>" />
           <?php } ?>
           <div class="form-group">
             <label>Output</label>
@@ -207,8 +209,8 @@
         changeYear: true,
         format: 'dd/mm/yyyy'
       });
-    var tahun = $('#tahun').val();
-    var direktorat = $('#direktorat').val();
+    var tahun = $('#tahun2').val();
+    var direktorat = $('#direktorat2').val();
     var table = $("#table").DataTable({
       "oLanguage": {
         "sInfoFiltered": ""
@@ -245,8 +247,8 @@
   });
 
   function search(){
-    var tahun = $('#tahun').val();
-    var direktorat = $('#direktorat').val();
+    var tahun = $('#tahun2').val();
+    var direktorat = $('#direktorat2').val();
     table.destroy();
     $('#table').DataTable({
       "scrollX": true,
@@ -288,12 +290,11 @@
     });
   }
   function chout(){
-    $("#soutput option").remove();   
-    $("#komp option").remove();   
-    $("#skomp option").remove();   
-    $('#soutput').append('<option>-- Pilih Sub Output --</option>');
-    $('#komp').append('<option>-- Pilih Komponen --</option>');
-    $('#skomp').append('<option>-- Pilih Sub Komponen --</option>');
+    var prog = $('#prog').val();
+    var output = $('#output').val();
+    var tahun = $('#tahun').val();
+    var direktorat = $('#direktorat').val();
+    alert('as');
     $.ajax({
       type: "POST",
       url: "<?php echo $url_rewrite;?>process/rab/getsout",

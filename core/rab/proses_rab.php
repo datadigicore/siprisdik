@@ -42,12 +42,12 @@ switch ($process) {
       array( 'db' => 'status',  'dt' => 6, 'formatter' => function($d,$row){ 
         if($d==0 && $_SESSION['level'] != 0){
           return  '<div class="text-center">'.
-                    '<a style="margin:0 2px;" id="btn-trans" href="'.$url_rewrite.'content/rabdetail/'.$row[0].'/detail" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Add Transaksi</a>'.
+                    '<a style="margin:0 2px;" id="btn-trans" href="'.$url_rewrite.'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Add Transaksi</a>'.
                     '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Ajukan</a>'.
                   '</div>';
         }elseif ($d==0 && $_SESSION['level'] == 0) {
           return  '<div class="text-center">'.
-                    '<a style="margin:0 2px;" id="btn-trans" href="rabdetail/'.$row[0].'/detail" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Add Transaksi</a>'.
+                    '<a style="margin:0 2px;" id="btn-trans" href="'.$url_rewrite.'rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Add Transaksi</a>'.
                   '</div>';
         }
         if($d==1  && $_SESSION['level'] != 0){
@@ -74,6 +74,7 @@ switch ($process) {
     $datatable->get_table($table, $key, $column,$where="");
     break;
   case 'getout':
+    // print_r($_POST);die;
     $output = $mdl_rab->getout($_POST['prog'],$_POST['tahun'],$_POST['direktorat']);
     echo json_encode($output);
     break;

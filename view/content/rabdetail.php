@@ -165,7 +165,7 @@
       "serverSide": true,
       // "scrollX": true,
       "ajax": {
-        "url": "<?php echo $url_rewrite;?>api/proses_rab_rinci.php?id_rab_view=<?php echo $id_rab_view; ?>",
+        "url": "<?php echo $url_rewrite;?>process/rab_rinci/table/<?php echo $id_rab_view; ?>",
         "type": "GET"
       },
       "columnDefs" : [
