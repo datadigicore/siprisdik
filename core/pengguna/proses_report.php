@@ -19,16 +19,21 @@ $data_pengguna = array(
   "status"     => $status
 );
 
-switch ($process) {
-  case 'table':
-  break;
+$id = $data[3];
+
+$kdakun = $report->get_kd_akun($id);
+
+
+switch ($kdakun) {
   case 'Rincian_Biaya_PD':
     $report->rincian_biaya_PD($data_pengguna);
   break;
-  case 'Kuitansi_Honor_Uang_Saku':
+  case '522151':
     $report->Kuitansi_Honor_Uang_Saku($data_pengguna);
   break;
-  case 'Kuitansi_Honorarium':
+  case '512111':
+    $id = $data[3];
+    echo "";
     $report->Kuitansi_Honorarium($data_pengguna);
   break;
   case 'SPPD':
@@ -54,6 +59,7 @@ switch ($process) {
   break;
   default:
     
+    echo $kdakun;
   break;
 }
 ?>

@@ -100,7 +100,7 @@
         kdoutput    = '$output',
         kdsoutput   = '$soutput',
         kdkmpnen    = '$komp',
-        desk        = '$uraian',
+        deskripsi   = '$uraian',
         tanggal     = '$tgl',
         lokasi      = '$lokasi',
         status      = '0'

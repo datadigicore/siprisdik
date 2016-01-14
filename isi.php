@@ -34,6 +34,7 @@ else {
           if($data[2]=='add'){
             include ('view/content/rab-add.php');
           } else if($data[2]=='add-rincian'){
+            $id = $data[3];
             include ('view/content/rab-add-rincian.php');
           } else {
             $direktorat = $_SESSION['direktorat'];
