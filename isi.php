@@ -37,12 +37,12 @@ else {
             include ('view/content/rab-add-rincian.php');
           } else {
             $direktorat = $_SESSION['direktorat'];
-            $program = $mdl_rab->getProg();
+            $tahun = $mdl_rab->getYear();
             include ('view/content/rab.php');
           }
         break;
         case 'rabdetail':
-          if($data[2]=='akun'){
+          if($data[3]=='akun'){
             include ('view/content/rab-add.php');
           }else{
             $id_rab_view = $data[2];
@@ -80,6 +80,14 @@ else {
             include ('view/content/rab.php');
           }
         break;
+        case 'rabdetail':
+          if($data[2]=='akun'){
+            include ('view/content/rab-add.php');
+          }else{
+            $id_rab_view = $data[2];
+            include ('view/content/rabdetail.php');
+          }
+          break;
         default:
           include ('view/content/home.php');
         break;

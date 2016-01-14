@@ -20,6 +20,11 @@
 
             <a style="" id="add-more-akun" href="#" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Tambah Akun</a>
             <div class="well" id="div-tambah-akun" style="display:none"> 
+              <label>Kode Akun</label>
+              <select style="margin:5px auto" class="form-control" id="kode-akun" name="kode-akun" onchange="" >
+                                      
+              </select>
+              <label>No Item</label>
               <select style="margin:5px auto" class="form-control" id="kode-akun" name="kode-akun" >
                                       
               </select>
@@ -38,17 +43,6 @@
                      <div class="clearfix"></div>
 
                      <div class="panel-body">
-                          
-                          <!-- <div class="form-group ">
-                               <label class="col-md-3 control-label">Kode Akun</label>
-                               <div class="col-md-9">
-                                    <select class="form-control" id="kode-akun" name="kode-akun">
-                                      
-                                    </select>
-
-                               </div>
-                          </div> -->
-                            
                           <div class="form-group ">
                                <label class="col-md-3 control-label">Belanja Bahan</label>
                                <div class="col-md-9">

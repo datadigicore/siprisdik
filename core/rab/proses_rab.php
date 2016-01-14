@@ -36,7 +36,7 @@ switch ($process) {
           return '<i>Close</i>';
         }
         elseif($d==5){
-          return '<i>Kwitansi Telah Disahkan</i>';
+          return '<i>Penutupan Anggaran</i>';
         }
       }),
       array( 'db' => 'status',  'dt' => 6, 'formatter' => function($d,$row){ 
@@ -84,6 +84,10 @@ switch ($process) {
   case 'getkomp':
     $komp = $mdl_rab->getkomp($_POST['prog'],$_POST['output'],$_POST['soutput'],$_POST['tahun'],$_POST['direktorat']);
     echo json_encode($komp);
+    break;
+  case 'getskomp':
+    $skomp = $mdl_rab->getskomp($_POST['prog'],$_POST['output'],$_POST['soutput'],$_POST['komp'],$_POST['tahun'],$_POST['direktorat']);
+    echo json_encode($skomp);
     break;
   case 'save':
     $mdl_rab->save($_POST);

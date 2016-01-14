@@ -88,19 +88,12 @@
           <div class="form-group">
             <label>Tahun Anggaran</label>
             <select class="form-control" name="tahun2" id="tahun2" required>
-              <option value="2016">2016</option>
-              <option value="2017">2017</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Program</label>
-            <select class="form-control" name="prog" id="prog" onchange="chprog()" required>
-              <option>-- Pilih Program --</option>
-              <?php for ($i=0; $i < count($program); $i++) { 
-                echo "<option value='".$program[$i]."'>".$program[$i]." - Direktorat Jenderal Kelembagaan Ilmu Pengetahuan Teknolgi dan Pendidikan Tinggi</option>";
+              <?php for ($i=0; $i < count($tahun); $i++) { 
+                echo "<option value='".$tahun[$i]."'>".$tahun[$i].'</option>';
               }?>
             </select>
           </div>
+          <input type="hidden" id="prog" name="prog" value="06" />
           <?php if ($_SESSION['direktorat'] == "") { ?>
           <div class="form-group">
             <label>Kode Kegiatan</label>
@@ -131,6 +124,12 @@
             <label>Komponen</label>
             <select class="form-control" id="komp" name="komp" onchange="chkomp()" required>
               <option>-- Pilih Komponen --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Sub Komponen</label>
+            <select class="form-control" id="skomp" name="skomp" onchange="chskomp()" required>
+              <option>-- Pilih Sub Komponen --</option>
             </select>
           </div>
           <div class="form-group">
@@ -201,12 +200,13 @@
   </div>
 </div>
 <script>
+
   $(function () {
-    $( "#datepicker" ).datepicker({
-      changeMonth: true,
-      changeYear: true,
-      format: 'dd/mm/yyyy'
-    });
+     $( "#datepicker" ).datepicker({
+        changeMonth: true,
+        changeYear: true,
+        format: 'dd/mm/yyyy'
+      });
     var tahun = $('#tahun').val();
     var direktorat = $('#direktorat').val();
     var table = $("#table").DataTable({
@@ -241,6 +241,7 @@
       tabrow = table.row(tr);
       $("#id_rab_sah").val(tabrow.data()[0]);
     });
+    chprog();
   });
 
   function search(){
@@ -263,9 +264,11 @@
     $("#output option").remove();   
     $("#soutput option").remove();   
     $("#komp option").remove();   
+    $("#skomp option").remove();   
     $('#output').append('<option>-- Pilih Output --</option>');
     $('#soutput').append('<option>-- Pilih Sub Output --</option>');
     $('#komp').append('<option>-- Pilih Komponen --</option>');
+    $('#skomp').append('<option>-- Pilih Sub Komponen --</option>');
     var tahun = $('#tahun').val();
     var direktorat = $('#direktorat').val();
     var prog = $('#prog').val();
@@ -287,12 +290,10 @@
   function chout(){
     $("#soutput option").remove();   
     $("#komp option").remove();   
+    $("#skomp option").remove();   
     $('#soutput').append('<option>-- Pilih Sub Output --</option>');
     $('#komp').append('<option>-- Pilih Komponen --</option>');
-    var tahun = $('#tahun').val();
-    var direktorat = $('#direktorat').val();
-    var prog = $('#prog').val();
-    var output = $('#output').val();
+    $('#skomp').append('<option>-- Pilih Sub Komponen --</option>');
     $.ajax({
       type: "POST",
       url: "<?php echo $url_rewrite;?>process/rab/getsout",
@@ -311,7 +312,9 @@
   }
   function chsout(){
     $("#komp option").remove();   
+    $("#skomp option").remove();   
     $('#komp').append('<option>-- Pilih Komponen --</option>');
+    $('#skomp').append('<option>-- Pilih Sub Komponen --</option>');
     var tahun = $('#tahun').val();
     var direktorat = $('#direktorat').val();
     var prog = $('#prog').val();
@@ -330,6 +333,33 @@
         var obj = jQuery.parseJSON(data);
         for (var i = 0; i < obj.KDKMPNEN.length; i++) {
           $('#komp').append('<option value="'+obj.KDKMPNEN[i]+'">'+obj.KDKMPNEN[i]+' - '+obj.NMKMPNEN[i]+'</option>')
+        };
+      },
+    });
+  }
+  function chkomp(){
+    $("#skomp option").remove();   
+    $('#skomp').append('<option>-- Pilih Sub Komponen --</option>');
+    var tahun = $('#tahun').val();
+    var direktorat = $('#direktorat').val();
+    var prog = $('#prog').val();
+    var output = $('#output').val();
+    var soutput = $('#soutput').val();
+    var komp = $('#komp').val();
+    $.ajax({
+      type: "POST",
+      url: "<?php echo $url_rewrite;?>process/rab/getskomp",
+      data: { 'prog' : prog,
+              'output' : output,
+              'soutput' : soutput,
+              'komp' : komp,
+              'tahun' : tahun,
+              'direktorat' : direktorat
+            },
+      success: function(data){
+        var obj = jQuery.parseJSON(data);
+        for (var i = 0; i < obj.KDSKMPNEN.length; i++) {
+          $('#skomp').append('<option value="'+obj.KDSKMPNEN[i]+'">'+obj.KDSKMPNEN[i]+' - '+obj.NMSKMPNEN[i]+'</option>')
         };
       },
     });

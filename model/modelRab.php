@@ -3,6 +3,17 @@
 
   class modelRab extends mysql_db {
 
+    public function getYear(){
+      $query  = "SELECT thang FROM rkakl_full as r where thang != '' group by r.thang";
+      $result = $this->query($query);
+      $i=0;
+      while ($fetch = $this->fetch_object($result)) {
+        $data[$i] = $fetch->thang;
+        $i++;
+      }
+      return $data;
+    }
+
     public function getProg() {
       $query  = "SELECT KDPROGRAM FROM rkakl_full as r group by r.kdprogram";
       $result = $this->query($query);
@@ -15,7 +26,8 @@
     }
 
     public function getout($prog, $th, $dr) {
-      $query  = "SELECT KDOUTPUT, NMOUTPUT FROM rkakl_full as r where kdprogram='$prog' and thang='$th' and kdgiat='$dr' 
+      $query  = "SELECT KDOUTPUT, NMOUTPUT FROM rkakl_full as r 
+                where kdprogram='$prog' and thang='$th' and kdgiat='$dr' 
                   group by r.KDOUTPUT";
       $result = $this->query($query);
       $i=0;
@@ -50,6 +62,20 @@
       while($fetch  = $this->fetch_object($result)) {
         $data['KDKMPNEN'][$i] = $fetch->KDKMPNEN;
         $data['NMKMPNEN'][$i] = $fetch->NMKMPNEN;
+        $i++;
+      }
+      return $data;
+    }
+
+    public function getskomp($prog, $output, $soutput, $komp, $th, $dr) {
+      $query  = "SELECT KDSKMPNEN, NMSKMPNEN FROM rkakl_full as r 
+                  where kdprogram='$prog' and kdoutput='$output' and kdsoutput='$soutput' and kdkmpnen='$komp' and thang='$th' and kdgiat='$dr' 
+                  group by r.KDSKMPNEN";
+      $result = $this->query($query);
+      $i=0;
+      while($fetch  = $this->fetch_object($result)) {
+        $data['KDSKMPNEN'][$i] = $fetch->KDSKMPNEN;
+        $data['NMSKMPNEN'][$i] = $fetch->NMSKMPNEN;
         $i++;
       }
       return $data;
