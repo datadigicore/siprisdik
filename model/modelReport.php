@@ -425,9 +425,12 @@
 
     //Rincian Biaya Perjalanan Dinas
     public function Rincian_Biaya_PD($data){
-      $id = $data['id'];
-
-
+      
+      $no=1;
+      $jml=0;
+      $id = $data;
+      $result = $this->query("SELECT penerima, value, npwp, deskripsi, honor_output, honor_profesi, pajak FROM rabfull where rabview_id='$id' ");
+      // $data = $this->fetch_array($result);
 
       ob_start();  
       require_once __DIR__ . "/../utility/report/header_dikti.php";
@@ -451,44 +454,20 @@
             <td>PERINCIAN BIAYA</td>
             <td>JUMLAH Rp.</td>
             <td>KETERANGAN</td>
-        </tr> 
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>4</td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>5</td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>6</td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr> 
-      </table>';
+        </tr>'; 
+
+      while($data=$this->fetch_array($result)){
+        echo '<tr>
+                <td>'.$no++.'</td>
+                <td>'.$data[deskripsi].'</td>
+                <td>'.$data[value].'</td>
+                <td></td>
+              </tr>';
+        $jml +=$data[value];
+
+      }
+
+      echo '</table>';
       echo '<table style="text-align: justify; width: 100%; font-size:84%; font-family:serif"  >
             <tr>
 
@@ -503,9 +482,9 @@
             <td>Telah menerima sejumlah uang sebesar</td>
           </tr>
           <tr>
-            <td>Rp. ........................</td>
+            <td>Rp. '.$jml.'</td>
             <td width="23%"></td>
-            <td>Rp .........................</td>
+            <td>Rp. '.$jml.'</td>
           </tr>    
           <tr>
             <td>Bendahara Pengeluaran Pembantu</td>
@@ -533,10 +512,10 @@
     echo '  <table style="width: 60%; font-size:80%;"  border="0">               
                     <tr>
                         <td align="left">Ditetapkan Sejumlah</td>
-                        <td align="left">: Rp ..............................................</td>
+                        <td align="left">: Rp. '.$jml.'</td>
                     </tr> 
                     <tr>
-                        <td align="left">Yang telah dibayat semula</td>
+                        <td align="left">Yang telah dibayar semula</td>
                         <td align="left">: Rp ..............................................</td>
                     </tr> 
                     <tr>
@@ -552,7 +531,6 @@
     //Kuitansi Honor Dan Uang Saku
     public function Kuitansi_Honor_Uang_Saku($data) {
       $id = $data;
-
       $result = $this->query("SELECT penerima, value, npwp, deskripsi, honor_output, honor_profesi, pajak FROM rabfull where id='$id' ");
       $data = $this->fetch_array($result);
 
@@ -632,11 +610,11 @@
         echo '  <table style="width: 100%; font-size:80%;"  border="0">               
                     <tr>
                         <td align="left" width="17%">Nama Wajib Pajak </td>
-                        <td align="left">: </td>
+                        <td align="left">:'.$data[penerima].' </td>
                     </tr> 
                     <tr>
                         <td align="left" width="17%">NPWP</td>
-                        <td align="left">:</td>
+                        <td align="left">:'.$data[npwp].'</td>
                     </tr> 
                     <tr>
                         <td align="left" width="17%">Alamat</td>

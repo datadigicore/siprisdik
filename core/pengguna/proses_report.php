@@ -26,7 +26,7 @@ $kdakun = $report->get_kd_akun($id);
 
 switch ($data[2]) {
   case 'Rincian_Biaya_PD':
-    $report->rincian_biaya_PD($data_pengguna);
+    $report->rincian_biaya_PD($data[3]);
   break;
   case '522151':
     $report->Kuitansi_Honor_Uang_Saku($data_pengguna);
