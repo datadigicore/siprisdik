@@ -26,8 +26,20 @@
               </select>
               <label>No Item</label>
               <select style="margin:5px auto" class="form-control" id="kode-akun" name="kode-akun" >
-                                      
+                <option>-- Pilih No Item --</option>
+                <option value="1">1 - ATK dan Bahan Habis Pakai</option>
+                <option value="2">2 - Biaya Surat Menyurat, Penggandaan, Fotokopi, Fax, dll</option>
+                <option value="3">3 - Biaya Cetak Laporan  [5 BH x 5 KEG]</option>
+                <option value="4">4 - Biaya Pembuatan Plakat  [5 BH x 5 KEG]</option>
+                <option value="5">5 - Biaya cetak Leaflet dan Brosur  [200 EKS x 2 KEG]</option>
+                <option value="6">6 - Biaya Perlengkapan Seminar dan JWG  [150 BH x 2 KEG]</option>
+                <option value="7">7 - Biaya Pendukung Desiminasi PT  [150 BH x 2 KEG]</option>
+                <option value="8">8 - Biaya Pembuatan spanduk dan Banner  [3 BH x 2 KEG]</option>
+                <option value="9">9 - Biaya Pembuatan Backdrop  [2 BH x 2 KEG]</option>
               </select>
+              <label>Value</label>
+              <input id="value" class="form-control" name="value" type="number" value="" placeholder="value">
+              <br>
               <a style="" id="buat-akun" href="#" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-plus"></i> Buat Akun</a>
             </div>
             <hr>
@@ -384,6 +396,7 @@
               <tr>
                 <th>No</th>
                 <th>Kode Akun</th>
+                <th>Nama Akun</th>
                 <th>No. Item</th>
                 <th>Nama Item</th>
                 <th>Nilai (Rupiah)</th>
@@ -391,10 +404,11 @@
             </thead>
             <tbody>
               <td>1</td>
-              <td>523213</td>
+              <td>521211</td>
+              <td>Belanja Bahan</td>
               <td>1</td>
-              <td>Honorarium</td>
-              <td>8.000.000</td>
+              <td>ATK dan Bahan Habis Pakai</td>
+              <td>2.410.000</td>
             </tbody>
           </table>
         </div>

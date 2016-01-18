@@ -21,19 +21,18 @@ $data_pengguna = array(
 
 $id = $data[3];
 
-$kdakun = $report->get_kd_akun($id);
+// $kdakun = $report->get_kd_akun($id);
 
 
-switch ($kdakun) {
+switch ($process) {
   case 'Rincian_Biaya_PD':
     $report->rincian_biaya_PD($data_pengguna);
   break;
   case '522151':
     $report->Kuitansi_Honor_Uang_Saku($data_pengguna);
   break;
-  case '512111':
+  case 'Kuitansi_Honorarium':
     $id = $data[3];
-    echo "";
     $report->Kuitansi_Honorarium($data_pengguna);
   break;
   case 'SPPD':
