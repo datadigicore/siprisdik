@@ -425,6 +425,13 @@
 
     //Rincian Biaya Perjalanan Dinas
     public function Rincian_Biaya_PD($data){
+      
+      $no=1;
+      $jml=0;
+      $id = $data;
+      $result = $this->query("SELECT penerima, value, npwp, deskripsi, honor_output, honor_profesi, pajak FROM rabfull where rabview_id='$id' ");
+      // $data = $this->fetch_array($result);
+
       ob_start();  
       require_once __DIR__ . "/../utility/report/header_dikti.php";
       echo '<p align="center" style="font-weight:bold; font-size:1.0em">RINCIAN BIAYA PERJALANAN DINAS</p>';
@@ -447,44 +454,20 @@
             <td>PERINCIAN BIAYA</td>
             <td>JUMLAH Rp.</td>
             <td>KETERANGAN</td>
-        </tr> 
-        <tr>
-            <td>1</td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>4</td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>5</td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>6</td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr> 
-      </table>';
+        </tr>'; 
+
+      while($data=$this->fetch_array($result)){
+        echo '<tr>
+                <td>'.$no++.'</td>
+                <td>'.$data[deskripsi].'</td>
+                <td>'.$data[value].'</td>
+                <td></td>
+              </tr>';
+        $jml +=$data[value];
+
+      }
+
+      echo '</table>';
       echo '<table style="text-align: justify; width: 100%; font-size:84%; font-family:serif"  >
             <tr>
 
@@ -499,9 +482,9 @@
             <td>Telah menerima sejumlah uang sebesar</td>
           </tr>
           <tr>
-            <td>Rp. ........................</td>
+            <td>Rp. '.$jml.'</td>
             <td width="23%"></td>
-            <td>Rp .........................</td>
+            <td>Rp. '.$jml.'</td>
           </tr>    
           <tr>
             <td>Bendahara Pengeluaran Pembantu</td>
@@ -529,10 +512,10 @@
     echo '  <table style="width: 60%; font-size:80%;"  border="0">               
                     <tr>
                         <td align="left">Ditetapkan Sejumlah</td>
-                        <td align="left">: Rp ..............................................</td>
+                        <td align="left">: Rp. '.$jml.'</td>
                     </tr> 
                     <tr>
-                        <td align="left">Yang telah dibayat semula</td>
+                        <td align="left">Yang telah dibayar semula</td>
                         <td align="left">: Rp ..............................................</td>
                     </tr> 
                     <tr>
@@ -547,26 +530,30 @@
 
     //Kuitansi Honor Dan Uang Saku
     public function Kuitansi_Honor_Uang_Saku($data) {
+      $id = $data;
+      $result = $this->query("SELECT penerima, value, npwp, deskripsi, honor_output, honor_profesi, pajak FROM rabfull where id='$id' ");
+      $data = $this->fetch_array($result);
+
         ob_start();
         echo '  <p align="right">No...............................................</p>';  
         require_once __DIR__ . "/../utility/report/header_dikti.php";
         echo ' <p align="center" style="font-weight:bold; font-size:1.2em">KUINTANSI</p>
-                    <table style="width: 50%; font-size:80%;"  border="0">               
+                    <table style="width: 100%; font-size:80%;"  border="0">               
                     <tr>
-                        <td align="left">Sudah Terima Dari </td>
-                        <td align="left">: </td>
+                        <td align="left" width="20%">Sudah Terima Dari </td>
+                        <td align="left">: '.$data[penerima].'</td>
                     </tr> 
                     <tr>
                         <td align="left">Jumlah Uang</td>
-                        <td align="left">: Rp. </td>
+                        <td align="left" style="background-color:gray">: Rp. '.$data[value].'</td>
                     </tr> 
                     <tr>
                         <td align="left">Uang Sebesar</td>
-                        <td align="left">: </td>
+                        <td align="left">: '.$this->terbilang($data[value],1).'</td>
                     </tr>                
                     <tr>
                         <td align="left">Untuk Pembayaran</td>
-                        <td align="left">: </td>
+                        <td align="left">: '.$data[deskripsi].'</td>
                     </tr>                
 
                     </table>';
@@ -623,11 +610,11 @@
         echo '  <table style="width: 100%; font-size:80%;"  border="0">               
                     <tr>
                         <td align="left" width="17%">Nama Wajib Pajak </td>
-                        <td align="left">: </td>
+                        <td align="left">:'.$data[penerima].' </td>
                     </tr> 
                     <tr>
                         <td align="left" width="17%">NPWP</td>
-                        <td align="left">:</td>
+                        <td align="left">:'.$data[npwp].'</td>
                     </tr> 
                     <tr>
                         <td align="left" width="17%">Alamat</td>
@@ -751,6 +738,57 @@
     public function readPengguna($data) {
       
     }
+    function kekata($x) {
+      $x = abs($x);
+      $angka = array("", "satu", "dua", "tiga", "empat", "lima",
+      "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas");
+      $temp = "";
+      if ($x <12) {
+      $temp = " ". $angka[$x];
+      } else if ($x <20) {
+      $temp = $this->kekata($x - 10). " belas";
+      } else if ($x <100) {
+      $temp = $this->kekata($x/10)." puluh". $this->kekata($x % 10);
+      } else if ($x <200) {
+      $temp = " seratus" . $this->kekata($x - 100);
+      } else if ($x <1000) {
+      $temp = $this->kekata($x/100) . " ratus" . $this->kekata($x % 100);
+      } else if ($x <2000) {
+      $temp = " seribu" . $this->kekata($x - 1000);
+      } else if ($x <1000000) {
+      $temp = $this->kekata($x/1000) . " ribu" . $this->kekata($x % 1000);
+      } else if ($x <1000000000) {
+      $temp = $this->kekata($x/1000000) . " juta" . $this->kekata($x % 1000000);
+      } else if ($x <1000000000000) {
+      $temp = $this->kekata($x/1000000000) . " milyar" . $this->kekata(fmod($x,1000000000));
+      } else if ($x <1000000000000000) {
+      $temp = $this->kekata($x/1000000000000) . " trilyun" . $this->kekata(fmod($x,1000000000000));
+      }
+      return $temp;
+}
+
+function terbilang($x, $style=4) {
+    if($x<0) {
+    $hasil = "minus ". trim($this->kekata($x));
+    } else {
+    $hasil = trim($this->kekata($x));
+    }
+    switch ($style) {
+    case 1:
+    $hasil = strtoupper($hasil);
+    break;
+    case 2:
+    $hasil = strtolower($hasil);
+    break;
+    case 3:
+    $hasil = ucwords($hasil);
+    break;
+    default:
+    $hasil = ucfirst($hasil);
+    break;
+    }
+    return $hasil;
+}
   }
 
 ?>

@@ -24,9 +24,10 @@ $id = $data[3];
 // $kdakun = $report->get_kd_akun($id);
 
 
-switch ($process) {
+
+switch ($data[2]) {
   case 'Rincian_Biaya_PD':
-    $report->rincian_biaya_PD($data_pengguna);
+    $report->rincian_biaya_PD($data[3]);
   break;
   case '522151':
     $report->Kuitansi_Honor_Uang_Saku($data_pengguna);
@@ -34,6 +35,11 @@ switch ($process) {
   case 'Kuitansi_Honorarium':
     $id = $data[3];
     $report->Kuitansi_Honorarium($data_pengguna);
+  break;
+  case 'Kuitansi_Honorarium':
+    $id = $data[3];
+    echo "";
+    $report->Kuitansi_Honor_Uang_Saku($id);
   break;
   case 'SPPD':
     $report->SPPD($data_pengguna);
