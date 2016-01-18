@@ -23,7 +23,7 @@ include '../config/application.php';
 	        if($d==0 && $_SESSION['level'] != 0){
 	          return  '<div class="text-center">'.
 	                    '<a style="margin:0 2px;" id="btn-trans" href="content/rab/add-rincian/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Add Akun</a>'.
-	                  	'<a style="margin:0 2px;" id="btn-trans" href="akun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Kwitansi</a>'.
+	                  	'<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/Kuitansi_Honorarium/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Kwitansi</a>'.
 	                  '</div>';
 	        }elseif ($d==0 && $_SESSION['level'] == 0) {
 	          return  '<div class="text-center ">'.
