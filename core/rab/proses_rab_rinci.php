@@ -12,7 +12,7 @@ switch ($process) {
 	case 'table':
 		$rabview_id = $data[3];
 
-		$kwitansi = $mdl_rab->getKwitansi($rabview_id);
+		// $kwitansi = $mdl_rab->getKwitansi($rabview_id);
 		$a='a';
 	    $get_table = "rabfull";
 	    $key   = "id";
