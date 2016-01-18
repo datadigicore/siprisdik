@@ -39,7 +39,7 @@ switch ($data[2]) {
   case 'Kuitansi_Honorarium':
     $id = $data[3];
     echo "";
-    $report->Kuitansi_Honor_Uang_Saku($data_pengguna);
+    $report->Kuitansi_Honor_Uang_Saku($id);
   break;
   case 'SPPD':
     $report->SPPD($data_pengguna);
