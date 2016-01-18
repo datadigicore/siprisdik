@@ -193,6 +193,20 @@
       return $result;
     }
 
+    public function getKwitansi($id_rab_view){
+      $query  = "SELECT * FROM kwitansi as k
+                  where k.rabview_id='$id_rab_view'
+                  group by k.no_kwitansi";
+      $result = $this->query($query);
+      $i=0;
+      while($fetch  = $this->fetch_object($result)) {
+        $data['KDKMPNEN'][$i] = $fetch->KDKMPNEN;
+        $data['NMKMPNEN'][$i] = $fetch->NMKMPNEN;
+        $i++;
+      }
+      return $data;
+    }
+
   }
 
 ?>

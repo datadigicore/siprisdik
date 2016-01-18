@@ -328,6 +328,67 @@ class SSP {
         );
     }
 
+    static function simplewheregroup( $request, $conn, $table, $primaryKey, $columns, $whereResult=null, $groupby=null )
+    {
+        $bindings = array();
+        $db = self::db( $conn );
+        $localWhereResult = array();
+        $localWhereAll = array();
+        $whereAllSql = '';
+        $group = '';
+
+        // Build the SQL query string from the request
+        $limit = self::limit( $request, $columns );
+        $order = self::order( $request, $columns );
+        $where = self::filter( $request, $columns, $bindings );
+
+        $whereResult = self::_flatten( $whereResult );
+        $whereAll = self::_flatten( $whereAll );
+
+        if ( $whereResult ) {
+            $where = $where ?
+                $where .' AND '.$whereResult :
+                'WHERE '.$whereResult;
+        }
+
+        if ( $groupby ) {
+            $group =' GROUP BY '.$groupby;
+        }
+
+        // Main query to actually get the data
+        $data = self::sql_exec( $db, $bindings,
+            "SELECT SQL_CALC_FOUND_ROWS `".implode("`, `", self::pluck($columns, 'db'))."`
+             FROM `$table`
+             $where
+             $group
+             $order"
+        );
+
+        // Data set length after filtering
+        $resFilterLength = self::sql_exec( $db,
+            "SELECT FOUND_ROWS()"
+        );
+        $recordsFiltered = $resFilterLength[0][0];
+
+        // Total data set length
+        $resTotalLength = self::sql_exec( $db, $bindings,
+            "SELECT COUNT(`{$primaryKey}`)
+             FROM   `$table` ".
+            $whereAllSql
+        );
+        $recordsTotal = $resTotalLength[0][0];
+
+        /*
+         * Output
+         */
+        return array(
+            "draw"            => intval( $request['draw'] ),
+            "recordsTotal"    => intval( $recordsTotal ),
+            "recordsFiltered" => intval( $recordsFiltered ),
+            "data"            => self::data_output( $columns, $data )
+        );
+    }
+
     /**
      * The difference between this method and the `simple` one, is that you can
      * apply additional `where` conditions to the SQL queries. These can be in

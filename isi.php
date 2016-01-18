@@ -50,6 +50,9 @@ else {
             include ('view/content/rabdetail.php');
           }
           break;
+        case 'rabakun':
+          include ('view/content/rab-add.php');
+          break;
         case 'insertrab':
           include ('view/content/rab-insert.php');
         break;
@@ -84,6 +87,9 @@ else {
             $id_rab_view = $data[2];
             include ('view/content/rabdetail.php');
           }
+          break;
+        case 'rabakun':
+          include ('view/content/rab-add.php');
           break;
         default:
           include ('view/content/home.php');

@@ -35,6 +35,8 @@
                   <th>Kode Akun</th>
                   <th>Total Dana RAB</th>
                   <th></th>
+                  <th>Pelaporan</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -163,7 +165,7 @@
       },
       "processing": true,
       "serverSide": true,
-      // "scrollX": true,
+      "scrollX": true,
       "ajax": {
         "url": "<?php echo $url_rewrite;?>process/rab_rinci/table/<?php echo $id_rab_view; ?>",
         "type": "GET"
