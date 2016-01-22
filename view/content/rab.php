@@ -54,7 +54,6 @@
               <?php } else{ ?>
               <input type="hidden" id="direktorat" name="direktorat" value="<?php echo $_SESSION['direktorat']; ?>" />
               <?php } ?>
-              <?php echo $url_rewrite;?>
             </table>
             <table id="table" class="display nowrap table table-bordered table-striped" cellspacing="0" width="100%">
               <thead style="background-color:#11245B;color:white;">
@@ -294,7 +293,6 @@
     var output = $('#output').val();
     var tahun = $('#tahun').val();
     var direktorat = $('#direktorat').val();
-    alert('as');
     $.ajax({
       type: "POST",
       url: "<?php echo $url_rewrite;?>process/rab/getsout",

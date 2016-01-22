@@ -35,8 +35,10 @@
                   <th>Kode Akun</th>
                   <th>Total Dana RAB</th>
                   <th></th>
+                  <?php if($_SESSION['level'] == 0){?>
                   <th>Pelaporan</th>
                   <th></th>
+                  <?php }?>
                 </tr>
               </thead>
               <tbody>

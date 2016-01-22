@@ -533,7 +533,6 @@
       $id = $data;
       $result = $this->query("SELECT penerima, value, npwp, deskripsi, honor_output, honor_profesi, pajak FROM rabfull where id='$id' ");
       $data = $this->fetch_array($result);
-
         ob_start();
         echo '  <p align="right">No...............................................</p>';  
         require_once __DIR__ . "/../utility/report/header_dikti.php";

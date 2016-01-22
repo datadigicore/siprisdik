@@ -76,7 +76,7 @@ else {
             include ('view/content/rab-add-rincian.php');
           } else {
             $direktorat = $_SESSION['direktorat'];
-            $program = $mdl_rab->getProg();
+            $tahun = $mdl_rab->getYear();
             include ('view/content/rab.php');
           }
         break;

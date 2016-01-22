@@ -5,10 +5,11 @@ switch ($process) {
   case 'table':
     $table = "rabview";
     $key   = "id";
+    $dataArray['url_rewrite'] = $url_rewrite; 
     $column = array(
       array( 'db' => 'id',      'dt' => 0 ),
       array( 'db' => 'kdprogram',  'dt' => 1, 'formatter' => function($d,$row){ 
-          return 'Program : '.$row[1].
+          return 'Program : '.$dataArray['url_rewrite'].
                 '<br>'.'Output : '.$row[7].
                 '<br>'.'Suboutput : '.$row[8].
                 '<br>'.'Komponen : '.$row[9];
@@ -42,12 +43,12 @@ switch ($process) {
       array( 'db' => 'status',  'dt' => 6, 'formatter' => function($d,$row){ 
         if($d==0 && $_SESSION['level'] != 0){
           return  '<div class="text-center">'.
-                    '<a style="margin:0 2px;" id="btn-trans" href="'.$url_rewrite.'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Add Transaksi</a>'.
+                    '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Add Transaksi</a>'.
                     '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Ajukan</a>'.
                   '</div>';
         }elseif ($d==0 && $_SESSION['level'] == 0) {
           return  '<div class="text-center">'.
-                    '<a style="margin:0 2px;" id="btn-trans" href="'.$url_rewrite.'rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Add Transaksi</a>'.
+                    '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Add Transaksi</a>'.
                      '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/Rincian_Biaya_PD/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
                   '</div>';
         }
@@ -75,7 +76,7 @@ switch ($process) {
       array( 'db' => 'kdsoutput',  'dt' => 8),
       array( 'db' => 'kdkmpnen',  'dt' => 9),
     );
-    $datatable->get_table($table, $key, $column,$where="");
+    $datatable->get_table($table, $key, $column,$where="",$dataArray);
     break;
   case 'getout':
     // print_r($_POST);die;

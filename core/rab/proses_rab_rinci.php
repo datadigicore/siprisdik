@@ -38,12 +38,12 @@ switch ($process) {
 	        if($d==0 && $_SESSION['level'] != 0){
 	          return  '<div class="text-center">'.
 	                    '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Add Akun</a>'.
-	                    '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/Kuitansi_Honorarium/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file"></i>&nbsp; Cetak Kwitansi</a>'.
+	                    '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/Kuitansi_Honorarium/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file"></i>&nbsp; Cetak Kuitansi</a>'.
 	                  '</div>';
 	        }elseif ($d==0 && $_SESSION['level'] == 0) {
 	          return  '<div class="text-center btn-group-vertical">'.
 	                    '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; View Akun</a>'.
-	                    '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/Kuitansi_Honorarium/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-file"></i>&nbsp; Cetak Kwitansi</a>'.
+	                    '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/Kuitansi_Honorarium/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-file"></i>&nbsp; Cetak Kuitansi</a>'.
 	                  '</div>';
 	        }
 	      }),
@@ -53,9 +53,14 @@ switch ($process) {
 		  			'<select>';
 		  }),
 		  array('db' => 'status', 'dt'=>10, 'formatter' => function($d,$row){
-		  	  return  '<div class="text-center btn-group-vertical">'.
+		  	if ($_SESSION['level'] == 0) {
+		  		return  '<div class="text-center btn-group-vertical">'.
 	                    '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/sahkanAkun/'.$row[0].'" class="btn btn-flat btn-success btn-sm"><i class="fa fa-check"></i>&nbsp; Sahkan</a>'.
 	                  '</div>';
+		  	}else{
+		  		return '';
+		  	}
+		  	  
 		  })
 	    );
 		$where = 'rabview_id = "'.$rabview_id.'"';
