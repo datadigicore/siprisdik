@@ -17,6 +17,22 @@
         $mpdf->Output($name.".pdf" ,'I');
         exit;
     }
+
+    public function cetak_dok($data){
+      ob_start();
+      $this->Kuitansi_Honor_Uang_Saku($data);
+      echo '<pagebreak />';
+      $this->Rincian_Biaya_PD($data);
+      echo '<pagebreak />';
+      $this->SPPD($data);
+      echo '<pagebreak />';
+      $this->Kuitansi_Honorarium($data);
+      echo '<pagebreak />';
+      $this->daftar_peng_riil($data);
+      $html = ob_get_contents();
+      $this->create_pdf("SPTB","A4",$html);
+
+    }
     public function SPTB($data){
       ob_start();
       echo '<p align="center" style="font-weight:bold; text-decoration: underline;">SURAT PERNYATAAN TANGGUNG JAWAB BELANJA</p>';
@@ -57,19 +73,19 @@
       
       echo '<table border="1" style="width: 100%; font-size:0.6em; border-collapse: collapse;">
             <tr>
-              <th rowspan="2">No.</th>
-              <th rowspan="2">Akun</th>
-              <th rowspan="2">Penerima</th>
-              <th rowspan="2">Uraian</th>
-              <th colspan="2">Bukti</th>
-              <th rowspan="2">Jumlah</th>
-              <th  colspan="2">Pajak yang dipungut Bendahara Pengeluaran</th>
+              <th rowspan="2">No.</td>
+              <th rowspan="2">Akun</td>
+              <th rowspan="2">Penerima</td>
+              <th rowspan="2">Uraian</td>
+              <th colspan="2">Bukti</td>
+              <th rowspan="2">Jumlah</td>
+              <th  colspan="2">Pajak yang dipungut Bendahara Pengeluaran</td>
             </tr>
             <tr>
-              <th>Tanggal</th>
-              <th>Nomor</th>
-              <th width="10%">PPN</th>
-              <th width="10%">PPH</th>
+              <td>Tanggal</td>
+              <td>Nomor</td>
+              <th width="10%">PPN</td>
+              <th width="10%">PPH</td>
             </tr>
           </table>';
           echo '<p align="left" style="font-size:0.65em;">Bukti-bukti  pengeluaran  anggaran  dan asli  setoran  pajak  (SSP/BPN)  tersebut  di  atas disimpan  oleh Pengguna  Anggaran/Kuasa  Pengguna  Anggaran  untuk  kelengkapan  administrasi  dan  pemeriksaan aparat pengawasan fungsional.</p>';
@@ -122,7 +138,7 @@
       ob_start();
       echo '<table border="1" style="width: 100%; font-size:0.9em; border-collapse: collapse;">
               <tr>
-                <th colspan="7">DAFTAR RINCIAN<br></th>
+                <th colspan="7">DAFTAR RINCIAN<br></td>
               </tr>
               <tr>
                 <th colspan="7">PERMINTAAN PENGELUARAN<br></td>
@@ -230,10 +246,10 @@
     }
     //Kuitansi Honorarium
     public function Kuitansi_Honorarium($data){
-      ob_start(); 
+      // ob_start(); 
       echo '  <p align="right">No...............................................</p>'; 
       require_once __DIR__ . "/../utility/report/header_dikti.php";
-      echo '  <p align="center">KUINTANSI</p>
+      echo '  <p align="center">KUITANSI</p>
                     <table style="width: 100%; font-size:80%; border-collapse: collapse;"  border="0">               
                     <tr>
                         <td align="left">Sudah Terima Dari </td>
@@ -289,14 +305,14 @@
               </tr>
               </table>';
 
-      $html = ob_get_contents();
-      $this->create_pdf("SPPD","A4",$html);
+      // $html = ob_get_contents();
+      // $this->create_pdf("SPPD","A4",$html);
 
     }
 
     //SPPD SURAT PERINTAH PERJALANAN DINAS
     public function SPPD($data){
-      ob_start();  
+      // ob_start();  
       require_once __DIR__ . "/../utility/report/header_dikti.php";
       echo '  <table style="width: 50%; font-size:80%;"   border="0">               
                     <tr>
@@ -418,8 +434,8 @@
               </tr>
 
               </table>';
-      $html = ob_get_contents();
-      $this->create_pdf("SPPD","A4",$html);
+      // $html = ob_get_contents();
+      // $this->create_pdf("SPPD","A4",$html);
 
     }
 
@@ -432,7 +448,7 @@
       $result = $this->query("SELECT penerima, value, npwp, deskripsi, honor_output, honor_profesi, pajak FROM rabfull where rabview_id='$id' ");
       // $data = $this->fetch_array($result);
 
-      ob_start();  
+      // ob_start();  
       require_once __DIR__ . "/../utility/report/header_dikti.php";
       echo '<p align="center" style="font-weight:bold; font-size:1.0em">RINCIAN BIAYA PERJALANAN DINAS</p>';
       echo '  <table style="width: 40%; font-size:80%; font-weight:bold;"  border="0">     
@@ -523,37 +539,37 @@
                         <td align="left">: Rp ..............................................</td>
                     </tr> 
                     </table>';  
-      $html = ob_get_contents();
-      $this->create_pdf("RB_Perjalanan_Dinas","A4",$html);
+      // $html = ob_get_contents();
+      // $this->create_pdf("RB_Perjalanan_Dinas","A4",$html);
 
     }
 
     //Kuitansi Honor Dan Uang Saku
     public function Kuitansi_Honor_Uang_Saku($data) {
       $id = $data;
-      $result = $this->query("SELECT penerima, value, npwp, deskripsi, honor_output, honor_profesi, pajak FROM rabfull where id='$id' ");
-      $data = $this->fetch_array($result);
+      $result = $this->query("SELECT jabatan, jenis, lama_hari, tgl_mulai, tgl_akhir, deskripsi, trans_lokal, penerima, value, npwp, deskripsi, honor_output, honor_profesi, pajak FROM rabfull where id='$id' ");
+      $data_rab = $this->fetch_array($result);
 
-        ob_start();
+        // ob_start();
         echo '  <p align="right">No...............................................</p>';  
         require_once __DIR__ . "/../utility/report/header_dikti.php";
-        echo ' <p align="center" style="font-weight:bold; font-size:1.2em">KUINTANSI</p>
+        echo ' <p align="center" style="font-weight:bold; font-size:1.2em">KUITANSI</p>
                     <table style="width: 100%; font-size:80%;"  border="0">               
                     <tr>
                         <td align="left" width="20%">Sudah Terima Dari </td>
-                        <td align="left">: '.$data[penerima].'</td>
+                        <td align="left">: '.$data_rab[penerima].'</td>
                     </tr> 
                     <tr>
                         <td align="left">Jumlah Uang</td>
-                        <td align="left" style="background-color:gray">: Rp. '.$data[value].'</td>
+                        <td align="left" style="background-color:gray">: Rp. '.$data_rab[value].'</td>
                     </tr> 
                     <tr>
                         <td align="left">Uang Sebesar</td>
-                        <td align="left">: '.$this->terbilang($data[value],1).'</td>
+                        <td align="left">: '.$this->terbilang($data_rab[value],1).'</td>
                     </tr>                
                     <tr>
                         <td align="left">Untuk Pembayaran</td>
-                        <td align="left">: '.$data[deskripsi].'</td>
+                        <td align="left">: '.$data_rab[deskripsi].'</td>
                     </tr>                
 
                     </table>';
@@ -610,11 +626,11 @@
         echo '  <table style="width: 100%; font-size:80%;"  border="0">               
                     <tr>
                         <td align="left" width="17%">Nama Wajib Pajak </td>
-                        <td align="left">:'.$data[penerima].' </td>
+                        <td align="left">:'.$data_rab[penerima].' </td>
                     </tr> 
                     <tr>
                         <td align="left" width="17%">NPWP</td>
-                        <td align="left">:'.$data[npwp].'</td>
+                        <td align="left">:'.$data_rab[npwp].'</td>
                     </tr> 
                     <tr>
                         <td align="left" width="17%">Alamat</td>
@@ -633,7 +649,7 @@
               </tr>              
               <tr>
                 <td >1. Honorarium</td>
-                <td style="text-align center;">Rp.................</td>
+                <td style="text-align center;">Rp. '.$data_rab[value].'</td>
                 <td >................... %</td>
                 <td >Rp................... </td>
               </tr>
@@ -696,8 +712,8 @@
 
               </table>';
         
-        $html = ob_get_contents(); 
-        $this->create_pdf("Kw_Honor_Uang_Saku","A4",$html);
+        // $html = ob_get_contents(); 
+        // $this->create_pdf("Kw_Honor_Uang_Saku","A4",$html);
         
     }
 
@@ -705,15 +721,15 @@
       ob_start();
       echo '<table>
               <tr>
-                <th rowspan="2"></th>
-                <th rowspan="2"></th>
-                <th rowspan="2"></th>
-                <th rowspan="2"></th>
-                <th colspan="3"></th>
-                <th colspan="3"></th>
-                <th rowspan="2"></th>
-                <th rowspan="2"></th>
-                <th colspan="2"></th>
+                <th rowspan="2"></td>
+                <th rowspan="2"></td>
+                <th rowspan="2"></td>
+                <th rowspan="2"></td>
+                <th colspan="3"></td>
+                <th colspan="3"></td>
+                <th rowspan="2"></td>
+                <th rowspan="2"></td>
+                <th colspan="2"></td>
               </tr>
               <tr>
                 <td></td>
@@ -731,7 +747,288 @@
       
     }
 
-    public function deletePengguna($id) {
+public function daftar_peng_riil($data){
+  $res = $this->query("SELECT * from rabfull where id='$data' ");
+
+  ob_start();
+      echo '<h2 align="center">DAFTAR PENGELUARAN RIIL<h2>
+          <h5>Yang bertanda tangan dibawah ini :<h5>';
+      echo '<table border=1 style="width: 100%; text-align:left; border-collapse:collapse; font-size:80%;">
+        <tr>
+          <td width="20%">Nama</td>
+          <td width="2%">:</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Asal Daerah</td>
+          <td>:</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>No Handphone</td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>';
+
+      echo '<h5>Berdasarkan Surat Tugas :</h5>';
+
+      echo '<table border=1 style="width: 100%; text-align:left; border-collapse:collapse; font-size:80%;">
+        <tr>
+          <td width="20%">Nomor</td>
+          <td width="2%">:</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Tanggal</td>
+          <td>:</td>
+          <td></td>
+        </tr>
+      </table>';
+
+      echo '<h5>Dengan ini saya menyatakan dengan sesugguhnya bahwa :</h5>';
+      echo '<table style="width: 100%; text-align:left; border-collapse:collapse; font-size:80%;">
+        <tr>
+          <td width="3%">1.</td>
+          <td>Biaya Transport dan pengeluaran yang tidak dapat diperoleh bukti-bukti pengeluarannya, meliputi : </td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Jumlah Uang tersebut pada lembar Uraian diatas benar-benar dikeluarkan untuk pelaksanaan Perjalanan dinas dimaksud dan apabilah dikemudian hari terdapat kelebihan atas pembayaran, kami bersedia menyetorkan kelebihan tersebut ke kas Negara</td>
+        </tr>
+      </table>
+
+      <h5>Demikian pernyataan ini dibuat untuk dipergunakan sebagaimana mestinya</h5>';
+
+      echo '<table  style="width: 100%; text-align:left; border-collapse:collapse; font-size:80%;">
+        <tr>
+          <td width="60%">Mengetahui</td>
+          <td>Jakarta, ..................................................</td>
+        </tr>
+        <tr>
+          <td>Pejabat Pembuat Komitmen</td>
+          <td>Yang Melaksanakan</td>
+        </tr>
+        <tr>
+          <td><br></br><br></br></td>
+          <td><br></br><br></br></td>
+        </tr>
+        <tr>
+          <td style="font-weight:bold">Ridwan</td>
+          <td>Irawan Yusuf</td>
+        </tr>
+        
+        <tr>
+          <td>NIP. 1962121019920310011</td>
+          <td></td>
+        </tr>
+      </table>';
+      $html = ob_get_contents();
+      $this->create_pdf("Daftar Pengeluaran Riil","A4",$html);
+}
+    public function pengajuan_UMK($data) {
+      $sql = $this->query("SELECT kdgiat, kdprogram, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, deskripsi, tanggal, lokasi, uang_muka FROM rabfull where rabview_id='$data' ");
+      $res = $this->fetch_array($sql);
+      $kdgiat= $res[kdgiat];
+      $kdprogram = $res[kdprogram];
+      $kdoutput = $res[kdoutput];
+      $kdsoutput = $res[kdsoutput];
+      $kdkmpnen = $res[kdkmpnen];
+      $kdskmpnen = $res[kdskmpnen];
+      $deskripsi = $res[deskripsi];
+      $tanggal = $res[tanggal];
+      $lokasi = $res[lokasi];
+      $uang_muka = $res[uang_muka];
+      echo $kdprogram." ".$kdoutput." ".$kdsoutput." ".$kdkmpnen." ".$tanggal;
+      $sql2 = $this->query("SELECT nmgiat, NMOUTPUT, NMKMPNEN, NmSkmpnen FROM rkakl_full where KDPROGRAM = '$kdprogram' and KDOUTPUT = '$kdoutput'  ");
+      $res2 = $this->fetch_array($sql2);
+      ob_start();
+      echo  '<table style="width: 100%; text-align:left; border-collapse:collapse; font-size:80%;">
+            <tr>
+              <td colspan="6"> PENGAJUAN UANG MUKA KERJA (UMK) </td>
+            </tr>
+            <tr>
+              <td colspan="6"> RINCIAN KEBUTUHAN DANA </td>
+            </tr>
+              <tr>
+                <td>1</td>
+                <td>Satker</td>
+                <td>:</td>
+                <td></td>
+                <td>:</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Kegiatan</td>
+                 <td>:</td>
+                <td></td>
+                <td>:</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Output</td>
+                 <td>:</td>
+                <td>'.$res2[NMOUTPUT].'</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>Komponen Input</td>
+                 <td>:</td>
+                <td></td>
+                <td>:</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>Sub Komponen</td>
+                <td>:</td>
+                <td></td>
+                <td>:</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td>Tujuan Pekerjaan</td>
+                <td>:</td>
+                <td></td>
+                <td>:</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>7</td>
+                <td>Waktu Pelaksanaan</td>
+                <td>:</td>
+                <td>'.$tanggal.'</td>
+                <td>:</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>8</td>
+                <td>Tempat pelaksanaan</td>
+                <td>:</td>
+                <td></td>
+                <td>:</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>9</td>
+                <td>Kebutuhan Biaya</td>
+                <td>:</td>
+                <td>1. Uang Harian/ uang saku</td>
+                <td>:</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>:</td>
+                <td>2. Honorarium</td>
+                <td>:</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>:</td>
+                <td>3. Akomodasi</td>
+                <td>:</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>:</td>
+                <td>4. Taxi / Transport Lokal</td>
+                <td>:</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>:</td>
+                <td>5. Tiket</td>
+                <td>:</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>:</td>
+                <td>6. Lain-lain</td>
+                <td>:</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>Jumlah</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>10</td>
+                <td>Penanggung Jawab kegiatan</td>
+                <td>:</td>
+                <td></td>
+                <td>:</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>11</td>
+                <td>Waktu Penyelesaian SPJ</td>
+                <td>:</td>
+                <td></td>
+                <td>:</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Jakarta, ................................. 2016</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td style="border: 1px solid black; " >Kuasa Pengguna Anggaran</td>
+                <td></td>
+                <td style="border: 1px solid black;">Bendahara Pengeluaran</td>
+                <td></td>
+                <td style="border: 1px solid black;">Pejabat Pembuat Komitmen</td>
+              </tr>
+              <tr>
+                <td><br></br><p></p></td>
+                <td  style="border-left: 1px solid black; border-right: 1px solid black;"></td>
+                <td></td>
+                <td style="border-left: 1px solid black; border-right: 1px solid black;"></td>
+                <td></td>
+                <td style="border-left: 1px solid black; border-right: 1px solid black;"></td>
+              </tr> 
+              <tr>
+                <td></td>
+                <td style="border-left: 1px solid black; border-right: 1px solid black;">Agus Indrajo</td>
+                <td></td>
+                <td style="border-left: 1px solid black;  border-right: 1px solid black;">Josephine Margaretta</td>
+                <td ></td>
+                <td style="border-left: 1px solid black; border-right: 1px solid black;">....................................</td>
+              </tr> 
+              <tr>
+                <td></td>
+                <td style="border-bottom: 1px solid black; border-left: 1px solid black;  border-right: 1px solid black;">NIP. 19600505 198703 1 001</td>
+                <td></td>
+                <td style="border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;">NIP. 19870613 201012 2 009</td>
+                <td></td>
+                <td style="border-bottom: 1px solid black; border-left: 1px solid black;  border-right: 1px solid black;">NIP. ....................................</td>
+              </tr>
+            </table>';
+            // $html = ob_get_contents();
+            // $this->create_pdf("Pengajuan UMK","A4",$html);
       
     }
 
@@ -787,6 +1084,7 @@ function terbilang($x, $style=4) {
     $hasil = ucfirst($hasil);
     break;
     }
+    $hasil .= " Rupiah";
     return $hasil;
 }
   }

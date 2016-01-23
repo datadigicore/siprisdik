@@ -48,18 +48,18 @@ switch ($process) {
         }elseif ($d==0 && $_SESSION['level'] == 0) {
           return  '<div class="text-center">'.
                     '<a style="margin:0 2px;" id="btn-trans" href="'.$url_rewrite.'rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Add Transaksi</a>'.
-                     '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/Rincian_Biaya_PD/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
+                     '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
                   '</div>';
         }
         if($d==1  && $_SESSION['level'] != 0){
           return  '<div class="text-center">'.
                     '<a style="margin:0 2px;" id="btn-viw" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View Transaksi</a>'.
-                     '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/Rincian_Biaya_PD/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
+                     '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
                   '</div>';
         }elseif ($d==1  && $_SESSION['level'] == 0) {
           return  '<div class="text-center">'.
                     '<a style="margin:0 2px;" id="btn-viw" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View Transaksi</a>'.
-                     '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/Rincian_Biaya_PD/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
+                     '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
                     '<a style="margin:0 2px;" id="btn-sah" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
                     '<a style="margin:0 2px;" id="btn-rev" href="#revisi" class="btn btn-flat btn-warning btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Revisi</a>'.
                   '</div>';
@@ -67,7 +67,7 @@ switch ($process) {
         else{
           return  '<div class="text-center">'.
                     '<a style="margin:0 2px;" id="btn-viw" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View Transaksi</a>'.
-                     '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/Rincian_Biaya_PD/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
+                     '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
                   '</div>';
         }
       }),
