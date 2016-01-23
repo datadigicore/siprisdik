@@ -10,12 +10,12 @@ class datatable extends config {
             SSP::simple( $_POST, $sql_details, $table, $primaryKey, $columns)
         );        
     }
-    function get_table($table, $primaryKey, $columns, $where){
+    function get_table($table, $primaryKey, $columns, $where, $dataArray){
         $config = new config();
         $sql_details = $config->sql_details();
         require( 'ssp.class.php' );
         echo json_encode(
-            SSP::simplewhere( $_POST, $sql_details, $table, $primaryKey, $columns, $where)
+            SSP::simplewhere( $_POST, $sql_details, $table, $primaryKey, $columns, $where, $dataArray)
         );        
     }
     function get_table_group($table, $primaryKey, $columns, $where, $group){

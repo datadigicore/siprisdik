@@ -547,10 +547,15 @@
     //Kuitansi Honor Dan Uang Saku
     public function Kuitansi_Honor_Uang_Saku($data) {
       $id = $data;
+
       $result = $this->query("SELECT jabatan, jenis, lama_hari, tgl_mulai, tgl_akhir, deskripsi, trans_lokal, penerima, value, npwp, deskripsi, honor_output, honor_profesi, pajak FROM rabfull where id='$id' ");
       $data_rab = $this->fetch_array($result);
 
         // ob_start();
+
+      $result = $this->query("SELECT penerima, value, npwp, deskripsi, honor_output, honor_profesi, pajak FROM rabfull where id='$id' ");
+      $data = $this->fetch_array($result);
+        ob_start();
         echo '  <p align="right">No...............................................</p>';  
         require_once __DIR__ . "/../utility/report/header_dikti.php";
         echo ' <p align="center" style="font-weight:bold; font-size:1.2em">KUITANSI</p>

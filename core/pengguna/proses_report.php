@@ -24,6 +24,7 @@ $id = $data[3];
 $kdakun = $report->get_kd_akun($id);
 
 
+
 switch ($data[2]) {
   case 'cetak_dok':
     $report->cetak_dok($data[3]);
@@ -38,14 +39,12 @@ switch ($data[2]) {
   case '522151':
     $report->Kuitansi_Honor_Uang_Saku($data_pengguna);
   break;
-  case '512111':
+  case 'Kuitansi_Honorarium':
     $id = $data[3];
-    echo "";
-    $report->Kuitansi_Honorarium($data_pengguna);
+    $report->Kuitansi_Honor_Uang_Saku($id);
   break;
   case 'Kuitansi_Honorarium':
     $id = $data[3];
-    echo "";
     $report->Kuitansi_Honor_Uang_Saku($id);
   break;
   case 'SPPD':

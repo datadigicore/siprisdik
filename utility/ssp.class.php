@@ -264,7 +264,7 @@ class SSP {
         );
     }
 
-    static function simplewhere( $request, $conn, $table, $primaryKey, $columns, $whereResult=null, $whereAll=null )
+    static function simplewhere( $request, $conn, $table, $primaryKey, $columns, $whereResult=null, $dataArray )
     {
         $bindings = array();
         $db = self::db( $conn );
@@ -324,7 +324,8 @@ class SSP {
             "draw"            => intval( $request['draw'] ),
             "recordsTotal"    => intval( $recordsTotal ),
             "recordsFiltered" => intval( $recordsFiltered ),
-            "data"            => self::data_output( $columns, $data )
+            "data"            => self::data_output( $columns, $data ),
+            'dataArray'       => $dataArray
         );
     }
 

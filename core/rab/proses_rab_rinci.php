@@ -30,7 +30,10 @@ switch ($process) {
 	      array( 'db' => 'golongan',  'dt' => 4 ),
 	      array( 'db' => 'jabatan', 'dt' => 5),
 	      array( 'db' => 'kdakun', 'dt' => 6),
-	      array( 'db' => 'value', 'dt' => 7),
+	      array( 'db' => 'value', 'dt' => 7, 'formatter' => function($d,$row){ 
+	      	return number_format($d,2);
+
+	      }),
 	      array( 'db' => 'status',  'dt' => 8, 'formatter' => function($d,$row){ 
 	        if($d==0 && $_SESSION['level'] != 0){
 	          return  '<div class="text-center">'.
@@ -50,9 +53,14 @@ switch ($process) {
 		  			'<select>';
 		  }),
 		  array('db' => 'status', 'dt'=>10, 'formatter' => function($d,$row){
-		  	  return  '<div class="text-center btn-group-vertical">'.
-	                    '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/content/rabakun/'.$row[0].'" class="btn btn-flat btn-success btn-sm"><i class="fa fa-check"></i>&nbsp; Sahkan</a>'.
+		  	if ($_SESSION['level'] == 0) {
+		  		return  '<div class="text-center btn-group-vertical">'.
+	                    '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/sahkanAkun/'.$row[0].'" class="btn btn-flat btn-success btn-sm"><i class="fa fa-check"></i>&nbsp; Sahkan</a>'.
 	                  '</div>';
+		  	}else{
+		  		return '';
+		  	}
+		  	  
 		  })
 	    );
 		$where = 'rabview_id = "'.$rabview_id.'"';
