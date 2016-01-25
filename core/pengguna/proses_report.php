@@ -23,11 +23,13 @@ $id = $data[3];
 
 $kdakun = $report->get_kd_akun($id);
 
-
+$param  = explode("-", $data[3]);
+$id = $param[0];
+$penerima = $param[1];
 
 switch ($data[2]) {
   case 'cetak_dok':
-    $report->cetak_dok($data[3]);
+    $report->cetak_dok($id,$penerima);
   break;
   case 'Rincian_Biaya_PD':
 
