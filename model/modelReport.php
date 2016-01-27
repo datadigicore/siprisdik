@@ -19,9 +19,6 @@
     }
 
     public function cetak_dok($id,$nama){
-      
-
-
       $result = $this->query("SELECT rabview_id from rabfull where id='$id' ");
       $res = $this->fetch_array($result);
       $rabv_id = $res[rabview_id];
@@ -38,22 +35,33 @@
       // $lokasi = $res[lokasi];
       // $uang_muka = $res[uang_muka];
       // echo "Nama : ".$nama."RABV ID ".$rabv_id." KD PROGRAM".$kdgiat." ".$kdprogram." ".$kdoutput." ".$kdsoutput." ".$kdkmpnen;
-      
+      $dinas = 0;
+      $lokal = 0;
       $sql2 = $this->query("SELECT NMGIAT, NMOUTPUT, NMKMPNEN, NmSkmpnen, NMITEM FROM rkakl_full where KDPROGRAM = '$kdprogram' and KDOUTPUT='$kdoutput' and KDSOUTPUT='$kdsoutput' and KDKMPNEN = '$kdkmpnen'; ");
       $detil_prog = $this->fetch_array($sql2);
       // print_r($detil_prog);
       mysql_free_result($result);
-      $result = $this->query("SELECT rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$rabv_id' and penerima='$nama' ");
+      $result = $this->query("SELECT rab.alat_trans, rab.kota_asal, rab.kota_tujuan, rab.lama_hari, rab.tgl_mulai, rab.tgl_akhir, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$rabv_id' and penerima='$nama' ");
+      while($res=$this->fetch_array($result)){
+        if($res[kdakun]=="524119" || $res[kdakun]=="524114"  || $res[kdakun]=="524113" || $res[kdakun]=="524219")   $dinas=1;
+        if($res[kdakun]=="524114"  || $res[kdakun]=="524113")   $lokal=1;
+      }
       ob_start();
-      $this->Kuitansi_Honor_Uang_Saku($result);
-      echo '<pagebreak />';
-      $this->Rincian_Biaya_PD($data);
-      echo '<pagebreak />';
-      $this->SPPD($data);
-      echo '<pagebreak />';
-      $this->Kuitansi_Honorarium($data);
-      echo '<pagebreak />';
-      $this->daftar_peng_riil($data);
+      if($lokal==0) {
+        $this->Kuitansi_Honor_Uang_Saku($result);
+        echo '<pagebreak />';
+      }
+      if($dinas==1){ 
+        $this->Rincian_Biaya_PD($result);
+        echo '<pagebreak />';
+        $this->SPPD($result);
+        echo '<pagebreak />';
+      }
+      if($lokal==1) {
+        $this->Kuitansi_Honorarium($result);
+        echo '<pagebreak />';
+      }
+      $this->daftar_peng_riil($result);
       $html = ob_get_contents();
       $this->create_pdf("SPTB","A4",$html);
 
@@ -313,7 +321,12 @@
     }
     //Kuitansi Honorarium
     public function Kuitansi_Honorarium($data){
-      // ob_start(); 
+      $penerima="";
+      $total=0;
+      foreach ($data as $value) {
+         $total += $value[value];
+         $penerima = $value[penerima];
+      }
       echo '  <p align="right">No...............................................</p>'; 
       require __DIR__ . "/../utility/report/header_dikti.php";
       echo '  <p align="center">KUITANSI</p>
@@ -324,7 +337,7 @@
                     </tr> 
                     <tr>
                         <td align="left">Jumlah Uang</td>
-                        <td align="left">: Rp. </td>
+                        <td align="left">: Rp. '.$total.'</td>
                     </tr> 
                     <tr>
                         <td align="left">Uang Sebesar</td>
@@ -336,7 +349,23 @@
                     </tr>                
 
                     </table>';
-    
+        $pph = (15 / 100) * $total;
+        $diterima = $total-$pph;      
+        echo  '<table style="width: 100%; font-size:80%;"  border="0">';                   
+        foreach ($data as $value) {
+          echo '<tr>
+                  <td width="18%"></td>
+                  <td width="40%">'.$value[NMITEM].'</td>
+                  <td>'." : Rp. ".$value[value].'</td>
+                </tr>';
+          }
+          echo '<tr>
+                  <td ></td>
+                  <td >'."Jumlah ".'</td>
+                  <td>'." : Rp. ".$total.'</td>
+                </tr>';
+        echo  '</table>';
+        
         echo '<br></br>
               <table style="text-align: left; width: 100%; font-size:84%; font-family:serif"  >
           
@@ -362,7 +391,7 @@
               <tr>
                 <td>'.'..................................'.'</td>
                 <td>'.'..................................'.'</td>
-                <td>'.'(..................................)'.'</td>
+                <td>'.$penerima.'</td>
               </tr>              
 
               <tr>
@@ -379,6 +408,24 @@
 
     //SPPD SURAT PERINTAH PERJALANAN DINAS
     public function SPPD($data){
+      $transportasi=null;
+      $kota_asal=null;
+      $kota_tujuan=null;
+      $lama_hari=null;
+      $tgl_mulai = null;
+      $tgl_akhir = null;
+      $penerima=nul;
+
+      foreach ($data as $value) {
+        if($value[alat_trans]!=''){ $transportasi = $value[alat_trans]; }
+        if($value[kota_asal]!="") $kota_asal= $value[kota_asal];
+        if($value[kota_tujuan]!="") $kota_tujuan = $value[kota_tujuan];
+        if($value[lama_hari]!="") $lama_hari = $value[lama_hari];
+        if($value[tgl_mulai]!="") $tgl_mulai = $value[tgl_mulai];
+        if($value[tgl_akhir]!="") $tgl_akhir = $value[tgl_akhir];
+        $penerima=$value[penerima];
+      }
+
       // ob_start();  
       require __DIR__ . "/../utility/report/header_dikti.php";
       echo '  <table style="width: 50%; font-size:80%;"   border="0">               
@@ -406,7 +453,7 @@
                     <tr>
                       <td>2</td>
                       <td>Nama/NIP Pegawai Yang Diperintahkan</td>
-                      <td colspan="2"></td>
+                      <td colspan="2">'.$penerima.'</td>
                     </tr> 
                     <tr>
                         <td>3</td>
@@ -419,13 +466,13 @@
                     </tr>
                     <tr>
                       <td>4</td>
-                      <td>Maksud Perjakanan Dinas</td>
+                      <td>Maksud Perjalanan Dinas</td>
                       <td colspan="2"></td>
                     </tr> 
                     <tr>
                       <td>5</td>
                       <td>Alat Angkutan yang dipergunakan</td>
-                      <td colspan="2"></td>
+                      <td colspan="2">'.$transportasi.'</td>
                     </tr>
                     <tr>
                       <td>6</td>
@@ -433,7 +480,10 @@
                           <p> a.  Tempat Berangkat</p>
                           <p> b.  Tempat Tujuan</p>
                       </td>
-                      <td colspan="2"></td>
+                      <td colspan="2">
+                          <p>'.$kota_asal.'</p>
+                          <p>'.$kota_tujuan.'</p>
+                      </td>
                     </tr> 
                     <tr>
                       <td>7</td>
@@ -443,7 +493,10 @@
                           <p>c.  Tanggal kembali/tiba di Tempat baru *)</p>
 
                       </td>
-                      <td colspan="2"></td>
+                      <td colspan="2">
+                          <p>'.$lama_hari." Hari".'</p>
+                          <p>'.$tgl_mulai.'</p>
+                          <p>'.$tgl_akhir.'</p></td>
                     </tr>
                     
                     <tr>
@@ -508,14 +561,7 @@
 
     //Rincian Biaya Perjalanan Dinas
     public function Rincian_Biaya_PD($data){
-      
-      $no=1;
       $jml=0;
-      $id = $data;
-      $result = $this->query("SELECT penerima, value, npwp, deskripsi, honor_output, honor_profesi, pajak FROM rabfull where rabview_id='$id' ");
-      // $data = $this->fetch_array($result);
-
-      // ob_start();  
       require __DIR__ . "/../utility/report/header_dikti.php";
       echo '<p align="center" style="font-weight:bold; font-size:1.0em">RINCIAN BIAYA PERJALANAN DINAS</p>';
       echo '  <table style="width: 40%; font-size:80%; font-weight:bold;"  border="0">     
@@ -531,24 +577,30 @@
 
         </table>';    
 
-      echo '  <table style="width: 100%; text-align:center; border-collapse:collapse; font-size:80%;"  border="1">     
+      echo '  <table cellpadding="8" style="width: 100%; text-align:center; border-collapse:collapse; font-size:80%;">     
         <tr>
-            <td width="9%">NO</td>
-            <td>PERINCIAN BIAYA</td>
-            <td>JUMLAH Rp.</td>
-            <td>KETERANGAN</td>
+            <td width="9%" style="border:1px solid">NO</td>
+            <td style="border:1px solid">PERINCIAN BIAYA</td>
+            <td style="border:1px solid">JUMLAH Rp.</td>
+            <td style="border:1px solid">KETERANGAN</td>
         </tr>'; 
-
-      while($data=$this->fetch_array($result)){
-        echo '<tr>
-                <td>'.$no++.'</td>
-                <td>'.$data[deskripsi].'</td>
-                <td>'.$data[value].'</td>
-                <td></td>
-              </tr>';
-        $jml +=$data[value];
-
-      }
+        $no=1;
+        foreach ($data as $value) {
+          
+          echo '<tr>
+                 <td style="border-left:1px solid; border-right:1px solid">'.$no++.'</td>
+                 <td style="border-left:1px solid; border-right:1px solid" align="left">'.$value[NMITEM].'</td>
+                 <td style="border-left:1px solid; border-right:1px solid">'.$value[value].'</td>
+                 <td style="border-left:1px solid; border-right:1px solid"></td>
+                </tr>';
+                $jml+=$value[value];
+          }
+          echo '<tr>
+                  <td style="border-top:1px solid"></td>
+                  <td style="border-top:1px solid"></td>
+                  <td style="border-top:1px solid"></td>
+                  <td style="border-top:1px solid"></td>
+                </tr>';
 
       echo '</table>';
       echo '<table style="text-align: justify; width: 100%; font-size:84%; font-family:serif"  >
@@ -613,13 +665,11 @@
 
     //Kuitansi Honor Dan Uang Saku
     public function Kuitansi_Honor_Uang_Saku($data) {
-      $data_rab = $this->fetch_array($data);
-      // print_r($data_rab);
+      $penerima;
       $total=0;
-      // print_r($det_prog);
       foreach ($data as $value) {
          $total += $value[value];
-
+         $penerima = $value[penerima];
       }
         echo '  <p align="right">No...............................................</p>';  
         require_once __DIR__ . "/../utility/report/header_dikti.php";
@@ -627,7 +677,7 @@
                     <table style="width: 100%; font-size:80%;"  border="0">               
                     <tr>
                         <td align="left" width="20%">Sudah Terima Dari </td>
-                        <td align="left">: '.$data_rab[penerima].'</td>
+                        <td align="left">: '.$penerima.'</td>
                         <td></td>
                         <td></td>
                     </tr> 
@@ -654,10 +704,9 @@
          $diterima = $total-$pph;      
          echo  '<table style="width: 100%; font-size:80%;"  border="0">';                   
         foreach ($data as $value) {
-          
           echo '<tr>
                   <td width="21%"></td>
-                  <td width="25%">'.$value[NMITEM].'</td>
+                  <td width="40%">'.$value[NMITEM].'</td>
                   <td>'." : Rp. ".$value[value].'</td>
                 </tr>';
           }
@@ -859,8 +908,10 @@
     }
 
 public function daftar_peng_riil($data){
-  $res = $this->query("SELECT * from rabfull where id='$data' ");
-
+  $penerima="";
+  foreach ($data as $value) {
+    $penerima = $value[penerima];
+  }
   // ob_start();
       echo '<h2 align="center">DAFTAR PENGELUARAN RIIL<h2>
           <h5>Yang bertanda tangan dibawah ini :<h5>';
@@ -868,7 +919,7 @@ public function daftar_peng_riil($data){
         <tr>
           <td width="20%">Nama</td>
           <td width="2%">:</td>
-          <td></td>
+          <td>'.$penerima.'</td>
         </tr>
         <tr>
           <td>Asal Daerah</td>
@@ -899,15 +950,25 @@ public function daftar_peng_riil($data){
 
       echo '<h5>Dengan ini saya menyatakan dengan sesugguhnya bahwa :</h5>';
       echo '<table style="width: 100%; text-align:left; border-collapse:collapse; font-size:80%;">
-        <tr>
-          <td width="3%">1.</td>
-          <td>Biaya Transport dan pengeluaran yang tidak dapat diperoleh bukti-bukti pengeluarannya, meliputi : </td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Jumlah Uang tersebut pada lembar Uraian diatas benar-benar dikeluarkan untuk pelaksanaan Perjalanan dinas dimaksud dan apabilah dikemudian hari terdapat kelebihan atas pembayaran, kami bersedia menyetorkan kelebihan tersebut ke kas Negara</td>
-        </tr>
-      </table>
+              <tr>
+                <td width="3%">1.</td>
+                <td colspan="2">Biaya Transport dan pengeluaran yang tidak dapat diperoleh bukti-bukti pengeluarannya, meliputi : </td>
+              </tr>';
+        foreach ($data as $value) {
+          
+          echo '<tr>
+                  <td></td>
+                  <td width="35%">- '.$value[NMITEM].'</td>
+                  <td>'." : Rp. ".$value[value].'</td>
+                </tr>';
+          }
+      echo '<tr>
+              <td>2</td>
+              <td colspan="2">Jumlah Uang tersebut pada lembar Uraian diatas benar-benar dikeluarkan untuk pelaksanaan Perjalanan dinas dimaksud dan apabilah dikemudian hari terdapat kelebihan atas pembayaran, kami bersedia menyetorkan kelebihan tersebut ke kas Negara</td>
+            </tr>';
+
+
+  echo  '</table>
 
       <h5>Demikian pernyataan ini dibuat untuk dipergunakan sebagaimana mestinya</h5>';
 
@@ -926,7 +987,7 @@ public function daftar_peng_riil($data){
         </tr>
         <tr>
           <td style="font-weight:bold">Ridwan</td>
-          <td>Irawan Yusuf</td>
+          <td>'.$penerima.'</td>
         </tr>
         
         <tr>
@@ -934,8 +995,7 @@ public function daftar_peng_riil($data){
           <td></td>
         </tr>
       </table>';
-      $html = ob_get_contents();
-      $this->create_pdf("Daftar Pengeluaran Riil","A4",$html);
+
 }
     public function pengajuan_UMK($data) {
       // $sql = $this->query("SELECT kdgiat, kdprogram, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, deskripsi, tanggal, lokasi, sum(uang_muka) as uang_muka, sum(uang_harian) as uang_harian, sum(uang_saku) as uang_saku, sum(honor_output) as honor_output, sum(honor_profesi) as honor_profesi, sum(tiket) as tiket, sum(biaya_akom) as akom, sum(trans_lokal) as trans_lokal FROM rabfull where rabview_id='$data' ");
