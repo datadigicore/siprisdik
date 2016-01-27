@@ -13,7 +13,7 @@ $kodeUniversitas=$_GET['kodeUniversitas'];
 $idprodi=$_GET['idprodi'];
 
  $qry = $db->query("select distinct KDAKUN, NMAKUN from rkakl_full order by KDAKUN");
- echo "<option value=\"\" >pilih kode akun</option>";
+ echo "<option value=\"\" >--Pilih Kode Akun--</option>";
  while ($row = $db->fetch_object($qry)) {
  	if($row->KDAKUN!=""){
       $kode_akun = $row->KDAKUN;

@@ -67,7 +67,8 @@
 
     }
     public function SPTB($data){
-      $sql = $this->query("SELECT f.kdakun as kdakun, f.penerima as penerima, f.tanggal as tanggal, f.value as value, v.deskripsi as deskripsi FROM rabview as v LEFT JOIN rabfull as f on v.id = f.rabview_id where f.kdakun like '%5%' ");
+      $sql = $this->query("SELECT f.kdgiat as kdgiat, f.kdprogram as kdprogram, f.kdoutput as kdoutput, f.kdakun as kdakun, f.penerima as penerima, f.tanggal as tanggal, f.value as value, v.deskripsi as deskripsi FROM rabview as v LEFT JOIN rabfull as f on v.id = f.rabview_id where f.kdakun ='$data' GROUP by tanggal, kdakun, penerima ");
+      $id = $this->fetch_array($sql);
       ob_start();
       echo '<p align="center" style="font-weight:bold; text-decoration: underline;">SURAT PERNYATAAN TANGGUNG JAWAB BELANJA</p>';
       echo '<p align="center" style="font-weight:bold;">Nomor : </p>';
@@ -94,7 +95,7 @@
                 <td align="left" width="1%">4.</td>
                 <td align="left" width="30%">Klasifikasi Mata Anggaran</td>
                 <td align="left" width="2%">:</td>
-                <td align="left" >: 10.03.06.5696.003.522151</td>
+                <td align="left" >: 10.03.'.$id[kdprogram].'.'.$id[kdgiat].'.'.$id[kdoutput].'.'.$id[kdakun].'</td>
               </tr>
             </table>';
       echo '<p align="center" style="font-weight:bold;">______________________________________________________________________________________________________</p>';
@@ -121,21 +122,23 @@
       $tot_value = 0;
       $tot_ppn = 0;
       $tot_pph = 0;
-      while($data = $this->fetch_array($sql)){
+      foreach ($sql as $value) {
         echo '<tr>
                 <td>'.$no.'</td>
-                <td>'.$data[kdakun].'</td>
-                <td>'.$data[penerima].'</td>
-                <td>'.$data[deskripsi].'</td>
-                <td>'.$data[tanggal].'</td>
+                <td>'.$value[kdakun].'</td>
+                <td>'.$value[penerima].'</td>
+                <td>'.$value[deskripsi].'</td>
+                <td>'.$value[tanggal].'</td>
                 <td>'."-".'</td>
-                <td>'.$data[value].'</td>
+                <td>'.$value[value].'</td>
                 <td>'." ".'</td>
                 <td>'." ".'</td>
             </tr>';
-            $tot_value += $data[value];
+            $tot_value += $value[value];
             $no++;
       }
+        
+      
       echo '<tr>
               <td colspan="6">JUMLAH</td>
               <td>'.$tot_value.'</td>

@@ -53,6 +53,7 @@ switch ($data[2]) {
     $report->SPPD($data_pengguna);
   break;
   case 'SPTB':
+    $kode_akun = $purifier->purify($_POST['kode-akun']);
     $kode_satker = $purifier->purify($_POST[kode_satker]);
     $nama_satker = $purifier->purify($_POST[nama_satker]);
     $tanggal_DIPA = $purifier->purify($_POST[tanggal_DIPA]);
@@ -65,7 +66,7 @@ switch ($data[2]) {
       "no_DIPA"      => $no_DIPA,
       "klasifikasi_MA"=> $klasifikasi_MA
     );
-    $report->SPTB($data);
+    $report->SPTB($kode_akun);
   break;
   case 'Rincian_Permintaan_Pengeluaran':
     $report->Rincian_Permintaan_Pengeluaran($data_pengguna);

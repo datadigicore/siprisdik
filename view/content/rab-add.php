@@ -18,7 +18,7 @@
           </div>
           <div class="box-body" >
 
-            <a style="" id="add-more-akun" href="#" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Tambah Akun</a>
+            <a style="" id="add-more-akun" href="#" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Tambah Akuns</a>
             <div class="well" id="div-tambah-akun" style="display:none"> 
               <label>Kode Akun</label>
               <select style="margin:5px auto" class="form-control" id="kode-akun" name="kode-akun" onchange="" >
