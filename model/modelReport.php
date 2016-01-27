@@ -195,93 +195,93 @@
     public function Rincian_Permintaan_Pengeluaran($data){
       $sql = $this->query("SELECT kdakun, penerima, tanggal, sum(value) as jumlah FROM `rabfull` GROUP BY kdakun order by kdakun asc ");
       ob_start();
-      echo '<table border="1" style="width: 100%; font-size:0.9em; border-collapse: collapse;">
+      echo '<table cellpadding="3" style="width: 100%; font-size:0.7em; border-collapse: collapse;">
               <tr>
-                <th colspan="7">DAFTAR RINCIAN<br></td>
+                <th colspan="7" style="border-top: 1px solid; border-left: 1px solid; border-right: 1px solid; font-size:1.0em; ">DAFTAR RINCIAN<br></td>
               </tr>
               <tr>
-                <th colspan="7">PERMINTAAN PENGELUARAN<br></td>
+                <th colspan="7" style="border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; font-size:1.0em;">PERMINTAAN PENGELUARAN<br></td>
               </tr>
               <tr>
-                <td >1. Kementrian / Lembaga<br></td>
-                <td colspan="2">: Kemenristek Dikti</td>
-                <td colspan="2">Jenis SPP<br></td>
+                <td style="border-left: 1px solid;">1. Kementrian / Lembaga<br></td>
+                <td  colspan="2">: Kemenristek Dikti</td>
+                <td style="border-left: 1px solid; border-right: 1px solid;" colspan="2">Jenis SPP<br></td>
                 <td>6. Nomor<br></td>
-                <td>:</td>
+                <td style="border-right: 1px solid;">:</td>
               </tr>
               <tr>
-                <td>2. Unit Organisasi<br></td>
+                <td style="border-left: 1px solid;">2. Unit Organisasi<br></td>
                 <td colspan="2">: Ditjen Kelembagaan Iptek dan Dikti</td>
-                <td colspan="2">1. GU NIHIL</td>
+                <td style="border-left: 1px solid; border-right: 1px solid;" colspan="2">1. GU NIHIL</td>
                 <td>7. KODE KEGIATAN<br></td>
-                <td>:</td>
+                <td style="border-right: 1px solid;">:</td>
               </tr>
               <tr>
-                <td>3. Lokasi<br></td>
-                <td colspan="2">: : DKI Jakarta<br></td>
-                <td colspan="2">PAGU SUB KEGIATAN<br></td>
+                <td style="border-left: 1px solid;">3. Lokasi<br></td>
+                <td colspan="2">: DKI Jakarta<br></td>
+                <td style="border-left: 1px solid; border-right: 1px solid; border-top: 1px solid;" colspan="2"><br>PAGU SUB KEGIATAN</br></td>
                 <td>8. KODE MAK<br></td>
-                <td>:</td>
+                <td style="border-right: 1px solid;">:</td>
               </tr>
               <tr>
-                <td>4. Kantor / Satuan Kerja<br></td>
+                <td style="border-left: 1px solid;">4. Kantor / Satuan Kerja<br></td>
                 <td colspan="2">: Ditjen Kelembagaan Iptek dan Dikti</td>
-                <td colspan="2" rowspan="2"></td>
+                <td style="border-left: 1px solid; border-right: 1px solid;" colspan="2" rowspan="2">Rp. </td>
                 <td>9. TAHUN ANGGARAN<br></td>
-                <td>: 2016</td>
+                <td style="border-right: 1px solid;">: 2016</td>
               </tr>
               <tr>
-                <td>5. Alamat<br></td>
-                <td colspan="2">: : Komplek Kemdikbud Gedung D Lt. 6</td>
+                <td style="border-left: 1px solid;">5. Alamat<br></td>
+                <td  colspan="2">: Komplek Kemdikbud Gedung D Lt. 6</td>
                 <td>10. Bulan</td>
-                <td>:</td>
+                <td style="border-right: 1px solid;">:</td>
               </tr>
               <tr>
-              <td></td>
-                <td colspan="4">Jln. Jend. Sudirman Pintu I Senayan, Jakarta Pusat</td>
-                
-                
+                <td style="border-left: 1px solid; border-bottom: 1px solid"></td>
+                <td  style="border-bottom: 1px solid; border-right: 1px solid" colspan="2">Jln. Jend. Sudirman Pintu I Senayan, Jakarta Pusat</td>
+                <td style="border-right: 1px solid; border-bottom: 1px solid; border-top: 1px solid; " colspan="4"></td>
               </tr>
               <tr>
-                <td  rowspan="2">No. Urut</td>
-                <td  colspan="2">BUKTI PENGELUARAN</td>
-                <td  rowspan="2">NPWP</td>
-                <td  rowspan="2">MAK</td>
-                <td  rowspan="2">NO BUKTI</td>
-                <td  rowspan="2">JUMLAH KOTOR YANG DIBAYARKAN (Rp)</td>
+                <td  rowspan="2" style="border: 1px solid; text-align:center;">No. Urut</td>
+                <td  colspan="2" style="border: 1px solid;  text-align:center;">BUKTI PENGELUARAN</td>
+                <td  rowspan="2" style="border: 1px solid;  text-align:center;">NPWP</td>
+                <td  rowspan="2" style="border: 1px solid;  text-align:center;">MAK</td>
+                <td  rowspan="2" style="border: 1px solid;  text-align:center;">NO BUKTI</td>
+                <td  rowspan="2" style="border: 1px solid;  text-align:center;">JUMLAH KOTOR YANG DIBAYARKAN (Rp)</td>
               </tr>
               <tr>
-                <td >TANGGAL PEMB</td>
-                <td >PENERIMA</td>
+                <td style="border: 1px solid;  text-align:center;" >TANGGAL PEMB</td>
+                <td style="border: 1px solid;  text-align:center;">PENERIMA</td>
               </tr>';
       $no=1;
       while($data=$this->fetch_array($sql)){
         echo '<tr>
-                <td>'.$no.'</td>
-                <td></td>
-                <td>SPTB</td>
-                <td>-</td>
-                <td>'.$data[kdakun].'</td>
-                <td>Terlampir Pada SPTB</td>
-                <td>'.$data[jumlah].'</td>
+                <td style="border: 1px solid;  text-align:center;">'.$no.'</td>
+                <td style="border: 1px solid;  text-align:center;"></td>
+                <td style="border: 1px solid;  text-align:center;">SPTB</td>
+                <td style="border: 1px solid;  text-align:center;">-</td>
+                <td style="border: 1px solid;  text-align:center;">'.$data[kdakun].'</td>
+                <td style="border: 1px solid;  text-align:center;">Terlampir Pada SPTB</td>
+                <td style="border: 1px solid;  text-align:center;">'.$data[jumlah].'</td>
               </tr>';
               $no++;
       }
+      $no--;
       echo'   <tr>
-                <td>Jumlah Lampiran :</td>
-                <td colspan="5">Jumlah SPP ini (Rp)</td>
-                <td colspan="5"></td>
+                <td style="border-right: 1px solid; border-left: 1px solid; border-top: 1px solid;  text-align:center;"> Jumlah Lampiran :</td>
+                <td style="border: 1px solid;  text-align:center;" colspan="5">Jumlah SPP ini (Rp)</td>
+                <td style="border-bottom: 1px solid; border-right: 1px solid;" colspan="5"></td>
 
               </tr>
               <tr>
-                <td>7</td>
-                <td colspan="5">SPM/SPP Sebelum SPP ini atas beban sub kegiatan ini</td>
-                <td colspan="5"></td>
+                <td style="border-right: 1px solid; border-left: 1px solid;  text-align:center;">'.$no.'</td>
+                <td style="border: 1px solid;  text-align:center;" colspan="5">SPM/SPP Sebelum SPP ini atas beban sub kegiatan ini</td>
+                <td style="border-bottom: 1px solid; border-right: 1px solid;" colspan="5"></td>
               </tr>
               <tr>
-                <td></td>
-                <td colspan="5">Jumlah s.d. SPP ini atas beban sub kegiatan ini</td>
-                <td colspan="5"></td>
+                <td style="border-left: 1px solid; border-bottom: 1px solid;"></td>
+                <td style="border: 1px solid;  text-align:center;" colspan="5">Jumlah s.d. SPP ini atas beban sub kegiatan ini</td>
+                <td style="border-bottom: 1px solid; border-right: 1px solid;" colspan="5"></td>
               </tr>
             </table>';
       echo '<table style="text-align: justify; width: 100%; font-size:84%;"  >
