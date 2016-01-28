@@ -14,7 +14,7 @@
       <div class="col-md-9 col-xs-12">
         <div class="nav-tabs-custom">
           <ul class="nav nav-tabs nav-justified">
-            <li class="dropdown active">
+            <!-- <li class="dropdown active">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
                 Macam-macam Kuitansi <span class="caret"></span>
               </a>
@@ -24,7 +24,8 @@
                 <li><a href="#tab_3" data-toggle="tab" aria-expanded="true">Kuitansi SPPD Perjalanan Dinas</a></li>
                 <li><a href="#tab_4" data-toggle="tab" aria-expanded="true">Kuitansi Transport Lokal</a></li>
               </ul>
-            </li>
+            </li> -->
+            <li><a href="#tab_7" data-toggle="tab" aria-expanded="true">Surat Perintah Pembayaran</a></li>
             <li><a href="#tab_5" data-toggle="tab" aria-expanded="true">Rincian Permintaan Pengeluaran</a></li>
             <li><a href="#tab_6" data-toggle="tab" aria-expanded="true">Surat Pertanggung Jawaban Belanja</a></li>
           </ul>
@@ -119,6 +120,21 @@
                                           
                   </select>
                 </div>
+              </div>
+              <div class="box-footer">
+                <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>
+              </div>        
+              </form>
+            </div>
+            <div class="tab-pane" id="tab_7">
+              <form method="POST" action="<?php echo $url_rewrite;?>process/report/SPP">
+              <div class="box-body" style="padding-bottom:0;">
+<!--                 <div class="form-group">
+                  <input type="text" name="tgl_awal" class="form-control" id="tgl_awal" placeholder="Tanggal Awal">
+                </div>
+                <div class="form-group">
+                  <input type="text" name="tgl_akhir" class="form-control" id="tgl_akhir" placeholder="Tanggal Akhir" >
+                </div> -->
               </div>
               <div class="box-footer">
                 <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>

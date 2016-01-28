@@ -52,6 +52,9 @@ switch ($data[2]) {
   case 'SPPD':
     $report->SPPD($data_pengguna);
   break;
+  case 'SPP':
+    $report->SPP($data_pengguna);
+  break;
   case 'SPTB':
     $kode_akun = $purifier->purify($_POST['kode-akun']);
     $kode_satker = $purifier->purify($_POST[kode_satker]);

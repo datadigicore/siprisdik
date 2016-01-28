@@ -19,7 +19,7 @@
     }
 
     public function cetak_dok($id,$nama){
-      $result = $this->query("SELECT rabview_id from rabfull where id='$id' ");
+      $result = $this->query("SELECT rabview_id, npwp, kdgiat, kdprogram, kdoutput, kdsoutput, kdkmpnen, kdskmpnen from rabfull where id='$id' ");
       $res = $this->fetch_array($result);
       $rabv_id = $res[rabview_id];
       // echo $rabv_id;
@@ -30,6 +30,68 @@
       $kdkmpnen = $res[kdkmpnen];
       $kdskmpnen = $res[kdskmpnen];
       $kdakun= $res[kdskmpnen];
+      $npwp= $res[npwp];
+
+      $sql_org = "SELECT id from rabfull 
+                  where kdgiat = '$kdgiat' 
+                    and kdprogram='$kdprogram' 
+                    and kdoutput = '$kdoutput'
+                    and kdsoutput = '$kdsoutput'
+                    and kdkmpnen = '$kdkmpnen'
+                    and kdskmpnen = '$kdskmpnen'
+                    and npwp = '$npwp' ";
+      $hsl_org = $this->query($sql_org);
+
+      $sql_nomor = "SELECT no_kuitansi, no_kuitansi_update from kuitansi 
+                    where kdgiat = '$kdgiat' 
+                    and kdprogram='$kdprogram' 
+                    and kdoutput = '$kdoutput'
+                    and kdsoutput = '$kdsoutput'
+                    and kdkmpnen = '$kdkmpnen'
+                    and kdskmpnen = '$kdskmpnen' order by no_kuitansi DESC limit 1 ";
+      $hsl_nomor = $this->query($sql_nomor);
+      $arr_kw = $this->fetch_array($hsl_nomor);
+      $no_kw = $arr_kw[no_kuitansi];
+      $no_kw_up = $arr_kw[no_kuitansi_update];
+
+      if ($this->num_rows($hsl_nomor)==0) { 
+        $no_kw = 1;
+        $no_kw_up = 1;
+          // Masukkin data baru degan no_kuitansi = 1
+          $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' ");
+          $this->query("INSERT into kuitansi(no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, pajak, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
+                        select
+                          no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, pajak, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
+                        from rabfull where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and npwp='$npwp' ");
+          $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and no_kuitansi_update is null and npwp='$npwp' ");
+
+      }
+      else {
+        if($this->num_rows($hsl_org)==0){
+          $no_kw+=1;
+          $no_kw_up=$no_kw;
+          // Masukkin data baru degan no_kuitansi = 1++
+          $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' ");
+          $this->query("INSERT into kuitansi(no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, pajak, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
+                        select
+                          no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, pajak, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
+                        from rabfull where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and npwp='$npwp' ");
+          $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and no_kuitansi_update is null and npwp='$npwp' ");
+
+        }
+        else{
+          // Masukkin data baru degan no_kuitansi sama dengan diatas
+          $no_kw_up=$no_kw+1;
+
+          $this->query("INSERT into kuitansi(no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, pajak, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
+                        select
+                          no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, pajak, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
+                        from rabfull where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and npwp='$npwp' ");
+          $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and no_kuitansi_update is null and npwp='$npwp' ");
+
+        }
+      }
+
       // $deskripsi = $res[deskripsi];
       // $tanggal = $res[tanggal];
       // $lokasi = $res[lokasi];
@@ -37,28 +99,28 @@
       // echo "Nama : ".$nama."RABV ID ".$rabv_id." KD PROGRAM".$kdgiat." ".$kdprogram." ".$kdoutput." ".$kdsoutput." ".$kdkmpnen;
       $dinas = 0;
       $lokal = 0;
-      $sql2 = $this->query("SELECT NMGIAT, NMOUTPUT, NMKMPNEN, NmSkmpnen, NMITEM FROM rkakl_full where KDPROGRAM = '$kdprogram' and KDOUTPUT='$kdoutput' and KDSOUTPUT='$kdsoutput' and KDKMPNEN = '$kdkmpnen'; ");
+      $sql2 = $this->query("SELECT NMGIAT, NMOUTPUT, NMKMPNEN, NmSkmpnen, NMITEM FROM rkakl_full where KDPROGRAM = '$kdprogram' and KDOUTPUT='$kdoutput' and KDSOUTPUT='$kdsoutput' and KDKMPNEN = '$kdkmpnen' and KDSKMPNEN = '$kdskmpnen' ; ");
       $detil_prog = $this->fetch_array($sql2);
       // print_r($detil_prog);
       mysql_free_result($result);
-      $result = $this->query("SELECT rab.alat_trans, rab.kota_asal, rab.kota_tujuan, rab.lama_hari, rab.tgl_mulai, rab.tgl_akhir, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$rabv_id' and penerima='$nama' ");
+      $result = $this->query("SELECT rab.alat_trans, rab.kota_asal, rab.kota_tujuan, rab.lama_hari, rab.tgl_mulai, rab.tgl_akhir, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$rabv_id' and penerima='$nama' ");
       while($res=$this->fetch_array($result)){
         if($res[kdakun]=="524119" || $res[kdakun]=="524114"  || $res[kdakun]=="524113" || $res[kdakun]=="524219")   $dinas=1;
         if($res[kdakun]=="524114"  || $res[kdakun]=="524113")   $lokal=1;
       }
       ob_start();
       if($lokal==0) {
-        $this->Kuitansi_Honor_Uang_Saku($result);
+        $this->Kuitansi_Honor_Uang_Saku($result, $no_kw_up, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen);
+        echo '<pagebreak />';
+      }
+      else{
+        $this->Kuitansi_Honorarium($result, $no_kw_up, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen);
         echo '<pagebreak />';
       }
       if($dinas==1){ 
         $this->Rincian_Biaya_PD($result);
         echo '<pagebreak />';
         $this->SPPD($result);
-        echo '<pagebreak />';
-      }
-      if($lokal==1) {
-        $this->Kuitansi_Honorarium($result);
         echo '<pagebreak />';
       }
       $this->daftar_peng_riil($result);
@@ -191,6 +253,424 @@
 
     }
 
+    public function SPP($data){
+      ob_start();
+      echo '<table cellpadding="1" style="border-collapse:collapse; font-size:0.85em;">
+
+             <tr>
+              <td colspan="12" style="font-weight:bold; font-size:1.3em;" align="center">SURAT PERMINTAAN
+              PEMBAYARAN</td>
+             </tr>
+             <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td width="2%"></td>
+              <td style="font-weight:bold;" colspan="3" align="right">Tanggal : 31 Desember 2016 Nomor :</td>
+              <td style="font-weight:bold;"  colspan="5" >00675/LEMKERMA/673474/2016</td>
+             </tr>
+             <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td colspan=2>Sifat Pembayaran</td>
+              <td style="border:1px solid; text-align:center;" width="1%" >5</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td width="1%" ></td>
+             </tr>
+             <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td colspan=2>Jenis Pembayaran</td>
+              <td style="border:1px solid;  text-align:center;">1</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr>
+              <td>1. </td>
+              <td colspan=2>Kementerian/Lembaga</td>
+              <td>:</td>
+              <td colspan=2>Kemenristek Dikti</td>
+            
+              <td>[ 042 ]</td>
+              <td>7. </td>
+              <td>Kegiatan</td>
+              <td></td>
+              <td></td>
+              <td>[ PKKID ]</td>
+             </tr>
+             <tr>
+              <td>2. </td>
+              <td colspan=2>Unit Organisasi</td>
+              <td>:</td>
+              <td colspan=2>Ditjen Kelembagaan Iptek
+              dan Dikti</td>
+              <td>[ 03 ]</td>
+              <td>8. </td>
+              <td>Kode Kegiatan</td>
+              <td></td>
+              <td></td>
+              <td >[ 5696 ]</td>
+             </tr>
+             <tr>
+              <td>3. </td>
+              <td colspan=2>Kantor/Satker</td>
+              <td>:</td>
+              <td colspan=2>Ditjen Kelembagaan Iptek
+              dan Dikti</td>
+              <td>[401196]</td>
+              <td>9. </td>
+              <td colspan=3>Kode Fungsi, Sub Fungsi,
+              Program</td>
+              <td>[ 10.03.06 ]</td>
+             </tr>
+             <tr>
+              <td>4. </td>
+              <td colspan=2>Lokasi</td>
+              <td>:</td>
+              <td>DKI Jakarta</td>
+              <td></td>
+              <td>[ 01 ]</td>
+              <td>10. </td>
+              <td colspan=3>Kewenangan Pelaksanaan</td>
+              <td>[ KP ]</td>
+             </tr>
+             <tr>
+              <td>5. </td>
+              <td colspan=2>Tempat</td>
+              <td>:</td>
+              <td>Kota Jakarta Pusat</td>
+              <td></td>
+              <td>[ 51 ]</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr>
+              <td>6. </td>
+              <td colspan=2>Alamat</td>
+              <td>:</td>
+              <td colspan=2>Gedung Kemenristek Dikti
+              Lt. 6</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td colspan=4>Jln. Jend. Sudirman Pintu
+              I Senayan, Jakarta Pusat</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr>
+              <td colspan=12><br></br></td>
+             </tr>
+             <tr>
+              <td></td>
+              <td colspan=10>KEPADA</td>
+              <td></td>
+             </tr>
+             <tr>
+              <td></td>
+              <td colspan=10>Yth. Pejabat Penanda Tangan Surat Perintah Membayar</td>
+              <td></td>
+             </tr>
+             <tr>
+              <td></td>
+              <td colspan=10>Direktorat Jenderal Kelembagaan Ilmu Pengetahuan
+              Teknologi dan Pendidikan Tinggi</td>
+              <td></td>
+             </tr>
+             <tr>
+              <td></td>
+              <td colspan=10>di- Kota Jakarta Pusat</td>
+              <td></td>
+             </tr>
+             <tr>
+              <td colspan=12><br></br></td>
+             </tr>
+             <tr>
+              <td colspan=12 >Berdasarkan DIPA Nomor : DIPA-042.03.1.401196/2016, Tgl. 1
+              Desember2015 dan, bersama ini kami
+              ajukan pembayaran sebagai berikut :</td>
+             </tr>
+             <tr>
+              <td >1. </td>
+              <td colspan=2>Jumlah pembayaran</td>
+              <td>:</td>
+              <td>1) dengan angka:</td>
+              <td colspan=3>#REF!</td>
+              <td ></td>
+              <td ></td>
+              <td ></td>
+              <td ></td>
+             </tr>
+             <tr>
+              <td></td>
+              <td colspan=2>yang dimintakan</td>
+              <td>:</td>
+              <td>2) dengan huruf :</td>
+              <td colspan=7 align=center style="width:442pt">#NAME?</td>
+             </tr>
+             <tr>
+              <td>2. </td>
+              <td colspan=2>Untuk keperluan</td>
+              <td>:</td>
+              <td>GU NIHIL</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr>
+              <td>3. </td>
+              <td colspan=2>Jenis Belanja</td>
+              <td>:</td>
+              <td>52 (Belanja Barang)</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr>
+              <td>4. </td>
+              <td colspan=2>Atas nama</td>
+              <td>:</td>
+              <td colspan=4>Bendahara Pengeluaran
+              Dit. Kelembagaan &amp; Kerjasama Dikti</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr>
+              <td>5. </td>
+              <td colspan=2>Alamat</td>
+              <td>:</td>
+              <td colspan=3>Gedung D Lt. VI Jl. Jend.
+              Sudirman Pintu I Senayan</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr>
+              <td>6. </td>
+              <td colspan=2>Mempunyai rekening</td>
+              <td>:</td>
+              <td colspan=5>Pada Bank Mandiri KK
+              Jakarta Kementerian Pendidikan Nasional</td>
+              <td colspan=3>Rek. No. 102-00-0558946-7</td>
+             </tr>
+             <tr>
+              <td>7. </td>
+              <td colspan=2>No.&amp; Tgl.SPK/Kontr.</td>
+              <td>:</td>
+              <td>-</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr>
+              <td>8. </td>
+              <td colspan=2>Nilai SPK/Kontrak</td>
+              <td>:</td>
+              <td>-</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr>
+              <td>9. </td>
+              <td colspan=2>Dengan penjelasan</td>
+              <td>:</td>
+              <td colspan=2>NPWP No.
+              00.493.675.3-077.000</td>
+              <td ></td>
+              <td ></td>
+              <td ></td>
+              <td ></td>
+              <td ></td>
+              <td></td>
+             </tr>
+             <tr >
+              <td style="border:1px solid"  align="center" rowspan=4>No</td>
+              <td style="border-top:1px solid" align="center" >I</td>
+              <td style="border-top:1px solid"  align="center" >Kegiatan &amp; MAK</td>
+              <td style="border:1px solid"  align="center" colspan=2 rowspan=4>Pagu Dalam DIPA (Rp)</td>
+              <td style="border:1px solid"  align="center" colspan=2 rowspan=4>SPP/SPM s/d yang lalu (Rp)</td>
+              <td style="border:1px solid"  align="center" colspan=2 rowspan=4>Jumlah SPP ini (Rp)</td>
+              <td style="border:1px solid"  align="center" colspan=2 rowspan=4>Jumlah s/d SPP ini (Rp)</td>
+              <td style="border:1px solid"  align="center" rowspan=4>Sisa Dana(Rp)</td>
+             </tr>
+              <tr >
+              <td  ></td>
+              <td >Bersangkutan</td>
+             </tr>
+             <tr >
+              <td  >II</td>
+              <td >Semua Kode Keg.</td>
+             </tr>
+             <tr >
+              <td></td>
+              <td >Dalam MAK</td>
+             </tr>
+             <tr>
+              <td style="border:1px solid" align="center">1</td>
+              <td style="border:1px solid"  align="center" colspan=2>2</td>
+              <td style="border:1px solid"  align="center" colspan=2>3</td>
+              <td style="border:1px solid"  align="center" colspan=2>4</td>
+              <td style="border:1px solid"  align="center" colspan=2>5</td>
+              <td style="border:1px solid"  align="center" colspan=2>6 = ( 4+5)</td>
+              <td style="border:1px solid"  align="center"  >7 = (3-6)</td>
+             </tr>';
+      echo   '<tr>
+              <td style="border-top:1px solid; border-bottom:1px solid; border-left:1px solid; "  ></td>
+              <td style="border-top:1px solid; border-bottom:1px solid; "    ></td>
+              <td style="border-top:1px solid; border-bottom:1px solid; border-right:1px solid;  "  >JUMLAH II</td>
+              <td style="border-top:1px solid; border-bottom:1px solid; solid;  "  ></td>
+              <td style="border-top:1px solid; border-bottom:1px solid; border-right:1px solid;  "  ></td>
+              <td style="border-top:1px solid; border-bottom:1px solid; solid;  "  ></td>
+              <td style="border-top:1px solid; border-bottom:1px solid; border-right:1px solid;  "  ></td>
+              <td style="border-top:1px solid; border-bottom:1px solid; solid;  "  ></td>
+              <td style="border-top:1px solid; border-bottom:1px solid; border-right:1px solid;  "  ></td>
+              <td style="border-top:1px solid; border-bottom:1px solid; solid;  "  ></td>
+              <td style="border-top:1px solid; border-bottom:1px solid; border-right:1px solid;  "  ></td>
+              <td style="border:1px solid;" ></td>
+             </tr>
+             <tr>
+              <td style="border-top:1px solid; border-bottom:1px solid; border-left:1px solid; "  colspan=3>Uang Persediaan</td>
+              <td style="border-left:1px solid; border-bottom:1px solid;" ></td>
+              <td style="border-right:1px solid; border-bottom:1px solid;" ></td>
+              <td style="border-left:1px solid; border-bottom:1px solid;" ></td>
+              <td style="border-right:1px solid; border-bottom:1px solid;" ></td>
+              <td style="border-left:1px solid; border-bottom:1px solid;" ></td>
+              <td style="border-right:1px solid; border-bottom:1px solid;" ></td>
+              <td style="border-left:1px solid; border-bottom:1px solid;" ></td>
+              <td style="border-right:1px solid; border-bottom:1px solid;" ></td>>
+              <td style="border:1px solid;"></td>
+             </tr>
+             <tr >
+              <td  ></td>
+              <td  ></td>
+              <td  ></td>
+              <td  ></td>
+              <td  ></td>
+              <td  ></td>
+              <td  ></td>
+              <td  ></td>
+              <td  >Surat bukti untuk</td>
+              <td  ></td>
+              <td ></td>
+              <td  ></td>
+             </tr>
+             <tr >
+              <td ></td>
+              <td></td>
+              <td>LAMPIRAN</td>
+              <td ></td>
+              <td>LEMBAR : B</td>
+              <td></td>
+              <td></td>
+              <td ></td>
+              <td>pengeluaran</td>
+              <td ></td>
+              <td>STS ___ lembar</td>
+              <td ></td>
+             </tr>
+             <tr>
+             <td colspan=5 >Diterima
+              oleh penguji SPP/Penerbit SPM</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td colspan=3>Jakarta : 31 Desember 2016 </td>
+             </tr>
+             <tr >
+              <td colspan=5 >Dirjen
+              Kelembagaan Iptek dan Dikti (401196)</td>
+              <td></td>
+              <td ></td>
+              <td ></td>
+              <td></td>
+              <td colspan=3>Pejabat Pembuat Komitmen</td>
+             </tr>
+             <tr >
+              <td colspan=3 >Pada
+              tanggal</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td ></td>
+              <td ></td>
+              <td></td>
+              <td colspan=3>Dirjen Kelembagaan Iptek
+              dan Dikti (401196)</td>
+             </tr>
+             <tr >
+              <td  colspan=3 >Akhmad
+              Mahmudin, S.IP, M.Si</td>
+              <td></td>
+              <td ></td>
+              <td></td>
+              <td ></td>
+              <td ></td>
+              <td></td>
+              <td  colspan=2>Sudarsono</td>
+              <td></td>
+             </tr>
+             <tr >
+              <td  colspan=3 >NIP.
+              19611214 198403 1 001</td>
+              <td></td>
+              <td ></td>
+              <td></td>
+              <td></td>
+              <td ></td>
+              <td></td>
+              <td  colspan=3>NIP. 19640920 198403 1 001</td>
+             </tr>
+             </table>';
+            $html = ob_get_contents();
+            $this->create_pdf("SPTB","A4",$html);
+
+    }
     // DAFTAR RINCIAN PERMINTAAN PENGELUARAN
     public function Rincian_Permintaan_Pengeluaran($data){
       $sql = $this->query("SELECT kdakun, penerima, tanggal, sum(value) as jumlah FROM `rabfull` GROUP BY kdakun order by kdakun asc ");
@@ -323,14 +803,13 @@
 
     }
     //Kuitansi Honorarium
-    public function Kuitansi_Honorarium($data){
-      $penerima="";
+    public function Kuitansi_Honorarium($data, $no_kw_up, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen){
       $total=0;
       foreach ($data as $value) {
          $total += $value[value];
          $penerima = $value[penerima];
       }
-      echo '  <p align="right">No...............................................</p>'; 
+      echo '  <p align="right">No '.$no_kw_up."/".$kdgiat.".".$kdoutput.".".$kdsoutput.".".$kdkmpnen.".".$kdskmpnen."/2016".'</p>'; 
       require __DIR__ . "/../utility/report/header_dikti.php";
       echo '  <p align="center">KUITANSI</p>
                     <table style="width: 100%; font-size:80%; border-collapse: collapse;"  border="0">               
@@ -667,14 +1146,14 @@
     }
 
     //Kuitansi Honor Dan Uang Saku
-    public function Kuitansi_Honor_Uang_Saku($data) {
+    public function Kuitansi_Honor_Uang_Saku($data, $no_kw_up, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen) {
       $penerima;
       $total=0;
       foreach ($data as $value) {
          $total += $value[value];
          $penerima = $value[penerima];
       }
-        echo '  <p align="right">No...............................................</p>';  
+        echo '  <p align="right">No '.$no_kw_up."/".$kdgiat.".".$kdoutput.".".$kdsoutput.".".$kdkmpnen.".".$kdskmpnen."/2016".'</p>';  
         require_once __DIR__ . "/../utility/report/header_dikti.php";
         echo ' <p align="center" style="font-weight:bold; font-size:1.2em">KUITANSI</p>
                     <table style="width: 100%; font-size:80%;"  border="0">               
