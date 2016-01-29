@@ -12,7 +12,8 @@ switch ($process) {
           return 'Program : '.$d.
                 '<br>'.'Output : '.$row[8].
                 '<br>'.'Suboutput : '.$row[9].
-                '<br>'.'Komponen : '.$row[10];
+                '<br>'.'Komponen : '.$row[10].
+                '<br>'.'Sub Komponen : '.$row[11];
       }),
       array( 'db' => 'kdgiat',  'dt' => 2),
       array( 'db' => 'deskripsi',  'dt' => 3),
@@ -76,6 +77,7 @@ switch ($process) {
       array( 'db' => 'kdoutput',  'dt' => 8),
       array( 'db' => 'kdsoutput',  'dt' => 9),
       array( 'db' => 'kdkmpnen',  'dt' => 10),
+      array( 'db' => 'kdskmpnen',  'dt' => 10),
     );
     $datatable->get_table($table, $key, $column,$where="",$dataArray);
     break;
@@ -105,6 +107,31 @@ switch ($process) {
     $utility->load("content/rab","success","Data RAB berhasil dimasukkan ke dalam database");
     break;
   case 'ajukan':
+    $akun = $mdl_rab->getakun($_POST);
+    echo "<br> <pre>";
+    // print_r($akun);die;
+    for ($i=0; $i < count($akun); $i++) { 
+      if ($akun[$i]->kdakun == 521211) {
+        $bahan = $mdl_rab->getitembahan($akun[$i]);
+        // print_r($bahan);
+        for ($j=0; $j < count($bahan); $j++) { 
+          $jum_rkakl = $mdl_rab->getrkakl($akun[$i], $bahan[$j]);
+
+            echo $jum_rkakl."rkaakl<br>";
+            echo $bahan[$j]->value."valu<br>";
+          if (number_format($jum_rkakl,2) <= number_format($bahan[$j]->value,2)) {
+            echo "<br>masuk<br>";
+          }else{
+            echo "revisi";
+          }
+        }
+      }elseif($akun[$i]->kdakun != ""){
+        echo "bukan belanja bahan<br>";
+      }else{
+        echo "Kode Akun Kosong<br>";
+      }
+    }
+    die;
     $mdl_rab->ajukan($_POST);
     $utility->load("content/rab","success","Data RAB telah diajukan ke Bendahara Pengeluaran");
     break;

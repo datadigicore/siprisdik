@@ -34,9 +34,10 @@
                   <th>Jabatan</th>
                   <th>Kode Akun</th>
                   <th>Total Dana RAB</th>
+                  <th>Status</th>
                   <th></th>
-                  <?php if($_SESSION['level'] == 0){?>
                   <th>Pelaporan</th>
+                  <?php if($_SESSION['level'] == 0){?>
                   <th></th>
                   <?php }?>
                 </tr>

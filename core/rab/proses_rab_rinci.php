@@ -32,6 +32,26 @@ switch ($process) {
 	      	return number_format($d,2);
 	      }),
 	      array( 'db' => 'status',  'dt' => 8, 'formatter' => function($d,$row, $dataArray){ 
+	        if($d==0){
+	          return '<i>Belum Diajukan</i>';
+	        }
+	        elseif($d==1){
+	          return '<i>Telah Diajukan</i>';
+	        }
+	        elseif($d==2){
+	          return '<i>Telah Disahkan</i>';
+	        }
+	        elseif($d==3){
+	          return '<i>Revisi</i>';
+	        }
+	        elseif($d==4){
+	          return '<i>Close</i>';
+	        }
+	        elseif($d==5){
+	          return '<i>Penutupan Anggaran</i>';
+	        }
+	      }),
+	      array( 'db' => 'status',  'dt' => 9, 'formatter' => function($d,$row, $dataArray){ 
 	        if($d==0 && $_SESSION['level'] != 0){
 	          return  '<div class="text-center">'.
 	                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Add Akun</a>'.
@@ -45,14 +65,14 @@ switch ($process) {
 	                  '</div>';
 	        }
 	      }),
-		  array( 'db' => 'no_kuitansi', 'dt' => 9, 'formatter' => function($d,$row){
+		  array( 'db' => 'no_kuitansi', 'dt' => 10, 'formatter' => function($d,$row){
 		  	if ($d != "") {
 		  		return '<center>'.$d.'</center>';
 		  	}else{
 		  		return '<center>-</center>';
 		  	}
 		  }),
-		  array('db' => 'status', 'dt'=>10, 'formatter' => function($d,$row, $dataArray){
+		  array('db' => 'status', 'dt'=>11, 'formatter' => function($d,$row, $dataArray){
 		  	if ($_SESSION['level'] == 0) {
 		  		return  '<div class="text-center btn-group-vertical">'.
 	                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/sahkanAkun/'.$row[0].'" class="btn btn-flat btn-success btn-sm"><i class="fa fa-check"></i>&nbsp; Sahkan</a>'.

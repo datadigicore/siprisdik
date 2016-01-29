@@ -137,6 +137,55 @@
       return $result;
     }
 
+    public function getakun($data){
+      $id_rabview = $data['id_rab_aju'];
+      $query_rab = "SELECT * FROM rabfull where rabview_id = '$id_rabview' group by kdakun";
+      $res_rab = $this->query($query_rab);
+      while ($rab = $this->fetch_object($res_rab)) {
+        $akun[] = $rab;
+      }
+      return $akun;
+    }
+    public function getitembahan($data){
+      $rab = $data;
+      $qry_jumrab = "SELECT noitem, value FROM rabfull
+                          WHERE thang='$rab->thang'
+                            AND kdprogram='$rab->kdprogram'
+                            AND kdgiat='$rab->kdgiat'
+                            AND kdoutput='$rab->kdoutput'
+                            AND kdsoutput='$rab->kdsoutput'
+                            AND kdkmpnen='$rab->kdkmpnen'
+                            AND kdskmpnen='$rab->kdskmpnen'
+                            AND kdakun='$rab->kdakun'
+                          GROUP BY noitem
+                          ";
+      $res_rab = $this->query($qry_jumrab);
+      while ($rab = $this->fetch_object($res_rab)) {
+        $item[] = $rab;
+      }
+      return $item;
+    }
+
+    public function getrkakl($dataAkun, $dataItem){
+      $rab = $dataAkun;
+      $qry_rkakl = "SELECT jumlah FROM rkakl_full 
+                      WHERE THANG='$rab->thang'
+                      AND KDPROGRAM='$rab->kdprogram'
+                      AND KDGIAT='$rab->kdgiat'
+                      AND KDOUTPUT='$rab->kdoutput'
+                      AND KDSOUTPUT='$rab->kdsoutput'
+                      AND KDKMPNEN='$rab->kdkmpnen'
+                      AND KDSKMPNEN='$rab->kdskmpnen'
+                      AND KDAKUN='$rab->kdakun'
+                      AND NOITEM='".$dataItem->noitem."'
+                      ";
+      $res_rkakl = $this->query($qry_rkakl);
+      while ($jumlah = $this->fetch_object($res_rkakl)) {
+        $jumrkakl = $jumlah->jumlah;
+      }
+      return $jumrkakl;
+    }
+
     public function ajukan($data){
       $id_rab = $data['id_rab_aju'];
       $query = "UPDATE rabview SET status='1' WHERE id = '$id_rab'";
@@ -168,13 +217,6 @@
                  FROM rabview as r where id = '$id'";
       $result = $this->query($query);
       $data  = $this->fetch_array($result);
-      // while($fetch  = $this->fetch_object($result)) {
-      //   $data[$i]['kdprogram'] = $fetch->kdprogram;
-      //   $data[$i]['kdoutput'] = $fetch->kdoutput;
-      //   $data[$i]['kdsoutput'] = $fetch->kdsoutput;
-      //   $data[$i]['kdkmpnen'] = $fetch->kdkmpnen;
-      //   $i++;
-      // }
       return $data;
     }
 
