@@ -222,7 +222,7 @@
         penerima    = '$penerima',
         npwp        = '$npwp',
         golongan    = '$golongan',
-        jabatan     = '$jabatan',
+        jabatan     = '$jabatan'
       ";
       $result = $this->query($query);
       return $result;
