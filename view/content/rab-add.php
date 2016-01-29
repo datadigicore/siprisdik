@@ -17,31 +17,30 @@
             <!-- <a href="<?php echo $url_rewrite;?>content/rab/add" class="btn btn-flat btn-success btn-sm pull-right">Tambah RAB</a> -->
           </div>
           <div class="box-body" >
+            <?php if (isset($_POST['message'])): ?>
+              <div class="alert alert-<?php echo $_POST['alert']; ?> alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <i class="icon fa fa-warning"></i><?php echo $_POST['message']; ?>
+              </div>
+            <?php endif ?>
+            <form class="form-horizontal" role="form" id="formAkun" enctype="multipart/form-data" method="post" action="<?= $url_rewrite ?>process/rab_rinci/tambahAkun">
+              <input type="hidden" id="id_rabfull" name="id_rabfull" value="<?php echo $id_rabfull?>" />
+              <a style="" id="add-more-akun" href="#" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Tambah Akun</a>
+              <div class="well" id="div-tambah-akun" style="display:none"> 
+                <label>Kode Akun</label>
+                <select style="margin:5px auto" class="form-control" id="kode-akun" name="kdakun" onchange="chakun()" required />
+                </select>
+                <label>No Item</label>
+                <select style="margin:5px auto" class="form-control" id="noitem" name="noitem" required />
+                </select>
 
-            <a style="" id="add-more-akun" href="#" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Tambah Akuns</a>
-            <div class="well" id="div-tambah-akun" style="display:none"> 
-              <label>Kode Akun</label>
-              <select style="margin:5px auto" class="form-control" id="kode-akun" name="kode-akun" onchange="" >
-                                      
-              </select>
-              <label>No Item</label>
-              <select style="margin:5px auto" class="form-control" id="kode-akun" name="kode-akun" >
-                <option>-- Pilih No Item --</option>
-                <option value="1">1 - ATK dan Bahan Habis Pakai</option>
-                <option value="2">2 - Biaya Surat Menyurat, Penggandaan, Fotokopi, Fax, dll</option>
-                <option value="3">3 - Biaya Cetak Laporan  [5 BH x 5 KEG]</option>
-                <option value="4">4 - Biaya Pembuatan Plakat  [5 BH x 5 KEG]</option>
-                <option value="5">5 - Biaya cetak Leaflet dan Brosur  [200 EKS x 2 KEG]</option>
-                <option value="6">6 - Biaya Perlengkapan Seminar dan JWG  [150 BH x 2 KEG]</option>
-                <option value="7">7 - Biaya Pendukung Desiminasi PT  [150 BH x 2 KEG]</option>
-                <option value="8">8 - Biaya Pembuatan spanduk dan Banner  [3 BH x 2 KEG]</option>
-                <option value="9">9 - Biaya Pembuatan Backdrop  [2 BH x 2 KEG]</option>
-              </select>
-              <label>Value</label>
-              <input id="value" class="form-control" name="value" type="number" value="" placeholder="value">
-              <br>
-              <a style="" id="buat-akun" href="#" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-plus"></i> Buat Akun</a>
-            </div>
+                <label>Value</label>
+                <input type="number" class="form-control" name="value" id="value" value="" placeholder="Value" required />
+                <br>
+                <!-- <a style="" id="buat-akun" href="#" class="form-control btn btn-flat btn-primary btn-sm"><i class="fa fa-plus"></i> Buat Akun</a> -->
+                <button type="submit" class="form-control btn btn-flat btn-primary btn-md"><i class="fa fa-save"></i> Simpan Akun</a>
+              </div>
+            </form>
             <hr>
             <form class="form-horizontal" role="form" id="frmMode1" enctype="multipart/form-data" method="post" action="<?= $url_rewrite ?>proses/student/" style="display:none">
              <input type="hidden" name="kategori" value="0">
@@ -260,128 +259,7 @@
   </div>
   <div id="panel-akun">
   </div>
-  <div class="row" id="521211" style="display:none">
-    <div class="col-xs-12">
-      <div class="box">
-        
-        <div class="box-body">
-          
-          <div class="panel panel-default" >
-                     <!-- Default panel contents -->
-                     <div class="panel-heading te-panel-heading">
-                          <i class="glyphicon glyphicon-th-large"></i> <span>Belanja Bahan</span>
-                     <button class="btn btn-danger btn-dismiss" id="close-521211" value="521211" ><i class="fa fa-close"></i></button>
-                     </div>
-
-                     <div class="clearfix"></div>
-
-                     <div class="panel-body">
-                      
-                      <form acion="#" method="POST" class="form-horizontal" name="form-belanja-bahan" id="form-belanja-bahan">
-                        <div class="form-group ">
-                             <label class="col-md-3 control-label">ATK</label>
-                             <div class="col-md-9">
-                                  <input type="text" class="form-control" value="<?= $belanja ?>" id="521211-1" name="521211-1" placeholder="ATK">
-                             </div>
-                        </div>
-                        <div class="form-group ">
-                             <label class="col-md-3 control-label">Seminar kit</label>
-                             <div class="col-md-9">
-                                  <input type="text" class="form-control" value="<?= $belanja ?>" id="521211-2" name="521211-2" placeholder="Seminar Kit">
-                             </div>
-                        </div>
-                        <div class="form-group ">
-                             <label class="col-md-3 control-label">Banner</label>
-                             <div class="col-md-9">
-                                  <input type="text" class="form-control" value="<?= $belanja ?>" id="521211-3" name="521211-3" placeholder="Banner">
-                             </div>
-                        </div>
-                        <div class="form-group ">
-                             <label class="col-md-3 control-label">Fotocopy</label>
-                             <div class="col-md-9">
-                                  <input type="text" class="form-control" value="<?= $belanja ?>" id="521211-4" name="521211-4" placeholder="Fotocopy">
-                             </div>
-                        </div>
-                        <div class="form-group ">
-                             <label class="col-md-3 control-label">Konsumsi & Snack</label>
-                             <div class="col-md-9">
-                                  <input type="text" class="form-control" value="<?= $belanja ?>" id="521211-5" name="521211-5" placeholder="Komsumsi & Snack">
-                             </div>
-                        </div>
-                        <a class="btn btn-primary" type="submit" id="">Simpan Akun</a>
-                      </form>
-                    </div>
-                  </div>
-        </div>
-      </div>        
-    </div>
-  </div>
-  <div class="row" id="521219" style="display:none">
-    <div class="col-xs-12">
-      <div class="box">
-        
-        <div class="box-body">
-          
-          <div class="panel panel-default" >
-                     <!-- Default panel contents -->
-                     <div class="panel-heading te-panel-heading">
-                          <i class="glyphicon glyphicon-th-large"></i> <span>Belanja Bantuan Non-operasional</span>
-                          <button class="btn btn-danger btn-dismiss" id="close-521219" value="521219" ><i class="fa fa-close"></i></button>
-                     </div>
-
-                     <div class="clearfix"></div>
-
-                     <div class="panel-body">
-                      
-                      <form acion="#" method="POST" class="form-horizontal" name="form-521219" id="form-521219">
-                        <div class="form-group ">
-                             <label class="col-md-3 control-label">Bantuan / Hibah</label>
-                             <div class="col-md-9">
-                                  <input type="text" class="form-control" value="<?= $belanja ?>" id="521219-1" name="521219-1" placeholder="ATK">
-                             </div>
-                        </div>
-                          
-                        <a class="btn btn-primary" type="submit" id="">Simpan Akun</a>
-                      </form>
-                    </div>
-                  </div>
-        </div>
-      </div>        
-    </div>
-  </div>
-  <div class="row" id="521213" style="display:none">
-    <div class="col-xs-12">
-      <div class="box">
-        
-        <div class="box-body">
-          
-          <div class="panel panel-default" >
-                     <!-- Default panel contents -->
-                     <div class="panel-heading te-panel-heading">
-                          <i class="glyphicon glyphicon-th-large"></i> <span>Belanja Honor Ouput Kegiatan</span>
-                          <button class="btn btn-danger btn-dismiss" id="close-521213" value="521213" ><i class="fa fa-close"></i></button>
-                     </div>
-
-                     <div class="clearfix"></div>
-
-                     <div class="panel-body">
-                      
-                      <form acion="#" method="POST" class="form-horizontal" name="form-521213" id="form-521213">
-                        <div class="form-group ">
-                             <label class="col-md-3 control-label">Bantuan / Hibah</label>
-                             <div class="col-md-9">
-                                  <input type="text" class="form-control" value="<?= $belanja ?>" id="521213-1" name="521219-1" placeholder="ATK">
-                             </div>
-                        </div>
-                          
-                        <a class="btn btn-primary" type="submit" id="">Simpan Akun</a>
-                      </form>
-                    </div>
-                  </div>
-        </div>
-      </div>        
-    </div>
-  </div>
+ 
   <div class="row">
     <div class="col-xs-12">
       <div class="box">
@@ -400,15 +278,10 @@
                 <th>No. Item</th>
                 <th>Nama Item</th>
                 <th>Nilai (Rupiah)</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
-              <td>1</td>
-              <td>521211</td>
-              <td>Belanja Bahan</td>
-              <td>1</td>
-              <td>ATK dan Bahan Habis Pakai</td>
-              <td>2.410.000</td>
             </tbody>
           </table>
         </div>
@@ -419,16 +292,17 @@
 </div>
 <script>
   $(document).ready(function() {
-    kodeAkun("kode-akun");
+    
     $("#add-more-akun").click(function(){
+      kodeAkun("kode-akun");
       $("#div-tambah-akun").show();
     });
     $("#buat-akun").click(function(){
       var val = $("#kode-akun").val();
       //$("#"+val).show();
       generateForm(val);
-      $("#kode-akun").val('');
-      $("#kode-akun option[value='"+val+"']").hide();
+      // $("#kode-akun").val('');
+      // $("#kode-akun option[value='"+val+"']").hide();
     });
     $(document).on("click",".btn-dismiss",function(){
       var val = $(this).attr("value");
@@ -466,39 +340,96 @@
       '</div>'+        
     '</div>'+
   '</div>';
-        $.ajax({
-          method: "GET",
-          url: "<?php echo $url_rewrite?>/ajax/show_item.php",
-          data: { kdAkun: kdAkun, }
-        })
-        .done(function( r ) {
-            r=JSON.parse(r);
-            if(r!=null){
-              $.each( r, function( key, value ) {
-                //alert( key + ": " + value );
-                isi = isi+ '<div class="form-group ">'+
-                               '<label class="col-md-3 control-label">'+value+'</label>'+
-                               '<div class="col-md-9">'+
-                                    '<input type="text" class="form-control" value="" id="'+kdAkun+'-'+key+'" name="'+kdAkun+'-'+key+'" placeholder="'+value+'">'+
-                               '</div>'+
-                          '</div>';
-              });
-              $("#panel-akun").append(form_header+isi+form_footer);
-            } else {
-              alert("Tidak terdapat item pada kode akun yang anda pilih");
-            }
-          });    
-                          
-        
-  
+  $.ajax({
+    method: "GET",
+    url: "<?php echo $url_rewrite?>ajax/show_item.php",
+    data: { kdAkun: kdAkun, }
+  })
+  .done(function( r ) {
+      r=JSON.parse(r);
+      if(r!=null){
+        $.each( r, function( key, value ) {
+          //alert( key + ": " + value );
+          isi = isi+ '<div class="form-group ">'+
+                         '<label class="col-md-3 control-label">'+value+'</label>'+
+                         '<div class="col-md-9">'+
+                              '<input type="text" class="form-control" value="" id="'+kdAkun+'-'+key+'" name="'+kdAkun+'-'+key+'" placeholder="'+value+'">'+
+                         '</div>'+
+                    '</div>';
+        });
+        $("#panel-akun").append(form_header+isi+form_footer);
+      } else {
+        alert("Tidak terdapat item pada kode akun yang anda pilih");
+      }
+    });    
   }
+
   function kodeAkun(idSelector){
-    var url = "<?=$url_rewrite?>ajax/show_opsi_akun.php";
-     ambilData(url, idSelector);
+    var id_rabfull = $('#id_rabfull').val();
+    var isi ="<option>-- Pilih Kode Akun --</option>";
+    $.ajax({
+      method: "GET",
+      url: "<?=$url_rewrite?>ajax/show_opsi_akun.php",
+      data: { 'id_rabfull': id_rabfull, }
+    })
+    .done(function(data){
+      obj=JSON.parse(data);
+      if(obj!=null){
+        $.each( obj, function( key, value ) {
+          isi = isi+ '<option value="'+key+'">'+key+' - '+value+'</option>';
+        });
+        $("#kode-akun").append(isi);
+      }
+    });
   }
+
+  function chakun(){
+    var id_rabfull = $('#id_rabfull').val();
+    var kdAkun = $('#kode-akun').val();
+    $("#noitem option").remove();
+    var isi ="<option>-- Pilih No Item --</option>";
+    $.ajax({
+      method: "GET",
+      url: "<?php echo $url_rewrite?>ajax/show_item.php",
+      data: { 'id_rabfull': id_rabfull,
+              'kdAkun'    : kdAkun, }
+    })
+    .done(function( r ) {
+        r=JSON.parse(r);
+        if(r!=null){
+          $.each( r, function( key, value ) {
+            isi = isi+ '<option value="'+key+'">'+key+' - '+value+'</option>';
+          });
+          $("#noitem").append(isi);
+        } else {
+          alert("Tidak terdapat item pada kode akun yang anda pilih");
+        }
+      });    
+  }
+  
+  
   $(function () {
-    $('#table').DataTable({
-      "scrollX": true
+     var table = $("#table").DataTable({
+      "oLanguage": {
+        "sInfoFiltered": ""
+      },
+      "processing": true,
+      "serverSide": true,
+      "scrollX": true,
+      "ajax": {
+        "url": "<?php echo $url_rewrite;?>process/rab_rinci/tableAkun/<?php echo $id_rabfull; ?>",
+        "type": "GET"
+      },
+      "columnDefs" : [
+        {"targets" : 0,
+         "visible" : false},
+        {"targets" : 1},
+        {"targets" : 2},
+        {"targets" : 3},
+        {"targets" : 4},
+        {"targets" : 5},
+      ],
+      "order": [[ 0, "desc" ]]
     });
   });
 </script>

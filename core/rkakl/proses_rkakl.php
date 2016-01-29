@@ -27,7 +27,7 @@ switch ($process) {
             catch(Exception $e) {
               die('Kesalahan! Gagal dalam mengupload file : "'.pathinfo($_FILES['excelupload']['name'],PATHINFO_BASENAME).'": '.$e->getMessage());
             }
-            $allDataInSheet = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+            $allDataInSheet = $objPHPExcel->getActiveSheet()->toArray(NULL,TRUE,FALSE,TRUE);
             $data_insert = array(
               "tanggal"    => date("Y-m-d H:i:s",$time),
               "filename"   => $path,

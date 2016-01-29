@@ -8,19 +8,20 @@ switch ($process) {
     $dataArray['url_rewrite'] = $url_rewrite; 
     $column = array(
       array( 'db' => 'id',      'dt' => 0 ),
-      array( 'db' => 'kdprogram',  'dt' => 1, 'formatter' => function($d,$row){ 
-          return 'Program : '.$dataArray['url_rewrite'].
-                '<br>'.'Output : '.$row[7].
-                '<br>'.'Suboutput : '.$row[8].
-                '<br>'.'Komponen : '.$row[9];
+      array( 'db' => 'kdprogram',  'dt' => 1, 'formatter' => function($d,$row, $dataArray){ 
+          return 'Program : '.$d.
+                '<br>'.'Output : '.$row[8].
+                '<br>'.'Suboutput : '.$row[9].
+                '<br>'.'Komponen : '.$row[10];
       }),
-      array( 'db' => 'deskripsi',  'dt' => 2),
-      array( 'db' => 'tanggal',  'dt' => 3, 'formatter' => function( $d, $row ) {
+      array( 'db' => 'kdgiat',  'dt' => 2),
+      array( 'db' => 'deskripsi',  'dt' => 3),
+      array( 'db' => 'tanggal',  'dt' => 4, 'formatter' => function( $d, $row ) {
             return date( 'j M Y', strtotime($d));
           }
       ),
-      array( 'db' => 'lokasi',  'dt' => 4 ),
-      array( 'db' => 'status', 'dt' => 5, 'formatter' => function($d,$row){ 
+      array( 'db' => 'lokasi',  'dt' => 5 ),
+      array( 'db' => 'status', 'dt' => 6, 'formatter' => function($d,$row){ 
         if($d==0){
           return '<i>Belum Diajukan</i>';
         }
@@ -40,44 +41,47 @@ switch ($process) {
           return '<i>Penutupan Anggaran</i>';
         }
       }),
-      array( 'db' => 'status',  'dt' => 6, 'formatter' => function($d,$row){ 
+      array( 'db' => 'status',  'dt' => 7, 'formatter' => function($d,$row, $dataArray){ 
         if($d==0 && $_SESSION['level'] != 0){
-          return  '<div class="text-center">'.
-                    '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Add Transaksi</a>'.
+          return  '<div class="text-center btn-group-vertical">'.
                     '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Ajukan</a>'.
+                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Add Transaksi</a>'.
                   '</div>';
         }elseif ($d==0 && $_SESSION['level'] == 0) {
           return  '<div class="text-center">'.
-
-                    '<a style="margin:0 2px;" id="btn-trans" href="'.$url_rewrite.'rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Add Transaksi</a>'.
-                     '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
+                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Add Transaksi</a>'.
+                     '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
                   '</div>';
         }
         if($d==1  && $_SESSION['level'] != 0){
           return  '<div class="text-center">'.
-                    '<a style="margin:0 2px;" id="btn-viw" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View Transaksi</a>'.
-                     '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
+                    '<a style="margin:0 2px;" class="btn btn-flat btn-primary btn-sm" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" ><i class="fa fa-file-text-o"></i> View Transaksi</a>'.
+                     '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
                   '</div>';
         }elseif ($d==1  && $_SESSION['level'] == 0) {
           return  '<div class="text-center">'.
-                    '<a style="margin:0 2px;" id="btn-viw" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View Transaksi</a>'.
-                     '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
+                    '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-file-text-o"></i> View Transaksi</a>'.
+                     '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
                     '<a style="margin:0 2px;" id="btn-sah" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
                     '<a style="margin:0 2px;" id="btn-rev" href="#revisi" class="btn btn-flat btn-warning btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Revisi</a>'.
                   '</div>';
         }
         else{
           return  '<div class="text-center">'.
-                    '<a style="margin:0 2px;" id="btn-viw" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View Transaksi</a>'.
+                    '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file-text-o"></i> View Transaksi</a>'.
                      '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
                   '</div>';
         }
       }),
-      array( 'db' => 'kdoutput',  'dt' => 7),
-      array( 'db' => 'kdsoutput',  'dt' => 8),
-      array( 'db' => 'kdkmpnen',  'dt' => 9),
+      array( 'db' => 'kdoutput',  'dt' => 8),
+      array( 'db' => 'kdsoutput',  'dt' => 9),
+      array( 'db' => 'kdkmpnen',  'dt' => 10),
     );
     $datatable->get_table($table, $key, $column,$where="",$dataArray);
+    break;
+  case 'getnpwp':
+    $npwp = $mdl_rab->getnpwp();
+    echo json_encode($npwp);
     break;
   case 'getout':
     // print_r($_POST);die;

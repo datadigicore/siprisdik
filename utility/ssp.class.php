@@ -23,7 +23,7 @@ class SSP {
      *  @param  array $data    Data from the SQL get
      *  @return array          Formatted data in a row based format
      */
-    static function data_output ( $columns, $data )
+    static function data_output ( $columns, $data, $dataArray=null )
     {
         $out = array();
 
@@ -35,7 +35,7 @@ class SSP {
 
                 // Is there a formatter?
                 if ( isset( $column['formatter'] ) ) {
-                    $row[ $column['dt'] ] = $column['formatter']( $data[$i][ $column['db'] ], $data[$i] );
+                    $row[ $column['dt'] ] = $column['formatter']( $data[$i][ $column['db'] ], $data[$i], $dataArray );
                 }
                 else {
                     $row[ $column['dt'] ] = $data[$i][ $columns[$j]['db'] ];
@@ -44,7 +44,30 @@ class SSP {
 
             $out[] = $row;
         }
+        return $out;
+    }
 
+    static function data_output2 ( $columns, $data, $dataArray=null )
+    {
+        $out = array();
+        for ( $i=0, $ien=count($data) ; $i<$ien ; $i++ ) {
+            $row = array();
+
+            for ( $j=0, $jen=count($columns) ; $j<$jen ; $j++ ) {
+                $column = $columns[$j];
+                $pecah[$j] = explode('.', $column['db']);
+                // Is there a formatter?
+                if ( isset( $column['formatter'] ) ) {
+                    $row[ $column['dt'] ] = $column['formatter']( $data[$i][ $pecah[$j][1] ], $data[$i], $dataArray );
+                }
+                else {
+                    $row[ $column['dt'] ] = $data[$i][ $pecah[$j][1] ];
+                }
+            }
+
+            $out[] = $row;
+        }
+        // print_r($pecah);die;
         return $out;
     }
 
@@ -324,12 +347,12 @@ class SSP {
             "draw"            => intval( $request['draw'] ),
             "recordsTotal"    => intval( $recordsTotal ),
             "recordsFiltered" => intval( $recordsFiltered ),
-            "data"            => self::data_output( $columns, $data ),
+            "data"            => self::data_output( $columns, $data, $dataArray ),
             'dataArray'       => $dataArray
         );
     }
 
-    static function simplewheregroup( $request, $conn, $table, $primaryKey, $columns, $whereResult=null, $groupby=null )
+    static function simplewheregroup( $request, $conn, $table, $primaryKey, $columns, $whereResult=null, $groupby=null, $dataArray )
     {
         $bindings = array();
         $db = self::db( $conn );
@@ -358,7 +381,7 @@ class SSP {
 
         // Main query to actually get the data
         $data = self::sql_exec( $db, $bindings,
-            "SELECT SQL_CALC_FOUND_ROWS `".implode("`, `", self::pluck($columns, 'db'))."`
+            "SELECT SQL_CALC_FOUND_ROWS ".implode(", ", self::pluck($columns, 'db'))."
              FROM `$table`
              $where
              $group
@@ -386,7 +409,7 @@ class SSP {
             "draw"            => intval( $request['draw'] ),
             "recordsTotal"    => intval( $recordsTotal ),
             "recordsFiltered" => intval( $recordsFiltered ),
-            "data"            => self::data_output( $columns, $data )
+            "data"            => self::data_output( $columns, $data, $dataArray )
         );
     }
 
@@ -474,6 +497,70 @@ class SSP {
             "recordsTotal"    => intval( $recordsTotal ),
             "recordsFiltered" => intval( $recordsFiltered ),
             "data"            => self::data_output( $columns, $data )
+        );
+    }
+
+    static function complexjoin ( $request, $conn, $table, $table2, $primaryKey, $columns, $on, $whereResult, $group=null, $dataArray=null )
+    {
+        $bindings = array();
+        $db = self::db( $conn );
+        $localWhereResult = array();
+        $localWhereAll = array();
+        $whereAllSql = '';
+
+        // Build the SQL query string from the request
+        $limit = self::limit( $request, $columns );
+        $order = self::order( $request, $columns );
+        $where = self::filter( $request, $columns, $bindings );
+
+        $whereResult = self::_flatten( $whereResult );
+        $whereAll = self::_flatten( $whereAll );
+
+        if ( $whereResult ) {
+            $where = $where ?
+                $where .' AND '.$whereResult :
+                'WHERE '.$whereResult;
+        }
+
+        if ( $whereAll ) {
+            $where = $where ?
+                $where .' AND '.$whereAll :
+                'WHERE '.$whereAll;
+
+            $whereAllSql = 'WHERE '.$whereAll;
+        }
+        // Main query to actually get the data
+        $data = self::sql_exec( $db, $bindings,
+            "SELECT SQL_CALC_FOUND_ROWS ".implode(", ",self::pluck($columns, 'db'))."
+             FROM `$table` join `$table2`
+             ON $on
+             $where
+             $group
+             $order
+             $limit"
+        );
+        // Data set length after filtering
+        $resFilterLength = self::sql_exec( $db,
+            "SELECT FOUND_ROWS()"
+        );
+        $recordsFiltered = $resFilterLength[0][0];
+
+        // Total data set length
+        // $resTotalLength = self::sql_exec( $db, $bindings,
+        //     "SELECT COUNT({$primaryKey})
+        //      FROM   `$table` ".
+        //     $whereAllSql
+        // );
+        // $recordsTotal = $resTotalLength[0][0];
+
+        /*
+         * Output
+         */
+        return array(
+            // "draw"            => intval( $request['draw'] ),
+            // "recordsTotal"    => intval( $recordsTotal ),
+            // "recordsFiltered" => intval( $recordsFiltered ),
+            "data"            => self::data_output2( $columns, $data, $dataArray )
         );
     }
 

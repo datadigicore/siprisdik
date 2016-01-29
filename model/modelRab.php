@@ -3,6 +3,21 @@
 
   class modelRab extends mysql_db {
 
+    public function getOrang($npwp){
+      $query  = "SELECT penerima, npwp, pajak, golongan, jabatan, pns FROM rabfull as r 
+                  where npwp = '$npwp' group by r.npwp";
+      $result = $this->query($query);
+      while ($fetch = $this->fetch_array($result)) {
+        $data['penerima'] = $fetch['penerima'];
+        $data['npwp'] = $fetch['npwp'];
+        $data['pajak'] = $fetch['pajak'];
+        $data['golongan'] = $fetch['golongan'];
+        $data['jabatan'] = $fetch['jabatan'];
+        $data['pns'] = $fetch['pns'];
+      }
+      return $data;
+    }
+
     public function getYear(){
       $query  = "SELECT thang FROM rkakl_full as r where thang != '' group by r.thang";
       $result = $this->query($query);
@@ -81,13 +96,25 @@
       return $data;
     }
 
+    public function getnpwp(){
+      $query = "SELECT npwp FROM rabfull group by npwp";
+      $result = $this->query($query);
+      $i=0;
+      while ($fetch  = $this->fetch_object($result)) {
+        $data['npwp'][$i] = $fetch->npwp;
+        $i++;
+      }
+      return $data;
+    }
+
     public function save($data){
-      $direktorat = $data['direktorat2'];
-      $tahun = $data['tahun2'];
+      $direktorat = $data['direktorat'];
+      $tahun = $data['tahun'];
       $prog = $data['prog'];
       $output = $data['output'];
       $soutput = $data['soutput'];
       $komp = $data['komp'];
+      $skomp = $data['skomp'];
       $uraian = $data['uraian'];
       $t = explode("/", $data['tanggal']);
       $tgl=$t[2].'-'.$t[1].'-'.$t[0];
@@ -100,6 +127,7 @@
         kdoutput    = '$output',
         kdsoutput   = '$soutput',
         kdkmpnen    = '$komp',
+        kdskmpnen    = '$skomp',
         deskripsi   = '$uraian',
         tanggal     = '$tgl',
         lokasi      = '$lokasi',
@@ -150,6 +178,14 @@
       return $data;
     }
 
+    public function getrabfull($id){
+      $query  = "SELECT thang,kdprogram,kdgiat,kdoutput,kdsoutput,kdkmpnen,kdskmpnen, penerima,npwp
+                 FROM rabfull as r where id = '$id'";
+      $result = $this->query($query);
+      $data  = $this->fetch_object($result);
+      return $data;
+    }
+
     public function save_penerima($id_rab_view,$getview, $post){
       // print_r($getview);die;
       $thang      = $getview['thang'];
@@ -174,7 +210,7 @@
         thang       = '$thang',
         kdprogram   = '$kdprogram',
         kdgiat      = '$kdgiat',
-        kdoutput    = '$kdprogram',
+        kdoutput    = '$kdoutput',
         kdsoutput   = '$kdsoutput',
         kdkmpnen    = '$kdkmpnen',
         kdskmpnen   = '$kdskmpnen',
@@ -187,7 +223,6 @@
         npwp        = '$npwp',
         golongan    = '$golongan',
         jabatan     = '$jabatan',
-        status      = '0'
       ";
       $result = $this->query($query);
       return $result;
@@ -205,6 +240,75 @@
         $i++;
       }
       return $data;
+    }
+
+    public function tambahAkun($data){
+      $id_rabfull = $data['id_rabfull'];
+      $cek  = "SELECT * FROM rabfull where id='$id_rabfull'";
+      $cekresult = $this->query($cek);
+      $cekfetch  = $this->fetch_object($cekresult);
+      // print_r($cekfetch);die;
+      if ($cekfetch->kdakun !="") {
+        $rabview_id= $cekfetch->rabview_id;
+        $thang      = $cekfetch->thang;
+        $kdprogram  = $cekfetch->kdprogram;
+        $kdgiat     = $cekfetch->kdgiat;
+        $kdoutput   = $cekfetch->kdoutput;
+        $kdsoutput  = $cekfetch->kdsoutput;
+        $kdkmpnen   = $cekfetch->kdkmpnen;
+        $kdskmpnen  = $cekfetch->kdskmpnen;
+        $kdakun     = $data['kdakun'];
+        $noitem     = $data['noitem'];
+        $value      = $data['value'];
+
+        $deskripsi  = $cekfetch->deskripsi;
+        $tanggal    = $cekfetch->tanggal;
+        $lokasi     = $cekfetch->lokasi;
+
+        $jenis      = $cekfetch->jenis;
+        $penerima   = $cekfetch->penerima;
+        $npwp       = $cekfetch->npwp;
+        $pajak      = $cekfetch->pajak;
+        $golongan   = $cekfetch->golongan;
+        $jabatan    = $cekfetch->jabatan;
+        $pns        = $cekfetch->pns;
+
+        $query      = "INSERT INTO rabfull SET
+          rabview_id  = '$rabview_id',
+          thang       = '$thang',
+          kdprogram   = '$kdprogram',
+          kdgiat      = '$kdgiat',
+          kdoutput    = '$kdoutput',
+          kdsoutput   = '$kdsoutput',
+          kdkmpnen    = '$kdkmpnen',
+          kdskmpnen   = '$kdskmpnen',
+          kdakun      = '$kdakun',
+          noitem      = '$noitem',
+          value       = '$value',
+
+          deskripsi   = '$deskripsi',
+          tanggal     = '$tanggal',
+          lokasi      = '$lokasi',
+
+          jenis       = '$jenis',
+          penerima    = '$penerima',
+          npwp        = '$npwp',
+          golongan    = '$golongan',
+          jabatan     = '$jabatan',
+          pns         = '$pns'
+        ";
+        $result = $this->query($query);
+        return $result;
+      }else{
+        $kdakun     = $data['kdakun'];
+        $noitem     = $data['noitem'];
+        $value      = $data['value'];
+
+        $query = "UPDATE rabfull SET kdakun='$kdakun', noitem='$noitem', value='$value' 
+                    where id='$id_rabfull'";
+        $result = $this->query($query);
+        return $result;
+      }
     }
 
   }
