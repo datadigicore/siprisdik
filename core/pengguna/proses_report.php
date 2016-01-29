@@ -23,11 +23,20 @@ $id = $data[3];
 
 $kdakun = $report->get_kd_akun($id);
 
-
+$param  = explode("-", $data[3]);
+$id = $param[0];
+$penerima = str_replace("%20"," ",$param[1]);
 
 switch ($data[2]) {
+  case 'cetak_dok':
+    $report->cetak_dok($id,$penerima);
+  break;
   case 'Rincian_Biaya_PD':
+
     $report->rincian_biaya_PD($data[3]);
+  break;
+  case 'pengajuan_UMK':
+    $report->pengajuan_UMK($data[3]);
   break;
   case '522151':
     $report->Kuitansi_Honor_Uang_Saku($data_pengguna);
@@ -43,7 +52,11 @@ switch ($data[2]) {
   case 'SPPD':
     $report->SPPD($data_pengguna);
   break;
+  case 'SPP':
+    $report->SPP($data_pengguna);
+  break;
   case 'SPTB':
+    $kode_akun = $purifier->purify($_POST['kode-akun']);
     $kode_satker = $purifier->purify($_POST[kode_satker]);
     $nama_satker = $purifier->purify($_POST[nama_satker]);
     $tanggal_DIPA = $purifier->purify($_POST[tanggal_DIPA]);
@@ -56,7 +69,7 @@ switch ($data[2]) {
       "no_DIPA"      => $no_DIPA,
       "klasifikasi_MA"=> $klasifikasi_MA
     );
-    $report->SPTB($data);
+    $report->SPTB($kode_akun);
   break;
   case 'Rincian_Permintaan_Pengeluaran':
     $report->Rincian_Permintaan_Pengeluaran($data_pengguna);

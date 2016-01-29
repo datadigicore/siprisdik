@@ -26,7 +26,8 @@ include '../config/application.php';
  					where K.KDAKUN not like '51%' 
  					and B.id = '$id_rabfull'
  					order by K.KDAKUN");
-
+ $qry = $db->query("select distinct KDAKUN, NMAKUN from rkakl_full order by KDAKUN");
+ echo "<option value=\"\" >--Pilih Kode Akun--</option>";
  while ($row = $db->fetch_object($qry)) {
      $akun[$row->KDAKUN] = $row->NMAKUN ;
  }

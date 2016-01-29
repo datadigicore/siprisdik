@@ -30,7 +30,6 @@
                 <label>Kode Akun</label>
                 <select style="margin:5px auto" class="form-control" id="kode-akun" name="kdakun" onchange="chakun()" required />
                 </select>
-
                 <label>No Item</label>
                 <select style="margin:5px auto" class="form-control" id="noitem" name="noitem" required />
                 </select>
