@@ -31,15 +31,24 @@
       $kdskmpnen = $res[kdskmpnen];
       $kdakun= $res[kdskmpnen];
       $npwp= $res[npwp];
-
-      $sql_org = "SELECT id from rabfull 
+      // echo "Npwp : ".$npwp;
+      $sql_org = "SELECT no_kuitansi from kuitansi 
                   where kdgiat = '$kdgiat' 
                     and kdprogram='$kdprogram' 
                     and kdoutput = '$kdoutput'
                     and kdsoutput = '$kdsoutput'
                     and kdkmpnen = '$kdkmpnen'
                     and kdskmpnen = '$kdskmpnen'
-                    and npwp = '$npwp' ";
+                    and npwp = '$npwp'  ";
+      $sql_org2 = "SELECT no_kuitansi_update from kuitansi
+                  where kdgiat = '$kdgiat' 
+                    and kdprogram='$kdprogram' 
+                    and kdoutput = '$kdoutput'
+                    and kdsoutput = '$kdsoutput'
+                    and kdkmpnen = '$kdkmpnen'
+                    and kdskmpnen = '$kdskmpnen'
+                    order by no_kuitansi_update desc limit 1 ";
+
       $hsl_org = $this->query($sql_org);
 
       $sql_nomor = "SELECT no_kuitansi, no_kuitansi_update from kuitansi 
@@ -48,13 +57,21 @@
                     and kdoutput = '$kdoutput'
                     and kdsoutput = '$kdsoutput'
                     and kdkmpnen = '$kdkmpnen'
-                    and kdskmpnen = '$kdskmpnen' order by no_kuitansi DESC limit 1 ";
+                    and kdskmpnen = '$kdskmpnen' order by no_kuitansi DESC, no_kuitansi_update DESC limit 1 ";
       $hsl_nomor = $this->query($sql_nomor);
+
       $arr_kw = $this->fetch_array($hsl_nomor);
+      $arr_kw_org = $this->fetch_array($hsl_org);
+      
       $no_kw = $arr_kw[no_kuitansi];
+      
+      $no_kw_org = $arr_kw_org[no_kuitansi];
+
       $no_kw_up = $arr_kw[no_kuitansi_update];
 
+      
       if ($this->num_rows($hsl_nomor)==0) { 
+        // echo "Belum Ada Nomor Kwitansi";
         $no_kw = 1;
         $no_kw_up = 1;
           // Masukkin data baru degan no_kuitansi = 1
@@ -68,35 +85,38 @@
       }
       else {
         if($this->num_rows($hsl_org)==0){
-          $no_kw+=1;
-          $no_kw_up=$no_kw;
+          // echo "Ada Nomor Kwitansi dan Belum ada orang";
+          $no_kw++;
+          $no_kw_up+=1;
           // Masukkin data baru degan no_kuitansi = 1++
           $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' ");
           $this->query("INSERT into kuitansi(no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, pajak, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
                         select
                           no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, pajak, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
                         from rabfull where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and npwp='$npwp' ");
-          $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and no_kuitansi_update is null and npwp='$npwp' ");
+          $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw' where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and no_kuitansi_update is null and npwp='$npwp' ");
 
         }
         else{
-          // Masukkin data baru degan no_kuitansi sama dengan diatas
-          $no_kw_up=$no_kw+1;
-
+          $hsl_tbh = $this->query($sql_org2);
+          $hsl_arr = $this->fetch_array($hsl_tbh);
+          $no_kw_up = $hsl_arr[no_kuitansi_update];
+          $no_kw_up+=1;
+          // echo "Sudah ada orang dengan kwitansi nomor yg lama";
           $this->query("INSERT into kuitansi(no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, pajak, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
                         select
                           no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, pajak, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
-                        from rabfull where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and npwp='$npwp' ");
-          $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and no_kuitansi_update is null and npwp='$npwp' ");
+                        from rabfull where no_kuitansi='$no_kw_org' and rabview_id='$rabv_id' and npwp='$npwp' ");
+          $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw_org' and rabview_id='$rabv_id' and no_kuitansi_update is null and npwp='$npwp' ");
 
         }
       }
-
+      // echo ' No Kwitansi : '.$no_kw." No Kw Update : ".$no_kw_up;
       // $deskripsi = $res[deskripsi];
       // $tanggal = $res[tanggal];
       // $lokasi = $res[lokasi];
       // $uang_muka = $res[uang_muka];
-      // echo "Nama : ".$nama."RABV ID ".$rabv_id." KD PROGRAM".$kdgiat." ".$kdprogram." ".$kdoutput." ".$kdsoutput." ".$kdkmpnen;
+      // echo "Nama : ".$nama."RABV ID ".$rabv_id." KD PROGRAM : ".$kdgiat." ".$kdprogram." ".$kdoutput." ".$kdsoutput." ".$kdkmpnen;
       $dinas = 0;
       $lokal = 0;
       $sql2 = $this->query("SELECT NMGIAT, NMOUTPUT, NMKMPNEN, NmSkmpnen, NMITEM FROM rkakl_full where KDPROGRAM = '$kdprogram' and KDOUTPUT='$kdoutput' and KDSOUTPUT='$kdsoutput' and KDKMPNEN = '$kdkmpnen' and KDSKMPNEN = '$kdskmpnen' ; ");
