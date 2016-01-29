@@ -43,6 +43,7 @@
                 <td><label>Direktorat</label></td>
                   <td>
                     <select id="direktorat2" name="direktorat2" class="form-control" onchange="search()">
+                      <option value="%">All</option>
                       <option value="5696">5696</option>
                       <option value="5697">5697</option>
                       <option value="5698">5698</option>
@@ -60,6 +61,7 @@
                 <tr>
                   <th>No</th>
                   <th>Kode RKAKL</th>
+                  <th>Direktorat</th>
                   <th>Uraian Acara</th>
                   <th>Tanggal</th>
                   <th>Lokasi</th>
@@ -221,15 +223,30 @@
         "url": "<?php echo $url_rewrite;?>process/rab/table",
         "type": "POST"
       },
-      "columnDefs" : [
-        {"targets" : 0,
-         "visible" : false},
-        {"targets" : 1},
-        {"targets" : 2},
-        {"targets" : 3},
-        {"targets" : 4},
-        {"targets" : 5},
-      ],
+      <?php if ($_SESSION['direktorat'] == "") { ?>
+        "columnDefs" : [
+          {"targets" : 0,
+           "visible" : false},
+          {"targets" : 1},
+          {"targets" : 2},
+          {"targets" : 3},
+          {"targets" : 4},
+          {"targets" : 5},
+          {"targets" : 6},
+        ],
+      <?php }else{?>
+        "columnDefs" : [
+          {"targets" : 0,
+           "visible" : false},
+          {"targets" : 1},
+          {"targets" : 2, 
+            "visible": false},
+          {"targets" : 3},
+          {"targets" : 4},
+          {"targets" : 5},
+          {"targets" : 6},
+        ],
+      <?php } ?>
       "order": [[ 0, "desc" ]]
     });
     $(document).on("click", "#btn-aju", function (){

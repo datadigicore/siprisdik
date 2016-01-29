@@ -51,6 +51,7 @@ else {
           }
           break;
         case 'rabakun':
+            $id_rabfull = $data[2];
           include ('view/content/rab-add.php');
           break;
         case 'insertrab':
