@@ -14,7 +14,8 @@
         <div class="box">
           <div class="box-header">
             <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya</h3>
-            <a href="#addrab" data-toggle="modal" class="btn btn-flat btn-success btn-sm pull-right">Tambah Orang / Badan</a>
+            <input type="hidden" id="id_rab_view" name="id_rab_view" value="<?php echo $id_rab_view ?>" />
+            <a href="#addrab" id="tblAdd" data-toggle="modal" class="btn btn-flat btn-success btn-sm pull-right">Tambah Orang / Badan</a>
           </div>
           <div class="box-body">
             <?php if (isset($_POST['message'])): ?>
@@ -31,6 +32,7 @@
                   <th>Keterangan</th>
                   <th>NPWP</th>
                   <th>Golongan </th>
+                  <th>PNS</th>
                   <th>Jabatan</th>
                   <th>Kode Akun</th>
                   <th>Total Dana RAB</th>
@@ -62,9 +64,10 @@
         </div>
         <div class="modal-body">
           <input type="hidden" name="id_rab_view" value="<?php echo $id_rab_view ?>" />
+          <input type="hidden" id="adendum" name="adendum" value="0" />
           <div class="form-group">
             <label>Jenis</label>
-            <select class="form-control" id="jenis-akun" name="jenis-akun">
+            <select class="form-control" required id="jenis-akun" name="jenis-akun" onchange="cnpwp()">
               <option value="0">Badan</option>
               <option value="1">Orang</option>
             </select>
@@ -79,15 +82,21 @@
           </div>
           <div class="form-group ">
               <label>Golongan</label>
-              <input type="text" class="form-control" value="<?= $golongan ?>" id="golongan" name="golongan" placeholder="Golongan Penerima">
+              <select class="form-control" id="golongan" required name="golongan">
+                <option>-- Pilih --</option>
+                <option value="1">I</option>
+                <option value="2">II</option>
+                <option value="3">III</option>
+                <option value="4">IV</option>
+              </select>
           </div>
           <div class="form-group ">
               <label>PNS / Non PNS</label>
               <select class="form-control" id="pns" required name="pns">
-              <option>-- Pilih --</option>
-              <option value="1">PNS</option>
-              <option value="0">Non PNS</option>
-            </select>
+                <option>-- Pilih --</option>
+                <option value="1">PNS</option>
+                <option value="0">Non PNS</option>
+              </select>
           </div>
           <div class="form-group ">
                <label>Jabatan Dalam Tugas</label>
@@ -108,6 +117,31 @@
         echo"<input type=\"hidden\"  name=\"kode\" value=\"$id\">";
         ?>
      </form> 
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="sahkan">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="<?php echo $url_rewrite;?>process/rab_rinci/sahkanAkun" method="POST">
+        <div class="modal-header" style="background-color:#111F3F !important; color:white;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" style="color:white">×</span></button>
+          <h4 class="modal-title">Dialog Box</h4>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="id_rabfull" name="id_rabfull" value="" />
+          <input type="hidden" id="id_rab_view" name="id_rab_view" value="<?php echo $id_rab_view ?>" />
+          <input type="hidden" id="status" name="status" value="" />
+          <div class="form-group">
+            <label>Apakah Anda Yakin Ingin Melakukan Pengesahan ?</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" data-dismiss="modal" class="btn btn-flat btn-warning">Tidak</button>
+          <button type="submit" class="btn btn-flat btn-success">Ya</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
@@ -150,24 +184,57 @@
         });
       },
     });
+
+    var id_rab_view = $('#id_rab_view').val();
+    $.ajax({
+      type: "POST",
+      url: "<?php echo $url_rewrite;?>process/rab_rinci/cekAdendum",
+      data: { 'id_rab_view': id_rab_view},
+      success: function(data){
+        var obj = jQuery.parseJSON(data);
+        if (obj.status != 0 && obj.status != 3 && obj.status != 4) {
+          $('#tblAdd').addClass('hidden');
+        }else if(obj.status == 4){
+          $('#tblAdd').html('Tambah Orang/Badan (Adendum)');
+          $('#adendum').val('5');
+        };
+      },
+    });
+
+    $(document).on("click", "#btn-sah", function (){
+      var tr = $(this).closest('tr');
+      tabrow = table.row(tr);
+      $("#id_rabfull").val(tabrow.data()[0]);
+      $("#status").val('4');
+    });
+    $(document).on("click", "#btn-sah-adn", function (){
+      var tr = $(this).closest('tr');
+      tabrow = table.row(tr);
+      $("#id_rabfull").val(tabrow.data()[0]);
+      $("#status").val('6');
+    });
   });
 
   function cnpwp(){
     var npwp = $('#npwp').val();
+    var jenis = $('#jenis-akun').val();
     $.ajax({
       type: "POST",
       url: "<?php echo $url_rewrite;?>process/rab_rinci/getorang",
-      data: { 'npwp':npwp },
+      data: { 'npwp':npwp,
+              'jenis':jenis },
       success: function(data){
         var obj = jQuery.parseJSON(data);
-        var penerima = obj.penerima;
-        $('#penerima').val(penerima);
-        var golongan = obj.golongan;
-        $('#golongan').val(golongan);
-        var pns = obj.pns;
-        $('#pns').val(pns);
-        var jabatan = obj.jabatan;
-        $('#jabatan').val(jabatan);
+        if (obj != null) {
+          var penerima = obj.penerima;
+          $('#penerima').val(penerima);
+          var golongan = obj.golongan;
+          $('#golongan').val(golongan);
+          var pns = obj.pns;
+          $('#pns').val(pns);
+          var jabatan = obj.jabatan;
+          $('#jabatan').val(jabatan);
+        };
       },
     });
   }

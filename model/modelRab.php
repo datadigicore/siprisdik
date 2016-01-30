@@ -3,9 +3,11 @@
 
   class modelRab extends mysql_db {
 
-    public function getOrang($npwp){
+    public function getOrang($data){
+      $npwp = $data['npwp'];
+      $jenis = $data['jenis'];
       $query  = "SELECT penerima, npwp, pajak, golongan, jabatan, pns FROM rabfull as r 
-                  where npwp = '$npwp' group by r.npwp";
+                  where npwp = '$npwp' and jenis='$jenis' group by r.npwp";
       $result = $this->query($query);
       while ($fetch = $this->fetch_array($result)) {
         $data['penerima'] = $fetch['penerima'];
@@ -304,8 +306,17 @@
                   );
     }
 
+    public function chStatusFull($id_rabfull, $status){
+      $query = "UPDATE rabfull SET status='$status' WHERE id = '$id_rabfull'";
+
+      $result = $this->query($query);
+
+      return $result;
+    }
+
     public function getview($id){
-      $query  = "SELECT thang,kdprogram,kdgiat,kdoutput,kdsoutput,kdkmpnen,kdskmpnen, deskripsi,tanggal,lokasi
+      $query  = "SELECT thang,kdprogram,kdgiat,kdoutput,kdsoutput,kdkmpnen,kdskmpnen, deskripsi,tanggal,lokasi,
+                        status
                  FROM rabview as r where id = '$id'";
       $result = $this->query($query);
       $data  = $this->fetch_array($result);
@@ -336,8 +347,29 @@
       $jenis = $post['jenis-akun'];
       $penerima = $post['penerima'];
       $npwp = $post['npwp'];
-      $golongan = $post['golongan'];
       $jabatan = $post['jabatan'];
+      $golongan = $post['golongan'];
+      $pns = $post['pns'];
+
+      $status = $post['adendum'];
+
+      if ($golongan == 4) {
+        $pajak = '15';
+      }elseif ($golongan == 3) {
+        $pajak = '5';
+      }elseif ($golongan == 2) {
+        if ($pns == 1) {
+          $pajak = '0';
+        }else{
+          if ($npwp != "") {
+            $pajak = '5';
+          }else{
+            $pajak = '6';
+          }
+        }
+      }else{
+        $pajak = '0';
+      }
 
       $query      = "INSERT INTO rabfull SET
         rabview_id  = '$id_rab_view',
@@ -355,8 +387,12 @@
         jenis       = '$jenis',
         penerima    = '$penerima',
         npwp        = '$npwp',
+        jabatan     = '$jabatan',
         golongan    = '$golongan',
-        jabatan     = '$jabatan'
+        pns         = '$pns',
+        pajak       = '$pajak',
+
+        status       = '$status'
       ";
       $result = $this->query($query);
       return $result;

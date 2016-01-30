@@ -25,13 +25,26 @@ switch ($process) {
 	      	}
 	      }),
 	      array( 'db' => 'npwp',  'dt' => 3),
-	      array( 'db' => 'golongan',  'dt' => 4 ),
-	      array( 'db' => 'jabatan', 'dt' => 5),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 6),
-	      array( 'db' => 'SUM(value)', 'dt' => 7, 'formatter' => function($d,$row){ 
+	      array( 'db' => 'golongan',  'dt' => 4 , 'formatter' => function($d, $row){
+	      	if ($d == 1) return '<center>I</center>';
+	      	elseif($d == 2) return '<center>II</center>';
+	      	elseif($d == 3) return '<center>III</center>';
+	      	elseif($d == 4) return '<center>VI</center>';
+	      	
+	      }),
+	      array( 'db' => 'pns',  'dt' => 5 , 'formatter' => function($d, $row){
+	      	if ($d == 0) {
+	      		return 'Non PNS';
+	      	}else{
+	      		return 'PNS';
+	      	}
+	      }),
+	      array( 'db' => 'jabatan', 'dt' => 6),
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 7),
+	      array( 'db' => 'SUM(value)', 'dt' => 8, 'formatter' => function($d,$row){ 
 	      	return number_format($d,2);
 	      }),
-	      array( 'db' => 'status',  'dt' => 8, 'formatter' => function($d,$row, $dataArray){ 
+	      array( 'db' => 'status',  'dt' => 9, 'formatter' => function($d,$row, $dataArray){ 
 	        if($d==0){
 	          return '<i>Belum Diajukan</i>';
 	        }
@@ -45,42 +58,64 @@ switch ($process) {
 	          return '<i>Revisi</i>';
 	        }
 	        elseif($d==4){
-	          return '<i>Close</i>';
+	          return '<i>Telah Disahkan / Close</i>';
 	        }
 	        elseif($d==5){
+	          return '<i>Adendum</i>';
+	        }
+	        elseif($d==6){
+	          return '<i>Adendum Telah Disahkan / Close Adendum</i>';
+	        }
+	        elseif($d==7){
 	          return '<i>Penutupan Anggaran</i>';
 	        }
 	      }),
-	      array( 'db' => 'status',  'dt' => 9, 'formatter' => function($d,$row, $dataArray){ 
-	        if($d==0 && $_SESSION['level'] != 0){
-	          return  '<div class="text-center">'.
-	                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Add Akun</a>'.
-	                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file"></i>&nbsp; Cetak Kuitansi</a>'.
-	                  '</div>';
-	        }elseif ($d==0 && $_SESSION['level'] == 0) {
-	          return  '<div class="text-center btn-group-vertical">'.
-	                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; View Akun</a>'.
-	                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-file"></i>&nbsp; Cetak Kuitansi</a>'.
-
-	                  '</div>';
-	        }
+	      array( 'db' => 'status',  'dt' => 10, 'formatter' => function($d,$row, $dataArray){ 
+	      	$button =  '<div class="text-center btn-group-vertical">';
+	      	if ($_SESSION['level'] == 0) {
+	      		$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; View Akun</a>';
+	      		if ($d != 0 && $d != 1 && $d != 3 && $d != 5) {
+	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1].'" class="btn btn-flat btn-info btn-sm"><i class="fa fa-file"></i>&nbsp; Cetak Kuitansi</a>';
+	      		}
+	      	}else{
+	      		$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Add Akun</a>';
+	      		if ($d != 0 &&  $d != 1 &&  $d != 3 &&  $d != 5) {
+	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1].'" class="btn btn-flat btn-info btn-sm"><i class="fa fa-file"></i>&nbsp; Cetak Kuitansi</a>';
+		        }
+	      	}
+	        $button .='</div>';
+	        return $button;
 	      }),
-		  array( 'db' => 'no_kuitansi', 'dt' => 10, 'formatter' => function($d,$row){
+		  array( 'db' => 'no_kuitansi', 'dt' => 11, 'formatter' => function($d,$row){
 		  	if ($d != "") {
 		  		return '<center>'.$d.'</center>';
 		  	}else{
-		  		return '<center>-</center>';
+		  		return '<center>N/A</center>';
 		  	}
 		  }),
-		  array('db' => 'status', 'dt'=>11, 'formatter' => function($d,$row, $dataArray){
+		  array('db' => 'status', 'dt'=>12, 'formatter' => function($d,$row, $dataArray){
+		  	
 		  	if ($_SESSION['level'] == 0) {
-		  		return  '<div class="text-center btn-group-vertical">'.
-	                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/sahkanAkun/'.$row[0].'" class="btn btn-flat btn-success btn-sm"><i class="fa fa-check"></i>&nbsp; Sahkan</a>'.
-	                  '</div>';
+		  		if ($row[11] != "" && ($d != 0 && $d != 1 && $d != 3 && $d != 5)) {
+		  			$button =  '<div class="text-center btn-group-vertical">'.
+		  						'<a style="margin:0 2px;" id="btn-sah" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
+		  						'</div>';
+		  		}elseif ($row[11] != "" && $d == 5) {
+		  			$button =  '<div class="text-center btn-group-vertical">'.
+		  						'<a style="margin:0 2px;" id="btn-sah-adn" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
+		  						'</div>';
+		  		}else{
+		  			$button = '<center>-</center>';
+		  		}
 		  	}else{
-		  		return '';
+		  		if ($row[11] != "" && ($d != 0 &&  $d != 1 &&  $d != 3)) {
+		  			$button = '<i>Belum Disahkan</i>';
+		  		}else{
+		  			$button = '<center>-</center>';
+		  		}
 		  	}
-		  	  
+		  	
+		  	return $button;
 		  })
 	    );
 		$where = 'rabview_id = "'.$rabview_id.'"';
@@ -89,9 +124,20 @@ switch ($process) {
 	    $datatable->get_table_group($get_table, $key, $column,$where, $group, $dataArray);
 	    break;
 	case 'getorang':
-		$npwp = $_POST['npwp'];
-		$getorang = $mdl_rab->getOrang($npwp);
+		$getorang = $mdl_rab->getOrang($_POST);
 		echo json_encode($getorang);
+		break;
+	case 'cekAdendum':
+		$id_rab_view = $_POST['id_rab_view'];
+		$getdata = $mdl_rab->getview($id_rab_view);
+		echo json_encode($getdata);
+		break;
+	case 'sahkanAkun':
+		$status = $_POST['status'];
+		$id_rabfull = $_POST['id_rabfull'];
+		$id_rab_view = $_POST['id_rab_view'];
+		$mdl_rab->chStatusFull($id_rabfull,$status);
+    	$utility->load("content/rabdetail/".$id_rab_view."/detail","success","Data telah disahkan");
 		break;
 	case 'tambahAkun':
 		$insert = $mdl_rab->tambahAkun($_POST);
