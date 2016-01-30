@@ -34,9 +34,10 @@
                   <th>Jabatan</th>
                   <th>Kode Akun</th>
                   <th>Total Dana RAB</th>
+                  <th>Status</th>
                   <th></th>
-                  <?php if($_SESSION['level'] == 0){?>
                   <th>Pelaporan</th>
+                  <?php if($_SESSION['level'] == 0){?>
                   <th></th>
                   <?php }?>
                 </tr>
@@ -153,7 +154,6 @@
 
   function cnpwp(){
     var npwp = $('#npwp').val();
-    alert(npwp);
     $.ajax({
       type: "POST",
       url: "<?php echo $url_rewrite;?>process/rab_rinci/getorang",

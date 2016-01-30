@@ -137,23 +137,164 @@
       return $result;
     }
 
-    public function ajukan($data){
-      $id_rab = $data['id_rab_aju'];
-      $query = "UPDATE rabview SET status='1' WHERE id = '$id_rab'";
-      $query2 = "UPDATE rabfull SET status='1' WHERE rabview_id = '$id_rab'";
-
-      $result = $this->query($query);
-      $result2 = $this->query($query2);
-
-      return array('result' => $result,
-                    'result2' => $result2
-                  );
+    public function getakun($id_rabview){
+      $query_rab = "SELECT * FROM rabfull where rabview_id = '$id_rabview' group by kdakun";
+      $res_rab = $this->query($query_rab);
+      while ($rab = $this->fetch_object($res_rab)) {
+        $akun[] = $rab;
+      }
+      return $akun;
     }
 
-    public function sahkan($data){
-      $id_rab = $data['id_rab_sah'];
-      $query = "UPDATE rabview SET status='2' WHERE id = '$id_rab'";
-      $query2 = "UPDATE rabfull SET status='2' WHERE rabview_id = '$id_rab'";
+    public function getRabItem($data){
+      $rab = $data;
+      $qry_jumrab = "SELECT noitem, sum(value) as jumlahrab FROM rabfull
+                          WHERE thang='$rab->thang'
+                            AND kdprogram='$rab->kdprogram'
+                            AND kdgiat='$rab->kdgiat'
+                            AND kdoutput='$rab->kdoutput'
+                            AND kdsoutput='$rab->kdsoutput'
+                            AND kdkmpnen='$rab->kdkmpnen'
+                            AND kdskmpnen='$rab->kdskmpnen'
+                            AND kdakun='$rab->kdakun'
+                          GROUP BY noitem
+                          ";
+      $res_rab = $this->query($qry_jumrab);
+      while ($rab = $this->fetch_object($res_rab)) {
+        $item[] = $rab;
+      }
+      return $item;
+    }
+
+    public function getRabAkun($data){
+      $rab = $data;
+      $qry_jumrab = "SELECT kdakun, sum(value) as `jumlahrab` FROM rabfull
+                          WHERE thang='$rab->thang'
+                            AND kdprogram='$rab->kdprogram'
+                            AND kdgiat='$rab->kdgiat'
+                            AND kdoutput='$rab->kdoutput'
+                            AND kdsoutput='$rab->kdsoutput'
+                            AND kdkmpnen='$rab->kdkmpnen'
+                            AND kdskmpnen='$rab->kdskmpnen'
+                            AND kdakun='$rab->kdakun'
+                          GROUP BY kdakun
+                          ";
+      $res_rab = $this->query($qry_jumrab);
+      while ($rab = $this->fetch_object($res_rab)) {
+        $item[] = $rab;
+      }
+      return $item;
+    }
+
+    public function getJumRkakl($dataAkun, $dataItem=null){
+      $rab = $dataAkun;
+      if ($dataItem != null) {
+        $whereitem = "AND NOITEM='".$dataItem->noitem."' GROUP BY NOITEM";
+      }else{
+        $whereitem = "GROUP BY KDAKUN";
+      }
+      $qry_rkakl = "SELECT sum(jumlah) as `jumlah`, sum(realisasi) as `realisasi`, sum(usulan) as `usulan`, GROUP_CONCAT(noitem) as noitem
+                     FROM rkakl_full 
+                      WHERE THANG='$rab->thang'
+                      AND KDPROGRAM='$rab->kdprogram'
+                      AND KDGIAT='$rab->kdgiat'
+                      AND KDOUTPUT='$rab->kdoutput'
+                      AND KDSOUTPUT='$rab->kdsoutput'
+                      AND KDKMPNEN='$rab->kdkmpnen'
+                      AND KDSKMPNEN='$rab->kdskmpnen'
+                      AND KDAKUN='$rab->kdakun'
+                      ".$whereitem."
+                      ";
+      $res_rkakl = $this->query($qry_rkakl);
+      while ($jumlah = $this->fetch_object($res_rkakl)) {
+        $jumrkakl = $jumlah;
+      }
+      return $jumrkakl;
+    }
+
+    public function insertUsulan($dataAkun, $item, $total){
+      $rab = $dataAkun;
+      if ($total == 0) {
+        $total = 'null';
+      }
+      $query = "UPDATE rkakl_full SET usulan='$total' WHERE THANG='$rab->thang'
+                                                      AND KDPROGRAM='$rab->kdprogram'
+                                                      AND KDGIAT='$rab->kdgiat'
+                                                      AND KDOUTPUT='$rab->kdoutput'
+                                                      AND KDSOUTPUT='$rab->kdsoutput'
+                                                      AND KDKMPNEN='$rab->kdkmpnen'
+                                                      AND KDSKMPNEN='$rab->kdskmpnen'
+                                                      AND KDAKUN='$rab->kdakun'
+                                                      AND NOITEM = '$item'
+                                                      ";
+
+      $result = $this->query($query);
+
+      return $result;
+    }
+
+    public function getRealUsul($dataAkun, $item){
+      $rab = $dataAkun;
+      $qry_rkakl = "SELECT realisasi, usulan
+                     FROM rkakl_full 
+                      WHERE THANG='$rab->thang'
+                      AND KDPROGRAM='$rab->kdprogram'
+                      AND KDGIAT='$rab->kdgiat'
+                      AND KDOUTPUT='$rab->kdoutput'
+                      AND KDSOUTPUT='$rab->kdsoutput'
+                      AND KDKMPNEN='$rab->kdkmpnen'
+                      AND KDSKMPNEN='$rab->kdskmpnen'
+                      AND KDAKUN='$rab->kdakun'
+                      AND NOITEM='".$item."'
+                      ";
+      $res_rkakl = $this->query($qry_rkakl);
+      while ($jumlah = $this->fetch_object($res_rkakl)) {
+        $jumrkakl = $jumlah;
+      }
+      return $jumrkakl;
+    }
+
+    public function moveRealisasi($dataAkun, $item, $total){
+      $rab = $dataAkun;
+      $query = "UPDATE rkakl_full SET realisasi='$total', usulan=null 
+                      WHERE THANG='$rab->thang'
+                        AND KDPROGRAM='$rab->kdprogram'
+                        AND KDGIAT='$rab->kdgiat'
+                        AND KDOUTPUT='$rab->kdoutput'
+                        AND KDSOUTPUT='$rab->kdsoutput'
+                        AND KDKMPNEN='$rab->kdkmpnen'
+                        AND KDSKMPNEN='$rab->kdskmpnen'
+                        AND KDAKUN='$rab->kdakun'
+                        AND NOITEM = '$item'
+                       ";
+
+      $result = $this->query($query);
+
+      return $result;
+    }
+
+    public function revisi($dataAkun, $item, $total){
+      $rab = $dataAkun;
+      $query = "UPDATE rkakl_full SET usulan=null 
+                      WHERE THANG='$rab->thang'
+                        AND KDPROGRAM='$rab->kdprogram'
+                        AND KDGIAT='$rab->kdgiat'
+                        AND KDOUTPUT='$rab->kdoutput'
+                        AND KDSOUTPUT='$rab->kdsoutput'
+                        AND KDKMPNEN='$rab->kdkmpnen'
+                        AND KDSKMPNEN='$rab->kdskmpnen'
+                        AND KDAKUN='$rab->kdakun'
+                        AND NOITEM = '$item'
+                       ";
+
+      $result = $this->query($query);
+
+      return $result;
+    }
+
+    public function chstatus($id_rabview, $status){
+      $query = "UPDATE rabview SET status='$status' WHERE id = '$id_rabview'";
+      $query2 = "UPDATE rabfull SET status='$status' WHERE rabview_id = '$id_rabview'";
 
       $result = $this->query($query);
       $result2 = $this->query($query2);
@@ -168,13 +309,6 @@
                  FROM rabview as r where id = '$id'";
       $result = $this->query($query);
       $data  = $this->fetch_array($result);
-      // while($fetch  = $this->fetch_object($result)) {
-      //   $data[$i]['kdprogram'] = $fetch->kdprogram;
-      //   $data[$i]['kdoutput'] = $fetch->kdoutput;
-      //   $data[$i]['kdsoutput'] = $fetch->kdsoutput;
-      //   $data[$i]['kdkmpnen'] = $fetch->kdkmpnen;
-      //   $i++;
-      // }
       return $data;
     }
 

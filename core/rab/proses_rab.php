@@ -12,7 +12,8 @@ switch ($process) {
           return 'Program : '.$d.
                 '<br>'.'Output : '.$row[8].
                 '<br>'.'Suboutput : '.$row[9].
-                '<br>'.'Komponen : '.$row[10];
+                '<br>'.'Komponen : '.$row[10].
+                '<br>'.'Sub Komponen : '.$row[11];
       }),
       array( 'db' => 'kdgiat',  'dt' => 2),
       array( 'db' => 'deskripsi',  'dt' => 3),
@@ -43,7 +44,7 @@ switch ($process) {
       }),
       array( 'db' => 'status',  'dt' => 7, 'formatter' => function($d,$row, $dataArray){ 
         if($d==0 && $_SESSION['level'] != 0){
-          return  '<div class="text-center btn-group-vertical">'.
+          return  '<div class="text-center ">'.
                     '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Ajukan</a>'.
                     '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Add Transaksi</a>'.
                   '</div>';
@@ -76,6 +77,7 @@ switch ($process) {
       array( 'db' => 'kdoutput',  'dt' => 8),
       array( 'db' => 'kdsoutput',  'dt' => 9),
       array( 'db' => 'kdkmpnen',  'dt' => 10),
+      array( 'db' => 'kdskmpnen',  'dt' => 10),
     );
     $datatable->get_table($table, $key, $column,$where="",$dataArray);
     break;
@@ -105,12 +107,152 @@ switch ($process) {
     $utility->load("content/rab","success","Data RAB berhasil dimasukkan ke dalam database");
     break;
   case 'ajukan':
-    $mdl_rab->ajukan($_POST);
-    $utility->load("content/rab","success","Data RAB telah diajukan ke Bendahara Pengeluaran");
+    $id_rabview = $_POST['id_rab_aju'];
+    $akun = $mdl_rab->getakun($id_rabview);
+    $error = false;
+    // echo "<pre>";
+    for ($i=0; $i < count($akun); $i++) { 
+      if ($akun[$i]->kdakun == 521211) {  //belanja bahan
+        $rab = $mdl_rab->getRabItem($akun[$i]);
+        for ($j=0; $j < count($rab); $j++) { 
+          $jum_rkakl = $mdl_rab->getJumRkakl($akun[$i], $rab[$j]);
+          if ($jum_rkakl->jumlah < ($rab[$j]->jumlahrab + $jum_rkakl->realisasi + $jum_rkakl->usulan)) {
+            $error = '1';
+            $kderror[$i] = $akun[$i]->kdakun;
+          }
+        }
+      }elseif($akun[$i]->kdakun != ""){  // bukan belanja bahan
+        $rab = $mdl_rab->getRabAkun($akun[$i]);
+        $jum_rkakl = $mdl_rab->getJumRkakl($akun[$i]);
+        if ($jum_rkakl->jumlah < ($rab->jumlahrab + $jum_rkakl->realisasi + $jum_rkakl->usulan)) {
+          $error = '1';
+          $kderror[$i] = $akun[$i]->kdakun;
+        }
+      }else{  //kode akun kosong
+        $error = '2';
+        $kderror[$i] = $akun[$i]->kdakun;
+      }
+    }
+
+    if (!$error) {
+      for ($i=0; $i < count($akun); $i++) { 
+        if ($akun[$i]->kdakun == 521211) {  //belanja bahan
+          $rab = $mdl_rab->getRabItem($akun[$i]);
+          for ($j=0; $j < count($rab); $j++) { 
+            $jum_rkakl = $mdl_rab->getJumRkakl($akun[$i], $rab[$j]);
+            $total = $jum_rkakl->usulan + $rab[$j]->jumlahrab;
+            $item = $rab[$j]->noitem;
+            $mdl_rab->insertUsulan($akun[$i], $item, $total);
+          }
+        }elseif($akun[$i]->kdakun != ""){  // bukan belanja bahan
+          $jum_rkakl = $mdl_rab->getJumRkakl($akun[$i]);
+          $rab = $mdl_rab->getRabAkun($akun[$i]);
+          $totalusul = $rab[0]->jumlahrab + $jum_rkakl->usulan;
+          $item = $jum_rkakl->noitem;
+          $pecah_item = explode(",", $item);
+          $banyakitem = count($pecah_item);
+
+          $totalperitem = floor($totalusul/$banyakitem);
+          $sisaitem = $totalusul % $banyakitem;
+
+          for ($x=0; $x < $banyakitem; $x++) { 
+            if ($sisaitem == 0) {
+              $mdl_rab->insertUsulan($akun[$i], $pecah_item[$x], $totalperitem);
+            }else{
+              if ($x == ($banyakitem-1)) {
+                $totalperitem = $totalperitem + $sisaitem;
+                $mdl_rab->insertUsulan($akun[$i], $pecah_item[$x], $totalperitem);
+              }else{
+                $mdl_rab->insertUsulan($akun[$i], $pecah_item[$x], $totalperitem);
+              }
+            }
+          }
+        }
+      }
+      $status = '1';
+      $mdl_rab->chstatus($id_rabview, $status);
+      $utility->load("content/rab","success","Data RAB telah diajukan ke Bendahara Pengeluaran");
+    }else{
+      $kodeError = implode(", ", $kderror);
+      if ($error == 1) {
+        $utility->load("content/rab","warning","Proses tidak dilanjutkan. Kode Akun ".$kodeError." melebihi Pagu");
+      }else{
+        $utility->load("content/rab","danger","Proses tidak dilanjutkan. Terdapat kode akun yang kosong");
+      }
+    }
     break;
   case 'sahkan':
-    $mdl_rab->sahkan($_POST);
+    $id_rabview = $_POST['id_rab_sah'];
+    $akun = $mdl_rab->getakun($id_rabview);
+    for ($i=0; $i < count($akun); $i++) { 
+      if ($akun[$i]->kdakun == 521211) {  //belanja bahan
+        $rab = $mdl_rab->getRabItem($akun[$i]);
+        for ($j=0; $j < count($rab); $j++) { 
+          $jum_rkakl = $mdl_rab->getJumRkakl($akun[$i], $rab[$j]);
+          $realisasi = $jum_rkakl->realisasi;
+          $usulan = $jum_rkakl->usulan;
+          $total = $realisasi + $usulan;
+          $item = $rab[$j]->noitem;
+          $mdl_rab->moveRealisasi($akun[$i], $item, $total);
+        }
+      }elseif($akun[$i]->kdakun != ""){  // bukan belanja bahan
+        $jum_rkakl = $mdl_rab->getJumRkakl($akun[$i]);
+        $item = $jum_rkakl->noitem;
+        $pecah_item = explode(",", $item);
+        $banyakitem = count($pecah_item);
+
+        for ($x=0; $x < $banyakitem; $x++) { 
+          $nilai = $mdl_rab->getRealUsul($akun[$i], $pecah_item[$x]);
+          $total = $nilai->realisasi + $nilai->usulan;
+          $mdl_rab->moveRealisasi($akun[$i], $pecah_item[$x], $total);
+        }
+      }
+    }
+    $status = '2';
+    $mdl_rab->chstatus($id_rabview, $status);
     $utility->load("content/rab","success","Data RAB telah disahkan");
+    break;
+  case 'revisi':
+    $id_rabview = $_POST['id_rab_rev'];
+    $akun = $mdl_rab->getakun($id_rabview);
+    for ($i=0; $i < count($akun); $i++) { 
+      if ($akun[$i]->kdakun == 521211) {  //belanja bahan
+        $rab = $mdl_rab->getRabItem($akun[$i]);
+        for ($j=0; $j < count($rab); $j++) { 
+          $jum_rkakl = $mdl_rab->getJumRkakl($akun[$i], $rab[$j]);
+          $total = $jum_rkakl->usulan - $rab[$j]->jumlahrab;
+          $item = $rab[$j]->noitem;
+          $mdl_rab->insertUsulan($akun[$i], $item, $total);
+        }
+      }elseif($akun[$i]->kdakun != ""){  // bukan belanja bahan
+        $jum_rkakl = $mdl_rab->getJumRkakl($akun[$i]);
+        $rab = $mdl_rab->getRabAkun($akun[$i]);
+
+        $totalusul = $jum_rkakl->usulan - $rab[0]->jumlahrab;
+        $item = $jum_rkakl->noitem;
+        $pecah_item = explode(",", $item);
+        $banyakitem = count($pecah_item);
+
+        $totalperitem = floor($totalusul/$banyakitem);
+        $sisaitem = $totalusul % $banyakitem;
+
+        for ($x=0; $x < $banyakitem; $x++) { 
+          if ($sisaitem == 0) {
+            $mdl_rab->insertUsulan($akun[$i], $pecah_item[$x], $totalperitem);
+          }else{
+            if ($x == ($banyakitem-1)) {
+              $totalperitem = $totalperitem + $sisaitem;
+              $mdl_rab->insertUsulan($akun[$i], $pecah_item[$x], $totalperitem);
+            }else{
+              $mdl_rab->insertUsulan($akun[$i], $pecah_item[$x], $totalperitem);
+            }
+          }
+        }
+      }
+    }
+    $status = '3';
+    $mdl_rab->chstatus($id_rabview, $status);
+    $utility->load("content/rab","success","Data RAB direvisi");
     break;
   default:
     $utility->location_goto(".");
