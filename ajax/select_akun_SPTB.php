@@ -16,16 +16,7 @@ include '../config/application.php';
  // print_r($row1);die;
 
 
- $qry = $db->query("select distinct K.KDAKUN, K.NMAKUN from rkakl_full K join rabfull B
- 					on K.KDPROGRAM = '$row1->kdprogram' 
-						and K.KDGIAT = '$row1->kdgiat' 
-						and K.KDOUTPUT = '$row1->kdoutput' 
-						and K.KDSOUTPUT = '$row1->kdsoutput' 
-						and K.KDKMPNEN = '$row1->kdkmpnen' 
-						and K.KDSKMPNEN = '$row1->kdskmpnen' 
- 					where K.KDAKUN not like '51%' 
- 					and B.id = '$id_rabfull'
- 					order by K.KDAKUN");
+
  $qry = $db->query("select distinct KDAKUN, NMAKUN from rkakl_full order by KDAKUN");
  // echo "<option value=\"\" >--Pilih Kode Akun--</option>";
  while ($row = $db->fetch_object($qry)) {

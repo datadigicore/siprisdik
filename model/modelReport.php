@@ -130,7 +130,7 @@
       }
       ob_start();
       if($lokal==0) {
-        $this->Kuitansi_Honor_Uang_Saku($result, $no_kw_up, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen);
+        $this->Kuitansi_Honor_Uang_Saku($result, $no_kw_up, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen, $npwp);
         echo '<pagebreak />';
       }
       else{
@@ -212,7 +212,7 @@
                 <td>'.$value[deskripsi].'</td>
                 <td>'.$value[tanggal].'</td>
                 <td>'."-".'</td>
-                <td>'.$value[value].'</td>
+                <td align="right">'.number_format($value[value],0,",",".").'</td>
                 <td>'." ".'</td>
                 <td>'." ".'</td>
             </tr>';
@@ -223,9 +223,9 @@
       
       echo '<tr>
               <td colspan="6">JUMLAH</td>
-              <td>'.$tot_value.'</td>
-              <td>'.$tot_pph.'</td>
-              <td>'.$tot_pph.'</td>
+              <td align="right">'.number_format($tot_value,0,",",".").'</td>
+              <td align="right">'.number_format($tot_ppn,0,",",".").'</td>
+              <td align="right">'.number_format($tot_pph,0,",",".").'</td>
               </tr>';
           echo '</table>';
           echo '<p align="left" style="font-size:0.65em;">Bukti-bukti  pengeluaran  anggaran  dan asli  setoran  pajak  (SSP/BPN)  tersebut  di  atas disimpan  oleh Pengguna  Anggaran/Kuasa  Pengguna  Anggaran  untuk  kelengkapan  administrasi  dan  pemeriksaan aparat pengawasan fungsional.</p>';
@@ -693,7 +693,7 @@
     }
     // DAFTAR RINCIAN PERMINTAAN PENGELUARAN
     public function Rincian_Permintaan_Pengeluaran($data){
-      $sql = $this->query("SELECT kdakun, penerima, tanggal, sum(value) as jumlah FROM `rabfull` GROUP BY kdakun order by kdakun asc ");
+      $sql = $this->query("SELECT kdakun, penerima, tanggal, sum(value) as jumlah FROM `rabfull` where kdakun like '$data%' GROUP BY kdakun order by kdakun asc ");
       ob_start();
       echo '<table cellpadding="3" style="width: 100%; font-size:0.7em; border-collapse: collapse;">
               <tr>
@@ -721,7 +721,7 @@
                 <td colspan="2">: DKI Jakarta<br></td>
                 <td style="border-left: 1px solid; border-right: 1px solid; border-top: 1px solid;" colspan="2"><br>PAGU SUB KEGIATAN</br></td>
                 <td>8. KODE MAK<br></td>
-                <td style="border-right: 1px solid;">:</td>
+                <td style="border-right: 1px solid;">:'." ".$data.'</td>
               </tr>
               <tr>
                 <td style="border-left: 1px solid;">4. Kantor / Satuan Kerja<br></td>
@@ -762,7 +762,7 @@
                 <td style="border: 1px solid;  text-align:center;">-</td>
                 <td style="border: 1px solid;  text-align:center;">'.$data[kdakun].'</td>
                 <td style="border: 1px solid;  text-align:center;">Terlampir Pada SPTB</td>
-                <td style="border: 1px solid;  text-align:center;">'.$data[jumlah].'</td>
+                <td style="border: 1px solid;  text-align:center;">'.number_format($data[jumlah],0,",",".").'</td>
               </tr>';
               $no++;
       }
@@ -839,7 +839,7 @@
                     </tr> 
                     <tr>
                         <td align="left">Jumlah Uang</td>
-                        <td align="left">: Rp. '.$total.'</td>
+                        <td align="left">: Rp. '.number_format($total,0,",",".").'</td>
                     </tr> 
                     <tr>
                         <td align="left">Uang Sebesar</td>
@@ -858,13 +858,13 @@
           echo '<tr>
                   <td width="18%"></td>
                   <td width="40%">'.$value[NMITEM].'</td>
-                  <td>'." : Rp. ".$value[value].'</td>
+                  <td>'." : Rp. ".number_format($value[value],0,",",".").'</td>
                 </tr>';
           }
           echo '<tr>
                   <td ></td>
                   <td >'."Jumlah ".'</td>
-                  <td>'." : Rp. ".$total.'</td>
+                  <td>'." : Rp. ".number_format($total[value],0,",",".").'</td>
                 </tr>';
         echo  '</table>';
         
@@ -1092,7 +1092,7 @@
           echo '<tr>
                  <td style="border-left:1px solid; border-right:1px solid">'.$no++.'</td>
                  <td style="border-left:1px solid; border-right:1px solid" align="left">'.$value[NMITEM].'</td>
-                 <td style="border-left:1px solid; border-right:1px solid">'.$value[value].'</td>
+                 <td style="border-left:1px solid; border-right:1px solid">'.number_format($value[value],0,",",".").'</td>
                  <td style="border-left:1px solid; border-right:1px solid"></td>
                 </tr>';
                 $jml+=$value[value];
@@ -1119,9 +1119,9 @@
             <td>Telah menerima sejumlah uang sebesar</td>
           </tr>
           <tr>
-            <td>Rp. '.$jml.'</td>
+            <td>Rp. '.number_format($jml,0,",",".").'</td>
             <td width="23%"></td>
-            <td>Rp. '.$jml.'</td>
+            <td>Rp. '.number_format($jml,0,",",".").'</td>
           </tr>    
           <tr>
             <td>Bendahara Pengeluaran Pembantu</td>
@@ -1149,7 +1149,7 @@
     echo '  <table style="width: 60%; font-size:80%;"  border="0">               
                     <tr>
                         <td align="left">Ditetapkan Sejumlah</td>
-                        <td align="left">: Rp. '.$jml.'</td>
+                        <td align="left">: Rp. '.number_format($jml,0,",",".").'</td>
                     </tr> 
                     <tr>
                         <td align="left">Yang telah dibayar semula</td>
@@ -1166,34 +1166,36 @@
     }
 
     //Kuitansi Honor Dan Uang Saku
-    public function Kuitansi_Honor_Uang_Saku($data, $no_kw_up, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen) {
+    public function Kuitansi_Honor_Uang_Saku($data, $no_kw_up, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen, $npwp) {
       $penerima;
+      
       $total=0;
       foreach ($data as $value) {
          $total += $value[value];
          $penerima = $value[penerima];
+         $npwp = $value[npwp];
       }
-        echo '  <p align="right">No '.$no_kw_up."/".$kdgiat.".".$kdoutput.".".$kdsoutput.".".$kdkmpnen.".".$kdskmpnen."/2016".'</p>';  
+        echo '  <p style="font-size:0.9em;" align="right">No '.$no_kw_up."/".$kdgiat.".".$kdoutput.".".$kdsoutput.".".$kdkmpnen.".".$kdskmpnen."/2016".'</p>';  
         require_once __DIR__ . "/../utility/report/header_dikti.php";
         echo ' <p align="center" style="font-weight:bold; font-size:1.2em">KUITANSI</p>
-                    <table style="width: 100%; font-size:80%;"  border="0">               
+                    <table cellpadding="3" style="width: 100%; font-size:0.7em;"  border="0">               
                     <tr>
                         <td align="left" width="20%">Sudah Terima Dari </td>
-                        <td align="left">: '.$penerima.'</td>
-                        <td></td>
-                        <td></td>
+                        <td width="1%" align="left">:</td>
+                        <td colspan="2"> '.$penerima.'</td>
+                       
                     </tr> 
                     <tr>
                         <td align="left">Jumlah Uang</td>
-                        <td align="left" style="background-color:gray">: Rp. '.$total.'</td>
-                        <td></td>
-                        <td></td>
+                        <td align="left" >: </td>
+                        <td style="background-color:gray" colspan="2">Rp. '.number_format($total,0,",",".").'</td>
+                        
                     </tr> 
                     <tr>
                         <td align="left">Uang Sebesar</td>
-                        <td align="left">: '.$this->terbilang($total,1).'</td>
-                        <td></td>
-                        <td></td>
+                        <td align="left">: </td>
+                        <td colspan="2">'.$this->terbilang($total,1).'</td>
+                        
                     </tr>                
                     <tr>
                         <td align="left">Untuk Pembayaran</td>
@@ -1204,35 +1206,40 @@
          echo  '</table>';
          $pph = (15 / 100) * $total;
          $diterima = $total-$pph;      
-         echo  '<table style="width: 100%; font-size:80%;"  border="0">';                   
+         echo  '<table style="width: 100%; font-size:0.7em;"  border="0">';                   
         foreach ($data as $value) {
           echo '<tr>
                   <td width="21%"></td>
                   <td width="40%">'.$value[NMITEM].'</td>
-                  <td>'." : Rp. ".$value[value].'</td>
+                  <td> : Rp. </td>
+                  <td align="right">'."".number_format($value[value],0,",",".").'</td>
                 </tr>';
           }
           echo '<tr>
                   <td ></td>
                   <td >'."Jumlah ".'</td>
-                  <td>'." : Rp. ".$total.'</td>
+                  <td> : Rp. </td>
+                  <td align="right">'."".number_format($total,0,",",".").'</td>
+                  <td></td>
                 </tr>';
           echo '<tr>
                   <td ></td>
                   <td >'."PPh. 15% ".'</td>
-                  <td>'." : Rp. ".$pph.'</td>
+                  <td> : Rp. </td>
+                  <td align="right">'." ".number_format($pph,0,",",".").'</td>
                 </tr>';
           echo '<tr>
                   <td ></td>
                   <td >'."Diterima ".'</td>
-                  <td>'." : Rp. ".$diterima.'</td>
+                  <td> : Rp. </td>
+                  <td align="right">'."".number_format($diterima,0,",",".").'</td>
                 </tr>';
            echo  '</table>';
         
         
        
         echo '<br></br>
-              <table style="text-align: center; width: 100%; font-size:84%; font-family:serif"  >
+              <table style="text-align: center; width: 100%; font-size:0.7em;"  >
           
               <tr>
                 <td style="text-align: center;"> Mengetahui/Setuju dibayar  </td>
@@ -1249,17 +1256,14 @@
                 <td>Bendahara Pengeluaran Pembantu,</td>
                 <td></td>
               </tr>
-              <tr>
-                <td><br></br></td>
-                <td></td>
-                <td></td>
+               <tr>
+                <td colspan="3"><br></br> <br></br> <br></br></td>
               </tr>
               <tr>
                 <td style="text-align: center;">'.'Ridwan'.'</td>
                 <td style="text-align: center;">'.'Evi Nursanti'.'</td>
-                <td style="text-align: center;">'.'('.$data_rab[penerima].')'.'</td>
+                <td style="text-align: center;">'.'('.$penerima.')'.'</td>
               </tr>              
-
               <tr>
                 <td style="text-align: center;">NIP'.'196212101992031001'.'</td>
                 <td style="text-align: center;">NIP'." ".'196203051986022001'.'</td>
@@ -1268,7 +1272,7 @@
               </table>';
               echo '<p>__ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __</p>';
 
-                echo '<table style=" text-align: left; border-collapse: collapse; margin-left: auto; margin-right: auto; width: 100%;  font-size:0.8em; font-family:serif; "  align="center">
+                echo '<table style=" text-align: left; border-collapse: collapse; margin-left: auto; margin-right: auto; width: 100%;  font-size:0.7em; font-family:serif; "  align="center">
                 <tr>
                     <td rowspan="4" width="13%"><img src="<../../static/dist/img/dirjenpajak.png" height="8%" /></td>
                     <td style= "vertical-align: bottom;">KEMENTERIAN KEUANGAN REPUBLIK INDONESIA</td>
@@ -1288,18 +1292,19 @@
         echo '  <table style="width: 100%; font-size:80%;"  border="0">               
                     <tr>
                         <td align="left" width="17%">Nama Wajib Pajak </td>
-                        <td align="left">:'.$data_rab[penerima].' </td>
+                        <td align="left">:'.$penerima.' </td>
                     </tr> 
                     <tr>
                         <td align="left" width="17%">NPWP</td>
-                        <td align="left">:'.$data_rab[npwp].'</td>
+                        <td align="left">:'.$npwp.'</td>
                     </tr> 
                     <tr>
                         <td align="left" width="17%">Alamat</td>
                         <td align="left">: </td>
                     </tr>                             
-                  </table>';
-        echo '<table style="text-align: left; width: 100%; font-size:84%; font-family:serif"  >
+                  </table>
+                  <br></br>';
+        echo '<table style="text-align: left; width: 100%; font-size:0.7em;"  >
               <tr>
                 <td width="25%"> Penghasilan </td>
                 <td width="25%">Jumlah</td>
@@ -1313,9 +1318,9 @@
           $tot_pot +=$pot;
           echo '<tr>
                   <td>'.$no.". ".$value[NMITEM].'</td>
-                  <td>'.$value[value].'</td>
+                  <td>Rp. '.number_format($value[value],0,",",".").'</td>
                   <td>15%</td>
-                  <td>'."Rp. ".$pot.'</td>
+                  <td>'."Rp. ".number_format($pot,0,",",".").'</td>
                 </tr>';
           $no++;
           }  
@@ -1323,11 +1328,11 @@
                   <td></td>
                   <td></td>
                   <td>JUMLAH</td>
-                  <td>'."Rp. ".$tot_pot.'</td>
+                  <td>'."Rp. ".number_format($tot_pot,0,",",".").'</td>
                 </tr>
               </table>';
 
-         echo '<table style="text-align: left; width: 100%; font-size:84%; font-family:serif"  >
+         echo '<table style="text-align: left; width: 100%; font-size:0.7em;"  >
               <tr>
 
                 <td style="text-align center;"></td>
@@ -1415,9 +1420,15 @@ public function daftar_peng_riil($data){
     $penerima = $value[penerima];
   }
   // ob_start();
-      echo '<h2 align="center">DAFTAR PENGELUARAN RIIL<h2>
-          <h5>Yang bertanda tangan dibawah ini :<h5>';
+      // echo '<h2 align="center">DAFTAR PENGELUARAN RIIL<h2>
+      //     <h6><h6>';
       echo '<table border=1 style="width: 100%; text-align:left; border-collapse:collapse; font-size:80%;">
+        <tr>
+          <td style="border-top:0px solid; border-left:0px solid; border-right:0px solid; font-weight:bold;" align="center" colspan="3"> DAFTAR PENGELUARAN RIIL </td>
+        </tr>
+        <tr>
+          <td style="border-top:0px solid; border-left:0px solid; border-right:0px solid; font-weight:bold;" colspan="3"><br>Yang bertanda tangan dibawah ini :</br></td>
+        </tr>
         <tr>
           <td width="20%">Nama</td>
           <td width="2%">:</td>
@@ -1461,7 +1472,7 @@ public function daftar_peng_riil($data){
           echo '<tr>
                   <td></td>
                   <td width="35%">- '.$value[NMITEM].'</td>
-                  <td>'." : Rp. ".$value[value].'</td>
+                  <td>'." : Rp. ".number_format($value[value],0,",",".").'</td>
                 </tr>';
           }
       echo '<tr>
@@ -1594,7 +1605,7 @@ public function daftar_peng_riil($data){
                 <td></td>
                 <td>'.$no.". ".$rs[NMITEM].'</td>
                 <td>:</td>
-                <td>'.$rs[value].'</td>
+                <td>'.number_format($rs[value],0,",",".").'</td>
               </tr>';
               $no++;
               $tot+=$rs[value];
@@ -1605,7 +1616,7 @@ public function daftar_peng_riil($data){
                 <td></td>
                 <td>JUMLAH</td>
                 <td>: </td>
-                <td>'.$tot.'</td>
+                <td>'.number_format($tot,0,",",".").'</td>
               </tr>
               <tr>
                 <td>10</td>
