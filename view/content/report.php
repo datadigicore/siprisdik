@@ -94,11 +94,19 @@
               <form method="POST" action="<?php echo $url_rewrite;?>process/report/Rincian_Permintaan_Pengeluaran">
               <div class="box-body" style="padding-bottom:0;">
                 <div class="form-group">
+                  <label>Pilih Kode MAK</label>
+                  <select style="margin:5px auto" class="form-control" id="kode-mak" name="kode-mak" onchange="" >
+                      <option value="51" >51 Belanja</option>
+                      <option value="52" >52 Belanja</option>
+                      <option value="53" >53 Belanja</option>
+                  </select>
+                </div>
+                <!-- <div class="form-group">
                   <input type="text" name="tgl_awal" class="form-control" id="tgl_awal" placeholder="Tanggal Awal">
                 </div>
                 <div class="form-group">
                   <input type="text" name="tgl_akhir" class="form-control" id="tgl_akhir" placeholder="Tanggal Akhir" >
-                </div>
+                </div> -->
               </div>
               <div class="box-footer">
                 <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>
@@ -223,9 +231,23 @@
   
   }
   function kodeAkun(idSelector){
-    var url = "<?=$url_rewrite?>ajax/show_opsi_akun.php";
-     ambilData(url, idSelector);
-  }
+      var id_rabfull = $('#id_rabfull').val();
+      var isi ="<option>-- Pilih Kode Akun --</option>";
+      $.ajax({
+        method: "GET",
+        url: "<?=$url_rewrite?>ajax/show_opsi_akun.php",
+        data: { 'id_rabfull': id_rabfull, }
+      })
+      .done(function(data){
+        obj=JSON.parse(data);
+        if(obj!=null){
+          $.each( obj, function( key, value ) {
+            isi = isi+ '<option value="'+key+'">'+key+' - '+value+'</option>';
+          });
+          $("#kode-akun").append(isi);
+        }
+      });
+    }
   $(function () {
     $('#table').DataTable({
       "scrollX": true

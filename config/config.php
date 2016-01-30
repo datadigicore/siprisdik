@@ -17,8 +17,8 @@
   $url_rewrite    = "http://localhost/siprisdik/";
   $REQUEST        = "siprisdik/content";
   $PROSES_REQUEST = "siprisdik/process";
-  $path           = "/srv/www/htdocs/siprisdik/";
-  $path_upload    = "/srv/www/htdocs/siprisdik/static/uploads/";
+  $path           = "C:/xampp/htdocs/siprisdik/";
+  $path_upload    = "C:/xampp/htdocs/siprisdik/static/uploads/";
 
   class config {
     public $db_host              = "localhost";

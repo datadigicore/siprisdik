@@ -72,7 +72,8 @@ switch ($data[2]) {
     $report->SPTB($kode_akun);
   break;
   case 'Rincian_Permintaan_Pengeluaran':
-    $report->Rincian_Permintaan_Pengeluaran($data_pengguna);
+    $kode_mak = $purifier->purify($_POST['kode-mak']);
+    $report->Rincian_Permintaan_Pengeluaran($kode_mak);
   break;
   default:
     
