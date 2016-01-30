@@ -13,8 +13,6 @@ include '../config/application.php';
  $id_rabfull=$_GET['id_rabfull'];
  $query1 = $db->query("SELECT * FROM rabfull where id ='$id_rabfull'");
  $row1 = $db->fetch_object($query1);
- // print_r($row1);die;
-
 
  $qry = $db->query("select distinct K.KDAKUN, K.NMAKUN from rkakl_full K join rabfull B
  					on K.KDPROGRAM = '$row1->kdprogram' 
@@ -26,10 +24,9 @@ include '../config/application.php';
  					where K.KDAKUN not like '51%' 
  					and B.id = '$id_rabfull'
  					order by K.KDAKUN");
- $qry = $db->query("select distinct KDAKUN, NMAKUN from rkakl_full order by KDAKUN");
- echo "<option value=\"\" >--Pilih Kode Akun--</option>";
+ 
  while ($row = $db->fetch_object($qry)) {
-     $akun[$row->KDAKUN] = $row->NMAKUN ;
+    $akun[$row->KDAKUN] = $row->NMAKUN ;
  }
  echo json_encode($akun);
 

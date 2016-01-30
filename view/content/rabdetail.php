@@ -154,7 +154,6 @@
 
   function cnpwp(){
     var npwp = $('#npwp').val();
-    alert(npwp);
     $.ajax({
       type: "POST",
       url: "<?php echo $url_rewrite;?>process/rab_rinci/getorang",
