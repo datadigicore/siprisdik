@@ -94,7 +94,7 @@
                         select
                           no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, pajak, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
                         from rabfull where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and npwp='$npwp' ");
-          $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw' where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and no_kuitansi_update is null and npwp='$npwp' ");
+          $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and no_kuitansi_update is null and npwp='$npwp' ");
 
         }
         else{
@@ -130,11 +130,11 @@
       }
       ob_start();
       if($lokal==0) {
-        $this->Kuitansi_Honor_Uang_Saku($result, $no_kw_up, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen, $npwp);
+        $this->Kuitansi_Honor_Uang_Saku($result, $no_kw, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen, $npwp);
         echo '<pagebreak />';
       }
       else{
-        $this->Kuitansi_Honorarium($result, $no_kw_up, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen);
+        $this->Kuitansi_Honorarium($result, $no_kw, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen);
         echo '<pagebreak />';
       }
       if($dinas==1){ 
@@ -864,7 +864,7 @@
           echo '<tr>
                   <td ></td>
                   <td >'."Jumlah ".'</td>
-                  <td>'." : Rp. ".number_format($total[value],0,",",".").'</td>
+                  <td>'." : Rp. ".number_format($total,0,",",".").'</td>
                 </tr>';
         echo  '</table>';
         
@@ -1531,12 +1531,15 @@ public function daftar_peng_riil($data){
       $result = $this->query("SELECT rab.tanggal, rab.deskripsi, rab.lokasi, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ");
       $res2 = $this->fetch_array($result);
       ob_start();
-      echo  '<table cellpadding="3" style="width: 100%;  text-align:left; border-collapse:collapse; font-size:80%;">
+      echo  '<table  cellpadding="3" style="width: 100%;  text-align:left; border-collapse:collapse; font-size:0.85em;">
             <tr>
               <td style="text-align:center;" colspan="6"><h4>PENGAJUAN UANG MUKA KERJA (UMK)</h4> </td>
             </tr>
             <tr>
               <td style="text-align:center;" colspan="6"><h4>RINCIAN KEBUTUHAN DANA</h4></td>
+            </tr>
+            <tr>
+              <td colspan="4"><br></br><br></br></td>
             </tr>
               <tr>
                 <td>1</td>
@@ -1578,7 +1581,7 @@ public function daftar_peng_riil($data){
                 <td>7</td>
                 <td>Waktu Pelaksanaan</td>
                 <td>:</td>
-                <td colspan="3">'.$res2[tanggal].'</td>
+                <td colspan="3">'.$this->konversi_tanggal($res2[tanggal]).'</td>
                 
               </tr>
               <tr>
@@ -1604,7 +1607,7 @@ public function daftar_peng_riil($data){
                 <td></td>
                 <td></td>
                 <td>'.$no.". ".$rs[NMITEM].'</td>
-                <td>:</td>
+                <td>: Rp. </td>
                 <td>'.number_format($rs[value],0,",",".").'</td>
               </tr>';
               $no++;
@@ -1614,9 +1617,9 @@ public function daftar_peng_riil($data){
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>JUMLAH</td>
-                <td>: </td>
-                <td>'.number_format($tot,0,",",".").'</td>
+                <td style="font-weight:bold;">JUMLAH</td>
+                <td style="font-weight:bold;">: Rp. </td>
+                <td style="font-weight:bold;">'.number_format($tot,0,",",".").'</td>
               </tr>
               <tr>
                 <td>10</td>
@@ -1640,8 +1643,10 @@ public function daftar_peng_riil($data){
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>Jakarta, ................................. 2016</td>
+                <td>Jakarta, '.$this->konversi_tanggal($res2[tanggal]).'</td>
               </tr>
+              </table>
+              <table cellpadding="3" style="width: 100%;  text-align:left; border-collapse:collapse; font-size:0.85em;">
               <tr>
                 <td></td>
                 <td style="border: 1px solid black; " >Kuasa Pengguna Anggaran</td>
@@ -1651,7 +1656,7 @@ public function daftar_peng_riil($data){
                 <td style="border: 1px solid black;">Pejabat Pembuat Komitmen</td>
               </tr>
               <tr>
-                <td><br></br><p></p></td>
+                <td><br></br><br></br><br></br><br></br></td>
                 <td  style="border-left: 1px solid black; border-right: 1px solid black;"></td>
                 <td></td>
                 <td style="border-left: 1px solid black; border-right: 1px solid black;"></td>
@@ -1710,7 +1715,67 @@ public function daftar_peng_riil($data){
       $temp = $this->kekata($x/1000000000000) . " trilyun" . $this->kekata(fmod($x,1000000000000));
       }
       return $temp;
+
 }
+
+function konversi_tanggal($tgl)
+{
+  $data_tgl = explode("-",$tgl);
+  $bulan ="";
+  if($data_tgl[1]=="01")
+        {
+            $bulan="Januari";
+        }        
+
+        if($data_tgl[1]=="02")
+        {
+            $bulan="Februari";
+        }
+
+        if($data_tgl[1]=="03")
+        {
+            $bulan="Maret";
+        }
+        if($data_tgl[1]=="04")
+        {
+            $bulan="April";
+        }
+        if($data_tgl[1]=="05")
+        {
+            $bulan="Mei";
+        }
+        if($data_tgl[1]=="06")
+        {
+            $bulan="Juni";
+        }
+        if($data_tgl[1]=="07")
+        {
+            $bulan="Juli";
+        }
+        if($data_tgl[1]=="08")
+        {
+            $bulan="Agusts";
+        }
+        if($data_tgl[1]=="09")
+        {
+            $bulan="September";
+        }
+        if($data_tgl[1]=="10")
+        {
+            $bulan="Oktober";
+        }
+        if($data_tgl[1]=="11")
+        {
+            $bulan="November";
+        }
+        if($data_tgl[1]=="12")
+        {
+            $bulan="Desember";
+        }
+  $array = array($data_tgl[2],$bulan,$data_tgl[0]);
+  $tanggal = implode(" / ", $array );
+  return $tanggal;
+}    
 
 function terbilang($x, $style=4) {
     if($x<0) {
