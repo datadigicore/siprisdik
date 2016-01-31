@@ -149,12 +149,22 @@
 
     }
     public function SPTB($data){
-      $sql = $this->query("SELECT f.kdgiat as kdgiat, f.kdprogram as kdprogram, f.kdoutput as kdoutput, f.kdakun as kdakun, f.penerima as penerima, f.tanggal as tanggal, f.value as value, v.deskripsi as deskripsi FROM rabview as v LEFT JOIN rabfull as f on v.id = f.rabview_id where f.kdakun ='$data' GROUP by tanggal, kdakun, penerima ");
+      $sql = $this->query("SELECT r.NMITEM as nmitem, r.NMGIAT as nmgiat, r.NMAKUN as nmakun, f.kdgiat as kdgiat, f.kdprogram as kdprogram, f.kdoutput as kdoutput, f.kdakun as kdakun, f.penerima as penerima, f.tanggal as tanggal, f.value as value FROM rabfull as f LEFT JOIN rkakl_full as r on f.kdgiat = r.KDGIAT and f.kdoutput = r.KDOUTPUT and f.kdkmpnen = r.KDKMPNEN and f.kdskmpnen = r.KDSKMPNEN  and f.kdakun = r.KDAKUN and f.noitem = r.NOITEM  where f.kdakun ='$data' ");
       $id = $this->fetch_array($sql);
       ob_start();
-      echo '<p align="center" style="font-weight:bold; text-decoration: underline;">SURAT PERNYATAAN TANGGUNG JAWAB BELANJA</p>';
-      echo '<p align="center" style="font-weight:bold;">Nomor : </p>';
-      echo '<table style="width: 100%; font-size:0.65em;"  border="0">               
+      // echo '<p align="center" style="font-weight:bold; text-decoration: underline;">SURAT PERNYATAAN TANGGUNG JAWAB BELANJA</p>';
+      // echo '<p align="center" style="font-weight:bold;">Nomor : ___/SPTB/401196/XII/2016</p>';
+      echo '<table style="width: 100%; font-size:0.8em;"  border="0">               
+              <tr>
+                <td style="font-weight:bold; text-decoration: underline; font-size:1.0em;" align="center" colspan="4">SURAT PERNYATAAN TANGGUNG JAWAB BELANJA</td>
+              </tr>
+              <tr>
+                <td style="font-weight:bold; font-size:1.0em;"  align="center" colspan="4">Nomor : ___/SPTB/401196/XII/2016</td>
+              </tr>
+              <tr>
+                <td align="center" colspan="4"><br></br><br></br></td>
+              </tr>
+
               <tr>
                 <td align="left" width="1%">1.</td>
                 <td align="left" width="30%">Kode Satuan Kerja</td>
@@ -186,31 +196,32 @@
       
       echo '<table border="1" style="width: 100%; font-size:0.6em; border-collapse: collapse;">
             <tr>
-              <th rowspan="2">No.</td>
+              <th width="2%" rowspan="2">No.</td>
               <th rowspan="2">Akun</td>
               <th rowspan="2">Penerima</td>
-              <th rowspan="2">Uraian</td>
+              <th width="30%" rowspan="2">Uraian</td>
               <th colspan="2">Bukti</td>
               <th rowspan="2">Jumlah</td>
               <th  colspan="2">Pajak yang dipungut Bendahara Pengeluaran</td>
             </tr>
             <tr>
-              <td>Tanggal</td>
-              <td>Nomor</td>
-              <th width="10%">PPN</td>
-              <th width="10%">PPH</td>
+              <th width="10%">Tanggal</th>
+              <th width="10%">Nomor</td>
+              <th width="10%">PPN</th>
+              <th width="10%">PPH</th>
             </tr>';
       $no=1;
       $tot_value = 0;
       $tot_ppn = 0;
       $tot_pph = 0;
       foreach ($sql as $value) {
+        $item=explode("[", $value[nmitem]);
         echo '<tr>
                 <td>'.$no.'</td>
                 <td>'.$value[kdakun].'</td>
                 <td>'.$value[penerima].'</td>
-                <td>'.$value[deskripsi].'</td>
-                <td>'.$value[tanggal].'</td>
+                <td style="text-align: justify;">'." Biaya ".$item[0]." kegiatan ".$value[nmgiat].", tgl. ".$this->konversi_tanggal($value[tanggal],"").'</td>
+                <td>'.$this->konversi_tanggal($value[tanggal],"/").'</td>
                 <td>'."-".'</td>
                 <td align="right">'.number_format($value[value],0,",",".").'</td>
                 <td>'." ".'</td>
@@ -1718,7 +1729,7 @@ public function daftar_peng_riil($data){
 
 }
 
-function konversi_tanggal($tgl)
+function konversi_tanggal($tgl,$type)
 {
   $data_tgl = explode("-",$tgl);
   $bulan ="";
@@ -1772,8 +1783,15 @@ function konversi_tanggal($tgl)
         {
             $bulan="Desember";
         }
-  $array = array($data_tgl[2],$bulan,$data_tgl[0]);
-  $tanggal = implode(" / ", $array );
+  if($type==""){
+    $array = array($data_tgl[2],$bulan,$data_tgl[0]);
+    $tanggal = implode(" ", $array );
+  }
+  else {
+    $array = array($data_tgl[2],$data_tgl[1],$data_tgl[0]);
+    $tanggal = implode(" / ", $array );
+  }
+  
   return $tanggal;
 }    
 
