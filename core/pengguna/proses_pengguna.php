@@ -16,6 +16,7 @@ $data_pengguna = array(
   "password"   => $password,
   "email"      => $email,
   "level"      => $level,
+  "direktorat" => $direktorat,
   "status"     => $status
 );
 

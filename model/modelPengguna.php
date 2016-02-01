@@ -8,6 +8,7 @@
       $password   = $data['password'];
       $email      = $data['email'];
       $level      = $data['level'];
+      $direktorat = $data['direktorat'];
       $status     = $data['status'];
 
       $query      = "INSERT INTO pengguna SET
@@ -16,6 +17,7 @@
         password  = '$password',
         email     = '$email',
         level     = '$level',
+        direktorat= '$direktorat',
         status    = '$status'
       ";
 

@@ -45,6 +45,16 @@
                 </select>
               </div>
               <div class="form-group">
+                <select class="form-control" name="direktorat" required>
+                  <option value="" disabled selected>-- Pilih Direktorat --</option>
+                  <option value="5696">5696</option>
+                  <option value="5697">5697</option>
+                  <option value="5698">5698</option>
+                  <option value="5699">5699</option>
+                  <option value="5700">5700</option>
+                </select>
+              </div>
+              <div class="form-group">
                 <select class="form-control" name="status" required>
                   <option value="" disabled selected>-- Pilih Status Akun --</option>
                   <option value="1">Aktif</option>

@@ -39,6 +39,11 @@
         <li><a href="<?php echo $url_rewrite;?>content/rab"><i class="fa fa-table"></i> <span>Data RAB</span></a></li>   
         <li><a href="<?php echo $url_rewrite;?>content/report"><i class="fa fa-dashboard"></i> <span>Laporan</span></a></li>
       <?php endif ?>
+      <?php if ($_SESSION['level'] == 3): ?>
+        <li class="active"><a href="<?php echo $url_rewrite;?>content/home"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+        <li><a href="<?php echo $url_rewrite;?>content/rab"><i class="fa fa-table"></i> <span>Data RAB</span></a></li>   
+        <li><a href="<?php echo $url_rewrite;?>content/report"><i class="fa fa-dashboard"></i> <span>Laporan</span></a></li>
+      <?php endif ?>
     </ul>
   </section>
 </aside>

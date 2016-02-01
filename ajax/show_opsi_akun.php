@@ -25,7 +25,7 @@ include '../config/application.php';
  					and B.id = '$id_rabfull'
  					order by K.KDAKUN");
 
- $qry = $db->query("select distinct KDAKUN, NMAKUN from rkakl_full order by KDAKUN");
+ // $qry = $db->query("select distinct KDAKUN, NMAKUN from rkakl_full order by KDAKUN");
  // echo "<option value=\"\" >--Pilih Kode Akun--</option>";
 
  while ($row = $db->fetch_object($qry)) {

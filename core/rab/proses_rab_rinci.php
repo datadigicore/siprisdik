@@ -202,5 +202,38 @@ switch ($process) {
 
 	    $datatable->get_table_join($get_table,$get_table2, $key, $column, $on, $where, $group, $dataArray);
 		break;
+	case 'cekDinas':
+		$id_rabfull = $_POST['id_rabfull'];
+		$kdakun = $_POST['kdAkun'];
+		$getrab = $mdl_rab->getrabfull($id_rabfull);
+		$getakun = $mdl_rab->getakungroup($getrab);
+		// print_r($getakun);die;
+		$data['error'] = false;
+		if (count($getakun) >= 2) {
+			$data['error'] = '1';
+			for ($i=0; $i < count($getakun); $i++) { 
+				if ($kdakun == $getakun[$i]->kdakun) {
+					$data['error'] = false;
+				}
+			}
+		}else{
+			if (!empty($getakun[0]->kdakun)) {
+				if ($getakun[0]->kdakun == 521213) {
+					if ($kdakun != 524114 && $kdakun != 524119) {
+						$data['error'] = '2';
+					}
+				}elseif ($getakun[0]->kdakun == 522151) {
+					if ($kdakun != 524114 && $kdakun != 524119) {
+						$data['error'] = '3';
+					}
+				}elseif ($getakun[0]->kdakun == 524114 || $getakun[0]->kdakun == 524119) {
+					if ($kdakun != 521213  && $kdakun != 522151) {
+						$data['error'] = '4';
+					}
+				}
+			}
+		}
+		echo json_encode($data);
+		break;
 }
 ?>

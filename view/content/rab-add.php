@@ -35,224 +35,59 @@
                 </select>
 
                 <label>Value</label>
-                <input type="number" class="form-control" name="value" id="value" value="" placeholder="Value" required />
+                <input style="margin:5px auto" type="number" class="form-control" name="value" id="value" value="" placeholder="Value" required />
+                
+                <div id="perjalanan" class="hidden">
+                  <script>
+                     $(function() {
+                          $("#tgl_mulai").datepicker();
+                          $("#tgl_akhir").datepicker();
+                     });
+                  </script>
+                  <label> Tanggal Berangkat</label>
+                  <div style="margin:5px auto" class="input-group">
+                      <input type="text"class="form-control" id="tgl_mulai" value="<?= $tgl_mulai ?>" name="tgl_mulai" placeholder="Tanggal Berangkat">
+                      <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                  </div>
+                  <label> Tanggal Kembali</label>
+                  <div style="margin:5px auto" class="input-group">
+                       <input type="text"  class="form-control" id="tgl_akhir" value="<?= $tgl_akhir ?>" name="tgl_akhir" placeholder="Tanggal Berangkat">
+                       <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                  </div>
+
+                  <label>Alat Transportasi</label>
+                  <input style="margin:5px auto" type="text" class="form-control" value="<?= $alat_trans ?>" id="alat_trans" name="alat_trans" placeholder="Alat Transportasi">
+
+                  <label>Kota Asal</label>
+                  <input style="margin:5px auto" type="text" class="form-control" value="<?= $kota_asal ?>" id="kota_asal" name="kota_asal" placeholder="Kota Asal">
+
+                  <label>Kota Tujuan</label>
+                  <input style="margin:5px auto" type="text" class="form-control" value="<?= $kota_tujuan ?>" id="kota_tujuan" name="kota_tujuan" placeholder="Kota Tujuan">
+
+                  <label>Taxi Asal</label>
+                  <input style="margin:5px auto" type="text" class="form-control" value="<?= $taxi_asal ?>" id="taxi_asal" name="taxi_asal" placeholder="Taxi Asal">
+
+                  <label>Taxi Tujuan</label>
+                  <input style="margin:5px auto" type="text" class="form-control" value="<?= $taxi_tujuan ?>" id="taxi_tujuan" name="taxi_tujuan" placeholder="Taxi Tujuan">
+
+                  <label>Rute 1</label>
+                  <input style="margin:5px auto" type="text" class="form-control" value="<?= $rute1 ?>" id="rute1" name="rute1" placeholder="Rute 1">
+                       
+                  <label>Rute 2</label>
+                  <input style="margin:5px auto" type="text" class="form-control" value="<?= $rute2 ?>" id="rute2" name="rute2" placeholder="Rute 2">
+
+                  <label>Rute 3</label>
+                  <input style="margin:5px auto" type="text" class="form-control" value="<?= $rute3 ?>" id="rute3" name="rute3" placeholder="Rute 3">
+
+                  <label>Rute 4</label>
+                  <input style="margin:5px auto" type="text" class="form-control" value="<?= $rute4 ?>" id="rute4" name="rute4" placeholder="Rute 4">
+                
+                </div>
                 <br>
                 <!-- <a style="" id="buat-akun" href="#" class="form-control btn btn-flat btn-primary btn-sm"><i class="fa fa-plus"></i> Buat Akun</a> -->
                 <button type="submit" class="form-control btn btn-flat btn-primary btn-md"><i class="fa fa-save"></i> Simpan Akun</a>
               </div>
             </form>
-            <hr>
-            <form class="form-horizontal" role="form" id="frmMode1" enctype="multipart/form-data" method="post" action="<?= $url_rewrite ?>proses/student/" style="display:none">
-             <input type="hidden" name="kategori" value="0">
-                <!-- panel personal info -->
-                <div class="panel panel-default">
-                     <!-- Default panel contents -->
-                     <div class="panel-heading te-panel-heading">
-                          <i class="glyphicon glyphicon-th-large"></i> <span>Form Akun RAB</span>
-                     </div>
-
-                     <div class="clearfix"></div>
-
-                     <div class="panel-body">
-                          <div class="form-group ">
-                               <label class="col-md-3 control-label">Belanja Bahan</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $belanja ?>" id="belanja" name="belanja" placeholder="Belanja bahan / ATK">
-                               </div>
-                          </div>
-                          <div class="form-group ">
-                               <label class="col-md-3 control-label">Honor Output</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $honor_output ?>" id="honor_output" name="honor_output" placeholder="Jumlah Honor Output">
-                               </div>
-                          </div>
-                          <div class="form-group ">
-                               <label class="col-md-3 control-label">Honor Profesi</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $honor_profesi ?>" id="honor_profesi" name="honor_profesi" placeholder="Jumlah Honor Profesi">
-                               </div>
-                          </div>
-                          <div class="form-group ">
-                               <label class="col-md-3 control-label">Uang Saku</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $uang_saku ?>" id="uang_saku" name="uang_saku" placeholder="Jumlah Uang Saku">
-                               </div>
-                          </div>
-                          <div class="form-group ">
-                               <label class="col-md-3 control-label">Transport Lokal</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $transport_lokal ?>" id="transport_lokal" name="transport_lokal" placeholder="Jumlah Transport Lokal">
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">Uang Harian</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $uang_harian ?>" id="uang_harian" name="uang_harian" placeholder="Jumlah Uang Harian">
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">Tiket</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $tiket ?>" id="tiket" name="tiket" placeholder="Tiket">
-                               </div>
-                          </div>
-                          
-                          <script>
-                             $(function() {
-                                  $("#tgl_mulai").datepicker();
-                                  $("#tgl_akhir").datepicker();
-                             });
-                          </script>
-                          <div class="form-group">
-                               <label for="inputFrom" class="col-md-3 control-label"> Tanggal Berangkat</label>
-                               <div class="col-md-9">
-                                    <div class="input-group">
-                                         <input type="text" readonly="1"  class="form-control" id="tgl_mulai" value="<?= $tgl_mulai ?>" name="tgl_mulai" placeholder="Tanggal Berangkat">
-                                         <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                                    </div>
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputFrom" class="col-md-3 control-label"> Tanggal Kembali</label>
-                               <div class="col-md-9">
-                                    <div class="input-group">
-                                         <input type="text" readonly="1"  class="form-control" id="tgl_akhir" value="<?= $tgl_akhir ?>" name="tgl_akhir" placeholder="Tanggal Berangkat">
-                                         <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                                    </div>
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">Tingkat Dalam Perjalanan Dinas</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $tingkat_jalan ?>" id="tingkat_jalan" name="tingkat_jalan" placeholder="Tingkat Dalam Perjalanan Dinas">
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">Alat Transportasi</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $alat_trans ?>" id="alat_trans" name="alat_trans" placeholder="Alat Transportasi">
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">Kota Asal</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $kota_asal ?>" id="kota_asal" name="kota_asal" placeholder="Kota Asal">
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">Kota Tujuan</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $kota_tujuan ?>" id="kota_tujuan" name="kota_tujuan" placeholder="Kota Tujuan">
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">Kota Tujuan</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $kota_tujuan ?>" id="kota_tujuan" name="kota_tujuan" placeholder="Kota Tujuan">
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">Taxi Asal</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $taxi_asal ?>" id="taxi_asal" name="taxi_asal" placeholder="Taxi Asal">
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">Taxi Tujuan</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $taxi_tujuan ?>" id="taxi_tujuan" name="taxi_tujuan" placeholder="Taxi Tujuan">
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">Pajak Airport</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $airport_tax ?>" id="airport_tax" name="airport_tax" placeholder="Pajak Airport">
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">Rute 1</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $rute1 ?>" id="rute1" name="rute1" placeholder="Rute 1">
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">Rute 2</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $rute2 ?>" id="rute2" name="rute2" placeholder="Rute 2">
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">Rute 3</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $rute3 ?>" id="rute3" name="rute3" placeholder="Rute 3">
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">Rute 4</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $rute4 ?>" id="rute4" name="rute4" placeholder="Rute 4">
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">Harga Tiket</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $harga_tiket ?>" id="harga_tiket" name="harga_tiket" placeholder="Harga Tiket">
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">Lama Hari</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $lama_hari ?>" id="lama_hari" name="lama_hari" placeholder="Lama Hari">
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">Kelompok HR</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $klmpk_hr ?>" id="klmpk_hr" name="klmpk_hr" placeholder="Kelompok HR">
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">PNS / Non-PNS</label>
-                               <div class="col-md-9">
-                                    <select class="form-control" id="pns" name="pns">
-                                      <option value="0">PNS</option>
-                                      <option value="1">Non-PNS</option>
-                                    </select>
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">Malam</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $malam ?>" id="malam" name="malam" placeholder="Jumlah Malam">
-                               </div>
-                          </div>
-                          <div class="form-group">
-                               <label for="inputLastName" class="col-md-3 control-label">Biaya Akomodasi</label>
-                               <div class="col-md-9">
-                                    <input type="text" class="form-control" value="<?= $biaya_akom ?>" id="biaya_akom" name="biaya_akom" placeholder="Biaya Akomodasi">
-                               </div>
-                          </div>
-                     </div>
-                     <!-- end of panel body -->
-                </div>
-
-                
-
-                <div class="form-group">
-                     <div class="col-md-offset-3 col-md-9">
-                          <button type="submit" name="btnPersonal" class="btn btn-primary">Simpan</button>
-                     </div>
-                </div>
-                <input type="hidden" value="1" name="mode"/>
-                <?php
-                if ($id != "")
-                     echo"<input type=\"hidden\"  name=\"kondisi\" value=\"edit\">";
-                else
-                     echo"<input type=\"hidden\"  name=\"kondisi\" value=\"tambah\">";
-
-                echo"<input type=\"hidden\"  name=\"kode\" value=\"$id\">";
-                ?>
-           </form>  
         </div>
       </div>
     </div>
@@ -404,7 +239,30 @@
         } else {
           alert("Tidak terdapat item pada kode akun yang anda pilih");
         }
-      });    
+      });  
+
+    $.ajax({
+      method: "POST",
+      url: "<?=$url_rewrite?>process/rab_rinci/cekDinas",
+      data: { 'id_rabfull': id_rabfull,
+              'kdAkun'    : kdAkun, },
+      success: function(data){
+        data=JSON.parse(data);
+        if (data.error) {
+         $('#kode-akun').prop('selectedIndex',0);
+         $('#noitem option').remove();
+         if (data.error == 1) {
+          alert('Tidak dapat menambah kode akun baru');
+         }else if(data.error == 2){
+          alert('Sudah terdapat kode akun 521213. Tidak dapat menambah kode akun selain 524114 / 524119');
+         }else if(data.error == 3){
+          alert('Sudah terdapat kode akun 522151. Tidak dapat menambah kode akun selain 524114 / 524119');
+         }else if(data.error == 4){
+          alert('Sudah terdapat kode akun 524114 / 524119. Tidak dapat menambah kode akun selain 521213 / 522151');
+         };
+        };
+      },
+    });
   }
   
   

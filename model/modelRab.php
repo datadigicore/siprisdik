@@ -148,6 +148,37 @@
       return $akun;
     }
 
+    public function getakungroup($data){
+      $thang      = $data->thang;
+      $kdprogram  = $data->kdprogram;
+      $kdgiat     = $data->kdgiat;
+      $kdoutput   = $data->kdoutput;
+      $kdsoutput  = $data->kdsoutput;
+      $kdkmpnen   = $data->kdkmpnen;
+      $kdskmpnen  = $data->kdskmpnen;
+      $penerima   = $data->penerima;
+      $npwp       = $data->npwp;
+      $jenis      = $data->jenis;
+      // print_r($data);die;
+      $query_rab  = "SELECT kdakun, count(0) as banyak FROM rabfull 
+                            WHERE thang='$thang'
+                            AND kdprogram='$kdprogram'
+                            AND kdgiat='$kdgiat'
+                            AND kdoutput='$kdoutput'
+                            AND kdsoutput='$kdsoutput'
+                            AND kdkmpnen='$kdkmpnen'
+                            AND kdskmpnen='$kdskmpnen'
+                            AND penerima='$penerima'
+                            AND npwp='$npwp'
+                            AND jenis='$jenis'
+                          GROUP BY kdakun";
+      $res_rab    = $this->query($query_rab);
+      while ($rab = $this->fetch_object($res_rab)) {
+        $akun[] = $rab;
+      }
+      return $akun;
+    }
+
     public function getRabItem($data){
       $rab = $data;
       $qry_jumrab = "SELECT noitem, sum(value) as jumlahrab FROM rabfull
@@ -324,7 +355,7 @@
     }
 
     public function getrabfull($id){
-      $query  = "SELECT thang,kdprogram,kdgiat,kdoutput,kdsoutput,kdkmpnen,kdskmpnen, penerima,npwp
+      $query  = "SELECT *
                  FROM rabfull as r where id = '$id'";
       $result = $this->query($query);
       $data  = $this->fetch_object($result);
