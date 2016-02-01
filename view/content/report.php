@@ -96,9 +96,9 @@
                 <div class="form-group">
                   <label>Pilih Kode MAK</label>
                   <select style="margin:5px auto" class="form-control" id="kode-mak" name="kode-mak" onchange="" >
-                      <option value="51" >51 Belanja</option>
-                      <option value="52" >52 Belanja</option>
-                      <option value="53" >53 Belanja</option>
+                      <option value="51" >51 Belanja Pegawai</option>
+                      <option value="52" >52 Belanja Barang</option>
+                      <option value="53" >53 Belanja Modal</option>
                   </select>
                 </div>
                 <!-- <div class="form-group">
