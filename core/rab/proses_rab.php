@@ -7,7 +7,7 @@ switch ($process) {
     $key   = "id";
     $dataArray['url_rewrite'] = $url_rewrite; 
     $dataArray['direktorat'] = $direk; 
-    print_r($direk);die;
+    // print_r($direk);die;
     $tahun = $_POST['tahun'];
     $direktorat = $_POST['direktorat'];
     $column = array(
