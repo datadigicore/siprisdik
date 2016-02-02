@@ -43,8 +43,10 @@ else {
           }
         break;
         case 'rabdetail':
-          if($data[2]=='rabakun'){
-            include ('view/content/rab-add.php');
+          if($data[3]=='add'){
+            $id_rab_view = $data[2];
+            $status = $data[4];
+            include ('view/content/rab-orang-add.php');
           }else{
             $id_rab_view = $data[2];
             include ('view/content/rabdetail.php');

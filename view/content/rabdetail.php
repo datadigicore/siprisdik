@@ -15,7 +15,7 @@
           <div class="box-header">
             <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya</h3>
             <input type="hidden" id="id_rab_view" name="id_rab_view" value="<?php echo $id_rab_view ?>" />
-            <a href="#addrab" id="tblAdd" data-toggle="modal" class="btn btn-flat btn-success btn-sm pull-right">Tambah Orang / Badan</a>
+            <a id="tblAdd" data-toggle="modal" class="btn btn-flat btn-success btn-sm pull-right">Tambah Orang / Badan</a>
           </div>
           <div class="box-body">
             <?php if (isset($_POST['message'])): ?>
@@ -197,6 +197,9 @@
         }else if(obj.status == 4){
           $('#tblAdd').html('Tambah Orang/Badan (Adendum)');
           $('#adendum').val('5');
+          $('#tblAdd').attr('href','<?php echo $url_rewrite?>content/rabdetail/<?php echo $id_rab_view?>/add/5');
+        }else{
+          $('#tblAdd').attr('href','<?php echo $url_rewrite?>content/rabdetail/<?php echo $id_rab_view?>/add/0');
         };
       },
     });

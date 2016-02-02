@@ -179,29 +179,6 @@
     </div>
   </div>
 </div>
-<div class="modal fade" id="ajuanrev">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form action="<?php echo $url_rewrite;?>process/rab/ajukanrev" method="POST">
-        <div class="modal-header" style="background-color:#111F3F !important; color:white;">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true" style="color:white">×</span></button>
-          <h4 class="modal-title">Dialog Box</h4>
-        </div>
-        <div class="modal-body">
-          <input type="hidden" id="id_rab_aju" name="id_rab_aju" value="" />
-          <div class="form-group">
-            <label>Apakah Anda Yakin Ingin Melakukan Pengajuan Revisi?</label>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" data-dismiss="modal" class="btn btn-flat btn-warning">Tidak</button>
-          <button type="submit" class="btn btn-flat btn-success">Ya</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
 <div class="modal fade" id="sahkan">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -249,11 +226,17 @@
   </div>
 </div>
 <script>
-var otable;
-  $(document).ready(function() {
+var table;
+  $(function () {
+     $( "#datepicker" ).datepicker({
+        changeMonth: true,
+        changeYear: true,
+        format: 'dd/mm/yyyy'
+      });
+
     var tahun = $('#tahun2').val();
     var direktorat = $('#direktorat2').val();
-    otable = $("#table").DataTable({
+    table = $("#table").DataTable({
         "oLanguage": {
           "sInfoFiltered": ""
         },
@@ -292,14 +275,6 @@ var otable;
         <?php } ?>
         "order": [[ 0, "desc" ]]
     });
-  });
-
-  $(function () {
-     $( "#datepicker" ).datepicker({
-        changeMonth: true,
-        changeYear: true,
-        format: 'dd/mm/yyyy'
-      });
     
     $(document).on("click", "#btn-aju", function (){
       var tr = $(this).closest('tr');
@@ -322,8 +297,8 @@ var otable;
   function search(){
     var tahun = $('#tahun2').val();
     var direktorat = $('#direktorat2').val();
-    otable.destroy();
-    otable = $("#table").DataTable({
+    table.destroy();
+    table = $("#table").DataTable({
         "oLanguage": {
           "sInfoFiltered": ""
         },

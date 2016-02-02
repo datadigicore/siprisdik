@@ -7,7 +7,7 @@ switch ($process) {
 		$getview = $mdl_rab->getview($id_rab_view);
 		// print_r($getview);die;
 		$mdl_rab->save_penerima($id_rab_view, $getview, $_POST);
-    	$utility->load("content/rabdetail/".$id_rab_view."/detail","success","Data berhasil dimasukkan ke dalam database");
+    	$utility->load("content/rabdetail/".$id_rab_view,"success","Data berhasil dimasukkan ke dalam database");
 		break;
 	case 'table':
 		$rabview_id = $data[3];
@@ -133,7 +133,7 @@ switch ($process) {
 		echo json_encode($getdata);
 		break;
 	case 'sahkanAkun':
-		if (!isset($_POST)) {
+		if (isset($_POST)) {
 			$status = $_POST['status'];
 			$id_rabfull = $_POST['id_rabfull'];
 			$id_rab_view = $_POST['id_rab_view'];
