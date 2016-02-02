@@ -9,6 +9,7 @@
     </ol>
   </section>
   <section class="content">
+  <?php if($_SESSION['level'] != 0){ ?>
     <div class="row">
       <div class="col-xs-12">
         <div class="box">
@@ -95,6 +96,7 @@
   </div>
   <div id="panel-akun">
   </div>
+  <?php }?>
  
   <div class="row">
     <div class="col-xs-12">

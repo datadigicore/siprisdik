@@ -15,7 +15,9 @@
           <div class="box-header">
             <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya</h3>
             <input type="hidden" id="id_rab_view" name="id_rab_view" value="<?php echo $id_rab_view ?>" />
-            <a id="tblAdd" data-toggle="modal" class="btn btn-flat btn-success btn-sm pull-right">Tambah Orang / Badan</a>
+            <?php if ($_SESSION['level'] != 0) {
+              echo '<a id="tblAdd" data-toggle="modal" class="btn btn-flat btn-success btn-sm pull-right">Tambah Orang / Badan</a>';
+            }?>
           </div>
           <div class="box-body">
             <?php if (isset($_POST['message'])): ?>

@@ -16,8 +16,9 @@
             <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya</h3>
 
             <!-- <a href="<?php echo $url_rewrite;?>content/rab/add" class="btn btn-flat btn-success btn-sm pull-right">Tambah RAB</a> -->
-
-            <a href="#addrab" data-toggle="modal" class="btn btn-flat btn-success btn-sm pull-right">Tambah RAB</a>
+            <?php if ($_SESSION['level'] != '0') {
+              echo '<a href="#addrab" data-toggle="modal" class="btn btn-flat btn-success btn-sm pull-right">Tambah RAB</a>';
+            }?>
 
           </div>
           <div class="box-body">
