@@ -74,12 +74,12 @@ switch ($process) {
 	      	$button =  '<div class="text-center btn-group-vertical">';
 	      	if ($_SESSION['level'] == 0) {
 	      		$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; View Akun</a>';
-	      		if ($d == 2 || $d == 5) {
+	      		if ($d == 2 || $d == 5 || $d == 4) {
 	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1].'" class="btn btn-flat btn-info btn-sm"><i class="fa fa-file"></i>&nbsp; Cetak Kuitansi</a>';
 	      		}
 	      	}else{
 	      		$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Add Akun</a>';
-	      		if ($d == 2 || $d == 5) {
+	      		if ($d == 2 || $d == 5 || $d == 4) {
 	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1].'" class="btn btn-flat btn-info btn-sm"><i class="fa fa-file"></i>&nbsp; Cetak Kuitansi</a>';
 		        }
 	      	}
@@ -96,11 +96,11 @@ switch ($process) {
 		  array('db' => 'status', 'dt'=>12, 'formatter' => function($d,$row, $dataArray){
 		  	
 		  	if ($_SESSION['level'] == 0) {
-		  		if ($row[11] != "" && ($d == 2 || $d == 5 || $d == 4)) {
+		  		if ($row[11] != "" && ($d == 2 || $d == 5)) {
 		  			$button =  '<div class="text-center btn-group-vertical">'.
 		  						'<a style="margin:0 2px;" id="btn-sah" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
 		  						'</div>';
-		  		}elseif ($row[11] != "" && ($d == 2 || $d == 5 || $d == 4)) {
+		  		}elseif ($row[11] != "" && ($d == 2 || $d == 5)) {
 		  			$button =  '<div class="text-center btn-group-vertical">'.
 		  						'<a style="margin:0 2px;" id="btn-sah-adn" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
 		  						'</div>';
