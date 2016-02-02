@@ -96,11 +96,11 @@ switch ($process) {
 		  array('db' => 'status', 'dt'=>12, 'formatter' => function($d,$row, $dataArray){
 		  	
 		  	if ($_SESSION['level'] == 0) {
-		  		if ($row[11] != "" && ($d == 2 || $d == 5)) {
+		  		if ($row[11] != "" && ($d == 2 || $d == 5 || $d == 6)) {
 		  			$button =  '<div class="text-center btn-group-vertical">'.
 		  						'<a style="margin:0 2px;" id="btn-sah" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
 		  						'</div>';
-		  		}elseif ($row[11] != "" && ($d == 2 || $d == 5)) {
+		  		}elseif ($row[11] != "" && ($d == 2 || $d == 5 || $d == 6)) {
 		  			$button =  '<div class="text-center btn-group-vertical">'.
 		  						'<a style="margin:0 2px;" id="btn-sah-adn" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
 		  						'</div>';
