@@ -587,6 +587,31 @@
       return $data;
     }
 
+    public function getrkaklfull($data){
+      $thang      = $data['thang'];
+      $kdprogram  = $data['kdprogram'];
+      $kdgiat     = $data['kdgiat'];
+      $kdoutput   = $data['kdoutput'];
+      $kdsoutput  = $data['kdsoutput'];
+      $kdkmpnen   = $data['kdkmpnen'];
+      $kdskmpnen  = $data['kdskmpnen'];
+
+      $query  = "SELECT * FROM rkakl_full
+                            WHERE THANG='$thang'
+                            AND KDPROGRAM='$kdprogram'
+                            AND KDGIAT='$kdgiat'
+                            AND KDOUTPUT='$kdoutput'
+                            AND KDSOUTPUT='$kdsoutput'
+                            AND KDKMPNEN='$kdkmpnen'
+                            AND KDSKMPNEN='$kdskmpnen'
+                            LIMIT 1";
+      $result    = $this->query($query);
+      while ($rkakl = $this->fetch_object($result)) {
+        $all[] = $rkakl;
+      }
+      return $all;
+    }
+
   }
 
 ?>

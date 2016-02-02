@@ -7,17 +7,16 @@ switch ($process) {
     $key   = "id";
     $dataArray['url_rewrite'] = $url_rewrite; 
     $dataArray['direktorat'] = $direk; 
-    // print_r($direk);die;
     $tahun = $_POST['tahun'];
     $direktorat = $_POST['direktorat'];
     $column = array(
       array( 'db' => 'id',      'dt' => 0 ),
       array( 'db' => 'kdprogram',  'dt' => 1, 'formatter' => function($d,$row, $dataArray){ 
-          return 'Program : '.$d.
-                '<br>'.'Output : '.$row[8].
-                '<br>'.'Suboutput : '.$row[9].
-                '<br>'.'Komponen : '.$row[10].
-                '<br>'.'Sub Komponen : '.$row[11];
+          return '<table><tr><td>Program</td><td> :&nbsp;</td><td>'.$d.'</td></tr>'.
+                 '<tr><td>Output</td><td> :&nbsp;</td><td>'.$row[8].'</td></tr>'.
+                 '<tr><td>Sub Output</td><td> :&nbsp;</td><td>'.$row[8].'</td></tr>'.
+                 '<tr><td>Komponen</td><td> :&nbsp;</td><td>'.$row[8].'</td></tr>'.
+                 '<tr><td>Sub Komponen</td><td> :&nbsp;</td><td>'.$row[8].'</td></tr></table>';
       }),
       array( 'db' => 'kdgiat',  'dt' => 2, 'formatter' => function($d, $row, $dataArray){
         return $dataArray['direktorat'][$d];

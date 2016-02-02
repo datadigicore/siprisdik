@@ -24,6 +24,32 @@
                 <i class="icon fa fa-warning"></i><?php echo $_POST['message']; ?>
               </div>
             <?php endif ?>
+            <table class="display table table-bordered table-striped" style="width:750px">
+              <tr>
+                <td class="col-md-1"><label>Tahun</label></td>
+                <td class="col-md-2"><label><?php echo $datarkakl[0]->THANG?></label></td>
+              </tr>
+              <tr>
+                <td><label>Kegiatan</label></td>
+                <td class="col-md-2"><label><?php echo $datarkakl[0]->NMGIAT?></label></td>
+              </tr>
+              <tr>
+                <td><label>Output</label></td>
+                <td class="col-md-2"><label><?php echo $datarkakl[0]->NMOUTPUT?></label></td>
+              </tr>
+              <tr>
+                <td><label>Sub Output</label></td>
+                <td class="col-md-2"><label><?php echo $datarkakl[0]->NMSOUTPUT?></label></td>
+              </tr>
+              <tr>
+                <td><label>Komponen</label></td>
+                <td class="col-md-2"><label><?php echo $datarkakl[0]->NMKMPNEN?></label></td>
+              </tr>
+              <tr>
+                <td><label>Sub Komponen</label></td>
+                <td class="col-md-2"><label><?php echo $datarkakl[0]->NmSkmpnen?></label></td>
+              </tr>
+            </table>
             <table id="table" class="display nowrap table table-bordered table-striped" cellspacing="0" width="100%">
               <thead style="background-color:#11245B;color:white;">
                 <tr>

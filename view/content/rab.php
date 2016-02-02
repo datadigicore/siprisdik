@@ -27,11 +27,11 @@
                 <i class="icon fa fa-warning"></i><?php echo $_POST['message']; ?>
               </div>
             <?php endif ?>
-            <table class="display table table-bordered table-striped" style="width:200px">
+            <table class="display table table-bordered table-striped" style="width:750px">
               <tr>
                 <td><label>Tahun</label></td>
                 <td>
-                  <select class="form-control" name="tahun2" id="tahun2" required>
+                  <select class="form-control select2" name="tahun2" id="tahun2" required>
                     <?php for ($i=0; $i < count($tahun); $i++) { 
                       echo "<option value='".$tahun[$i]."'>".$tahun[$i].'</option>';
                     }?>
@@ -240,7 +240,7 @@ var table;
         },
         "processing": true,
         "serverSide": true,
-        // "scrollX": true,
+        "scrollX": true,
         "ajax": {
           "url": "<?php echo $url_rewrite;?>process/rab/table",
           "type": "POST",
@@ -302,7 +302,7 @@ var table;
         },
         "processing": true,
         "serverSide": true,
-        // "scrollX": true,
+        "scrollX": true,
         "ajax": {
           "url": "<?php echo $url_rewrite;?>process/rab/table",
           "type": "POST",

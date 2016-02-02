@@ -56,6 +56,8 @@ else {
             include ('view/content/rab-orang-add.php');
           }else{
             $id_rab_view = $data[2];
+            $view = $mdl_rab->getview($id_rab_view);
+            $datarkakl = $mdl_rab->getrkaklfull($view);
             include ('view/content/rabdetail.php');
           }
           break;
@@ -97,6 +99,7 @@ else {
             include ('view/content/rab-orang-add.php');
           }else{
             $id_rab_view = $data[2];
+            $view = $mdl_rab->getview($id_rab_view);
             include ('view/content/rabdetail.php');
           }
           break;
