@@ -4,6 +4,13 @@ $path = ltrim($_SERVER['REQUEST_URI'], '/');
 $temp_path = explode($REQUEST, $path);
 $elements = explode('/', $temp_path[1]);
 $data = array_filter($elements);
+
+$direk = array( '5696' => 'Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti',
+              '5697' => 'Pengembangan Kelembagaan Perguruan Tinggi',
+              '5698' => 'Pembinaan Kelembagaan Perguruan Tinggi',
+              '5699' => 'Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan',
+              '5700' => 'Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya',
+            );
 if (count($data) == 0) {
   include "./index.php";
 }
@@ -84,8 +91,10 @@ else {
           }
         break;
         case 'rabdetail':
-          if($data[2]=='akun'){
-            include ('view/content/rab-add.php');
+          if($data[3]=='add'){
+            $id_rab_view = $data[2];
+            $status = $data[4];
+            include ('view/content/rab-orang-add.php');
           }else{
             $id_rab_view = $data[2];
             include ('view/content/rabdetail.php');

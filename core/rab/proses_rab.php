@@ -6,6 +6,8 @@ switch ($process) {
     $table = "rabview";
     $key   = "id";
     $dataArray['url_rewrite'] = $url_rewrite; 
+    $dataArray['direktorat'] = $direk; 
+    print_r($direk);die;
     $tahun = $_POST['tahun'];
     $direktorat = $_POST['direktorat'];
     $column = array(
@@ -17,7 +19,9 @@ switch ($process) {
                 '<br>'.'Komponen : '.$row[10].
                 '<br>'.'Sub Komponen : '.$row[11];
       }),
-      array( 'db' => 'kdgiat',  'dt' => 2),
+      array( 'db' => 'kdgiat',  'dt' => 2, 'formatter' => function($d, $row, $dataArray){
+        return $dataArray['direktorat'][$d];
+      }),
       array( 'db' => 'deskripsi',  'dt' => 3),
       array( 'db' => 'tanggal',  'dt' => 4, 'formatter' => function( $d, $row ) {
             return date( 'j M Y', strtotime($d));

@@ -44,11 +44,9 @@
                   <td>
                     <select id="direktorat2" name="direktorat2" class="form-control" onchange="search()">
                       <option value="">All</option>
-                      <option value="5696">5696</option>
-                      <option value="5697">5697</option>
-                      <option value="5698">5698</option>
-                      <option value="5699">5699</option>
-                      <option value="5700">5700</option>
+                      <?php foreach ($direk as $key => $value) {
+                        echo "<option value='".$key."'>".$value.'</option>';
+                      }?>
                     </select>
                   </td>
               </tr>

@@ -53,73 +53,7 @@
     </div>
   </section>
 </div>
-<div class="modal fade" id="addrab" style="z-index:-100px">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form enctype="multipart/form-data" method="post" action="<?php echo $url_rewrite;?>process/rab_rinci/save_penerima">
-        <div class="modal-header" style="background-color:#111F3F !important; color:white;">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true" style="color:white">×</span></button>
-          <h4 class="modal-title">Form</h4>
-        </div>
-        <div class="modal-body">
-          <input type="hidden" name="id_rab_view" value="<?php echo $id_rab_view ?>" />
-          <input type="hidden" id="adendum" name="adendum" value="0" />
-          <div class="form-group">
-            <label>Jenis</label>
-            <select class="form-control" required id="jenis-akun" name="jenis-akun" onchange="cnpwp()">
-              <option value="0">Badan</option>
-              <option value="1">Orang</option>
-            </select>
-          </div>
-          <div class="form-group ">
-              <label>NPWP</label>
-              <input type="text" class="form-control" value="<?= $npwp ?>" id="npwp" name="npwp" onkeyup="cnpwp()" placeholder="NPWP">
-          </div>
-          <div class="form-group">
-              <label>Nama Personel</label>
-              <input type="text" class="form-control" value="<?= $penerima ?>" id="penerima" name="penerima" placeholder="Nama Penerima">
-          </div>
-          <div class="form-group ">
-              <label>Golongan</label>
-              <select class="form-control" id="golongan" required name="golongan">
-                <option>-- Pilih --</option>
-                <option value="1">I</option>
-                <option value="2">II</option>
-                <option value="3">III</option>
-                <option value="4">IV</option>
-              </select>
-          </div>
-          <div class="form-group ">
-              <label>PNS / Non PNS</label>
-              <select class="form-control" id="pns" required name="pns">
-                <option>-- Pilih --</option>
-                <option value="1">PNS</option>
-                <option value="0">Non PNS</option>
-              </select>
-          </div>
-          <div class="form-group ">
-               <label>Jabatan Dalam Tugas</label>
-               <input type="text" class="form-control" value="<?= $jabatan ?>" id="jabatan" name="jabatan" placeholder="Jabatan Dalam Tugas">
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" data-dismiss="modal" class="btn btn-flat btn-warning">Cancel</button>
-          <button type="submit" class="btn btn-flat btn-success">Simpan</button>
-        </div>
-        <input type="hidden" value="1" name="mode"/>
-        <?php
-        if ($id != "")
-             echo"<input type=\"hidden\"  name=\"kondisi\" value=\"edit\">";
-        else
-             echo"<input type=\"hidden\"  name=\"kondisi\" value=\"tambah\">";
 
-        echo"<input type=\"hidden\"  name=\"kode\" value=\"$id\">";
-        ?>
-     </form> 
-    </div>
-  </div>
-</div>
 <div class="modal fade" id="sahkan">
   <div class="modal-dialog">
     <div class="modal-content">
