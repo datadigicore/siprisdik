@@ -14,15 +14,16 @@ include '../config/application.php';
  $query1 = $db->query("SELECT * FROM rabfull where id ='$id_rabfull'");
  $row1 = $db->fetch_object($query1);
 
+
  $query2="select distinct K.KDAKUN, K.NMAKUN from rkakl_full as K
  					
  					where K.KDAKUN not like '51%' 
  						and K.THANG = '$row1->thang' 
  						and K.KDPROGRAM = '$row1->kdprogram' 
-						and K.KDGIAT = '$row1->kdgiat' 
-						and K.KDOUTPUT = '$row1->kdoutput' 
-						and K.KDSOUTPUT = '$row1->kdsoutput' 
-						and K.KDKMPNEN = '$row1->kdkmpnen' 
+						and K.KDGIAT = '".trim($row1->kdgiat,"\x0D\x0A")."' 
+						and K.KDOUTPUT = '".trim($row1->kdoutput,"\x0D\x0A")."' 
+						and K.KDSOUTPUT = '".trim($row1->kdsoutput,"\x0D\x0A")."' 
+						and K.KDKMPNEN = '".trim($row1->kdkmpnen,"\x0D\x0A")."'
 						and K.KDSKMPNEN = '$row1->kdskmpnen' 
 					order by K.KDAKUN";
  $qry = $db->query($query2);
