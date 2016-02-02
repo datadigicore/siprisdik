@@ -5,8 +5,8 @@
         <img src="<?php echo $url_rewrite;?>static/dist/img/risetdikti.png" class="img-circle" alt="User Image">
       </div>
       <div class="pull-left info">
-        <p>Username</p>
-        <small>Administrator Web</small>
+        <p><?php echo $_SESSION['username'];?></p>
+        <!-- <small>Administrator Web</small> -->
       </div>
     </div>
     <ul class="sidebar-menu">

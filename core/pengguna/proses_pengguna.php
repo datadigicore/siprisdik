@@ -8,6 +8,7 @@ $password   = $utility->sha512($_POST[password]);
 // $hash_pass  = $utility->sha512($_POST[hash_pass]);
 $email      = $purifier->purify($_POST[email]);
 $level      = $purifier->purify($_POST[level]);
+$direktorat     = $purifier->purify($_POST[direktorat]);
 $status     = $purifier->purify($_POST[status]);
 
 $data_pengguna = array(
@@ -48,6 +49,7 @@ switch ($process) {
           return 'Operator BPP';
         }
       }),
+      array( 'db' => 'direktorat',   'dt' => 6 ),
       array( 'db' => 'level',   'dt' => 7 ),
       array( 'db' => 'status',  'dt' => 8 )
     );

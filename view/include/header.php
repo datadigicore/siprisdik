@@ -17,14 +17,14 @@
             <li class="dropdown user user-menu">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <img src="<?php echo $url_rewrite;?>static/dist/img/risetdikti.png" class="user-image" alt="User Image">
-                <span class="hidden-xs">Username RISTEKDIKTI</span>
+                <span class="hidden-xs"><?php echo $_SESSION['username'];?></span>
               </a>
               <ul class="dropdown-menu" style="border-right:none;">
                 <li class="user-header">
                   <img src="<?php echo $url_rewrite;?>static/dist/img/risetdikti.png" class="img-circle" alt="User Image">
                   <p>
-                    Username - RISTEKDIKTI
-                    <small>Login terakhir pukul 12.30</small>
+                    <?php echo $_SESSION['username'];?>
+                    <!-- <small>Login terakhir pukul 12.30</small> -->
                   </p>
                 </li>
                 <li class="user-footer">
