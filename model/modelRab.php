@@ -345,6 +345,35 @@
       return $result;
     }
 
+    public function chStatusFullOrang($data, $status){
+      $thang      = $data->thang;
+      $kdprogram  = $data->kdprogram;
+      $kdgiat     = $data->kdgiat;
+      $kdoutput   = $data->kdoutput;
+      $kdsoutput  = $data->kdsoutput;
+      $kdkmpnen   = $data->kdkmpnen;
+      $kdskmpnen  = $data->kdskmpnen;
+      $penerima   = $data->penerima;
+      $npwp       = $data->npwp;
+      $jenis      = $data->jenis;
+
+      $query = "UPDATE rabfull SET status='$status' 
+                          WHERE thang='$thang'
+                            AND kdprogram='$kdprogram'
+                            AND kdgiat='$kdgiat'
+                            AND kdoutput='$kdoutput'
+                            AND kdsoutput='$kdsoutput'
+                            AND kdkmpnen='$kdkmpnen'
+                            AND kdskmpnen='$kdskmpnen'
+                            AND penerima='$penerima'
+                            AND npwp='$npwp'
+                            AND jenis='$jenis'";
+
+      $result = $this->query($query);
+
+      return $result;
+    }
+
     public function getview($id){
       $query  = "SELECT thang,kdprogram,kdgiat,kdoutput,kdsoutput,kdkmpnen,kdskmpnen, deskripsi,tanggal,lokasi,
                         status
@@ -510,6 +539,18 @@
         $result = $this->query($query);
         return $result;
       }
+    }
+
+    public function updateView($id){
+      $query  = "SELECT status FROM rabfull as r where rabview_id = '$id' and status != '4'";
+      $result = $this->query($query);
+      $data  = $this->fetch_array($result);
+
+      if (empty($data)) {
+        $query2 = "UPDATE rabview SET status='4' WHERE id = '$id'";
+        $result2 = $this->query($query2);
+      }
+      return $data;
     }
 
   }

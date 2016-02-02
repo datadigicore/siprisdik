@@ -6,6 +6,8 @@ switch ($process) {
     $table = "rabview";
     $key   = "id";
     $dataArray['url_rewrite'] = $url_rewrite; 
+    $tahun = $_POST['tahun'];
+    $direktorat = $_POST['direktorat'];
     $column = array(
       array( 'db' => 'id',      'dt' => 0 ),
       array( 'db' => 'kdprogram',  'dt' => 1, 'formatter' => function($d,$row, $dataArray){ 
@@ -39,6 +41,12 @@ switch ($process) {
           return '<i>Close</i>';
         }
         elseif($d==5){
+          return '<i>Adendum</i>';
+        }
+        elseif($d==6){
+          return '<i>Close Adendum</i>';
+        }
+        elseif($d==7){
           return '<i>Penutupan Anggaran</i>';
         }
       }),
@@ -50,7 +58,7 @@ switch ($process) {
                   '</div>';
         }elseif ($d==0 && $_SESSION['level'] == 0) {
           return  '<div class="text-center">'.
-                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Add Transaksi</a>'.
+                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> View Transaksi</a>'.
                      '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
                   '</div>';
         }
@@ -67,6 +75,26 @@ switch ($process) {
                     '<a style="margin:0 2px;" id="btn-rev" href="#revisi" class="btn btn-flat btn-warning btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Revisi</a>'.
                   '</div>';
         }
+        if($d==3 && $_SESSION['level'] != 0){
+          return  '<div class="text-center ">'.
+                    '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Ajukan Revisi</a>'.
+                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Add Transaksi</a>'.
+                  '</div>';
+        }elseif ($d==3 && $_SESSION['level'] == 0) {
+          return  '<div class="text-center">'.
+                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> View Transaksi</a>'.
+                  '</div>';
+        }
+        if($d==6 && $_SESSION['level'] != 0){
+          return  '<div class="text-center ">'.
+                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> View Transaksi</a>'.
+                  '</div>';
+        }elseif ($d==6 && $_SESSION['level'] == 0) {
+          return  '<div class="text-center">'.
+                    '<a style="margin:0 2px;" id="btn-aju" href="#tutup" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Penutupan Anggaran</a>'.
+                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> View Transaksi</a>'.
+                  '</div>';
+        }
         else{
           return  '<div class="text-center">'.
                     '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file-text-o"></i> View Transaksi</a>'.
@@ -79,7 +107,18 @@ switch ($process) {
       array( 'db' => 'kdkmpnen',  'dt' => 10),
       array( 'db' => 'kdskmpnen',  'dt' => 10),
     );
-    $datatable->get_table($table, $key, $column,$where="",$dataArray);
+    $where="";
+    if ($tahun != "") {
+      $where = 'thang = "'.$tahun.'"';
+    }
+    if ($direktorat != "") {
+      if ($where == "") {
+        $where .= 'kdgiat = "'.$direktorat.'"';
+      }else{
+        $where .= 'AND kdgiat = "'.$direktorat.'"';
+      }
+    }
+    $datatable->get_table($table, $key, $column,$where,$dataArray);
     break;
   case 'getnpwp':
     $npwp = $mdl_rab->getnpwp();

@@ -43,7 +43,7 @@
                 <td><label>Direktorat</label></td>
                   <td>
                     <select id="direktorat2" name="direktorat2" class="form-control" onchange="search()">
-                      <option value="%">All</option>
+                      <option value="">All</option>
                       <option value="5696">5696</option>
                       <option value="5697">5697</option>
                       <option value="5698">5698</option>
@@ -53,7 +53,7 @@
                   </td>
               </tr>
               <?php } else{ ?>
-              <input type="hidden" id="direktorat" name="direktorat" value="<?php echo $_SESSION['direktorat']; ?>" />
+              <input type="hidden" id="direktorat2" name="direktorat2" value="<?php echo $_SESSION['direktorat']; ?>" />
               <?php } ?>
             </table>
             <table id="table" class="display nowrap table table-bordered table-striped" cellspacing="0" width="100%">
@@ -100,7 +100,7 @@
           <?php if ($_SESSION['direktorat'] == "") { ?>
           <div class="form-group">
             <label>Kode Kegiatan</label>
-            <select class="form-control" id="direktorat" name="direktorat" onchange="search()">
+            <select class="form-control" id="direktorat" name="direktorat" onchange="chout()">
                 <option value="5696">5696</option>
                 <option value="5697">5697</option>
                 <option value="5698">5698</option>
@@ -179,6 +179,29 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="ajuanrev">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="<?php echo $url_rewrite;?>process/rab/ajukanrev" method="POST">
+        <div class="modal-header" style="background-color:#111F3F !important; color:white;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" style="color:white">×</span></button>
+          <h4 class="modal-title">Dialog Box</h4>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="id_rab_aju" name="id_rab_aju" value="" />
+          <div class="form-group">
+            <label>Apakah Anda Yakin Ingin Melakukan Pengajuan Revisi?</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" data-dismiss="modal" class="btn btn-flat btn-warning">Tidak</button>
+          <button type="submit" class="btn btn-flat btn-success">Ya</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <div class="modal fade" id="sahkan">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -226,6 +249,50 @@
   </div>
 </div>
 <script>
+var otable;
+  $(document).ready(function() {
+    var tahun = $('#tahun2').val();
+    var direktorat = $('#direktorat2').val();
+    otable = $("#table").DataTable({
+        "oLanguage": {
+          "sInfoFiltered": ""
+        },
+        "processing": true,
+        "serverSide": true,
+        // "scrollX": true,
+        "ajax": {
+          "url": "<?php echo $url_rewrite;?>process/rab/table",
+          "type": "POST",
+          "data": {'tahun':tahun,
+                    'direktorat':direktorat }
+        },
+        <?php if ($_SESSION['direktorat'] == "") { ?>
+          "columnDefs" : [
+            {"targets" : 0,
+             "visible" : false},
+            {"targets" : 1},
+            {"targets" : 2},
+            {"targets" : 3},
+            {"targets" : 4},
+            {"targets" : 5},
+            {"targets" : 6},
+          ],
+        <?php }else{?>
+          "columnDefs" : [
+            {"targets" : 0,
+             "visible" : false},
+            {"targets" : 1},
+            {"targets" : 2, 
+              "visible": false},
+            {"targets" : 3},
+            {"targets" : 4},
+            {"targets" : 5},
+            {"targets" : 6},
+          ],
+        <?php } ?>
+        "order": [[ 0, "desc" ]]
+    });
+  });
 
   $(function () {
      $( "#datepicker" ).datepicker({
@@ -233,45 +300,7 @@
         changeYear: true,
         format: 'dd/mm/yyyy'
       });
-    var tahun = $('#tahun2').val();
-    var direktorat = $('#direktorat2').val();
-    var table = $("#table").DataTable({
-      "oLanguage": {
-        "sInfoFiltered": ""
-      },
-      "processing": true,
-      "serverSide": true,
-      // "scrollX": true,
-      "ajax": {
-        "url": "<?php echo $url_rewrite;?>process/rab/table",
-        "type": "POST"
-      },
-      <?php if ($_SESSION['direktorat'] == "") { ?>
-        "columnDefs" : [
-          {"targets" : 0,
-           "visible" : false},
-          {"targets" : 1},
-          {"targets" : 2},
-          {"targets" : 3},
-          {"targets" : 4},
-          {"targets" : 5},
-          {"targets" : 6},
-        ],
-      <?php }else{?>
-        "columnDefs" : [
-          {"targets" : 0,
-           "visible" : false},
-          {"targets" : 1},
-          {"targets" : 2, 
-            "visible": false},
-          {"targets" : 3},
-          {"targets" : 4},
-          {"targets" : 5},
-          {"targets" : 6},
-        ],
-      <?php } ?>
-      "order": [[ 0, "desc" ]]
-    });
+    
     $(document).on("click", "#btn-aju", function (){
       var tr = $(this).closest('tr');
       tabrow = table.row(tr);
@@ -293,16 +322,45 @@
   function search(){
     var tahun = $('#tahun2').val();
     var direktorat = $('#direktorat2').val();
-    table.destroy();
-    $('#table').DataTable({
-      "scrollX": true,
-      "bProcessing": true,
-      "bServerSide": true,
-      "sAjaxSource": "getRab",
-      "fnServerParams": function ( aoData ) {
-        aoData.push( { "name": "tahun", "value": tahun },
-                      { "name": "direktorat", "value": direktorat } );
-      }
+    otable.destroy();
+    otable = $("#table").DataTable({
+        "oLanguage": {
+          "sInfoFiltered": ""
+        },
+        "processing": true,
+        "serverSide": true,
+        // "scrollX": true,
+        "ajax": {
+          "url": "<?php echo $url_rewrite;?>process/rab/table",
+          "type": "POST",
+          "data": {'tahun':tahun,
+                    'direktorat':direktorat }
+        },
+        <?php if ($_SESSION['direktorat'] == "") { ?>
+          "columnDefs" : [
+            {"targets" : 0,
+             "visible" : false},
+            {"targets" : 1},
+            {"targets" : 2},
+            {"targets" : 3},
+            {"targets" : 4},
+            {"targets" : 5},
+            {"targets" : 6},
+          ],
+        <?php }else{?>
+          "columnDefs" : [
+            {"targets" : 0,
+             "visible" : false},
+            {"targets" : 1},
+            {"targets" : 2, 
+              "visible": false},
+            {"targets" : 3},
+            {"targets" : 4},
+            {"targets" : 5},
+            {"targets" : 6},
+          ],
+        <?php } ?>
+        "order": [[ 0, "desc" ]]
     });
   }
 

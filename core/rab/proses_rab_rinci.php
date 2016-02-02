@@ -74,12 +74,12 @@ switch ($process) {
 	      	$button =  '<div class="text-center btn-group-vertical">';
 	      	if ($_SESSION['level'] == 0) {
 	      		$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; View Akun</a>';
-	      		if ($d != 0 && $d != 1 && $d != 3 && $d != 5) {
+	      		if ($d == 2 || $d == 5) {
 	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1].'" class="btn btn-flat btn-info btn-sm"><i class="fa fa-file"></i>&nbsp; Cetak Kuitansi</a>';
 	      		}
 	      	}else{
 	      		$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Add Akun</a>';
-	      		if ($d != 0 &&  $d != 1 &&  $d != 3 &&  $d != 5) {
+	      		if ($d == 2 || $d == 5) {
 	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1].'" class="btn btn-flat btn-info btn-sm"><i class="fa fa-file"></i>&nbsp; Cetak Kuitansi</a>';
 		        }
 	      	}
@@ -96,11 +96,11 @@ switch ($process) {
 		  array('db' => 'status', 'dt'=>12, 'formatter' => function($d,$row, $dataArray){
 		  	
 		  	if ($_SESSION['level'] == 0) {
-		  		if ($row[11] != "" && ($d != 0 && $d != 1 && $d != 3 && $d != 5)) {
+		  		if ($row[11] != "" && ($d == 2 || $d == 5)) {
 		  			$button =  '<div class="text-center btn-group-vertical">'.
 		  						'<a style="margin:0 2px;" id="btn-sah" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
 		  						'</div>';
-		  		}elseif ($row[11] != "" && $d == 5) {
+		  		}elseif ($row[11] != "" && ($d == 2 || $d == 5)) {
 		  			$button =  '<div class="text-center btn-group-vertical">'.
 		  						'<a style="margin:0 2px;" id="btn-sah-adn" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
 		  						'</div>';
@@ -108,7 +108,7 @@ switch ($process) {
 		  			$button = '<center>-</center>';
 		  		}
 		  	}else{
-		  		if ($row[11] != "" && ($d != 0 &&  $d != 1 &&  $d != 3)) {
+		  		if ($row[11] != "" && ($d == 2 || $d == 5)) {
 		  			$button = '<i>Belum Disahkan</i>';
 		  		}else{
 		  			$button = '<center>-</center>';
@@ -133,11 +133,17 @@ switch ($process) {
 		echo json_encode($getdata);
 		break;
 	case 'sahkanAkun':
-		$status = $_POST['status'];
-		$id_rabfull = $_POST['id_rabfull'];
-		$id_rab_view = $_POST['id_rab_view'];
-		$mdl_rab->chStatusFull($id_rabfull,$status);
-    	$utility->load("content/rabdetail/".$id_rab_view."/detail","success","Data telah disahkan");
+		if (!isset($_POST)) {
+			$status = $_POST['status'];
+			$id_rabfull = $_POST['id_rabfull'];
+			$id_rab_view = $_POST['id_rab_view'];
+			$getrab = $mdl_rab->getrabfull($id_rabfull);
+			$mdl_rab->chStatusFullOrang($getrab,$status);
+			$mdl_rab->updateView($id_rab_view);
+	    	$utility->load("content/rabdetail/".$id_rab_view."/detail","success","Data telah disahkan");
+		}else{
+			$utility->location_goto(".");
+		}
 		break;
 	case 'tambahAkun':
 		$insert = $mdl_rab->tambahAkun($_POST);
@@ -234,6 +240,9 @@ switch ($process) {
 			}
 		}
 		echo json_encode($data);
+		break;
+	default:
+		$utility->location_goto(".");
 		break;
 }
 ?>
