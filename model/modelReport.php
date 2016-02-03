@@ -23,7 +23,6 @@
       $res = $this->fetch_array($result);
       $rabv_id = $res[rabview_id];
       // echo $rabv_id;
-      $kdgiat= $res[kdgiat];
       $kdprogram = $res[kdprogram];
       $kdoutput = $res[kdoutput];
       $kdsoutput = $res[kdsoutput];
@@ -69,7 +68,7 @@
 
       $no_kw_up = $arr_kw[no_kuitansi_update];
 
-      
+
       if ($this->num_rows($hsl_nomor)==0) { 
         // echo "Belum Ada Nomor Kwitansi";
         $no_kw = 1;
@@ -111,41 +110,137 @@
 
         }
       }
+      $det_giat = array('kdgiat'    => $res[kdgiat],
+                         'kdprogram' => $res[kdprogram],
+                          'kdoutput'  => $res[kdoutput],
+                          'kdsoutput' => $res[kdsoutput],
+                          'kdkmpnen'  => $res[kdkmpnen],
+                          'kdskmpnen' => $res[kdskmpnen],
+                          'no_kw'     => $no_kw,
+                          'npwp'      => $res[npwp] );
+
+      // { PENGUJIAN VARIABEL }
       // echo ' No Kwitansi : '.$no_kw." No Kw Update : ".$no_kw_up;
       // $deskripsi = $res[deskripsi];
       // $tanggal = $res[tanggal];
       // $lokasi = $res[lokasi];
       // $uang_muka = $res[uang_muka];
       // echo "Nama : ".$nama."RABV ID ".$rabv_id." KD PROGRAM : ".$kdgiat." ".$kdprogram." ".$kdoutput." ".$kdsoutput." ".$kdkmpnen;
+      
+      // { PENGUJIAN KONDISI YANG LAMA }
+
       $dinas = 0;
       $lokal = 0;
+      $dt_akun = array();
+      $item_honor = "0";
+      $item_transport = "0";
+      $item_uangsaku = "0";
+      $uang_saku_dalam = 0;
+      $uang_saku_luar = 0;
+      $honor = 0;
+      $transport_lokal = 0;
+      $item = "";
       $sql2 = $this->query("SELECT NMGIAT, NMOUTPUT, NMKMPNEN, NmSkmpnen, NMITEM FROM rkakl_full where KDPROGRAM = '$kdprogram' and KDOUTPUT='$kdoutput' and KDSOUTPUT='$kdsoutput' and KDKMPNEN = '$kdkmpnen' and KDSKMPNEN = '$kdskmpnen' ; ");
       $detil_prog = $this->fetch_array($sql2);
       // print_r($detil_prog);
       mysql_free_result($result);
-      $result = $this->query("SELECT rab.alat_trans, rab.kota_asal, rab.kota_tujuan, rab.lama_hari, rab.tgl_mulai, rab.tgl_akhir, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$rabv_id' and penerima='$nama' ");
-      while($res=$this->fetch_array($result)){
-        if($res[kdakun]=="524119" || $res[kdakun]=="524114"  || $res[kdakun]=="524113" || $res[kdakun]=="524219")   $dinas=1;
-        if($res[kdakun]=="524114"  || $res[kdakun]=="524113")   $lokal=1;
-      }
+      $result = $this->query("SELECT rab.alat_trans, rab.kota_asal, rab.kota_tujuan, rab.lama_hari, rab.tgl_mulai, rab.tgl_akhir, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rab.rabview_id='$rabv_id' and rab.npwp='$npwp' order by rab.kdakun asc ");
+      // while($res=$this->fetch_array($result)){
+      //   if($res[kdakun]=="524119" || $res[kdakun]=="524114"  || $res[kdakun]=="524113" || $res[kdakun]=="524219")   $dinas=1;
+      //   if($res[kdakun]=="524114"  || $res[kdakun]=="524113")   $lokal=1;
+      // }
+      $counter="";
       ob_start();
-      if($lokal==0) {
-        $this->Kuitansi_Honor_Uang_Saku($result, $no_kw, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen, $npwp);
+      while($res=$this->fetch_array($result)){
+        // echo "<br>".$res[NMITEM]."<br>";
+        if($res[kdakun]=="521213"){
+          $item_honor = "1";
+          $honor += $res[value];
+          // $pot = "";
+          // $pph=0;
+        }
+        else if($res[kdakun]=="522151"){
+          $item_honor = "1";
+          $honor += $res[value];
+          
+        }
+        else if($res[kdakun]=="524113"){
+          if(substr($res[NMITEM],1,8)!=="ransport"){
+            $item_uangsaku = "1";
+            $uang_saku_dalam +=$res[value];
+          }
+          else
+          {
+            $item_transport = "1";
+            $transport_lokal +=$res[value];
+          }
+          
+        }
+        else if($res[kdakun]=="524114"){
+          if(substr($res[NMITEM],1,8)!=="ransport"){
+            $item_uangsaku = "1";
+            $uang_saku_dalam +=$res[value];
+          }
+          else{
+            $item_transport = "1";
+            $transport_lokal +=$res[value];
+          }
+        }
+        else if($res[kdakun]=="524119"){
+          $item = "Perjalanan Dinas Keluar";
+        }
+        else{
+             // $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$res[kdakun]);
+             //  echo '<pagebreak />';
+          if($counter!==$res[kdakun]){
+            array_push($dt_akun, $res[kdakun]);
+            $counter=$res[kdakun];
+          }
+        }
+        
+       
+      }
+      // print_r($dt_akun);
+      if($honor>0){
+          $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "Honorarium",$honor);
+          echo '<pagebreak />';
+      }
+      if($uang_saku_dalam>0){
+          $this->Kuitansi_Honorarium($result, $det_giat, "Uang Saku",$uang_saku_dalam);
+          echo '<pagebreak />';
+        }
+      if($transport_lokal>0){
+        $this->Kuitansi_Honorarium($result, $det_giat, "Transport Lokal ",$transport_lokal);
+        echo "transport";
+        }
+      if($dt_akun[0]!==""){
+        $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[0]);
         echo '<pagebreak />';
       }
-      else{
-        $this->Kuitansi_Honorarium($result, $no_kw, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen);
+      if($dt_akun[1]!==""){
+        $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[1]);
         echo '<pagebreak />';
       }
-      if($dinas==1){ 
-        $this->Rincian_Biaya_PD($result);
-        echo '<pagebreak />';
-        $this->SPPD($result);
-        echo '<pagebreak />';
-      }
-      $this->daftar_peng_riil($result);
+        // echo "<br>Item Terpilih : ".$item."<br> Honorarium : ".$honor."<br> Uang saku : ".$uang_saku_dalam."Transport Lokal  : ".$transport_lokal;
+        
+      // ob_start();
+      // if($lokal==0) {
+      //   $this->Kuitansi_Honor_Uang_Saku($result, $no_kw, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen, $npwp);
+      //   echo '<pagebreak />';
+      // }
+      // else{
+      //   $this->Kuitansi_Honorarium($result, $no_kw, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen);
+      //   echo '<pagebreak />';
+      // }
+      // if($dinas==1){ 
+      //   $this->Rincian_Biaya_PD($result);
+      //   echo '<pagebreak />';
+      //   $this->SPPD($result);
+      //   echo '<pagebreak />';
+      // }
+      // $this->daftar_peng_riil($result);
       $html = ob_get_contents();
-      $this->create_pdf("SPTB","A4",$html);
+      $this->create_pdf($npwp."_".$no_kw,"A4",$html);
 
     }
     public function SPTB($data){
@@ -834,37 +929,47 @@
 
     }
     //Kuitansi Honorarium
-    public function Kuitansi_Honorarium($data, $no_kw_up, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen){
-      $total=0;
-      foreach ($data as $value) {
-         $total += $value[value];
-         $penerima = $value[penerima];
+    public function Kuitansi_Honorarium($data, $det, $item, $val){
+      $total=$val;
+      if($item==""){
+        foreach ($data as $value) {
+           $total += $value[value];
+           $penerima = $value[penerima];
+        }
       }
-      echo '  <p align="right">No '.$no_kw_up."/".$kdgiat.".".$kdoutput.".".$kdsoutput.".".$kdkmpnen.".".$kdskmpnen."/2016".'</p>'; 
+      echo '  <p align="right">No '.$det['no_kw']."/".$det['kdgiat'].".".$det['kdoutput'].".".$det['kdsoutput'].".".$det['kdkmpnen']."/2016".'</p>'; 
       require __DIR__ . "/../utility/report/header_dikti.php";
       echo '  <p align="center">KUITANSI</p>
                     <table style="width: 100%; font-size:80%; border-collapse: collapse;"  border="0">               
                     <tr>
                         <td align="left">Sudah Terima Dari </td>
-                        <td align="left" style="font-weight:bold">: Kuasa Pengguna Anggaran Direktorat Jenderal Kelembagaan IPTEK dan DIKTI</td>
+                        <td align="left">: </td>
+                        <td align="left" style="font-weight:bold"> Kuasa Pengguna Anggaran Direktorat Jenderal Kelembagaan IPTEK dan DIKTI</td>
+                        
                     </tr> 
                     <tr>
                         <td align="left">Jumlah Uang</td>
-                        <td align="left">: Rp. '.number_format($total,0,",",".").'</td>
+                        <td align="left">: </td>
+                        <td align="left" style="background-color:gray; font-size:1.2em;"><b>Rp. '.number_format($total,0,",",".").'</b></td>
                     </tr> 
                     <tr>
                         <td align="left">Uang Sebesar</td>
                         <td align="left">: </td>
+                        <td align="left"> <b>'.$this->terbilang($total,1).'<b></td>
+                        
                     </tr>                
                     <tr>
                         <td align="left">Untuk Pembayaran</td>
                         <td align="left">: </td>
+                        <td></td>
+                        
                     </tr>                
 
                     </table>';
         $pph = (15 / 100) * $total;
         $diterima = $total-$pph;      
-        echo  '<table style="width: 100%; font-size:80%;"  border="0">';                   
+        echo  '<table style="width: 100%; font-size:80%;"  border="0">';
+        if($item==""){                   
         foreach ($data as $value) {
           echo '<tr>
                   <td width="18%"></td>
@@ -872,6 +977,15 @@
                   <td>'." : Rp. ".number_format($value[value],0,",",".").'</td>
                 </tr>';
           }
+        }
+        else{
+          echo '<tr>
+                  <td width="18%"></td>
+                  <td width="40%">'.$item.'</td>
+                  <td>'." : Rp. ".number_format($val,0,",",".").'</td>
+                </tr>';
+
+        }
           echo '<tr>
                   <td ></td>
                   <td >'."Jumlah ".'</td>
@@ -1177,17 +1291,27 @@
     }
 
     //Kuitansi Honor Dan Uang Saku
-    public function Kuitansi_Honor_Uang_Saku($data, $no_kw_up, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen, $npwp) {
+    public function Kuitansi_Honor_Uang_Saku($data,$det,$item,$val,$kd_akun) {
       $penerima;
-      
-      $total=0;
-      foreach ($data as $value) {
-         $total += $value[value];
-         $penerima = $value[penerima];
-         $npwp = $value[npwp];
+      $total=$val;
+
+      if($item==""){
+        foreach ($data as $value) {
+          if($value[kdakun]==$kd_akun and $value[kdakun]!== "521213" and $value[kdakun]!== "522151"and $value[kdakun]!== "524114"and $value[kdakun]!== "524113"and $value[kdakun]!== "524119" ){
+             $total += $value[value];
+             $penerima = $value[penerima];
+             $npwp = $value[npwp];
+          }
+        }
       }
-        echo '  <p style="font-size:0.9em;" align="right">No '.$no_kw_up."/".$kdgiat.".".$kdoutput.".".$kdsoutput.".".$kdkmpnen.".".$kdskmpnen."/2016".'</p>';  
-        require_once __DIR__ . "/../utility/report/header_dikti.php";
+      else{
+        foreach ($data as $value) {
+           $penerima = $value[penerima];
+           break;
+        }
+      }
+        echo '  <p align="right">No '.$det['no_kw']."/".$det['kdgiat'].".".$det['kdoutput'].".".$det['kdsoutput'].".".$det['kdkmpnen']."/2016".'</p>'; 
+        require __DIR__ . "/../utility/report/header_dikti.php";
         echo ' <p align="center" style="font-weight:bold; font-size:1.2em">KUITANSI</p>
                     <table cellpadding="3" style="width: 100%; font-size:0.7em;"  border="0">               
                     <tr>
@@ -1217,14 +1341,27 @@
          echo  '</table>';
          $pph = (15 / 100) * $total;
          $diterima = $total-$pph;      
-         echo  '<table style="width: 100%; font-size:0.7em;"  border="0">';                   
-        foreach ($data as $value) {
-          echo '<tr>
-                  <td width="21%"></td>
-                  <td width="40%">'.$value[NMITEM].'</td>
-                  <td> : Rp. </td>
-                  <td align="right">'."".number_format($value[value],0,",",".").'</td>
-                </tr>';
+         echo  '<table style="width: 100%; font-size:0.7em;"  border="0">';
+         if($item==""){                   
+            foreach ($data as $value) {
+              if($value[kdakun]==$kd_akun and $value[kdakun]!== "521213" and $value[kdakun]!== "522151"and $value[kdakun]!== "524114"and $value[kdakun]!== "524113"and $value[kdakun]!== "524119" ){
+                echo '<tr>
+                        <td width="21%"></td>
+                        <td width="40%">'.$value[NMITEM].'</td>
+                        <td> : Rp. </td>
+                        <td align="right">'."".number_format($value[value],0,",",".").'</td>
+                      </tr>';
+                }
+            }
+          }
+          else{
+            echo '<tr>
+                      <td width="21%"></td>
+                      <td width="40%">'.$item.'</td>
+                      <td> : Rp. </td>
+                      <td align="right">'."".number_format($val,0,",",".").'</td>
+                    </tr>';
+
           }
           echo '<tr>
                   <td ></td>
@@ -1325,15 +1462,17 @@
         $no=1;
         $tot_pot=0;
         foreach ($data as $value) {
-          $pot = (15/100)*$value[value];
-          $tot_pot +=$pot;
-          echo '<tr>
-                  <td>'.$no.". ".$value[NMITEM].'</td>
-                  <td>Rp. '.number_format($value[value],0,",",".").'</td>
-                  <td>15%</td>
-                  <td>'."Rp. ".number_format($pot,0,",",".").'</td>
-                </tr>';
-          $no++;
+          if($value[kdakun]==$kd_akun and $value[kdakun]!== "521213" and $value[kdakun]!== "522151"and $value[kdakun]!== "524114"and $value[kdakun]!== "524113"and $value[kdakun]!== "524119" ){
+            $pot = (15/100)*$value[value];
+            $tot_pot +=$pot;
+            echo '<tr>
+                    <td>'.$no.". ".$value[NMITEM].'</td>
+                    <td>Rp. '.number_format($value[value],0,",",".").'</td>
+                    <td>15%</td>
+                    <td>'."Rp. ".number_format($pot,0,",",".").'</td>
+                  </tr>';
+            $no++;
+          }
           }  
           echo '<tr>
                   <td></td>
@@ -1395,35 +1534,7 @@
         
     }
 
-    public function rekap_keg($data) {
-      ob_start();
-      echo '<table>
-              <tr>
-                <th rowspan="2"></td>
-                <th rowspan="2"></td>
-                <th rowspan="2"></td>
-                <th rowspan="2"></td>
-                <th colspan="3"></td>
-                <th colspan="3"></td>
-                <th rowspan="2"></td>
-                <th rowspan="2"></td>
-                <th colspan="2"></td>
-              </tr>
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-          </table>';
-      $html = ob_get_contents(); 
-      $this->create_pdf("Rinc_perjalanan_dinas","A4",$html);
-      
-    }
+ 
 
 public function daftar_peng_riil($data){
   $penerima="";
