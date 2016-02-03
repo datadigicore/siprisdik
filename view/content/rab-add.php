@@ -9,6 +9,7 @@
     </ol>
   </section>
   <section class="content">
+  <?php if($_SESSION['level'] != 0){ ?>
     <div class="row">
       <div class="col-xs-12">
         <div class="box">
@@ -44,6 +45,7 @@
                           $("#tgl_akhir").datepicker();
                      });
                   </script>
+                  <input type="hidden" name="perjalanan" value="true">
                   <label> Tanggal Berangkat</label>
                   <div style="margin:5px auto" class="input-group">
                       <input type="text"class="form-control" id="tgl_mulai" value="<?= $tgl_mulai ?>" name="tgl_mulai" placeholder="Tanggal Berangkat">
@@ -65,10 +67,10 @@
                   <input style="margin:5px auto" type="text" class="form-control" value="<?= $kota_tujuan ?>" id="kota_tujuan" name="kota_tujuan" placeholder="Kota Tujuan">
 
                   <label>Taxi Asal</label>
-                  <input style="margin:5px auto" type="text" class="form-control" value="<?= $taxi_asal ?>" id="taxi_asal" name="taxi_asal" placeholder="Taxi Asal">
+                  <input style="margin:5px auto" type="number" step="0.001" class="form-control" value="<?= $taxi_asal ?>" id="taxi_asal" name="taxi_asal" placeholder="Taxi Asal">
 
                   <label>Taxi Tujuan</label>
-                  <input style="margin:5px auto" type="text" class="form-control" value="<?= $taxi_tujuan ?>" id="taxi_tujuan" name="taxi_tujuan" placeholder="Taxi Tujuan">
+                  <input style="margin:5px auto" type="number" step="0.001" class="form-control" value="<?= $taxi_tujuan ?>" id="taxi_tujuan" name="taxi_tujuan" placeholder="Taxi Tujuan">
 
                   <label>Rute 1</label>
                   <input style="margin:5px auto" type="text" class="form-control" value="<?= $rute1 ?>" id="rute1" name="rute1" placeholder="Rute 1">
@@ -94,6 +96,7 @@
   </div>
   <div id="panel-akun">
   </div>
+  <?php }?>
  
   <div class="row">
     <div class="col-xs-12">
@@ -260,7 +263,13 @@
          }else if(data.error == 4){
           alert('Sudah terdapat kode akun 524114 / 524119. Tidak dapat menambah kode akun selain 521213 / 522151');
          };
-        };
+        } else {
+          if(kdAkun=="524119" || kdAkun=="524114"  || kdAkun=="524113" || kdAkun=="524219" ||kdAkun=="524114"  || kdAkun=="524113"){
+            $('#perjalanan').removeAttr( "class" );
+          } else {
+            $('#perjalanan').attr( "class","hidden" );
+          }
+        }
       },
     });
   }

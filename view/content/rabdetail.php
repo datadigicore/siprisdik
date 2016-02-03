@@ -15,7 +15,9 @@
           <div class="box-header">
             <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya</h3>
             <input type="hidden" id="id_rab_view" name="id_rab_view" value="<?php echo $id_rab_view ?>" />
-            <a href="#addrab" id="tblAdd" data-toggle="modal" class="btn btn-flat btn-success btn-sm pull-right">Tambah Orang / Badan</a>
+            <?php if ($_SESSION['level'] != 0) {
+              echo '<a id="tblAdd" data-toggle="modal" class="btn btn-flat btn-success btn-sm pull-right">Tambah Orang / Badan</a>';
+            }?>
           </div>
           <div class="box-body">
             <?php if (isset($_POST['message'])): ?>
@@ -24,6 +26,32 @@
                 <i class="icon fa fa-warning"></i><?php echo $_POST['message']; ?>
               </div>
             <?php endif ?>
+            <table class="display table table-bordered table-striped" style="width:750px">
+              <tr>
+                <td class="col-md-1"><label>Tahun</label></td>
+                <td class="col-md-2"><label><?php echo $datarkakl[0]->THANG?></label></td>
+              </tr>
+              <tr>
+                <td><label>Kegiatan</label></td>
+                <td class="col-md-2"><label><?php echo $datarkakl[0]->NMGIAT?></label></td>
+              </tr>
+              <tr>
+                <td><label>Output</label></td>
+                <td class="col-md-2"><label><?php echo $datarkakl[0]->NMOUTPUT?></label></td>
+              </tr>
+              <tr>
+                <td><label>Sub Output</label></td>
+                <td class="col-md-2"><label><?php echo $datarkakl[0]->NMSOUTPUT?></label></td>
+              </tr>
+              <tr>
+                <td><label>Komponen</label></td>
+                <td class="col-md-2"><label><?php echo $datarkakl[0]->NMKMPNEN?></label></td>
+              </tr>
+              <tr>
+                <td><label>Sub Komponen</label></td>
+                <td class="col-md-2"><label><?php echo $datarkakl[0]->NmSkmpnen?></label></td>
+              </tr>
+            </table>
             <table id="table" class="display nowrap table table-bordered table-striped" cellspacing="0" width="100%">
               <thead style="background-color:#11245B;color:white;">
                 <tr>
@@ -53,73 +81,7 @@
     </div>
   </section>
 </div>
-<div class="modal fade" id="addrab" style="z-index:-100px">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form enctype="multipart/form-data" method="post" action="<?php echo $url_rewrite;?>process/rab_rinci/save_penerima">
-        <div class="modal-header" style="background-color:#111F3F !important; color:white;">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true" style="color:white">×</span></button>
-          <h4 class="modal-title">Form</h4>
-        </div>
-        <div class="modal-body">
-          <input type="hidden" name="id_rab_view" value="<?php echo $id_rab_view ?>" />
-          <input type="hidden" id="adendum" name="adendum" value="0" />
-          <div class="form-group">
-            <label>Jenis</label>
-            <select class="form-control" required id="jenis-akun" name="jenis-akun" onchange="cnpwp()">
-              <option value="0">Badan</option>
-              <option value="1">Orang</option>
-            </select>
-          </div>
-          <div class="form-group ">
-              <label>NPWP</label>
-              <input type="text" class="form-control" value="<?= $npwp ?>" id="npwp" name="npwp" onkeyup="cnpwp()" placeholder="NPWP">
-          </div>
-          <div class="form-group">
-              <label>Nama Personel</label>
-              <input type="text" class="form-control" value="<?= $penerima ?>" id="penerima" name="penerima" placeholder="Nama Penerima">
-          </div>
-          <div class="form-group ">
-              <label>Golongan</label>
-              <select class="form-control" id="golongan" required name="golongan">
-                <option>-- Pilih --</option>
-                <option value="1">I</option>
-                <option value="2">II</option>
-                <option value="3">III</option>
-                <option value="4">IV</option>
-              </select>
-          </div>
-          <div class="form-group ">
-              <label>PNS / Non PNS</label>
-              <select class="form-control" id="pns" required name="pns">
-                <option>-- Pilih --</option>
-                <option value="1">PNS</option>
-                <option value="0">Non PNS</option>
-              </select>
-          </div>
-          <div class="form-group ">
-               <label>Jabatan Dalam Tugas</label>
-               <input type="text" class="form-control" value="<?= $jabatan ?>" id="jabatan" name="jabatan" placeholder="Jabatan Dalam Tugas">
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" data-dismiss="modal" class="btn btn-flat btn-warning">Cancel</button>
-          <button type="submit" class="btn btn-flat btn-success">Simpan</button>
-        </div>
-        <input type="hidden" value="1" name="mode"/>
-        <?php
-        if ($id != "")
-             echo"<input type=\"hidden\"  name=\"kondisi\" value=\"edit\">";
-        else
-             echo"<input type=\"hidden\"  name=\"kondisi\" value=\"tambah\">";
 
-        echo"<input type=\"hidden\"  name=\"kode\" value=\"$id\">";
-        ?>
-     </form> 
-    </div>
-  </div>
-</div>
 <div class="modal fade" id="sahkan">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -197,6 +159,9 @@
         }else if(obj.status == 4){
           $('#tblAdd').html('Tambah Orang/Badan (Adendum)');
           $('#adendum').val('5');
+          $('#tblAdd').attr('href','<?php echo $url_rewrite?>content/rabdetail/<?php echo $id_rab_view?>/add/5');
+        }else{
+          $('#tblAdd').attr('href','<?php echo $url_rewrite?>content/rabdetail/<?php echo $id_rab_view?>/add/0');
         };
       },
     });

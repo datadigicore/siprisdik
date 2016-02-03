@@ -16,8 +16,9 @@
             <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya</h3>
 
             <!-- <a href="<?php echo $url_rewrite;?>content/rab/add" class="btn btn-flat btn-success btn-sm pull-right">Tambah RAB</a> -->
-
-            <a href="#addrab" data-toggle="modal" class="btn btn-flat btn-success btn-sm pull-right">Tambah RAB</a>
+            <?php if ($_SESSION['level'] != '0') {
+              echo '<a href="#addrab" data-toggle="modal" class="btn btn-flat btn-success btn-sm pull-right">Tambah RAB</a>';
+            }?>
 
           </div>
           <div class="box-body">
@@ -27,11 +28,11 @@
                 <i class="icon fa fa-warning"></i><?php echo $_POST['message']; ?>
               </div>
             <?php endif ?>
-            <table class="display table table-bordered table-striped" style="width:200px">
+            <table class="display table table-bordered table-striped" style="width:750px">
               <tr>
                 <td><label>Tahun</label></td>
                 <td>
-                  <select class="form-control" name="tahun2" id="tahun2" required>
+                  <select class="form-control select2" name="tahun2" id="tahun2" required>
                     <?php for ($i=0; $i < count($tahun); $i++) { 
                       echo "<option value='".$tahun[$i]."'>".$tahun[$i].'</option>';
                     }?>
@@ -43,17 +44,15 @@
                 <td><label>Direktorat</label></td>
                   <td>
                     <select id="direktorat2" name="direktorat2" class="form-control" onchange="search()">
-                      <option value="%">All</option>
-                      <option value="5696">5696</option>
-                      <option value="5697">5697</option>
-                      <option value="5698">5698</option>
-                      <option value="5699">5699</option>
-                      <option value="5700">5700</option>
+                      <option value="">All</option>
+                      <?php foreach ($direk as $key => $value) {
+                        echo "<option value='".$key."'>".$value.'</option>';
+                      }?>
                     </select>
                   </td>
               </tr>
               <?php } else{ ?>
-              <input type="hidden" id="direktorat" name="direktorat" value="<?php echo $_SESSION['direktorat']; ?>" />
+              <input type="hidden" id="direktorat2" name="direktorat2" value="<?php echo $_SESSION['direktorat']; ?>" />
               <?php } ?>
             </table>
             <table id="table" class="display nowrap table table-bordered table-striped" cellspacing="0" width="100%">
@@ -100,7 +99,7 @@
           <?php if ($_SESSION['direktorat'] == "") { ?>
           <div class="form-group">
             <label>Kode Kegiatan</label>
-            <select class="form-control" id="direktorat" name="direktorat" onchange="search()">
+            <select class="form-control" id="direktorat" name="direktorat" onchange="chout()">
                 <option value="5696">5696</option>
                 <option value="5697">5697</option>
                 <option value="5698">5698</option>
@@ -226,52 +225,56 @@
   </div>
 </div>
 <script>
-
+var table;
   $(function () {
      $( "#datepicker" ).datepicker({
         changeMonth: true,
         changeYear: true,
         format: 'dd/mm/yyyy'
       });
+
     var tahun = $('#tahun2').val();
     var direktorat = $('#direktorat2').val();
-    var table = $("#table").DataTable({
-      "oLanguage": {
-        "sInfoFiltered": ""
-      },
-      "processing": true,
-      "serverSide": true,
-      // "scrollX": true,
-      "ajax": {
-        "url": "<?php echo $url_rewrite;?>process/rab/table",
-        "type": "POST"
-      },
-      <?php if ($_SESSION['direktorat'] == "") { ?>
-        "columnDefs" : [
-          {"targets" : 0,
-           "visible" : false},
-          {"targets" : 1},
-          {"targets" : 2},
-          {"targets" : 3},
-          {"targets" : 4},
-          {"targets" : 5},
-          {"targets" : 6},
-        ],
-      <?php }else{?>
-        "columnDefs" : [
-          {"targets" : 0,
-           "visible" : false},
-          {"targets" : 1},
-          {"targets" : 2, 
-            "visible": false},
-          {"targets" : 3},
-          {"targets" : 4},
-          {"targets" : 5},
-          {"targets" : 6},
-        ],
-      <?php } ?>
-      "order": [[ 0, "desc" ]]
+    table = $("#table").DataTable({
+        "oLanguage": {
+          "sInfoFiltered": ""
+        },
+        "processing": true,
+        "serverSide": true,
+        "scrollX": true,
+        "ajax": {
+          "url": "<?php echo $url_rewrite;?>process/rab/table",
+          "type": "POST",
+          "data": {'tahun':tahun,
+                    'direktorat':direktorat }
+        },
+        <?php if ($_SESSION['direktorat'] == "") { ?>
+          "columnDefs" : [
+            {"targets" : 0,
+             "visible" : false},
+            {"targets" : 1},
+            {"targets" : 2},
+            {"targets" : 3},
+            {"targets" : 4},
+            {"targets" : 5},
+            {"targets" : 6},
+          ],
+        <?php }else{?>
+          "columnDefs" : [
+            {"targets" : 0,
+             "visible" : false},
+            {"targets" : 1},
+            {"targets" : 2, 
+              "visible": false},
+            {"targets" : 3},
+            {"targets" : 4},
+            {"targets" : 5},
+            {"targets" : 6},
+          ],
+        <?php } ?>
+        "order": [[ 0, "desc" ]]
     });
+    
     $(document).on("click", "#btn-aju", function (){
       var tr = $(this).closest('tr');
       tabrow = table.row(tr);
@@ -294,15 +297,44 @@
     var tahun = $('#tahun2').val();
     var direktorat = $('#direktorat2').val();
     table.destroy();
-    $('#table').DataTable({
-      "scrollX": true,
-      "bProcessing": true,
-      "bServerSide": true,
-      "sAjaxSource": "getRab",
-      "fnServerParams": function ( aoData ) {
-        aoData.push( { "name": "tahun", "value": tahun },
-                      { "name": "direktorat", "value": direktorat } );
-      }
+    table = $("#table").DataTable({
+        "oLanguage": {
+          "sInfoFiltered": ""
+        },
+        "processing": true,
+        "serverSide": true,
+        "scrollX": true,
+        "ajax": {
+          "url": "<?php echo $url_rewrite;?>process/rab/table",
+          "type": "POST",
+          "data": {'tahun':tahun,
+                    'direktorat':direktorat }
+        },
+        <?php if ($_SESSION['direktorat'] == "") { ?>
+          "columnDefs" : [
+            {"targets" : 0,
+             "visible" : false},
+            {"targets" : 1},
+            {"targets" : 2},
+            {"targets" : 3},
+            {"targets" : 4},
+            {"targets" : 5},
+            {"targets" : 6},
+          ],
+        <?php }else{?>
+          "columnDefs" : [
+            {"targets" : 0,
+             "visible" : false},
+            {"targets" : 1},
+            {"targets" : 2, 
+              "visible": false},
+            {"targets" : 3},
+            {"targets" : 4},
+            {"targets" : 5},
+            {"targets" : 6},
+          ],
+        <?php } ?>
+        "order": [[ 0, "desc" ]]
     });
   }
 

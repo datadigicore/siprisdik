@@ -4,6 +4,14 @@
   $temp_path = explode($PROSES_REQUEST,$path);
   $elements = explode('/', $temp_path[1]);
   $data = array_filter($elements);
+
+  $direk = array( '5696' => 'Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti',
+              '5697' => 'Pengembangan Kelembagaan Perguruan Tinggi',
+              '5698' => 'Pembinaan Kelembagaan Perguruan Tinggi',
+              '5699' => 'Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan',
+              '5700' => 'Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya',
+            );
+  
   if (count($data) == 0){
     include "./index.php";
   }

@@ -539,6 +539,13 @@ class SSP {
              $order
              $limit"
         );
+        // echo "SELECT SQL_CALC_FOUND_ROWS ".implode(", ",self::pluck($columns, 'db'))."
+        //      FROM `$table` join `$table2`
+        //      ON $on
+        //      $where
+        //      $group
+        //      $order
+        //      $limit";exit;
         // Data set length after filtering
         $resFilterLength = self::sql_exec( $db,
             "SELECT FOUND_ROWS()"
@@ -557,9 +564,9 @@ class SSP {
          * Output
          */
         return array(
-            // "draw"            => intval( $request['draw'] ),
-            // "recordsTotal"    => intval( $recordsTotal ),
-            // "recordsFiltered" => intval( $recordsFiltered ),
+            "draw"            => intval( $request['draw'] ),
+            "recordsTotal"    => intval( $recordsTotal ),
+            "recordsFiltered" => intval( $recordsFiltered ),
             "data"            => self::data_output2( $columns, $data, $dataArray )
         );
     }

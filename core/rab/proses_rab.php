@@ -6,16 +6,21 @@ switch ($process) {
     $table = "rabview";
     $key   = "id";
     $dataArray['url_rewrite'] = $url_rewrite; 
+    $dataArray['direktorat'] = $direk; 
+    $tahun = $_POST['tahun'];
+    $direktorat = $_POST['direktorat'];
     $column = array(
       array( 'db' => 'id',      'dt' => 0 ),
       array( 'db' => 'kdprogram',  'dt' => 1, 'formatter' => function($d,$row, $dataArray){ 
-          return 'Program : '.$d.
-                '<br>'.'Output : '.$row[8].
-                '<br>'.'Suboutput : '.$row[9].
-                '<br>'.'Komponen : '.$row[10].
-                '<br>'.'Sub Komponen : '.$row[11];
+          return '<table><tr><td>Program</td><td> :&nbsp;</td><td>'.$d.'</td></tr>'.
+                 '<tr><td>Output</td><td> :&nbsp;</td><td>'.$row[8].'</td></tr>'.
+                 '<tr><td>Sub Output</td><td> :&nbsp;</td><td>'.$row[8].'</td></tr>'.
+                 '<tr><td>Komponen</td><td> :&nbsp;</td><td>'.$row[8].'</td></tr>'.
+                 '<tr><td>Sub Komponen</td><td> :&nbsp;</td><td>'.$row[8].'</td></tr></table>';
       }),
-      array( 'db' => 'kdgiat',  'dt' => 2),
+      array( 'db' => 'kdgiat',  'dt' => 2, 'formatter' => function($d, $row, $dataArray){
+        return $dataArray['direktorat'][$d];
+      }),
       array( 'db' => 'deskripsi',  'dt' => 3),
       array( 'db' => 'tanggal',  'dt' => 4, 'formatter' => function( $d, $row ) {
             return date( 'j M Y', strtotime($d));
@@ -39,6 +44,12 @@ switch ($process) {
           return '<i>Close</i>';
         }
         elseif($d==5){
+          return '<i>Adendum</i>';
+        }
+        elseif($d==6){
+          return '<i>Close Adendum</i>';
+        }
+        elseif($d==7){
           return '<i>Penutupan Anggaran</i>';
         }
       }),
@@ -50,27 +61,47 @@ switch ($process) {
                   '</div>';
         }elseif ($d==0 && $_SESSION['level'] == 0) {
           return  '<div class="text-center">'.
-                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Add Transaksi</a>'.
-                     '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
+                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> View Transaksi</a>'.
+                     '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file-text-o"></i> Cetak Rincian</a>'.
                   '</div>';
         }
         if($d==1  && $_SESSION['level'] != 0){
           return  '<div class="text-center">'.
-                    '<a style="margin:0 2px;" class="btn btn-flat btn-primary btn-sm" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" ><i class="fa fa-file-text-o"></i> View Transaksi</a>'.
-                     '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
+                    '<a style="margin:0 2px;" class="btn btn-flat btn-primary btn-sm" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" ><i class="fa fa-list"></i> View Transaksi</a>'.
+                     '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file-text-o"></i> Cetak Rincian</a>'.
                   '</div>';
         }elseif ($d==1  && $_SESSION['level'] == 0) {
           return  '<div class="text-center">'.
-                    '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-file-text-o"></i> View Transaksi</a>'.
-                     '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
+                    '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> View Transaksi</a>'.
+                     '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file-text-o"></i> Cetak Rincian</a>'.
                     '<a style="margin:0 2px;" id="btn-sah" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
                     '<a style="margin:0 2px;" id="btn-rev" href="#revisi" class="btn btn-flat btn-warning btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Revisi</a>'.
                   '</div>';
         }
+        if($d==3 && $_SESSION['level'] != 0){
+          return  '<div class="text-center ">'.
+                    '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Ajukan Revisi</a>'.
+                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Add Transaksi</a>'.
+                  '</div>';
+        }elseif ($d==3 && $_SESSION['level'] == 0) {
+          return  '<div class="text-center">'.
+                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> View Transaksi</a>'.
+                  '</div>';
+        }
+        if($d==6 && $_SESSION['level'] != 0){
+          return  '<div class="text-center ">'.
+                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> View Transaksi</a>'.
+                  '</div>';
+        }elseif ($d==6 && $_SESSION['level'] == 0) {
+          return  '<div class="text-center">'.
+                    '<a style="margin:0 2px;" id="btn-aju" href="#tutup" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Penutupan Anggaran</a>'.
+                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> View Transaksi</a>'.
+                  '</div>';
+        }
         else{
           return  '<div class="text-center">'.
-                    '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file-text-o"></i> View Transaksi</a>'.
-                     '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> Cetak Rincian</a>'.
+                    '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> View Transaksi</a>'.
+                     '<a style="margin:0 2px;" id="btn-trans" href="http://localhost/siprisdik/process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file-text-o"></i> Cetak Rincian</a>'.
                   '</div>';
         }
       }),
@@ -79,7 +110,18 @@ switch ($process) {
       array( 'db' => 'kdkmpnen',  'dt' => 10),
       array( 'db' => 'kdskmpnen',  'dt' => 10),
     );
-    $datatable->get_table($table, $key, $column,$where="",$dataArray);
+    $where="";
+    if ($tahun != "") {
+      $where = 'thang = "'.$tahun.'"';
+    }
+    if ($direktorat != "") {
+      if ($where == "") {
+        $where .= 'kdgiat = "'.$direktorat.'"';
+      }else{
+        $where .= 'AND kdgiat = "'.$direktorat.'"';
+      }
+    }
+    $datatable->get_table($table, $key, $column,$where,$dataArray);
     break;
   case 'getnpwp':
     $npwp = $mdl_rab->getnpwp();
