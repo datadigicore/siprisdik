@@ -17,8 +17,14 @@
         $mpdf->Output($name.".pdf" ,'I');
         exit;
     }
+    public function create_word($name, $size, $html){
+        ob_end_clean();
+        header("Content-type: application/vnd.ms-word");
+        header("Content-Disposition: attachment;Filename=document_name.doc");
+        echo $html;
+    }
 
-    public function cetak_dok($id,$nama){
+    public function cetak_dok($id,$nama,$format){
       $result = $this->query("SELECT rabview_id, npwp, kdgiat, kdprogram, kdoutput, kdsoutput, kdkmpnen, kdskmpnen from rabfull where id='$id' ");
       $res = $this->fetch_array($result);
       $rabv_id = $res[rabview_id];
@@ -249,8 +255,12 @@
       // }
       // $this->daftar_peng_riil($result);
       $html = ob_get_contents();
+      if($format=="pdf"){
       $this->create_pdf($npwp."_".$no_kw,"A4",$html);
-
+      }
+      else{
+        $this->create_word($npwp."_".$no_kw,"A4",$html);
+      }
     }
     public function SPTB($data){
       $sql = $this->query("SELECT r.NMITEM as nmitem, r.NMGIAT as nmgiat, r.NMAKUN as nmakun, f.kdgiat as kdgiat, f.kdprogram as kdprogram, f.kdoutput as kdoutput, f.kdakun as kdakun, f.penerima as penerima, f.tanggal as tanggal, f.value as value FROM rabfull as f LEFT JOIN rkakl_full as r on f.kdgiat = r.KDGIAT and f.kdoutput = r.KDOUTPUT and f.kdkmpnen = r.KDKMPNEN and f.kdskmpnen = r.KDSKMPNEN  and f.kdakun = r.KDAKUN and f.noitem = r.NOITEM  where f.kdakun ='$data' ");

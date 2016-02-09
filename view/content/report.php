@@ -235,7 +235,7 @@
       var isi ="<option>-- Pilih Kode Akun --</option>";
       $.ajax({
         method: "GET",
-        url: "<?=$url_rewrite?>ajax/show_opsi_akun.php",
+        url: "<?=$url_rewrite?>ajax/select_akun_SPTB.php",
         data: { 'id_rabfull': id_rabfull, }
       })
       .done(function(data){
