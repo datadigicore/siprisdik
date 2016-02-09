@@ -75,9 +75,9 @@
         $no_kw_up = 1;
           // Masukkin data baru degan no_kuitansi = 1
           $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' ");
-          $this->query("INSERT into kuitansi(no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, pajak, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
+          $this->query("INSERT into kuitansi(no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
                         select
-                          no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, pajak, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
+                          no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
                         from rabfull where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and npwp='$npwp' ");
           $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and no_kuitansi_update is null and npwp='$npwp' ");
 
@@ -89,9 +89,9 @@
           $no_kw_up+=1;
           // Masukkin data baru degan no_kuitansi = 1++
           $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' ");
-          $this->query("INSERT into kuitansi(no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, pajak, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
+          $this->query("INSERT into kuitansi(no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
                         select
-                          no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, pajak, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
+                          no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
                         from rabfull where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and npwp='$npwp' ");
           $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and no_kuitansi_update is null and npwp='$npwp' ");
 
@@ -102,9 +102,9 @@
           $no_kw_up = $hsl_arr[no_kuitansi_update];
           $no_kw_up+=1;
           // echo "Sudah ada orang dengan kwitansi nomor yg lama";
-          $this->query("INSERT into kuitansi(no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, pajak, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
+          $this->query("INSERT into kuitansi(no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
                         select
-                          no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, pajak, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
+                          no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
                         from rabfull where no_kuitansi='$no_kw_org' and rabview_id='$rabv_id' and npwp='$npwp' ");
           $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw_org' and rabview_id='$rabv_id' and no_kuitansi_update is null and npwp='$npwp' ");
 
@@ -144,7 +144,8 @@
       $detil_prog = $this->fetch_array($sql2);
       // print_r($detil_prog);
       mysql_free_result($result);
-      $result = $this->query("SELECT rab.alat_trans, rab.kota_asal, rab.kota_tujuan, rab.lama_hari, rab.tgl_mulai, rab.tgl_akhir, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rab.rabview_id='$rabv_id' and rab.npwp='$npwp' order by rab.kdakun asc ");
+      // $result = $this->query("SELECT rab.alat_trans, rab.kota_asal, rab.kota_tujuan, rab.lama_hari, rab.tgl_mulai, rab.tgl_akhir, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rab.rabview_id='$rabv_id' and rab.npwp='$npwp' order by rab.kdakun asc ");
+      $result = $this->query("SELECT rab.tgl_mulai, rab.tgl_akhir, rab.rabview_id, rab.penerima, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rab.rabview_id='$rabv_id' and rab.npwp='$npwp' order by rab.kdakun asc ");
       // while($res=$this->fetch_array($result)){
       //   if($res[kdakun]=="524119" || $res[kdakun]=="524114"  || $res[kdakun]=="524113" || $res[kdakun]=="524219")   $dinas=1;
       //   if($res[kdakun]=="524114"  || $res[kdakun]=="524113")   $lokal=1;
@@ -188,6 +189,7 @@
         }
         else if($res[kdakun]=="524119"){
           $item = "Perjalanan Dinas Keluar";
+          $dinas=1;
         }
         else{
              // $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$res[kdakun]);
@@ -210,7 +212,7 @@
           echo '<pagebreak />';
         }
       if($transport_lokal>0){
-        $this->Kuitansi_Honorarium($result, $det_giat, "Transport Lokal ",$transport_lokal);
+        $this->Kuitansi_Honorarium($result, $det_giat, "Transport Lokal",$transport_lokal);
         echo '<pagebreak />';
         }
       if($dt_akun[0]!==""){
@@ -220,6 +222,13 @@
       if($dt_akun[1]!==""){
         $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[1]);
         echo '<pagebreak />';
+      }
+      if($dinas==1){
+        $this->SPPD($data);
+         echo '<pagebreak />';
+        $this->Rincian_Biaya_PD($data);
+         echo '<pagebreak />';
+        $this->daftar_peng_riil($data);
       }
         // echo "<br>Item Terpilih : ".$item."<br> Honorarium : ".$honor."<br> Uang saku : ".$uang_saku_dalam."Transport Lokal  : ".$transport_lokal;
         
@@ -1028,8 +1037,79 @@
               </tr>
               </table>';
 
-      // $html = ob_get_contents();
-      // $this->create_pdf("SPPD","A4",$html);
+      if($item=="Transport Lokal"){
+        echo "---------------------------------------------------------------------------------------------------------------------------------------";
+        echo '<table border=0 style="width: 100%; text-align:left; border-collapse:collapse; font-size:85%;">
+        <tr>
+          <td style="border-top:0px solid; border-left:0px solid; border-right:0px solid; font-weight:bold;" align="center" colspan="3"> DAFTAR PENGELUARAN RIIL </td>
+        </tr>
+        <tr>
+          <td style="border-top:0px solid; border-left:0px solid; border-right:0px solid;" colspan="3"><br>Yang bertanda tangan dibawah ini :</br></td>
+        </tr>
+        <tr>
+          <td width="20%">Nama</td>
+          <td width="2%">:</td>
+          <td>'.$penerima.'</td>
+        </tr>
+        <tr>
+          <td>Jabatan</td>
+          <td>:</td>
+          <td>'.$jabatan.'</td>
+        </tr>
+      </table>';
+
+      echo '<table border=0 style="width: 100%; text-align:left; border-collapse:collapse; font-size:80%;">
+        <tr>
+          <td>Berdasarkan Surat Perjalanan Dinas (SPD) Tanggal ........................... Nomor: ...................................., dengan ini saya menyatakan dengan sesungguhnya bahwa:</td>
+        </tr>
+      </table>';
+      echo '<table style="width: 100%; text-align:left; border-collapse:collapse; font-size:80%;">
+              <tr>
+                <td width="3%">1.</td>
+                <td colspan="2">Biaya Transport dan pengeluaran yang tidak dapat diperoleh bukti-bukti pengeluarannya, meliputi : </td>
+              </tr>';
+        // foreach ($data as $value) {
+          
+        //   echo '<tr>
+        //           <td></td>
+        //           <td width="35%">- '.$value[NMITEM].'</td>
+        //           <td>'." : Rp. ".number_format($value[value],0,",",".").'</td>
+        //         </tr>';
+        //   }
+      echo '<tr>
+              <td>2</td>
+              <td colspan="2">Jumlah Uang tersebut pada lembar Uraian diatas benar-benar dikeluarkan untuk pelaksanaan Perjalanan dinas dimaksud dan apabilah dikemudian hari terdapat kelebihan atas pembayaran, kami bersedia menyetorkan kelebihan tersebut ke kas Negara</td>
+            </tr>';
+
+
+      echo  '</table>
+
+      <h5>Demikian pernyataan ini dibuat untuk dipergunakan sebagaimana mestinya</h5>';
+
+      echo '<table  style="width: 100%; text-align:left; border-collapse:collapse; font-size:80%;">
+        <tr>
+          <td width="60%">Mengetahui</td>
+          <td>Jakarta, ..................................................</td>
+        </tr>
+        <tr>
+          <td>Pejabat Pembuat Komitmen</td>
+          <td>Yang Melaksanakan</td>
+        </tr>
+        <tr>
+          <td><br></br><br></br></td>
+          <td><br></br><br></br></td>
+        </tr>
+        <tr>
+          <td style="font-weight:bold">Ridwan</td>
+          <td>'.$penerima.'</td>
+        </tr>
+        
+        <tr>
+          <td>NIP. 1962121019920310011</td>
+          <td></td>
+        </tr>
+      </table>';
+      }
 
     }
 
@@ -1390,6 +1470,8 @@
            break;
         }
       }
+      $pph = (15 / 100) * $total;
+      $diterima = $total-$pph;  
         echo '  <p align="right">No '.$det['no_kw']."/".$det['kdgiat'].".".$det['kdoutput'].".".$det['kdsoutput'].".".$det['kdkmpnen']."/2016".'</p>'; 
         require __DIR__ . "/../utility/report/header_dikti.php";
         echo ' <p align="center" style="font-weight:bold; font-size:1.2em">KUITANSI</p>
@@ -1403,13 +1485,13 @@
                     <tr>
                         <td align="left">Jumlah Uang</td>
                         <td align="left" >: </td>
-                        <td style="background-color:gray" colspan="2">Rp. '.number_format($total,0,",",".").'</td>
+                        <td style="background-color:gray" colspan="2">Rp. '.number_format($diterima,0,",",".").'</td>
                         
                     </tr> 
                     <tr>
                         <td align="left">Uang Sebesar</td>
                         <td align="left">: </td>
-                        <td colspan="2">'.$this->terbilang($total,1).'</td>
+                        <td colspan="2">'.$this->terbilang($diterima,1).'</td>
                         
                     </tr>                
                     <tr>
@@ -1419,8 +1501,7 @@
                         <td></td>
                     </tr>'; 
          echo  '</table>';
-         $pph = (15 / 100) * $total;
-         $diterima = $total-$pph;      
+            
          echo  '<table style="width: 100%; font-size:0.7em;"  border="0">';
          if($item==""){                   
             foreach ($data as $value) {
@@ -1524,7 +1605,7 @@
                     </tr> 
                     <tr>
                         <td align="left" width="17%">NPWP</td>
-                        <td align="left">:'.$npwp.'</td>
+                        <td align="left">:'.$det[npwp].'</td>
                     </tr> 
                     <tr>
                         <td align="left" width="17%">Alamat</td>
@@ -1540,7 +1621,7 @@
                 <td width="25%">Pph yang dipotong</td>
               </tr>';
         $no=1;
-        $tot_pot=0;
+        $tot_pot=(15/100)*$val;
         foreach ($data as $value) {
           if($value[kdakun]==$kd_akun and $value[kdakun]!== "521213" and $value[kdakun]!== "522151"and $value[kdakun]!== "524114"and $value[kdakun]!== "524113"and $value[kdakun]!== "524119" ){
             $pot = (15/100)*$value[value];
@@ -1555,9 +1636,9 @@
           }
           }  
           echo '<tr>
-                  <td></td>
-                  <td></td>
-                  <td>JUMLAH</td>
+                  <td>1.'.$item.'</td>
+                  <td>'.$val.'</td>
+                  <td>15 %</td>
                   <td>'."Rp. ".number_format($tot_pot,0,",",".").'</td>
                 </tr>
               </table>';
