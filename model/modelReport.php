@@ -211,7 +211,7 @@
         }
       if($transport_lokal>0){
         $this->Kuitansi_Honorarium($result, $det_giat, "Transport Lokal ",$transport_lokal);
-        echo "transport";
+        echo '<pagebreak />';
         }
       if($dt_akun[0]!==""){
         $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[0]);
@@ -1188,7 +1188,29 @@
 
     //Rincian Biaya Perjalanan Dinas
     public function Rincian_Biaya_PD($data){
-      $jml=0;
+      $jml=0; 
+      $query = "SELECT kota_asal, kota_tujuan, tiket, airport_tax, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima, npwp FROM rabfull where rabview_id='$data'";
+      // print_r($query);
+      $result = $this->query($query);
+      $array = $this->fetch_array($result);
+      $asal=""; $tujuan=""; $alat_trans; $tiket=0; $airport_tax=0;
+      $taxi_asal=0; $taxi_tujuan=0; $jml_hari=1; $uang_harian=0;
+      $jml_uang_harian;
+      // print_r($result);
+      foreach ($result as $val) {
+        $alat_trans = $val[alat_trans];
+        $asal = $val[kota_asal];
+        $tujuan = $val[kota_tujuan];
+        if($val[tiket]>0) $tiket = $val[tiket];
+        if($val[airport_tax]>0) $airport_tax = $val[airport_tax];
+        if($val[taxi_asal]>0)   $taxi_asal = $val[taxi_asal];
+        if($val[taxi_tujuan]>0) $taxi_tujuan = $val[taxi_tujuan];
+        if($val[lama_hari]>0)   $jml_hari = $val[lama_hari];
+        if($val[uang_harian]>0) $uang_harian = $val[uang_harian];   
+               
+      }
+      $jml_uang_harian = $jml_hari * $uang_harian;
+      $total = $tiket + $airport_tax + $taxi_asal + $taxi_tujuan +$jml_uang_harian;
       require __DIR__ . "/../utility/report/header_dikti.php";
       echo '<p align="center" style="font-weight:bold; font-size:1.0em">RINCIAN BIAYA PERJALANAN DINAS</p>';
       echo '  <table style="width: 40%; font-size:80%; font-weight:bold;"  border="0">     
@@ -1204,30 +1226,88 @@
 
         </table>';    
 
-      echo '  <table cellpadding="8" style="width: 100%; text-align:center; border-collapse:collapse; font-size:80%;">     
+      echo '  <table cellpadding="8" style="width: 100%; border-collapse:collapse; font-size:80%;">     
         <tr>
-            <td width="9%" style="border:1px solid">NO</td>
-            <td style="border:1px solid">PERINCIAN BIAYA</td>
-            <td style="border:1px solid">JUMLAH Rp.</td>
-            <td style="border:1px solid">KETERANGAN</td>
+            <td width="9%" style="border:1px solid; text-align:center;">NO</td>
+            <td width="40%"  style="border:1px solid; text-align:center;">PERINCIAN BIAYA</td>
+            <td style="border:1px solid; text-align:center;">JUMLAH Rp.</td>
+            <td style="border:1px solid; text-align:center;">KETERANGAN</td>
         </tr>'; 
-        $no=1;
-        foreach ($data as $value) {
+       // $no=1; 
+       //  foreach ($data as $value) {
           
+          // echo '<tr>
+          //        <td style="border-left:1px solid; border-right:1px solid">'.$no++.'</td>
+          //        <td style="border-left:1px solid; border-right:1px solid" align="left">'.$value[NMITEM].'</td>
+          //        <td style="border-left:1px solid; border-right:1px solid">'.number_format($value[value],0,",",".").'</td>
+          //        <td style="border-left:1px solid; border-right:1px solid"></td>
+          //       </tr>';
+          //       $jml+=$value[value];
+          // }
           echo '<tr>
-                 <td style="border-left:1px solid; border-right:1px solid">'.$no++.'</td>
-                 <td style="border-left:1px solid; border-right:1px solid" align="left">'.$value[NMITEM].'</td>
-                 <td style="border-left:1px solid; border-right:1px solid">'.number_format($value[value],0,",",".").'</td>
-                 <td style="border-left:1px solid; border-right:1px solid"></td>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
+                  <td style="border-left:1px solid; border-right:1px solid;">Transport : </td>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
                 </tr>';
-                $jml+=$value[value];
+
+          echo '<tr>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.$asal." - ".$tujuan.'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($tiket,0,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
+                </tr>';
+          if($airport_tax>0){
+          echo '<tr>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'."Airport tax".'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($airport_tax).'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
+                </tr>';
           }
           echo '<tr>
-                  <td style="border-top:1px solid"></td>
-                  <td style="border-top:1px solid"></td>
-                  <td style="border-top:1px solid"></td>
-                  <td style="border-top:1px solid"></td>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'."Biaya Taxi dari / ke Bandara :  ".'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
                 </tr>';
+          echo '<tr>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.$asal." - Rp.".number_format($taxi_asal,0,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($taxi_asal,0,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
+                </tr>';
+          echo '<tr>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.$tujuan." - Rp.".number_format($taxi_tujuan,0,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($taxi_tujuan,0,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
+                </tr>';
+          echo '<tr>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'."Uang Harian :".'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
+                </tr>';
+
+          //Uang Harian
+          echo '<tr>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.$jml_hari." Hari X Rp. ".number_format($uang_harian,0,",",".")." = Rp.".$jml_uang_harian.'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($jml_uang_harian,0,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
+                </tr>';
+          echo '<tr>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'."Jumlah".'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">Rp. '.number_format($total,0,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;"></td>
+                </tr>';  
+                echo '<tr>
+                  <td style="border:1px solid; border-right:1px solid;"></td>
+                  <td colspan="2" style="border:1px solid; border-right:1px solid;">'.$this->terbilang($total,1).'</td>
+                  <td style="border:1px solid;"></td>
+                </tr>';                
 
       echo '</table>';
       echo '<table style="text-align: justify; width: 100%; font-size:84%; font-family:serif"  >
@@ -1244,9 +1324,9 @@
             <td>Telah menerima sejumlah uang sebesar</td>
           </tr>
           <tr>
-            <td>Rp. '.number_format($jml,0,",",".").'</td>
+            <td>Rp. '.number_format($total,0,",",".").'</td>
             <td width="23%"></td>
-            <td>Rp. '.number_format($jml,0,",",".").'</td>
+            <td>Rp. '.number_format($total,0,",",".").'</td>
           </tr>    
           <tr>
             <td>Bendahara Pengeluaran Pembantu</td>
@@ -1274,7 +1354,7 @@
     echo '  <table style="width: 60%; font-size:80%;"  border="0">               
                     <tr>
                         <td align="left">Ditetapkan Sejumlah</td>
-                        <td align="left">: Rp. '.number_format($jml,0,",",".").'</td>
+                        <td align="left">: Rp. '."..............................................".'</td>
                     </tr> 
                     <tr>
                         <td align="left">Yang telah dibayar semula</td>
