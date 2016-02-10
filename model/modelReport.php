@@ -20,8 +20,26 @@
     public function create_word($name, $size, $html){
         ob_end_clean();
         header("Content-type: application/vnd.ms-word");
-        header("Content-Disposition: attachment;Filename=document_name.doc");
+        header("Content-Disposition: attachment;Filename=".$name.".doc");
+        echo '<html>';
+        echo '<head>';
+        echo '<style type="text/css">
+                @page  
+                { 
+                  size: A4;
+                  margin: 0mm 0mm 0mm 0mm;  
+                } 
+                body,  p.MsoNormal, li.MsoNormal, div.MsoNormal {
+                margin: 0mm 0mm 0mm 0mm;
+                margin-bottom:.0001pt;
+                font-size:9.0pt;     
+                }
+                </style>';
+        echo '<body>';
         echo $html;
+        echo '</body>';
+        echo '<head>';
+        echo '<html>';
     }
 
     public function cetak_dok($id,$nama,$format){
@@ -230,11 +248,11 @@
         echo '<pagebreak />';
       }
       if($dinas==1){
-        $this->SPPD($data);
+         $this->SPPD($rabv_id, $npwp);
          echo '<pagebreak />';
-        $this->Rincian_Biaya_PD($data);
+        $this->Rincian_Biaya_PD($rabv_id, $npwp);
          echo '<pagebreak />';
-        $this->daftar_peng_riil($data);
+        $this->daftar_peng_riil($rabv_id, $npwp);
       }
         // echo "<br>Item Terpilih : ".$item."<br> Honorarium : ".$honor."<br> Uang saku : ".$uang_saku_dalam."Transport Lokal  : ".$transport_lokal;
         
@@ -1124,7 +1142,12 @@
     }
 
     //SPPD SURAT PERINTAH PERJALANAN DINAS
-    public function SPPD($data){
+    public function SPPD($rabv_id, $npwp){
+      $query = "SELECT kota_asal, golongan, tingkat_jalan,  jabatan, kota_tujuan,alat_trans, lama_hari, tgl_mulai, tgl_akhir, uang_harian, penerima FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
+      $data = $this->query($query);
+      $golongan=null;
+      $jabatan=null;
+      $tingkat_jalan=null;
       $transportasi=null;
       $kota_asal=null;
       $kota_tujuan=null;
@@ -1134,7 +1157,10 @@
       $penerima=nul;
 
       foreach ($data as $value) {
-        if($value[alat_trans]!=''){ $transportasi = $value[alat_trans]; }
+        if($value[golongan]!=""){ $golongan = $value[golongan]; }
+        if($value[jabatan]!=""){ $jabatan = $value[jabatan]; }
+        if($value[tingkat_jalan]!=""){ $tingkat_jalan = $value[tingkat_jalan]; }
+        if($value[alat_trans]!=""){ $transportasi = $value[alat_trans]; }
         if($value[kota_asal]!="") $kota_asal= $value[kota_asal];
         if($value[kota_tujuan]!="") $kota_tujuan = $value[kota_tujuan];
         if($value[lama_hari]!="") $lama_hari = $value[lama_hari];
@@ -1179,7 +1205,9 @@
                           <p> b.  Jabatan/Instansi</p>
                           <p> c.  Tingkat menurut peraturan perjalanan dinas</p>
                         </td>
-                        <td colspan="2">Ada di RAB</td>
+                        <td colspan="2"><p>'.$golongan.'</p>
+                                        <p>'.$jabatan.'</p>
+                                        <p>'.$tingkat_jalan.'</p></td>
                     </tr>
                     <tr>
                       <td>4</td>
@@ -1277,9 +1305,9 @@
     }
 
     //Rincian Biaya Perjalanan Dinas
-    public function Rincian_Biaya_PD($data){
+    public function Rincian_Biaya_PD($rabv_id, $npwp){
       $jml=0; 
-      $query = "SELECT kota_asal, kota_tujuan, tiket, airport_tax, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima, npwp FROM rabfull where rabview_id='$data'";
+      $query = "SELECT kota_asal, kota_tujuan, tiket, airport_tax, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima, npwp FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
       // print_r($query);
       $result = $this->query($query);
       $array = $this->fetch_array($result);
@@ -1288,9 +1316,9 @@
       $jml_uang_harian;
       // print_r($result);
       foreach ($result as $val) {
-        $alat_trans = $val[alat_trans];
-        $asal = $val[kota_asal];
-        $tujuan = $val[kota_tujuan];
+        if($val[alat_trans]!="") $alat_trans = $val[alat_trans];
+        if($val[kota_asal]!="") $asal = $val[kota_asal];
+        if($val[kota_tujuan]!="") $tujuan = $val[kota_tujuan];
         if($val[tiket]>0) $tiket = $val[tiket];
         if($val[airport_tax]>0) $airport_tax = $val[airport_tax];
         if($val[taxi_asal]>0)   $taxi_asal = $val[taxi_asal];
