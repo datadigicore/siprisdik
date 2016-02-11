@@ -98,6 +98,21 @@
       return $data;
     }
 
+    public function getakunrkakl51($prog, $output, $soutput, $komp, $skomp, $th, $dr) {
+      $query  = "SELECT KDAKUN, NMAKUN FROM rkakl_full as r 
+                  where kdprogram='$prog' and kdoutput='$output' and kdsoutput='$soutput' and kdkmpnen='$komp' and kdskmpnen='$skomp' and thang='$th' and kdgiat='$dr' 
+                  AND kdakun like '51%'
+                  group by r.KDSKMPNEN";
+      $result = $this->query($query);
+      $i=0;
+      while($fetch  = $this->fetch_object($result)) {
+        $data['KDAKUN'][$i] = $fetch->KDAKUN;
+        $data['NMAKUN'][$i] = $fetch->NMAKUN;
+        $i++;
+      }
+      return $data;
+    }
+
     public function getnpwp(){
       $query = "SELECT npwp FROM rabfull group by npwp";
       $result = $this->query($query);
@@ -134,6 +149,38 @@
         tanggal     = '$tgl',
         lokasi      = '$lokasi',
         status      = '0'
+      ";
+      $result = $this->query($query);
+      return $result;
+    }
+
+    public function save51($data){
+      $direktorat = $data['direktorat'];
+      $tahun = $data['tahun'];
+      $prog = $data['prog'];
+      $output = $data['output'];
+      $soutput = $data['soutput'];
+      $komp = $data['komp'];
+      $skomp = $data['skomp'];
+      $akun = $data['akun'];
+      $deskripsi = $data['deskripsi'];
+      $value = $data['jumlah'];
+      $t = explode("/", $data['tanggal']);
+      $tgl=$t[2].'-'.$t[1].'-'.$t[0];
+
+      $query      = "INSERT INTO rabfull SET
+        thang       = '$tahun',
+        kdprogram   = '$prog',
+        kdgiat      = '$direktorat',
+        kdoutput    = '$output',
+        kdsoutput   = '$soutput',
+        kdkmpnen    = '$komp',
+        kdskmpnen    = '$skomp',
+        kdakun    = '$akun',
+        deskripsi   = '$deskripsi',
+        tanggal     = '$tgl',
+        value     = '$value',
+        status      = '1'
       ";
       $result = $this->query($query);
       return $result;
