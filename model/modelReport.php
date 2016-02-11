@@ -21,27 +21,33 @@
         ob_end_clean();
         header("Content-type: application/vnd.ms-word");
         header("Content-Disposition: attachment;Filename=".$name.".doc");
-        echo '<html>';
+        echo '<html xmlns:o="urn:schemas-microsoft-com:office:office"
+                xmlns:w="urn:schemas-microsoft-com:office:word"
+                xmlns="http://www.w3.org/TR/REC-html40">';
         echo '<head>';
-        echo '<style type="text/css">
-                @page  
+        echo '<style >
+                @page Section1
                 { 
-                  size: A4;
-                  margin: 0mm 0mm 0mm 0mm;  
+                   mso-header-margin:.25in;
+                  margin: 0.20in 0.20in 0.20in 0.20in; 
                 } 
+                 div.Section1
+                  {page:Section1;}
                 body,  p.MsoNormal, li.MsoNormal, div.MsoNormal {
                 margin: 0mm 0mm 0mm 0mm;
                 margin-bottom:.0001pt;
-                font-size:9.0pt;     
+                font-size:12.0pt;     
                 }
                 </style>';
-        echo '<body>';
+        echo '<body>
+               <div class="Section1"> ';
         echo $html;
-        echo '</body>';
+        echo '</div>
+        </body>';
         echo '<head>';
         echo '<html>';
     }
-    public function log_kwitansi($res){
+    public function log_kwitansi($res, $kode_akun,$id){
       $rabv_id = $res[rabview_id];
       $kdgiat = $res[kdgiat];
       $kdprogram = $res[kdprogram];
@@ -49,8 +55,16 @@
       $kdsoutput = $res[kdsoutput];
       $kdkmpnen = $res[kdkmpnen];
       $kdskmpnen = $res[kdskmpnen];
-      $kdakun= $res[kdskmpnen];
       $npwp= $res[npwp];
+      $condition;
+
+      if(substr($kode, 0,2)=="51"){
+        $condition=" and id='$id' ";
+      }
+      else{
+        $condition="and rabview_id='$rabv_id' and npwp='$npwp' and kdakun='$kode_akun'";
+      }
+
       $sql_org = "SELECT no_kuitansi from kuitansi 
                   where kdgiat = '$kdgiat' 
                     and kdprogram='$kdprogram' 
@@ -58,7 +72,7 @@
                     and kdsoutput = '$kdsoutput'
                     and kdkmpnen = '$kdkmpnen'
                     and kdskmpnen = '$kdskmpnen'
-                    and npwp = '$npwp'  ";
+                    and npwp = '$npwp' and kdakun='$kode_akun' ";
       $sql_org2 = "SELECT no_kuitansi_update from kuitansi
                   where kdgiat = '$kdgiat' 
                     and kdprogram='$kdprogram' 
@@ -94,12 +108,12 @@
         $no_kw = 1;
         $no_kw_up = 1;
           // Masukkin data baru degan no_kuitansi = 1
-          $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' ");
+          $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' and kdakun='$kode_akun' ");
           $this->query("INSERT into kuitansi(no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
                         select
                           no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
-                        from rabfull where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and npwp='$npwp' ");
-          $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and no_kuitansi_update is null and npwp='$npwp' ");
+                        from rabfull where no_kuitansi='$no_kw' ".$condition." ");
+          $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw' and no_kuitansi_update is null ".$condition." ");
 
       }
       else {
@@ -108,12 +122,12 @@
           $no_kw++;
           $no_kw_up+=1;
           // Masukkin data baru degan no_kuitansi = 1++
-          $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' ");
+          $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' and kdakun='$kode_akun' ");
           $this->query("INSERT into kuitansi(no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
                         select
                           no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
-                        from rabfull where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and npwp='$npwp' ");
-          $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw' and rabview_id='$rabv_id' and no_kuitansi_update is null and npwp='$npwp' ");
+                        from rabfull where no_kuitansi='$no_kw' ".$condition." ");
+          $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw' and no_kuitansi_update is null ".$condition." ");
 
         }
         else{
@@ -125,8 +139,8 @@
           $this->query("INSERT into kuitansi(no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
                         select
                           no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
-                        from rabfull where no_kuitansi='$no_kw_org' and rabview_id='$rabv_id' and npwp='$npwp' ");
-          $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw_org' and rabview_id='$rabv_id' and no_kuitansi_update is null and npwp='$npwp' ");
+                        from rabfull where no_kuitansi='$no_kw_org' ".$condition." ");
+          $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw_org' and no_kuitansi_update is null  ".$condition." ");
 
         }
       }
@@ -166,7 +180,7 @@
       // echo "Nama : ".$nama."RABV ID ".$rabv_id." KD PROGRAM : ".$kdgiat." ".$kdprogram." ".$kdoutput." ".$kdsoutput." ".$kdkmpnen;
       
       // { PENGUJIAN KONDISI YANG LAMA }
-      $this->log_kwitansi($det_giat);
+      // $this->log_kwitansi($det_giat);
       $dinas = 0;
       $lokal = 0;
       $dt_akun = array();
@@ -297,22 +311,27 @@
           echo '<pagebreak />';
       }
       if($uang_saku_dalam>0){
+          $this->log_kwitansi($det_giat,"524113");
           $this->Kuitansi_Honorarium($result, $det_giat, "Uang Saku",$uang_saku_dalam);
           echo '<pagebreak />';
       }
 
       if($transport_lokal>0){
+        $this->log_kwitansi($det_giat,"524113");
         $this->Kuitansi_Honorarium($result, $det_giat, "Transport Lokal",$transport_lokal);
         echo '<pagebreak />';
       }
 
       if(count($dt_akun)==1){
+        $this->log_kwitansi($det_giat, $dt_akun[0],$id);
         $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[0]);
         echo '<pagebreak />';
       }
       if(count($dt_akun)>1){
+        $this->log_kwitansi($det_giat, $dt_akun[0],$id);
         $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[0]);
         echo '<pagebreak />';
+        $this->log_kwitansi($det_giat, $dt_akun[1]);
         $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[1]);
         echo '<pagebreak />';
         
