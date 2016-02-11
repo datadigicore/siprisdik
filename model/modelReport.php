@@ -41,12 +41,9 @@
         echo '<head>';
         echo '<html>';
     }
-
-    public function cetak_dok($id,$nama,$format){
-      $result = $this->query("SELECT rabview_id, npwp, kdgiat, kdprogram, kdoutput, kdsoutput, kdkmpnen, kdskmpnen from rabfull where id='$id' ");
-      $res = $this->fetch_array($result);
+    public function log_kwitansi($res){
       $rabv_id = $res[rabview_id];
-      // echo $rabv_id;
+      $kdgiat = $res[kdgiat];
       $kdprogram = $res[kdprogram];
       $kdoutput = $res[kdoutput];
       $kdsoutput = $res[kdsoutput];
@@ -54,7 +51,6 @@
       $kdskmpnen = $res[kdskmpnen];
       $kdakun= $res[kdskmpnen];
       $npwp= $res[npwp];
-      // echo "Npwp : ".$npwp;
       $sql_org = "SELECT no_kuitansi from kuitansi 
                   where kdgiat = '$kdgiat' 
                     and kdprogram='$kdprogram' 
@@ -134,25 +130,8 @@
 
         }
       }
-      $det_giat = array('kdgiat'    => $res[kdgiat],
-                         'kdprogram' => $res[kdprogram],
-                          'kdoutput'  => $res[kdoutput],
-                          'kdsoutput' => $res[kdsoutput],
-                          'kdkmpnen'  => $res[kdkmpnen],
-                          'kdskmpnen' => $res[kdskmpnen],
-                          'no_kw'     => $no_kw,
-                          'npwp'      => $res[npwp] );
-
-      // { PENGUJIAN VARIABEL }
-      // echo ' No Kwitansi : '.$no_kw." No Kw Update : ".$no_kw_up;
-      // $deskripsi = $res[deskripsi];
-      // $tanggal = $res[tanggal];
-      // $lokasi = $res[lokasi];
-      // $uang_muka = $res[uang_muka];
-      // echo "Nama : ".$nama."RABV ID ".$rabv_id." KD PROGRAM : ".$kdgiat." ".$kdprogram." ".$kdoutput." ".$kdsoutput." ".$kdkmpnen;
-      
-      // { PENGUJIAN KONDISI YANG LAMA }
-
+    }
+    public function cetak_dok($id,$nama,$format){
       $dinas = 0;
       $lokal = 0;
       $dt_akun = array();
@@ -164,18 +143,85 @@
       $honor = 0;
       $transport_lokal = 0;
       $item = "";
+      
+      $result = $this->query("SELECT rabview_id, npwp, kdgiat, kdprogram, kdoutput, kdsoutput, kdkmpnen, kdskmpnen from rabfull where id='$id' ");
+      $res = $this->fetch_array($result);
+      $rabv_id = $res[rabview_id];
+      // echo $rabv_id;
+      $kdgiat = $res[kdgiat];
+      $kdprogram = $res[kdprogram];
+      $kdoutput = $res[kdoutput];
+      $kdsoutput = $res[kdsoutput];
+      $kdkmpnen = $res[kdkmpnen];
+      $kdskmpnen = $res[kdskmpnen];
+      $kdakun= $res[kdskmpnen];
+      $npwp= $res[npwp];
+
+      $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$kdgiat' ");
+      $arr_pb = $this->fetch_array($result_pb);
+      $bpp = $arr_pb[bpp];
+      $nip_bpp = $arr_pb[nip_bpp];
+      $ppk = $arr_pb[ppk];
+      $nip_ppk = $arr_pb[nip_ppk];
+
+
       $sql2 = $this->query("SELECT NMGIAT, NMOUTPUT, NMKMPNEN, NmSkmpnen, NMITEM FROM rkakl_full where KDPROGRAM = '$kdprogram' and KDOUTPUT='$kdoutput' and KDSOUTPUT='$kdsoutput' and KDKMPNEN = '$kdkmpnen' and KDSKMPNEN = '$kdskmpnen' ; ");
       $detil_prog = $this->fetch_array($sql2);
       // print_r($detil_prog);
       mysql_free_result($result);
-      // $result = $this->query("SELECT rab.alat_trans, rab.kota_asal, rab.kota_tujuan, rab.lama_hari, rab.tgl_mulai, rab.tgl_akhir, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rab.rabview_id='$rabv_id' and rab.npwp='$npwp' order by rab.kdakun asc ");
-      $result = $this->query("SELECT rab.tgl_mulai, rab.tgl_akhir, rab.rabview_id, rab.penerima, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rab.rabview_id='$rabv_id' and rab.npwp='$npwp' order by rab.kdakun asc ");
-      // while($res=$this->fetch_array($result)){
-      //   if($res[kdakun]=="524119" || $res[kdakun]=="524114"  || $res[kdakun]=="524113" || $res[kdakun]=="524219")   $dinas=1;
-      //   if($res[kdakun]=="524114"  || $res[kdakun]=="524113")   $lokal=1;
-      // }
+      
+      $result = $this->query("SELECT rab.penerima, rab.jabatan, rab.pns, rab.golongan, rab.kdakun, rkkl.NMGIAT, rab.value, rab.pajak, rab.ppn, rab.pph, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rab.rabview_id='$rabv_id' and rab.npwp='$npwp' order by rab.kdakun asc ");
+
       $counter="";
-      ob_start();
+      
+      // echo "Npwp : ".$npwp;
+      if ($golongan == 4) {
+        $pajak = '15';
+      }
+      elseif ($golongan == 3) {
+        $pajak = '5';
+      }
+      elseif ($golongan == 2) {
+        if ($pns == 1) {
+          $pajak = '0';
+        }
+        else{
+          if ($npwp != "") {
+            $pajak = '5';
+          }
+          else{
+            $pajak = '6';
+          }
+        }
+      }
+      else{
+        $pajak = '0';
+      }
+      $det_giat = array('kdgiat'    => $res[kdgiat],
+                         'kdprogram' => $res[kdprogram],
+                          'kdoutput'  => $res[kdoutput],
+                          'kdsoutput' => $res[kdsoutput],
+                          'kdkmpnen'  => $res[kdkmpnen],
+                          'kdskmpnen' => $res[kdskmpnen],
+                          'no_kw'     => $no_kw,
+                          'bpp'       => $bpp,
+                          'nip_bpp'   => $nip_bpp,
+                          'ppk'       => $ppk,
+                          'nip_ppk'   => $nip_ppk,
+                          'rabview_id'   => $rabv_id,
+                          'npwp'      => $res[npwp] );
+
+      // { PENGUJIAN VARIABEL }
+      // echo ' No Kwitansi : '.$no_kw." No Kw Update : ".$no_kw_up;
+      // $deskripsi = $res[deskripsi];
+      // $tanggal = $res[tanggal];
+      // $lokasi = $res[lokasi];
+      // $uang_muka = $res[uang_muka];
+      // echo "Nama : ".$nama."RABV ID ".$rabv_id." KD PROGRAM : ".$kdgiat." ".$kdprogram." ".$kdoutput." ".$kdsoutput." ".$kdkmpnen;
+      
+      // { PENGUJIAN KONDISI YANG LAMA }
+      $this->log_kwitansi($det_giat);
+      
       while($res=$this->fetch_array($result)){
         // echo "<br>".$res[NMITEM]."<br>";
         if($res[kdakun]=="521213"){
@@ -216,8 +262,6 @@
           $dinas=1;
         }
         else{
-             // $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$res[kdakun]);
-             //  echo '<pagebreak />';
           if($counter!==$res[kdakun]){
             array_push($dt_akun, $res[kdakun]);
             $counter=$res[kdakun];
@@ -227,6 +271,8 @@
        
       }
       // print_r($dt_akun);
+
+      ob_start();
       if($honor>0){
           $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "Honorarium",$honor);
           echo '<pagebreak />';
@@ -234,29 +280,34 @@
       if($uang_saku_dalam>0){
           $this->Kuitansi_Honorarium($result, $det_giat, "Uang Saku",$uang_saku_dalam);
           echo '<pagebreak />';
-        }
+      }
+
       if($transport_lokal>0){
         $this->Kuitansi_Honorarium($result, $det_giat, "Transport Lokal",$transport_lokal);
         echo '<pagebreak />';
-        }
-      if($dt_akun[0]!==""){
+      }
+
+      if(count($dt_akun)==1){
         $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[0]);
         echo '<pagebreak />';
       }
-      if($dt_akun[1]!==""){
+      if(count($dt_akun)>1){
+        $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[0]);
+        echo '<pagebreak />';
         $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[1]);
         echo '<pagebreak />';
+        
       }
       if($dinas==1){
         $query = "SELECT golongan, tingkat_jalan,  jabatan, kota_asal, kota_tujuan, harga_tiket, airport_tax, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
-        print_r($query);
+        // print_r($query);
         $result = $this->query($query);
-        $array = $this->fetch_array($result);
-        $this->SPPD($result);
+        $array = $this->fetch_array($result, $det_giat);
+        $this->SPPD($result, $det_giat);
          echo '<pagebreak />';
-        $this->Rincian_Biaya_PD($result);
+        $this->Rincian_Biaya_PD($result, $det_giat);
          echo '<pagebreak />';
-        $this->daftar_peng_riil($result);
+        $this->daftar_peng_riil($result, $det_giat);
       }
         // echo "<br>Item Terpilih : ".$item."<br> Honorarium : ".$honor."<br> Uang saku : ".$uang_saku_dalam."Transport Lokal  : ".$transport_lokal;
         
@@ -970,17 +1021,31 @@
 
     }
     //Kuitansi Honorarium
-    public function Kuitansi_Honorarium($data, $det, $item, $val){
-      $total=$val;
+    public function Kuitansi_Honorarium($data,$det,$item,$val,$kd_akun){
+      $penerima;
+      $jabatan;
+      $total=0;
+
       if($item==""){
         foreach ($data as $value) {
-           $total += $value[value];
-           $penerima = $value[penerima];
+          if($value[kdakun]==$kd_akun and $value[kdakun]!== "521213" and $value[kdakun]!== "522151"and $value[kdakun]!== "524114"and $value[kdakun]!== "524113"and $value[kdakun]!== "524119" ){
+             $total += $value[value];
+             $penerima = $value[penerima];
+             $npwp = $value[npwp];
+          }
         }
+      }
+      else{
+        foreach ($data as $value) {
+           $penerima = $value[penerima];
+           $jabatan = $value[jabatan];
+           break;
+        }
+        $total=$val;
       }
       echo '  <p align="right">No '.$det['no_kw']."/".$det['kdgiat'].".".$det['kdoutput'].".".$det['kdsoutput'].".".$det['kdkmpnen']."/2016".'</p>'; 
       require __DIR__ . "/../utility/report/header_dikti.php";
-      echo '  <p align="center">KUITANSI</p>
+      echo '  <p align="center" style="text-decoration:underline;">KUITANSI</p>
                     <table style="width: 100%; font-size:80%; border-collapse: collapse;"  border="0">               
                     <tr>
                         <td align="left">Sudah Terima Dari </td>
@@ -991,7 +1056,7 @@
                     <tr>
                         <td align="left">Jumlah Uang</td>
                         <td align="left">: </td>
-                        <td align="left" style="background-color:gray; font-size:1.2em;"><b>Rp. '.number_format($total,0,",",".").'</b></td>
+                        <td align="left" style="font-size:1.3em;"><b>Rp. '.number_format($total,0,",",".").'</b></td>
                     </tr> 
                     <tr>
                         <td align="left">Uang Sebesar</td>
@@ -1057,64 +1122,78 @@
                 <td><br></br> <br></br> <br></br></td>
               </tr>
               <tr>
-                <td>'.'..................................'.'</td>
-                <td>'.'..................................'.'</td>
+                <td>'.$det['ppk'].'</td>
+                <td>'.$det['bpp'].'</td>
                 <td>'.$penerima.'</td>
               </tr>              
 
               <tr>
-                <td>NIP'.'..........................'.'</td>
-                <td>NIP'." ".'..........................'.'</td>
+                <td>NIP '.$det['nip_ppk'].'</td>
+                <td>NIP '.$det['nip_bpp'].'</td>
                 <td></td>
               </tr>
+              <tr>
+                <td style="border-bottom:2px dashed;" colspan="3"><br></br></td>
               </table>';
 
       if($item=="Transport Lokal"){
-        echo "---------------------------------------------------------------------------------------------------------------------------------------";
+      require __DIR__ . "/../utility/report/header_dikti.php";  
         echo '<table border=0 style="width: 100%; text-align:left; border-collapse:collapse; font-size:85%;">
-        <tr>
-          <td style="border-top:0px solid; border-left:0px solid; border-right:0px solid; font-weight:bold;" align="center" colspan="3"> DAFTAR PENGELUARAN RIIL </td>
-        </tr>
-        <tr>
-          <td style="border-top:0px solid; border-left:0px solid; border-right:0px solid;" colspan="3"><br>Yang bertanda tangan dibawah ini :</br></td>
-        </tr>
-        <tr>
-          <td width="20%">Nama</td>
-          <td width="2%">:</td>
-          <td>'.$penerima.'</td>
-        </tr>
-        <tr>
-          <td>Jabatan</td>
-          <td>:</td>
-          <td>'.$jabatan.'</td>
-        </tr>
-      </table>';
-
-      echo '<table border=0 style="width: 100%; text-align:left; border-collapse:collapse; font-size:80%;">
-        <tr>
-          <td>Berdasarkan Surat Perjalanan Dinas (SPD) Tanggal ........................... Nomor: ...................................., dengan ini saya menyatakan dengan sesungguhnya bahwa:</td>
-        </tr>
-      </table>';
-      echo '<table style="width: 100%; text-align:left; border-collapse:collapse; font-size:80%;">
               <tr>
-                <td width="3%">1.</td>
-                <td colspan="2">Biaya Transport dan pengeluaran yang tidak dapat diperoleh bukti-bukti pengeluarannya, meliputi : </td>
-              </tr>';
-        // foreach ($data as $value) {
-          
-        //   echo '<tr>
-        //           <td></td>
-        //           <td width="35%">- '.$value[NMITEM].'</td>
-        //           <td>'." : Rp. ".number_format($value[value],0,",",".").'</td>
-        //         </tr>';
-        //   }
-      echo '<tr>
-              <td>2</td>
-              <td colspan="2">Jumlah Uang tersebut pada lembar Uraian diatas benar-benar dikeluarkan untuk pelaksanaan Perjalanan dinas dimaksud dan apabilah dikemudian hari terdapat kelebihan atas pembayaran, kami bersedia menyetorkan kelebihan tersebut ke kas Negara</td>
-            </tr>';
+                <td style=" font-weight:bold;" align="center" colspan="3"> DAFTAR PENGELUARAN RIIL </td>
+              </tr>
+              <tr>
+                <td style="" colspan="3"><br>Yang bertanda tangan dibawah ini :</br></td>
+              </tr>
+              <tr>
+                <td width="20%">Nama</td>
+                <td width="2%">:</td>
+                <td>'.$penerima.'</td>
+              </tr>
+              <tr>
+                <td>Jabatan</td>
+                <td>:</td>
+                <td>'.$jabatan.'</td>
+              </tr>
+            </table>';
+        
+        echo '<table border=0 style="width: 100%; text-align:left; border-collapse:collapse; font-size:0.9em;">
+                <tr>
+                  <td>Berdasarkan Surat Perjalanan Dinas (SPD) Tanggal ........................... Nomor: ...................................., dengan ini saya menyatakan dengan sesungguhnya bahwa:</td>
+                </tr>
+              </table>';
+        
+        echo '<table style="width: 100%; text-align:left; border-collapse:collapse; font-size:0.9em;">
+                <tr>
+                  <td width="3%">1.</td>
+                  <td colspan="2">Biaya Transport dan pengeluaran yang tidak dapat diperoleh bukti-bukti pengeluarannya, meliputi : </td>
+                </tr>
+              </table>';
 
+        echo '<table cellpadding="2" style="width: 100%; text-align:left; border-collapse:collapse; font-size:0.9em;">
+                <tr>
+                      <td width="2%"></td>
+                      <td width="4%" style="border:1px solid; font-weight:bold; text-align:center; ">No</td>
+                      <td style="border:1px solid; font-weight:bold; text-align:center;">Uraian</td>
+                      <td colspan="2" width="22%" style="border:1px solid; font-weight:bold; text-align:center;">Jumlah</td>
+                </tr>
+                <tr>
+                      <td width="2%"></td>
+                      <td width="4%" style="border-left:1px solid;">1</td>
+                      <td style="border-left:1px solid;">Transport Lokal</td>
+                      <td  width="5%" style="border-left:1px solid;  solid;">Rp.</td>
+                      <td  width="17%" style="border-right:1px solid; text-align:right;">'.number_format($total,0,",",".").'</td>
+                </tr>';
 
-      echo  '</table>
+        echo    '<tr>
+                    <td style=""> <br></br><br></br> </td>
+                    <td style="border-top:1px solid;" colspan="4"> <br></br><br></br> </td>
+                </tr>
+                <tr>
+                    <td>2.</td>
+                    <td colspan="4">Jumlah uang tersebut pada angka 1 di atas benar-benar dikeluarkan untuk pelaksanaan Perjalanan Dinas dimaksud dan apabila di kemudian hari terdapat kelebihan atas pembayaran, saya bersedia untuk menyetorkan kelebihan tersebut ke Kas Negara.</td>
+                </tr>     ';
+        echo  '</table>
 
       <h5>Demikian pernyataan ini dibuat untuk dipergunakan sebagaimana mestinya</h5>';
 
@@ -1128,16 +1207,15 @@
           <td>Yang Melaksanakan</td>
         </tr>
         <tr>
-          <td><br></br><br></br></td>
-          <td><br></br><br></br></td>
+          <td colspan="2"><br></br><br></br><br></br> <br></br></td>
         </tr>
         <tr>
-          <td style="font-weight:bold">Ridwan</td>
-          <td>'.$penerima.'</td>
+          <td style="font-weight:bold">'.$det['ppk'].'</td>
+          <td>( '.$penerima.' )</td>
         </tr>
         
         <tr>
-          <td>NIP. 1962121019920310011</td>
+          <td>NIP. '.$det['nip_ppk'].'</td>
           <td></td>
         </tr>
       </table>';
@@ -1495,7 +1573,7 @@
     //Kuitansi Honor Dan Uang Saku
     public function Kuitansi_Honor_Uang_Saku($data,$det,$item,$val,$kd_akun) {
       $penerima;
-      $total=$val;
+      $total=0;
 
       if($item==""){
         foreach ($data as $value) {
@@ -1511,6 +1589,7 @@
            $penerima = $value[penerima];
            break;
         }
+        $total=$val;
       }
       $pph = (15 / 100) * $total;
       $diterima = $total-$pph;  
@@ -1533,7 +1612,7 @@
                     <tr>
                         <td align="left">Uang Sebesar</td>
                         <td align="left">: </td>
-                        <td colspan="2">'.$this->terbilang($diterima,1).'</td>
+                        <td colspan="2">'.$this->terbilang($total,1).'</td>
                         
                     </tr>                
                     <tr>
@@ -1562,7 +1641,7 @@
                       <td width="21%"></td>
                       <td width="40%">'.$item.'</td>
                       <td> : Rp. </td>
-                      <td align="right">'."".number_format($val,0,",",".").'</td>
+                      <td align="right">'."".number_format($total,0,",",".").'</td>
                     </tr>';
 
           }
@@ -1604,13 +1683,13 @@
                 <td colspan="3"><br></br> <br></br> <br></br></td>
               </tr>
               <tr>
-                <td style="text-align: center;">'.'Ridwan'.'</td>
-                <td style="text-align: center;">'.'Evi Nursanti'.'</td>
+                <td style="text-align: center;">'.$det['ppk'].'</td>
+                <td style="text-align: center;">'.$det['bpp'].'</td>
                 <td style="text-align: center;">'.'('.$penerima.')'.'</td>
               </tr>              
               <tr>
-                <td style="text-align: center;">NIP'.'196212101992031001'.'</td>
-                <td style="text-align: center;">NIP'." ".'196203051986022001'.'</td>
+                <td style="text-align: center;">NIP'.$det['nip_ppk'].'</td>
+                <td style="text-align: center;">NIP'.$det['nip_bpp'].'</td>
                 <td style="text-align: center;"></td>
               </tr>
               </table>';
@@ -1650,10 +1729,10 @@
                   <br></br>';
         echo '<table style="text-align: left; width: 100%; font-size:0.7em;"  >
               <tr>
-                <td width="25%"> Penghasilan </td>
-                <td width="25%">Jumlah</td>
-                <td width="25%">Tarif</td>
-                <td width="25%">Pph yang dipotong</td>
+                <td > Penghasilan </td>
+                <td width="20%">Jumlah</td>
+                <td width="20%">Tarif</td>
+                <td width="20%">Pph yang dipotong</td>
               </tr>';
         $no=1;
         $tot_pot=(15/100)*$val;
@@ -1661,23 +1740,26 @@
           if($value[kdakun]==$kd_akun and $value[kdakun]!== "521213" and $value[kdakun]!== "522151"and $value[kdakun]!== "524114"and $value[kdakun]!== "524113"and $value[kdakun]!== "524119" ){
             $pot = (15/100)*$value[value];
             $tot_pot +=$pot;
+            $det_item=explode("[",$value[NMITEM] );
             echo '<tr>
-                    <td>'.$no.". ".$value[NMITEM].'</td>
+                    <td>'.$no.". ".$det_item[0].'</td>
                     <td>Rp. '.number_format($value[value],0,",",".").'</td>
                     <td>15%</td>
                     <td>'."Rp. ".number_format($pot,0,",",".").'</td>
                   </tr>';
             $no++;
           }
-          }  
-          echo '<tr>
-                  <td>1.'.$item.'</td>
-                  <td>'.$val.'</td>
-                  <td>15 %</td>
-                  <td>'."Rp. ".number_format($tot_pot,0,",",".").'</td>
-                </tr>
-              </table>';
-
+          }
+          if($item!==""){  
+            echo '<tr>
+                    <td>1.'.$item.'</td>
+                    <td>Rp. '.number_format($val,0,",",".").'</td>
+                    <td>15 %</td>
+                    <td>'."Rp. ".number_format($pph,0,",",".").'</td>
+                  </tr>
+                ';
+          }
+          echo '</table>';
          echo '<table style="text-align: left; width: 100%; font-size:0.7em;"  >
               <tr>
 
@@ -1688,7 +1770,7 @@
 
               <tr>
 
-                <td style="text-align center;"></td>
+                <td style="text-align center;">Perhatian : </td>
                 <td style="text-align: center;"></td>
                 <td style="text-align: center; font-size:0.7em;">Pemotong Pajak :</td>
               </tr>
@@ -1698,16 +1780,20 @@
                 <td style="text-align: center;"></td>
                 <td width="27%" style="text-align: center; font-size:0.7em;">Nama  : Bendahara Pengeluaran Direktorat Jenderal Kelembagaann IPTEK dan DIKTI</td>
               </tr>
-              <tr>
 
+              <tr>
                 <td style="text-align center;"></td>
                 <td style="text-align: center;"></td>
                 <td width="27%" style="text-align: center; font-size:0.7em;">NPWP : 00.493.675.3-077.000</td>
               </tr>
-              <br></br>
-              <br></br>
-              <br></br>
-              <br></br>
+              <tr>
+                <td>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                </td>
+              </tr>
               <tr >
 
                 <td style="text-align center;"></td>
