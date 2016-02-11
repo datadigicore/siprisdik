@@ -31,8 +31,8 @@ switch ($process) {
           return  '<div class="text-center btn-group-vertical">'.
                     '<a style="margin:0 2px;" href="#" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i> View Transaksi</a>'.
                     '<a style="margin:0 2px;" href="#" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i> Edit Transaksi</a>'.
-                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."pdf".'" class="btn btn-flat btn-danger btn-sm"><i class="fa fa-file"></i>&nbsp; Cetak Kuitansi (PDF)</a>'.
-                     '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."word".'" class="btn btn-flat btn-info btn-sm"><i class="fa fa-file"></i>&nbsp; Cetak Kuitansi (Word)</a>';
+                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-"."51"."-"."pdf".'" class="btn btn-flat btn-danger btn-sm"><i class="fa fa-file"></i>&nbsp; Cetak Kuitansi (PDF)</a>'.
+                     '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-"."51"."-"."word".'" class="btn btn-flat btn-info btn-sm"><i class="fa fa-file"></i>&nbsp; Cetak Kuitansi (Word)</a>';
                   '</div>';
       }),
       array( 'db' => 'kdoutput',  'dt' => 6),
