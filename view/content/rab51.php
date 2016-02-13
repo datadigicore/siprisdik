@@ -14,7 +14,7 @@
         <div class="box">
           <div class="box-header">
             <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya</h3>
-            <?php if ($_SESSION['level'] == '0') {
+            <?php if ($_SESSION['level'] != '0') {
               echo '<a href="'.$url_rewrite.'content/rab51/'.$direktorat.'/addnew" class="btn btn-flat btn-success btn-sm pull-right">Tambah RAB</a>';
             }?>
           </div>
@@ -50,6 +50,7 @@
                   <th>Deskripsi</th>
                   <th>Tanggal</th>
                   <th>Jumlah</th>
+                  <th>Status</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -62,10 +63,33 @@
     </div>
   </section>
 </div>
+<div class="modal fade" id="ajuan">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="<?php echo $url_rewrite;?>process/rab51/ajukan" method="POST">
+        <div class="modal-header" style="background-color:#111F3F !important; color:white;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" style="color:white">×</span></button>
+          <h4 class="modal-title">Dialog Box</h4>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="id_rab_aju" name="id_rab_aju" value="" />
+          <div class="form-group">
+            <label>Apakah Anda Yakin Ingin Melakukan Pengajuan ?</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" data-dismiss="modal" class="btn btn-flat btn-warning">Tidak</button>
+          <button type="submit" class="btn btn-flat btn-success">Ya</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <div class="modal fade" id="sahkan">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="<?php echo $url_rewrite;?>process/rab/sahkan" method="POST">
+      <form action="<?php echo $url_rewrite;?>process/rab51/sahkan" method="POST">
         <div class="modal-header" style="background-color:#111F3F !important; color:white;">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true" style="color:white">×</span></button>
@@ -75,6 +99,29 @@
           <input type="hidden" id="id_rab_sah" name="id_rab_sah" value="" />
           <div class="form-group">
             <label>Apakah Anda Yakin Ingin Melakukan Pengesahan ?</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" data-dismiss="modal" class="btn btn-flat btn-warning">Tidak</button>
+          <button type="submit" class="btn btn-flat btn-success">Ya</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="revisi">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="<?php echo $url_rewrite;?>process/rab51/revisi" method="POST">
+        <div class="modal-header" style="background-color:#111F3F !important; color:white;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" style="color:white">×</span></button>
+          <h4 class="modal-title">Dialog Box</h4>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="id_rab_rev" name="id_rab_rev" value="" />
+          <div class="form-group">
+            <label>Apakah Anda Yakin Melakukan Revisi pada RAB ini ?</label>
           </div>
         </div>
         <div class="modal-footer">
@@ -117,14 +164,25 @@ var table;
             {"targets" : 3},
             {"targets" : 4},
             {"targets" : 5},
+            {"targets" : 6},
           ],
         "order": [[ 0, "desc" ]]
     });
     
+    $(document).on("click", "#btn-aju", function (){
+      var tr = $(this).closest('tr');
+      tabrow = table.row(tr);
+      $("#id_rab_aju").val(tabrow.data()[0]);
+    });
     $(document).on("click", "#btn-sah", function (){
       var tr = $(this).closest('tr');
       tabrow = table.row(tr);
       $("#id_rab_sah").val(tabrow.data()[0]);
+    });
+    $(document).on("click", "#btn-rev", function (){
+      var tr = $(this).closest('tr');
+      tabrow = table.row(tr);
+      $("#id_rab_rev").val(tabrow.data()[0]);
     });
 
   });
@@ -154,6 +212,7 @@ var table;
             {"targets" : 3},
             {"targets" : 4},
             {"targets" : 5},
+            {"targets" : 6},
           ],
         "order": [[ 0, "desc" ]]
     });

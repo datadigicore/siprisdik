@@ -180,7 +180,7 @@
         deskripsi   = '$deskripsi',
         tanggal     = '$tgl',
         value     = '$value',
-        status      = '1'
+        status      = '0'
       ";
       $result = $this->query($query);
       return $result;
@@ -381,6 +381,15 @@
 
       return array('result' => $result,
                     'result2' => $result2
+                  );
+    }
+
+    public function chstatus51($idrab, $status){
+      $query = "UPDATE rabfull SET status='$status' WHERE id = '$idrab'";
+
+      $result = $this->query($query);
+
+      return array('result' => $result,
                   );
     }
 

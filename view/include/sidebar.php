@@ -21,11 +21,11 @@
             <i class="fa fa-angle-left pull-right"></i>
           </a>
           <ul class="treeview-menu">
-            <li><a href="<?php echo $url_rewrite;?>content/rab51/5696"><i class="fa fa-table"></i> <span>5696</span></a></li>
-            <li><a href="<?php echo $url_rewrite;?>content/rab51/5697"><i class="fa fa-table"></i> <span>5697</span></a></li>
-            <li><a href="<?php echo $url_rewrite;?>content/rab51/5698"><i class="fa fa-table"></i> <span>5698</span></a></li>
-            <li><a href="<?php echo $url_rewrite;?>content/rab51/5699"><i class="fa fa-table"></i> <span>5699</span></a></li>
-            <li><a href="<?php echo $url_rewrite;?>content/rab51/5700"><i class="fa fa-table"></i> <span>5700</span></a></li>
+            <li><a href="<?php echo $url_rewrite;?>content/rab51/5696"><i class="fa fa-table"></i> <span>Dukungan Manajemen untuk <br>Program Peningkatan Kualitas <br>Kelembagaan Iptek dan Dikti</span></a></li>
+            <li><a href="<?php echo $url_rewrite;?>content/rab51/5697"><i class="fa fa-table"></i> <span>Pengembangan <br>Kelembagaan Perguruan Tinggi</span></a></li>
+            <li><a href="<?php echo $url_rewrite;?>content/rab51/5698"><i class="fa fa-table"></i> <span>Pembinaan Kelembagaan <br>Perguruan Tinggi</span></a></li>
+            <li><a href="<?php echo $url_rewrite;?>content/rab51/5699"><i class="fa fa-table"></i> <span>Penguatan dan <br>Pengembangan Lembaga <br>Penelitian dan Pengembangan</span></a></li>
+            <li><a href="<?php echo $url_rewrite;?>content/rab51/5700"><i class="fa fa-table"></i> <span>Pengembangan Taman Sains <br>dan Teknologi (TST) dan <br>Lembaga Penunjang Lainnya</span></a></li>
           </ul>
         </li>     
         <li><a href="<?php echo $url_rewrite;?>content/report"><i class="fa fa-file-text"></i> <span>Cetak Surat</span></a></li>
@@ -42,19 +42,28 @@
               </ul>
             </li> -->
       <?php endif ?>
-      <?php if ($_SESSION['level'] == 1): ?>
+      <?php if ($_SESSION['level'] != 0): ?>
         <li class="active"><a href="<?php echo $url_rewrite;?>content/home"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
         <li><a href="<?php echo $url_rewrite;?>content/rab"><i class="fa fa-table"></i> <span>Data RAB</span></a></li>   
-        <li><a href="<?php echo $url_rewrite;?>content/report"><i class="fa fa-dashboard"></i> <span>Laporan</span></a></li>
-      <?php endif ?>
-      <?php if ($_SESSION['level'] == 2): ?>
-        <li class="active"><a href="<?php echo $url_rewrite;?>content/home"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
-        <li><a href="<?php echo $url_rewrite;?>content/rab"><i class="fa fa-table"></i> <span>Data RAB</span></a></li>   
-        <li><a href="<?php echo $url_rewrite;?>content/report"><i class="fa fa-dashboard"></i> <span>Laporan</span></a></li>
-      <?php endif ?>
-      <?php if ($_SESSION['level'] == 3): ?>
-        <li class="active"><a href="<?php echo $url_rewrite;?>content/home"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
-        <li><a href="<?php echo $url_rewrite;?>content/rab"><i class="fa fa-table"></i> <span>Data RAB</span></a></li>   
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-table"></i> <span><span>Data RAB (51)</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu">
+            <?php if($_SESSION['direktorat'] == 5696){ ?>
+            <li><a href="<?php echo $url_rewrite;?>content/rab51/5696"><i class="fa fa-table"></i> <span>Dukungan Manajemen untuk <br>Program Peningkatan Kualitas <br>Kelembagaan Iptek dan Dikti</span></a></li>
+            <?php }elseif($_SESSION['direktorat'] == 5697){ ?>
+            <li><a href="<?php echo $url_rewrite;?>content/rab51/5697"><i class="fa fa-table"></i> <span>Pengembangan <br>Kelembagaan Perguruan Tinggi</span></a></li>
+            <?php }elseif($_SESSION['direktorat'] == 5698){ ?>
+            <li><a href="<?php echo $url_rewrite;?>content/rab51/5698"><i class="fa fa-table"></i> <span>Pembinaan Kelembagaan <br>Perguruan Tinggi</span></a></li>
+            <?php }elseif($_SESSION['direktorat'] == 5699){ ?>
+            <li><a href="<?php echo $url_rewrite;?>content/rab51/5699"><i class="fa fa-table"></i> <span>Penguatan dan <br>Pengembangan Lembaga <br>Penelitian dan Pengembangan</span></a></li>
+            <?php }elseif($_SESSION['direktorat'] == 5700){ ?>
+            <li><a href="<?php echo $url_rewrite;?>content/rab51/5700"><i class="fa fa-table"></i> <span>Pengembangan Taman Sains <br>dan Teknologi (TST) dan <br>Lembaga Penunjang Lainnya</span></a></li>
+            <?php }?>
+          </ul>
+        </li>   
         <li><a href="<?php echo $url_rewrite;?>content/report"><i class="fa fa-dashboard"></i> <span>Laporan</span></a></li>
       <?php endif ?>
     </ul>
