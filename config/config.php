@@ -17,8 +17,12 @@
   $url_rewrite    = "http://localhost/siprisdik/";
   $REQUEST        = "siprisdik/content";
   $PROSES_REQUEST = "siprisdik/process";
-  $path           = "C:/xampp/htdocs/siprisdik/";
-  $path_upload    = "C:/xampp/htdocs/siprisdik/static/uploads/";
+  // $path           = "C:/xampp/htdocs/siprisdik/";
+  $path           = "/srv/www/htdocs/dikti/";
+  // $path           = "/Applications/XAMPP/htdocs/siprisdik/";
+  // $path_upload    = "C:/xampp/htdocs/siprisdik/static/uploads/";
+  $path_upload    = "/srv/www/htdocs/dikti/static/uploads/";
+  // $path_upload    = "/Applications/XAMPP/htdocs/siprisdik/static/uploads/";
 
   class config {
     public $db_host              = "localhost";

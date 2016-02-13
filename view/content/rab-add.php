@@ -261,7 +261,9 @@
          }else if(data.error == 3){
           alert('Sudah terdapat kode akun 522151. Tidak dapat menambah kode akun selain 524114 / 524119');
          }else if(data.error == 4){
-          alert('Sudah terdapat kode akun 524114 / 524119. Tidak dapat menambah kode akun selain 521213 / 522151');
+          alert('Sudah terdapat kode akun 524114. Tidak dapat menambah kode akun selain 521213 / 522151');
+         }else if(data.error == 5){
+          alert('Sudah terdapat kode akun 524119. Tidak dapat menambah kode akun selain 521213 / 522151');
          };
         } else {
           if(kdAkun=="524119" || kdAkun=="524114"  || kdAkun=="524113" || kdAkun=="524219" ||kdAkun=="524114"  || kdAkun=="524113"){
