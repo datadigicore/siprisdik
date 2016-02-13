@@ -55,17 +55,17 @@
               <input type="hidden" id="direktorat2" name="direktorat2" value="<?php echo $_SESSION['direktorat']; ?>" />
               <?php } ?>
             </table>
-            <table id="table" class="display nowrap table table-bordered table-striped" cellspacing="0" width="100%">
+            <table id="table" class="display table table-bordered table-striped " cellspacing="0" width="100%">
               <thead style="background-color:#11245B;color:white;">
                 <tr>
                   <th>No</th>
-                  <th>Kode RKAKL</th>
-                  <th>Direktorat</th>
-                  <th>Uraian Acara</th>
-                  <th>Tanggal</th>
-                  <th>Lokasi</th>
-                  <th>Status</th>
-                  <th>Action</th>
+                  <th width="15%">Kode RKAKL</th>
+                  <th width="20%">Direktorat</th>
+                  <th width="10%">Uraian Acara</th>
+                  <th width="10%">Tanggal</th>
+                  <th width="15%">Lokasi</th>
+                  <th width="10%">Status</th>
+                  <th width="15%">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -236,6 +236,7 @@ var table;
     var tahun = $('#tahun2').val();
     var direktorat = $('#direktorat2').val();
     table = $("#table").DataTable({
+      "info":false,
         "oLanguage": {
           "sInfoFiltered": ""
         },
