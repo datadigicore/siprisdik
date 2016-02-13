@@ -227,16 +227,20 @@ switch ($process) {
 		}else{
 			if (!empty($getakun[0]->kdakun)) {
 				if ($getakun[0]->kdakun == 521213) {
-					if ($kdakun != 524114 && $kdakun != 524119) {
+					if ($kdakun != 524114 && $kdakun != 524119 && $kdakun != 521213) {
 						$data['error'] = '2';
 					}
 				}elseif ($getakun[0]->kdakun == 522151) {
-					if ($kdakun != 524114 && $kdakun != 524119) {
+					if ($kdakun != 524114 && $kdakun != 524119 && $kdakun != 522151) {
 						$data['error'] = '3';
 					}
-				}elseif ($getakun[0]->kdakun == 524114 || $getakun[0]->kdakun == 524119) {
-					if ($kdakun != 521213  && $kdakun != 522151) {
+				}elseif ($getakun[0]->kdakun == 524114) {
+					if ($kdakun != 521213  && $kdakun != 522151 && $kdakun != 524114) {
 						$data['error'] = '4';
+					}
+				}elseif ($getakun[0]->kdakun == 524119) {
+					if ($kdakun != 521213  && $kdakun != 522151 && $kdakun != 524119) {
+						$data['error'] = '5';
 					}
 				}
 			}
