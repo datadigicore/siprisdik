@@ -144,6 +144,7 @@
 
         }
       }
+      return $no_kw;
     }
     public function cetak_dok($id,$pil_akun,$format){
       
@@ -215,7 +216,7 @@
       //   if($res[kdakun]=="524114"  || $res[kdakun]=="524113")   $lokal=1;
       // }
       $counter="";
-      
+      $id_akun;
       
       while($res=$this->fetch_array($result)){
         $golongan=$res[golongan];
@@ -226,10 +227,12 @@
           $honor += $res[value];
           // $pot = "";
           // $pph=0;
+          $id_akun="521213";
         }
         else if($res[kdakun]=="522151"){
           $item_honor = "1";
           $honor += $res[value];
+          $id_akun="522151";
           
         }
         else if($res[kdakun]=="524113"){
@@ -307,32 +310,33 @@
       ob_start();
       // print_r($dt_akun);
       if($honor>0){
-          $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "Honorarium",$honor);
+          $nmr_kuitansi = $this->log_kwitansi($det_giat,$id_akun);
+          $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "Honorarium",$honor, $nmr_kuitansi);
           echo '<pagebreak />';
       }
       if($uang_saku_dalam>0){
-          $this->log_kwitansi($det_giat,"524113");
-          $this->Kuitansi_Honorarium($result, $det_giat, "Uang Saku",$uang_saku_dalam);
+          $nmr_kuitansi = $this->log_kwitansi($det_giat,"524113");
+          $this->Kuitansi_Honorarium($result, $det_giat, "Uang Saku",$uang_saku_dalam, $nmr_kuitansi);
           echo '<pagebreak />';
       }
 
       if($transport_lokal>0){
-        $this->log_kwitansi($det_giat,"524113");
-        $this->Kuitansi_Honorarium($result, $det_giat, "Transport Lokal",$transport_lokal);
+        $nmr_kuitansi = $this->log_kwitansi($det_giat,"524113");
+        $this->Kuitansi_Honorarium($result, $det_giat, "Transport Lokal",$transport_lokal, $nmr_kuitansi);
         echo '<pagebreak />';
       }
 
       if(count($dt_akun)==1){
-        $this->log_kwitansi($det_giat, $dt_akun[0],$id);
-        $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[0]);
+        $nmr_kuitansi = $this->log_kwitansi($det_giat, $dt_akun[0],$id);
+        $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[0], $nmr_kuitansi);
         echo '<pagebreak />';
       }
       if(count($dt_akun)>1){
-        $this->log_kwitansi($det_giat, $dt_akun[0],$id);
-        $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[0]);
+        $nmr_kuitansi = $this->log_kwitansi($det_giat, $dt_akun[0],$id);
+        $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[0], $nmr_kuitansi);
         echo '<pagebreak />';
-        $this->log_kwitansi($det_giat, $dt_akun[1]);
-        $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[1]);
+        $nmr_kuitansi = $this->log_kwitansi($det_giat, $dt_akun[1]);
+        $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[1], $nmr_kuitansi);
         echo '<pagebreak />';
         
       }
@@ -1059,7 +1063,7 @@
 
     }
     //Kuitansi Honorarium
-    public function Kuitansi_Honorarium($data,$det,$item,$val,$kd_akun){
+    public function Kuitansi_Honorarium($data,$det,$item,$val,$kd_akun, $nmr_kw){
       $penerima;
       $jabatan;
       $total=0;
@@ -1081,7 +1085,7 @@
         }
         $total=$val;
       }
-      echo '  <p align="right">No '.$det['no_kw']."/".$det['kdgiat'].".".$det['kdoutput'].".".$det['kdsoutput'].".".$det['kdkmpnen']."/2016".'</p>'; 
+      echo '  <p align="right">No '.$nmr_kw."/".$det['kdgiat'].".".$det['kdoutput'].".".$det['kdsoutput'].".".$det['kdkmpnen']."/2016".'</p>'; 
       require __DIR__ . "/../utility/report/header_dikti.php";
       echo '  <p align="center" style="text-decoration:underline;">KUITANSI</p>
                     <table style="width: 100%; font-size:80%; border-collapse: collapse;"  border="0">               
@@ -1609,7 +1613,7 @@
     }
 
     //Kuitansi Honor Dan Uang Saku
-    public function Kuitansi_Honor_Uang_Saku($data,$det,$item,$val,$kd_akun) {
+    public function Kuitansi_Honor_Uang_Saku($data,$det,$item,$val,$kd_akun, $nmr_kw) {
       $penerima;
       $total=0;
       $pph;
@@ -1639,7 +1643,7 @@
       }
 
       $diterima = $total-$pph;  
-        echo '  <p align="right">No '.$det['no_kw']."/".$det['kdgiat'].".".$det['kdoutput'].".".$det['kdsoutput'].".".$det['kdkmpnen']."/2016".'</p>'; 
+        echo '  <p align="right">No '.$nmr_kw."/".$det['kdgiat'].".".$det['kdoutput'].".".$det['kdsoutput'].".".$det['kdkmpnen']."/2016".'</p>'; 
         require __DIR__ . "/../utility/report/header_dikti.php";
         echo ' <p align="center" style="font-weight:bold; font-size:1.2em">KUITANSI</p>
                     <table cellpadding="3" style="width: 100%; font-size:0.7em;"  border="0">               

@@ -101,6 +101,7 @@
                       <option value="53" >53 Belanja Modal</option>
                   </select>
                 </div>
+
                 <!-- <div class="form-group">
                   <input type="text" name="tgl_awal" class="form-control" id="tgl_awal" placeholder="Tanggal Awal">
                 </div>
@@ -129,6 +130,15 @@
                   </select>
                 </div>
               </div>
+              <div class="box-body">
+                      <label class="col-sm-3 control-label">Format laporan</label>
+                      <div class="col-sm-4">
+                        <select name="format" id="format" class="form-control">
+                          <option value="pdf">PDF</option>
+                          <option value="word">Word</option>
+                        </select>
+                      </div>
+                    </div>
               <div class="box-footer">
                 <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>
               </div>        
