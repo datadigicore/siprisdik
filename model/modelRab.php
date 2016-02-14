@@ -186,6 +186,75 @@
       return $result;
     }
 
+    public function edit($data){
+      $idview = $data['idview'];
+      $tahun = $data['tahun'];
+      $output = $data['output'];
+      $soutput = $data['soutput'];
+      $komp = $data['komp'];
+      $skomp = $data['skomp'];
+      $uraian = $data['uraian'];
+      $t = explode("/", $data['tanggal']);
+      $tgl=$t[2].'-'.$t[1].'-'.$t[0];
+      $lokasi = $data['lokasi'];
+
+      $query      = "UPDATE rabview SET
+        thang       = '$tahun',
+        kdoutput    = '$output',
+        kdsoutput   = '$soutput',
+        kdkmpnen    = '$komp',
+        kdskmpnen   = '$skomp',
+        deskripsi   = '$uraian',
+        tanggal     = '$tgl',
+        lokasi      = '$lokasi'
+        WHERE id = '$idview'
+      ";
+
+      $query2      = "UPDATE rabfull SET
+        thang       = '$tahun',
+        kdoutput    = '$output',
+        kdsoutput   = '$soutput',
+        kdkmpnen    = '$komp',
+        kdskmpnen   = '$skomp',
+        deskripsi   = '$uraian',
+        tanggal     = '$tgl',
+        lokasi      = '$lokasi'
+        WHERE rabview_id = '$idview'
+      ";
+      $result = $this->query($query);
+      $result2 = $this->query($query2);
+      return $result;
+    }
+
+    public function edit51($data){
+      $idrab = $data['idrab'];
+      $tahun = $data['tahun'];
+      $output = $data['output'];
+      $soutput = $data['soutput'];
+      $komp = $data['komp'];
+      $skomp = $data['skomp'];
+      $akun = $data['akun'];
+      $deskripsi = $data['deskripsi'];
+      $value = $data['jumlah'];
+      $t = explode("/", $data['tanggal']);
+      $tgl=$t[2].'-'.$t[1].'-'.$t[0];
+
+      $query      = "UPDATE rabfull SET
+        thang       = '$tahun',
+        kdoutput    = '$output',
+        kdsoutput   = '$soutput',
+        kdkmpnen    = '$komp',
+        kdskmpnen   = '$skomp',
+        kdakun      = '$akun',
+        deskripsi   = '$deskripsi',
+        tanggal     = '$tgl',
+        value       = '$value'
+        WHERE id = '".$idrab."'
+      ";
+      $result = $this->query($query);
+      return $result;
+    }
+
     public function getakun($id_rabview){
       $query_rab = "SELECT * FROM rabfull where rabview_id = '$id_rabview' group by kdakun";
       $res_rab = $this->query($query_rab);
@@ -431,7 +500,7 @@
     }
 
     public function getview($id){
-      $query  = "SELECT thang,kdprogram,kdgiat,kdoutput,kdsoutput,kdkmpnen,kdskmpnen, deskripsi,tanggal,lokasi,
+      $query  = "SELECT id,thang,kdprogram,kdgiat,kdoutput,kdsoutput,kdkmpnen,kdskmpnen, deskripsi,tanggal,lokasi,
                         status
                  FROM rabview as r where id = '$id'";
       $result = $this->query($query);

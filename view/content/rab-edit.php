@@ -1,10 +1,10 @@
 <div class="content-wrapper">
   <section class="content-header">
     <h1>
-      Data RAB (51)
+      Data RAB 
     </h1>
     <ol class="breadcrumb">
-      <li><i class="fa fa-user"></i> Tambah RAB</li>
+      <li><i class="fa fa-user"></i> Edit RAB</li>
     </ol>
   </section>
   <section class="content">
@@ -12,9 +12,10 @@
       <div class="col-md-9 col-xs-12">
         <div class="box">
           <div class="box-header with-border">
-            <h3 class="box-title" style="margin-top:6px;">Tambah RAB</h3>
+            <h3 class="box-title" style="margin-top:6px;">Edit RAB</h3>
           </div>
-          <form action="<?php echo $url_rewrite;?>process/rab51/save" method="POST" enctype="multipart/form-data">
+          <form action="<?php echo $url_rewrite;?>process/rab/edit" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="idview" value="<?php echo $getview['id'];?>" />
             <div class="box-body">
               <div class="form-group">
                 <label>Tahun Anggaran</label>
@@ -25,12 +26,20 @@
                 </select>
               </div>
               <input type="hidden" id="prog" name="prog" value="06" />
+              <?php if ($_SESSION['direktorat'] == "") { ?>
               <div class="form-group">
-                <label>Kode Kegiatan</label><br>
-                <!-- <label><?php echo $direk[$direktorat]; ?></label> -->
-                <input type="text" class="form-control" readonly id="direktorat2" name="direktorat2" value="<?php echo $direk[$direktorat]; ?>" />
-                <input type="hidden" class="form-control" readonly id="direktorat" name="direktorat" value="<?php echo $direktorat; ?>" />
+                <label>Kode Kegiatan</label>
+                <select class="form-control" id="direktorat" name="direktorat" onchange="chout()">
+                    <option value="5696">5696</option>
+                    <option value="5697">5697</option>
+                    <option value="5698">5698</option>
+                    <option value="5699">5699</option>
+                    <option value="5700">5700</option>
+                </select>
               </div>
+              <?php } else{ ?>
+              <input type="hidden" id="direktorat" name="direktorat" value="<?php echo $_SESSION['direktorat']; ?>" />
+              <?php } ?>
               <div class="form-group">
                 <label>Output</label>
                 <select class="form-control" id="output" name="output" onchange="chout()" required>
@@ -56,22 +65,16 @@
                 </select>
               </div>
               <div class="form-group">
-                <label>Akun</label>
-                <select class="form-control" id="akun" name="akun" onchange="chakun()" required>
-                  <option>-- Pilih Akun --</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Deskripsi</label>
-                <textarea rows="5" type="text" class="form-control" id="deskripsi" name="deskripsi" placeholder="Deskripsi" style="resize:none;" required></textarea>
+                <label>Uraian Acara</label>
+                <textarea rows="5" type="text" class="form-control" id="uraian" name="uraian" placeholder="Uraian Acara" style="resize:none;" required><?php echo $getview['deskripsi'];?></textarea>
               </div>
               <div class="form-group">
                 <label>Tanggal</label>
-                <input class="form-control" type="text" id="tanggal" name="tanggal" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" />
+                <input class="form-control" type="text" id="tanggal" name="tanggal" value="<?php echo date('d/m/Y',strtotime($getview['tanggal']));?>" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" />
               </div>
               <div class="form-group">
-                <label>Jumlah</label>
-                <input class="form-control" required type="number" name="jumlah" value="0" placeholder="" />
+                <label>Lokasi Kegiatan</label>
+                <input type="text" class="form-control" id="lokasi" name="lokasi" value="<?php echo $getview['lokasi'];?>" placeholder="Lokasi Kegiatan" required />
               </div>
               
             </div>
@@ -87,6 +90,12 @@
 
 <script>
 $(function() {
+    $('#tahun').val('<?php echo $getview["thang"]; ?>');
+    $("#tanggal").datepicker({ 
+      changeMonth: true,
+      changeYear: true,
+      format: 'dd/mm/yyyy' 
+    });
     $("#tanggal").datepicker({ 
       changeMonth: true,
       changeYear: true,
@@ -121,6 +130,8 @@ function chprog(){
         for (var i = 0; i < obj.KDOUTPUT.length; i++) {
           $('#output').append('<option value="'+obj.KDOUTPUT[i]+'">'+obj.KDOUTPUT[i]+' - '+obj.NMOUTPUT[i]+'</option>')
         };
+        $('#output').val('<?php echo $getview["kdoutput"]; ?>');
+        chout();
       },
     });
   }
@@ -150,6 +161,8 @@ function chprog(){
         for (var i = 0; i < obj.KDSOUTPUT.length; i++) {
           $('#soutput').append('<option value="'+obj.KDSOUTPUT[i]+'">'+obj.KDSOUTPUT[i]+' - '+obj.NMSOUTPUT[i]+'</option>')
         };
+        $('#soutput').val('<?php echo $getview["kdsoutput"]; ?>');
+        chsout();
       },
     });
   }
@@ -179,6 +192,8 @@ function chprog(){
         for (var i = 0; i < obj.KDKMPNEN.length; i++) {
           $('#komp').append('<option value="'+obj.KDKMPNEN[i]+'">'+obj.KDKMPNEN[i]+' - '+obj.NMKMPNEN[i]+'</option>')
         };
+        $('#komp').val('<?php echo $getview["kdkmpnen"]; ?>');
+        chkomp();
       },
     });
   }
@@ -208,6 +223,7 @@ function chprog(){
         for (var i = 0; i < obj.KDSKMPNEN.length; i++) {
           $('#skomp').append('<option value="'+obj.KDSKMPNEN[i]+'">'+obj.KDSKMPNEN[i]+' - '+obj.NMSKMPNEN[i]+'</option>')
         };
+        $('#skomp').val('<?php echo $getview["kdskmpnen"]; ?>');
       },
     });
   }
