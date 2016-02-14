@@ -14,16 +14,36 @@
         tahun     = '$tahun'
       ";
       $result = $this->query($query);
-      $query      = "INSERT INTO rkakl_view SET
-        tanggal   = '$tanggal',
-        filename  = '$filename',
-        filesave  = '$filesave',
-        keterangan= '$keterangan',
-        tahun     = '$tahun',
-        status    = '$status'
-      ";
-      $result = $this->query($query);
-      return $result;
+      $cek_versi = "SELECT MAX(versi) AS max_versi FROM rkakl_view WHERE tahun = '$tahun'";
+      $result = $this->query($cek_versi);
+      while ($fetch = $this->fetch_object($result)) {
+        $versi = $fetch->max_versi;
+      }
+      if (is_null($versi)) {
+        $query      = "INSERT INTO rkakl_view SET
+          tanggal   = '$tanggal',
+          filename  = '$filename',
+          filesave  = '$filesave',
+          keterangan= '$keterangan',
+          tahun     = '$tahun',
+          status    = '$status'
+        ";
+        $result = $this->query($query);
+      }
+      else{
+        $newversi   = $versi+1;
+        $query      = "INSERT INTO rkakl_view SET
+          tanggal   = '$tanggal',
+          filename  = '$filename',
+          filesave  = '$filesave',
+          keterangan= '$keterangan',
+          tahun     = '$tahun',
+          status    = '$status',
+          versi     = '$newversi'
+        ";
+        $result = $this->query($query);
+        return $result;
+      }
     }
 
     public function checkThang($data) {
@@ -127,7 +147,17 @@
         $string .= "('".$THANG."','".$KDJENDOK."','".$KDSATKER."','".$KDDEPT."','".$KDUNIT."','".$KDPROGRAM."','".$KDGIAT."','".$NMGIAT."','".$KDOUTPUT."','".$NMOUTPUT."','".$KDSOUTPUT."','".$NMSOUTPUT."','".$KDKMPNEN."','".$NMKMPNEN."','".$KDSKMPNEN."','".$NMSKMPNEN."','".$KDAKUN."','".$NMAKUN."','".$KDKPPN."','".$KDBEBAN."','".$KDJNSBAN."','".$KDCTARIK."','".$REGISTER."','".$CARAHITUNG."','".$HEADER1."','".$HEADER2."','".$KDHEADER."','".$NOITEM."','".$NMITEM."','".$VOL1."','".$SAT1."','".$VOL2."','".$SAT2."','".$VOL3."','".$SAT3."','".$VOL4."','".$SAT4."','".$VOLKEG."','".$SATKEG."','".$HARGASAT."','".$JUMLAH."','".$JUMLAH2."','".$PAGUPHLN."','".$PAGURMP."','".$PAGURKP."','".$KDBLOKIR."','".$BLOKIRPHLN."','".$BLOKIRRMP."','".$BLOKIRRKP."','".$RPHBLOKIR."','".$KDCOPY."','".$KDABT."','".$KDSBU."','".$VOLSBK."','".$VOLRKAKL."','".$BLNKONTRAK."','".$NOKONTRAK."','".$TGKONTRAK."','".$NILKONTRAK."','".$JANUARI."','".$PEBRUARI."','".$MARET."','".$APRIL."','".$MEI."','".$JUNI."','".$JULI."','".$AGUSTUS."','".$SEPTEMBER."','".$OKTOBER."','".$NOPEMBER."','".$DESEMBER."','".$JMLTUNDA."','".$KDLUNCURAN."','".$JMLABT."','".$NOREV."','".$KDUBAH."','".$KURS."','".$INDEXKPJM."','".$KDIB."'),";
       }
       $query = substr($string,0,-1);
-      $result = $this->query($query);
+      $result= $this->query($query);
+      $tahun = date("Y");
+      $cek_versi = "SELECT MAX(versi) AS max_versi FROM rkakl_view WHERE tahun = '$tahun'";
+      $result = $this->query($cek_versi);
+      while ($fetch = $this->fetch_object($result)) {
+        $versi = $fetch->max_versi;
+      }
+      $query = "CREATE TABLE rkakl_full_".$tahun."_".$versi."
+        AS (SELECT * FROM rkakl_full)
+      ";
+      $result= $this->query($query);
       return $result;
     }
   }
