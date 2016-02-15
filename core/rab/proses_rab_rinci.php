@@ -148,6 +148,7 @@ switch ($process) {
 		}
 		break;
 	case 'tambahAkun':
+	print_r($_POST);die;
 		$insert = $mdl_rab->tambahAkun($_POST);
     	$utility->load("content/rabakun/".$_POST['id_rabfull'],"success","Data berhasil dimasukkan ke dalam database");
 		break;
@@ -176,22 +177,16 @@ switch ($process) {
 	      	return number_format($d,2);
 	      }),
 	      array( 'db' => 'rabfull.status',  'dt' => 6, 'formatter' => function($d,$row,$dataArray){ 
-	        if($d==0 && $_SESSION['level'] != 0){
+	        if(($d==0 || $d==3) && $_SESSION['level'] != 0){
 	          return  '<div class="text-center">'.
 	                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Detail</a>'.
-	                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i>&nbsp; Edit</a>'.
-	                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/Kuitansi_Honorarium/'.$row[0].'" class="btn btn-flat btn-danger btn-sm" ><i class="fa fa-close"></i>&nbsp; Delete</a>'.
-	                  '</div>';
-	        }elseif ($d==0 && $_SESSION['level'] == 0) {
-	          return  '<div class="text-center btn-group-vertical">'.
-	                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Detail</a>'.
-	                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i>&nbsp; Edit</a>'.
-	                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/Kuitansi_Honorarium/'.$row[0].'" class="btn btn-flat btn-danger btn-sm" ><i class="fa fa-close"></i>&nbsp; Delete</a>'.
+	                    '<a style="margin:0 2px;" id="btn-trans" href="#" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i>&nbsp; Edit</a>'.
+	                    '<a style="margin:0 2px;" id="btn-trans" href="#" class="btn btn-flat btn-danger btn-sm" ><i class="fa fa-close"></i>&nbsp; Delete</a>'.
 	                  '</div>';
 	        }else{
 	        	return  '<div class="text-center">'.
 		                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Detail</a>'.
-		                  '</div>';
+		                '</div>';
 	        }
 	      })
 	    );

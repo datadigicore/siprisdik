@@ -628,6 +628,7 @@
         $golongan   = $cekfetch->golongan;
         $jabatan    = $cekfetch->jabatan;
         $pns        = $cekfetch->pns;
+        $pajak      = $cekfetch->pajak;
 
         $query      = "INSERT INTO rabfull SET
           rabview_id  = '$rabview_id',

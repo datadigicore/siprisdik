@@ -10,98 +10,71 @@
   </section>
   <section class="content">
   <?php if($_SESSION['level'] != 0){ ?>
-    <div class="row">
-      <div class="col-xs-12">
-        <div class="box">
-          <div class="box-header">
-            <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya</h3>
-            <!-- <a href="<?php echo $url_rewrite;?>content/rab/add" class="btn btn-flat btn-success btn-sm pull-right">Tambah RAB</a> -->
-          </div>
-          <div class="box-body" >
-            <?php if (isset($_POST['message'])): ?>
-              <div class="alert alert-<?php echo $_POST['alert']; ?> alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <i class="icon fa fa-warning"></i><?php echo $_POST['message']; ?>
-              </div>
-            <?php endif ?>
-            <form class="form-horizontal" role="form" id="formAkun" enctype="multipart/form-data" method="post" action="<?= $url_rewrite ?>process/rab_rinci/tambahAkun">
-              <input type="hidden" id="id_rabfull" name="id_rabfull" value="<?php echo $id_rabfull?>" />
-              <a style="" id="add-more-akun" href="#" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Tambah Akun</a>
-              <div class="well" id="div-tambah-akun" style="display:none"> 
-                <label>Kode Akun</label>
-                <select style="margin:5px auto" class="form-control" id="kode-akun" name="kdakun" onchange="chakun()" required />
-                </select>
-                <label>No Item</label>
-                <select style="margin:5px auto" class="form-control" id="noitem" name="noitem" required />
-                </select>
-
-                <label>Value</label>
-                <input style="margin:5px auto" type="number" class="form-control" name="value" id="value" value="" placeholder="Value" required />
-                
-                <div id="perjalanan" class="hidden">
-                  <script>
-                     $(function() {
-                          $("#tgl_mulai").datepicker();
-                          $("#tgl_akhir").datepicker();
-                     });
-                  </script>
-                  <input type="hidden" name="perjalanan" value="true">
-                  <label> Tanggal Berangkat</label>
-                  <div style="margin:5px auto" class="input-group">
-                      <input type="text"class="form-control" id="tgl_mulai" value="<?= $tgl_mulai ?>" name="tgl_mulai" placeholder="Tanggal Berangkat">
-                      <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                  </div>
-                  <label> Tanggal Kembali</label>
-                  <div style="margin:5px auto" class="input-group">
-                       <input type="text"  class="form-control" id="tgl_akhir" value="<?= $tgl_akhir ?>" name="tgl_akhir" placeholder="Tanggal Berangkat">
-                       <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                  </div>
-
-                  <label>Alat Transportasi</label>
-                  <input style="margin:5px auto" type="text" class="form-control" value="<?= $alat_trans ?>" id="alat_trans" name="alat_trans" placeholder="Alat Transportasi">
-
-                  <label>Kota Asal</label>
-                  <input style="margin:5px auto" type="text" class="form-control" value="<?= $kota_asal ?>" id="kota_asal" name="kota_asal" placeholder="Kota Asal">
-
-                  <label>Kota Tujuan</label>
-                  <input style="margin:5px auto" type="text" class="form-control" value="<?= $kota_tujuan ?>" id="kota_tujuan" name="kota_tujuan" placeholder="Kota Tujuan">
-
-                  <label>Taxi Asal</label>
-                  <input style="margin:5px auto" type="number" step="0.001" class="form-control" value="<?= $taxi_asal ?>" id="taxi_asal" name="taxi_asal" placeholder="Taxi Asal">
-
-                  <label>Taxi Tujuan</label>
-                  <input style="margin:5px auto" type="number" step="0.001" class="form-control" value="<?= $taxi_tujuan ?>" id="taxi_tujuan" name="taxi_tujuan" placeholder="Taxi Tujuan">
-
-                  <label>Rute 1</label>
-                  <input style="margin:5px auto" type="text" class="form-control" value="<?= $rute1 ?>" id="rute1" name="rute1" placeholder="Rute 1">
-                       
-                  <label>Rute 2</label>
-                  <input style="margin:5px auto" type="text" class="form-control" value="<?= $rute2 ?>" id="rute2" name="rute2" placeholder="Rute 2">
-
-                  <label>Rute 3</label>
-                  <input style="margin:5px auto" type="text" class="form-control" value="<?= $rute3 ?>" id="rute3" name="rute3" placeholder="Rute 3">
-
-                  <label>Rute 4</label>
-                  <input style="margin:5px auto" type="text" class="form-control" value="<?= $rute4 ?>" id="rute4" name="rute4" placeholder="Rute 4">
-                
-                </div>
-                <br>
-                <!-- <a style="" id="buat-akun" href="#" class="form-control btn btn-flat btn-primary btn-sm"><i class="fa fa-plus"></i> Buat Akun</a> -->
-                <button type="submit" class="form-control btn btn-flat btn-primary btn-md"><i class="fa fa-save"></i> Simpan Akun</a>
-              </div>
-            </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div id="panel-akun">
-  </div>
-  <?php }?>
- 
+  <form class="form-horizontal" role="form" id="formAkun" enctype="multipart/form-data" method="post" action="<?= $url_rewrite ?>process/rab_rinci/tambahAkun">
   <div class="row">
     <div class="col-xs-12">
       <div class="box">
         <div class="box-header">
+          <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya</h3>
+        </div>
+        <div class="box-body" >
+          <?php if (isset($_POST['message'])): ?>
+            <div class="alert alert-<?php echo $_POST['alert']; ?> alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+              <i class="icon fa fa-warning"></i><?php echo $_POST['message']; ?>
+            </div>
+          <?php endif ?>
+            <input type="hidden" id="id_rabfull" name="id_rabfull" value="<?php echo $id_rabfull?>" />
+            <a style="" id="add-more-akun" href="#" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Tambah Akun</a>
+            <div class="well" id="div-tambah-akun" style="display:none"> 
+              <label>Kode Akun</label>
+              <select style="margin:5px auto" class="form-control" id="kode-akun" name="kdakun" onchange="chakun()" required />
+              </select>
+
+              <label>No Item</label>
+              <select style="margin:5px auto" class="form-control" id="noitem" name="noitem" required />
+              </select>
+
+              <div id="bahan" class="hidden">
+                <label>PPN</label>
+                <input style="margin:5px auto" type="number" class="form-control" name="ppn" id="ppn" value="" placeholder="PPN" required />
+              </div>
+
+              <div id="tbl_rute" class="hidden">  
+                <br>
+                <button class="form-control btn btn-primary btn-sm" onclick="tambahRute()"><i class="fa fa-plus"></i> Tambah Rute</button>
+              </div>
+
+              <div id="nilai">
+                <label>Value</label>
+                <input style="margin:5px auto" type="number" class="form-control" name="value" id="value" value="" placeholder="Value" required />
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php }?>
+
+  <div id="perjalanan" class="row">
+  </div>
+  
+  <div id="tbl_save" class="row hidden">
+    <div class="col-xs-12">
+      <div class="box box-success">
+        <div class="box-footer">
+          <button type="submit" onclick="simpan()" class="btn btn-flat btn-success btn-lg col-xs-12"><i class="fa fa-save"></i> Simpan Akun</a></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </form>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header with-border">
           <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya Yang Sudah Tercatat</h3>
           <!-- <a href="#addrab" data-toggle="modal" class="btn btn-flat btn-success btn-sm pull-right">Tambah Akun</a> -->
         </div>
@@ -129,18 +102,17 @@
   </section>
 </div>
 <script>
+
+
   $(document).ready(function() {
-    
     $("#add-more-akun").click(function(){
       kodeAkun("kode-akun");
       $("#div-tambah-akun").show();
+      $("#tbl_save").removeClass('hidden');
     });
     $("#buat-akun").click(function(){
       var val = $("#kode-akun").val();
-      //$("#"+val).show();
       generateForm(val);
-      // $("#kode-akun").val('');
-      // $("#kode-akun option[value='"+val+"']").hide();
     });
     $(document).on("click",".btn-dismiss",function(){
       var val = $(this).attr("value");
@@ -177,13 +149,13 @@
         '</div>'+
       '</div>'+        
     '</div>'+
-  '</div>';
-  $.ajax({
-    method: "GET",
-    url: "<?php echo $url_rewrite?>ajax/show_item.php",
-    data: { kdAkun: kdAkun, }
-  })
-  .done(function( r ) {
+    '</div>';
+    $.ajax({
+      method: "GET",
+      url: "<?php echo $url_rewrite?>ajax/show_item.php",
+      data: { kdAkun: kdAkun, }
+    })
+    .done(function( r ) {
       r=JSON.parse(r);
       if(r!=null){
         $.each( r, function( key, value ) {
@@ -266,14 +238,87 @@
           alert('Sudah terdapat kode akun 524119. Tidak dapat menambah kode akun selain 521213 / 522151');
          };
         } else {
-          if(kdAkun=="524119" || kdAkun=="524114"  || kdAkun=="524113" || kdAkun=="524219" ||kdAkun=="524114"  || kdAkun=="524113"){
-            $('#perjalanan').removeAttr( "class" );
+          if(kdAkun=="524119" || kdAkun=="524114"){
+            $('#tbl_rute').removeClass('hidden');
+            $('#bahan').addClass('hidden');
+            $('#nilai').addClass('hidden');
+          } else if(kdAkun == "521211"){
+            $('#tbl_rute').addClass('hidden');
+            $('#bahan').removeClass('hidden');
+            $('#nilai').removeClass('hidden');
+            $('#perjalanan').addClass('hidden');
           } else {
-            $('#perjalanan').attr( "class","hidden" );
+            $('#tbl_rute').addClass('hidden');
+            $('#bahan').addClass('hidden');
+            $('#nilai').removeClass('hidden');
+            $('#perjalanan').addClass('hidden');
           }
         }
       },
     });
+  }
+
+  function tambahRute(){
+    $('#perjalanan').append( ''
+          +'<div class="col-xs-4">'
+          +'  <div class="box box-warning">'
+          +'    <div class="box-header with-border">'
+          +'      <h3 class="box-title" style="margin-top:6px;">Tambah Rute</h3>'
+          +'      <div class="box-tools pull-right">'
+          +'        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>'
+          +'        </button>'
+          +'      </div>'
+          +'    </div>'
+          +'    <div class="box-body">'
+          +'        <input type="hidden" name="perjalanan" value="true">'
+          +'        <label>Rute</label>'
+          +'        <input style="margin:5px auto" type="text" class="form-control" id="rute[]" name="rute[]" placeholder="Rute">'
+          +'        <script>'
+          +'          $(function (){'
+          +'            $("#datepicker").datepicker({ '
+          +'              changeMonth: true,'
+          +'              changeYear: true,'
+          +'              format: "dd/mm/yyyy" '
+          +'            });'
+          +'          })'
+          +'        </script>'
+          
+          +'        <label>Value</label>'
+          +'        <input style="margin:5px auto" type="text" class="form-control" id="value[]" name="value[]" placeholder="Value">'
+                      
+          +'        <label> Tanggal Berangkat</label>'
+          +'        <div style="margin:5px auto" class="input-group">'
+          +'            <input type="text" class="form-control tgl" data-date-format="dd/mm/yyyy" id="datepicker" name="tgl_mulai[]" placeholder="Tanggal Berangkat">'
+          +'            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>'
+          +'        </div>'
+          +'        <label> Tanggal Kembali</label>'
+          +'        <div style="margin:5px auto" class="input-group">'
+          +'             <input type="text" class="form-control tgl" data-date-format="dd/mm/yyyy" id="tgl_akhir[]" name="tgl_akhir[]" placeholder="Tanggal Berangkat">'
+          +'             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>'
+          +'        </div>'
+
+          +'        <label>Alat Transportasi</label>'
+          +'        <input style="margin:5px auto" type="text" class="form-control" id="alat_trans[]" name="alat_trans[]" placeholder="Alat Transportasi">'
+
+          +'        <label>Kota Asal</label>'
+          +'        <input style="margin:5px auto" type="text" class="form-control" id="kota_asal[]" name="kota_asal[]" placeholder="Kota Asal">'
+
+          +'        <label>Kota Tujuan</label>'
+          +'        <input style="margin:5px auto" type="text" class="form-control" id="kota_tujuan[]" name="kota_tujuan[]" placeholder="Kota Tujuan">'
+
+          +'        <label>Taxi Asal</label>'
+          +'        <input style="margin:5px auto" type="number" step="0.001" class="form-control" id="taxi_asal[]" name="taxi_asal[]" placeholder="Taxi Asal">'
+
+          +'        <label>Taxi Tujuan</label>'
+          +'        <input style="margin:5px auto" type="number" step="0.001" class="form-control" id="taxi_tujuan[]" name="taxi_tujuan[]" placeholder="Taxi Tujuan">'
+
+          +'    </div>'
+          +'  </div>'
+          +'</div>' );
+  }
+
+  function simpan(){
+    $( "#formAkun" ).submit();
   }
   
   

@@ -94,11 +94,6 @@ $(function() {
       changeYear: true,
       format: 'dd/mm/yyyy' 
     });
-    $("#tanggal").datepicker({ 
-      changeMonth: true,
-      changeYear: true,
-      format: 'dd/mm/yyyy' 
-    });
     chprog();
 });
 
