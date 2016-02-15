@@ -69,7 +69,7 @@ switch ($data[2]) {
       "no_DIPA"      => $no_DIPA,
       "klasifikasi_MA"=> $klasifikasi_MA
     );
-    $report->SPTB($kode_akun);
+    $report->SPTB($kode_akun, $_SESSION['direktorat']);
   break;
   case 'Rincian_Permintaan_Pengeluaran':
     $kode_mak = $purifier->purify($_POST['kode-mak']);

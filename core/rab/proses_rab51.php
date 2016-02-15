@@ -57,7 +57,7 @@ switch ($process) {
             $button = '<center><div class="text-center btn-group-vertical">';
             if ($d == 0 && $_SESSION['level'] != 0 ) {
               $button .= '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Ajukan</a>';
-              $button .= '<a style="margin:0 2px;" href="#" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i> Edit Transaksi</a>';
+              $button .= '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rab51/5696/edit/'.$row[0].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i> Edit Transaksi</a>';
             }elseif ($d == 0 && $_SESSION['level'] == 0) {
               $button .= 'N/A';
             }
@@ -74,7 +74,7 @@ switch ($process) {
             }
             if ($d == 3 && $_SESSION['level'] != 0 ) {
               $button .= '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Ajukan</a>';
-              $button .= '<a style="margin:0 2px;" href="#" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i> Edit Transaksi</a>';
+              $button .= '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rab51/5696/edit/'.$row[0].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i> Edit Transaksi</a>';
             }elseif ($d == 3 && $_SESSION['level'] == 0) {
               $button .= 'N/A';
             }
@@ -117,17 +117,21 @@ switch ($process) {
     $mdl_rab->save51($_POST);
     $utility->load("content/rab51/".$_POST['direktorat'],"success","Data RAB berhasil dimasukkan ke dalam database");
     break;
+  case 'edit':
+    $mdl_rab->edit51($_POST);
+    $utility->load("content/rab51/".$_POST['direktorat'],"success","Data RAB berhasil diubah");
+    break;
   case 'ajukan':
     $idrab = $_POST['id_rab_aju'];
     $akun = $mdl_rab->getrabfull($idrab);
-    // print_r($akun);die;
     $error = false;
     // echo "<pre>";
 
     if($akun->kdakun != ""){  
-      $rab = $mdl_rab->getRabAkun($akun);
       $jum_rkakl = $mdl_rab->getJumRkakl($akun);
-      if ($jum_rkakl->jumlah < ($rab->jumlahrab + $jum_rkakl->realisasi + $jum_rkakl->usulan)) {
+      $jumlah1 = $jum_rkakl->jumlah;
+      $jumlah2 = $akun->value + $jum_rkakl->realisasi + $jum_rkakl->usulan;
+      if ($jumlah1 < $jumlah2) {
         $error = '1';
         $kderror[$i] = $akun->kdakun;
       }
@@ -136,13 +140,12 @@ switch ($process) {
       $kderror[$i] = $akun->kdakun;
     }
 
-
     if (!$error) {
       for ($i=0; $i < count($akun); $i++) { 
         if($akun->kdakun != ""){  // bukan belanja bahan
           $jum_rkakl = $mdl_rab->getJumRkakl($akun);
-          $rab = $mdl_rab->getRabAkun($akun);
-          $totalusul = $rab[0]->jumlahrab + $jum_rkakl->usulan;
+
+          $totalusul = $akun->value + $jum_rkakl->usulan;
           $item = $jum_rkakl->noitem;
           $pecah_item = explode(",", $item);
           $banyakitem = count($pecah_item);

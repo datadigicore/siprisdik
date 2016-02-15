@@ -90,6 +90,9 @@ else {
     }
     else {
       switch ($data[1]) {
+        case 'report':
+          include ('view/content/report.php');
+        break;
         case 'table':
           include ('view/content/table.php');
         break;
@@ -98,8 +101,12 @@ else {
             $direktorat = $_SESSION['direktorat'];
             $tahun = $mdl_rab->getYear();
             include ('view/content/rab-tambah.php');
-          } else if($data[2]=='add-rincian'){
-            include ('view/content/rab-add-rincian.php');
+          } else if($data[2]=='edit'){
+            $direktorat = $_SESSION['direktorat'];
+            $tahun = $mdl_rab->getYear();
+            $idview = $data[3];
+            $getview = $mdl_rab->getview($idview);
+            include ('view/content/rab-edit.php');
           } else {
             $direktorat = $_SESSION['direktorat'];
             $tahun = $mdl_rab->getYear();

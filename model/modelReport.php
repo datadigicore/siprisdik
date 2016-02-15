@@ -57,8 +57,9 @@
       $kdskmpnen = $res[kdskmpnen];
       $npwp= $res[npwp];
       $condition;
-
-      if(substr($kode, 0,2)=="51"){
+      // echo substr($kode, 0,2);
+      // echo $npwp;
+      if(substr($kode_akun, 0,2)=="51"){
         $condition=" and id='$id' ";
       }
       else{
@@ -144,6 +145,8 @@
 
         }
       }
+
+      // echo " No Kwitansi ".$no_kw;
       return $no_kw;
     }
     public function cetak_dok($id,$pil_akun,$format){
@@ -321,8 +324,9 @@
       }
 
       if($transport_lokal>0){
-        $nmr_kuitansi = $this->log_kwitansi($det_giat,"524113");
-        $this->Kuitansi_Honorarium($result, $det_giat, "Transport Lokal",$transport_lokal, $nmr_kuitansi);
+        $nmr_kuitansi = $this->log_kwitansi($det_giat,"524113","");
+        // echo " Return : ".$nmr_kuitansi;
+        $this->Kuitansi_Honorarium($result, $det_giat, "Transport Lokal",$transport_lokal,"524113", $nmr_kuitansi);
         echo '<pagebreak />';
       }
 
@@ -377,8 +381,14 @@
         $this->create_word($npwp."_".$no_kw,"A4",$html);
       }
     }
-    public function SPTB($data){
-      $sql = $this->query("SELECT r.NMITEM as nmitem, r.NMGIAT as nmgiat, r.NMAKUN as nmakun, f.kdgiat as kdgiat, f.kdprogram as kdprogram, f.kdoutput as kdoutput, f.kdakun as kdakun, f.penerima as penerima, f.tanggal as tanggal, f.value as value FROM rabfull as f LEFT JOIN rkakl_full as r on f.kdgiat = r.KDGIAT and f.kdoutput = r.KDOUTPUT and f.kdkmpnen = r.KDKMPNEN and f.kdskmpnen = r.KDSKMPNEN  and f.kdakun = r.KDAKUN and f.noitem = r.NOITEM  where f.kdakun ='$data' ");
+    public function SPTB($data, $direktorat){
+      $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
+      $arr_pb = $this->fetch_array($result_pb);
+      $bpp = $arr_pb[bpp];
+      $nip_bpp = $arr_pb[nip_bpp];
+      $ppk = $arr_pb[ppk];
+      $nip_ppk = $arr_pb[nip_ppk];
+      $sql = $this->query("SELECT r.NMITEM as nmitem, r.NMGIAT as nmgiat, r.NMAKUN as nmakun, f.kdgiat as kdgiat, f.kdprogram as kdprogram, f.kdoutput as kdoutput, f.kdakun as kdakun, f.penerima as penerima, f.tanggal as tanggal, f.value  as value, f.pajak as pajak, f.ppn as ppn, f.pph as pph FROM rabfull as f LEFT JOIN rkakl_full as r on f.kdgiat = r.KDGIAT and f.kdoutput = r.KDOUTPUT and f.kdkmpnen = r.KDKMPNEN and f.kdskmpnen = r.KDSKMPNEN  and f.kdakun = r.KDAKUN and f.noitem = r.NOITEM  where f.kdakun ='$data' and f.kdgiat='$direktorat' ");
       $id = $this->fetch_array($sql);
       ob_start();
       // echo '<p align="center" style="font-weight:bold; text-decoration: underline;">SURAT PERNYATAAN TANGGUNG JAWAB BELANJA</p>';
@@ -453,11 +463,13 @@
                 <td>'.$this->konversi_tanggal($value[tanggal],"/").'</td>
                 <td>'."-".'</td>
                 <td align="right">'.number_format($value[value],0,",",".").'</td>
-                <td>'." ".'</td>
-                <td>'." ".'</td>
+                <td>'.number_format($value[ppn],0,",",".").'</td>
+                <td>'.number_format($value[ppn],0,",",".").'</td>
             </tr>';
             $tot_value += $value[value];
             $no++;
+            $tot_ppn += $value[ppn];
+            $tot_pph += $value[pph];
       }
         
       
@@ -496,13 +508,13 @@
                   </tr>
                   <tr>
                     
-                    <td style="font-weight:bold">Sudarsono</td>
+                    <td style="font-weight:bold">'.$ppk.'</td>
                     <td></td>
                     <td style="font-weight:bold">Sugiharto</td>
                   </tr>
                   <tr>
                     
-                    <td>NIP. 19640920 198403 1 001</td>
+                    <td>NIP. '.$nip_ppk.'</td>
                     <td></td>
                     <td>NIP. 19750721 200912 1 001</td>
                   </tr>  
@@ -1067,7 +1079,7 @@
       $penerima;
       $jabatan;
       $total=0;
-
+      // echo " NOmor KW : ".$nmr_kw;
       if($item==""){
         foreach ($data as $value) {
           if($value[kdakun]==$kd_akun and $value[kdakun]!== "521213" and $value[kdakun]!== "522151"and $value[kdakun]!== "524114"and $value[kdakun]!== "524113"and $value[kdakun]!== "524119" ){

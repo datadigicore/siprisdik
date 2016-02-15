@@ -64,7 +64,7 @@
             <?php }?>
           </ul>
         </li>   
-        <li><a href="<?php echo $url_rewrite;?>content/report"><i class="fa fa-dashboard"></i> <span>Laporan</span></a></li>
+        <li><a href="<?php echo $url_rewrite;?>content/report"><i class="fa fa-file-text"></i> <span>Cetak Surat</span></a></li>
       <?php endif ?>
     </ul>
   </section>

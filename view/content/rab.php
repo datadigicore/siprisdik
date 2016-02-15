@@ -51,7 +51,13 @@
                   </td>
               </tr>
               <?php } else{ ?>
-              <input type="hidden" id="direktorat2" name="direktorat2" value="<?php echo $_SESSION['direktorat']; ?>" />
+              <tr>
+                <td><label>Direktorat</label></td>
+                <td>
+                  <label><?php echo $direk[$_SESSION['direktorat']];?></label>
+                  <input type="hidden" id="direktorat2" name="direktorat2" value="<?php echo $_SESSION['direktorat']; ?>" />
+                </td>
+              </tr>
               <?php } ?>
             </table>
             <table id="table" class="display table table-bordered table-striped " cellspacing="0" width="100%">

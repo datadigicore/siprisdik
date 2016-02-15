@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -16,8 +16,8 @@ include '../config/application.php';
  // print_r($row1);die;
 
 
-
- $qry = $db->query("select distinct KDAKUN, NMAKUN from rkakl_full order by KDAKUN");
+$direktorat = $_SESSION['direktorat'];
+ $qry = $db->query("select distinct f.kdakun as KDAKUN, r.NMAKUN from rabfull f inner join rkakl_full r on f.kdakun = r.KDAKUN  where f.kdgiat='$direktorat' order by KDAKUN");
  // echo "<option value=\"\" >--Pilih Kode Akun--</option>";
  while ($row = $db->fetch_object($qry)) {
      $akun[$row->KDAKUN] = $row->NMAKUN ;
