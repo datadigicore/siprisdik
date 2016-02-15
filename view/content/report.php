@@ -130,7 +130,7 @@
                   </select>
                 </div>
               </div>
-              <div class="box-body">
+              <!-- <div class="box-body">
                       <label class="col-sm-3 control-label">Format laporan</label>
                       <div class="col-sm-4">
                         <select name="format" id="format" class="form-control">
@@ -138,7 +138,7 @@
                           <option value="word">Word</option>
                         </select>
                       </div>
-                    </div>
+                    </div> -->
               <div class="box-footer">
                 <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>
               </div>        

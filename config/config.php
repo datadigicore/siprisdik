@@ -17,10 +17,10 @@
   $REQUEST        = "siprisdik/content";
   $PROSES_REQUEST = "siprisdik/process";
   // $path           = "C:/xampp/htdocs/siprisdik/";
-  $path           = "/srv/www/htdocs/dikti/";
+  $path           = "/opt/lampp/htdocs/siprisdik/";
   // $path           = "/Applications/XAMPP/htdocs/siprisdik/";
   // $path_upload    = "C:/xampp/htdocs/siprisdik/static/uploads/";
-  $path_upload    = "/srv/www/htdocs/dikti/static/uploads/";
+  $path_upload    = "/opt/lampp/htdocs/siprisdik/static/uploads/";
   // $path_upload    = "/Applications/XAMPP/htdocs/siprisdik/static/uploads/";
 
   class config {

@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="<?php echo $url_rewrite;?>static/plugins/daterangepicker/daterangepicker-bs3.css">
   <!-- bootstrap wysihtml5 - text editor -->
   <link rel="stylesheet" href="<?php echo $url_rewrite;?>static/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+  <link rel="stylesheet" href="<?php echo $url_rewrite;?>static/plugins/jQueryUI/jquery-ui.css">
   <link rel="stylesheet" href="<?php echo $url_rewrite;?>static/dist/css/skins/skin-blue.min.css">
   <style type="text/css">
     div.dataTables_wrapper {
