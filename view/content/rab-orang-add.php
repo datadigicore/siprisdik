@@ -20,20 +20,21 @@
               <input type="hidden" id="adendum" name="adendum" value="<?php echo $status;?>" />
               <div class="form-group">
                 <label>Jenis</label>
-                <select class="form-control" required id="jenis-akun" name="jenis-akun" onchange="cnpwp()">
+                <select onchange="cekJenis();" class="form-control" required id="jenis-akun" name="jenis-akun" onchange="cnpwp()">
+                  <option>-- Pilih Jenis --</option>
                   <option value="0">Badan</option>
                   <option value="1">Orang</option>
                 </select>
               </div>
-              <div class="form-group ">
+              <div class="form-group form-rab">
                   <label>NPWP</label>
-                  <input type="text" class="form-control" value="<?= $npwp ?>" id="npwp" name="npwp" onkeyup="cnpwp()" placeholder="NPWP">
+                  <input type="text" class="form-control" value="<?= $npwp ?>" id="npwp" name="npwp" placeholder="NPWP">
               </div>
-              <div class="form-group">
-                  <label>Nama Personel</label>
+              <div class="form-group form-rab">
+                  <label>Nama Penerima</label>
                   <input type="text" class="form-control" value="<?= $penerima ?>" id="penerima" name="penerima" placeholder="Nama Penerima">
               </div>
-              <div class="form-group ">
+              <div class="form-group form-rab orang">
                   <label>Golongan</label>
                   <select class="form-control" id="golongan" required name="golongan">
                     <option>-- Pilih --</option>
@@ -43,7 +44,7 @@
                     <option value="4">IV</option>
                   </select>
               </div>
-              <div class="form-group ">
+              <div class="form-group form-rab orang">
                   <label>PNS / Non PNS</label>
                   <select class="form-control" id="pns" required name="pns">
                     <option>-- Pilih --</option>
@@ -51,15 +52,20 @@
                     <option value="0">Non PNS</option>
                   </select>
               </div>
-              <div class="form-group ">
+              <div class="form-group form-rab orang">
                    <label>Jabatan Dalam Tugas</label>
                    <input type="text" class="form-control" value="<?= $jabatan ?>" id="jabatan" name="jabatan" placeholder="Jabatan Dalam Tugas">
               </div>
+              <div class="form-group form-rab badan">
+                <label>Besar Pajak</label>
+                <input type="text" class="form-control" value="<?= $pajak ?>" id="pajak" name="pajak" placeholder="Besar Pajak">
+            </div>
             </div>
             <div class="box-footer">
               <button type="button" data-dismiss="modal" class="btn btn-flat btn-warning">Cancel</button>
               <button type="submit" class="btn btn-flat btn-success">Simpan</button>
             </div>
+            
             <input type="hidden" value="1" name="mode"/>
             <?php
             if ($id != "")
@@ -78,6 +84,9 @@
 
 <script>
   $(function () {
+
+    cekJenis();
+
     $.ajax({
       type: "POST",
       url: "<?php echo $url_rewrite;?>process/rab/getnpwp",
@@ -86,34 +95,45 @@
         var obj = jQuery.parseJSON(data);
         var avai_npwp = obj.npwp;
         $( "#npwp" ).autocomplete({
-          source: avai_npwp
+          source: avai_npwp,
+          select: function (event, ui) {
+            // cnpwp(jenis);
+            cnpwp(ui.item.value);
+          },
         });
       },
     });
+
+
   });
 
-  function cnpwp(){
-    var npwp = $('#npwp').val();
+
+
+  function cnpwp(npwp){
+    // var npwp = $('#npwp').val();
     var jenis = $('#jenis-akun').val();
-    $.ajax({
-      type: "POST",
-      url: "<?php echo $url_rewrite;?>process/rab_rinci/getorang",
-      data: { 'npwp':npwp,
-              'jenis':jenis },
-      success: function(data){
-        var obj = jQuery.parseJSON(data);
-        if (obj != null) {
-          var penerima = obj.penerima;
-          $('#penerima').val(penerima);
-          var golongan = obj.golongan;
-          $('#golongan').val(golongan);
-          var pns = obj.pns;
-          $('#pns').val(pns);
-          var jabatan = obj.jabatan;
-          $('#jabatan').val(jabatan);
-        };
-      },
-    });
+    
+      $.ajax({
+        type: "POST",
+        url: "<?php echo $url_rewrite;?>process/rab_rinci/getorang",
+        data: { 'npwp':npwp,
+                'jenis':jenis },
+        success: function(data){
+          var obj = jQuery.parseJSON(data);
+          if (obj != null) {
+            if(jenis==1){
+              var golongan = obj.golongan;
+              $('#golongan').val(golongan);
+              var pns = obj.pns;
+              $('#pns').val(pns);
+              var jabatan = obj.jabatan;
+              $('#jabatan').val(jabatan);
+            }
+            var penerima = obj.penerima;
+            $('#penerima').val(penerima);
+          };
+        }
+      });
   }
 
   function search(){
@@ -130,5 +150,32 @@
                       { "name": "direktorat", "value": direktorat } );
       }
     });
+  }
+
+  
+
+  function showOrang(){
+    $(".form-rab").show();
+    $(".orang").show();
+    $(".badan").hide();
+  }
+
+  function showBadan(){
+    $(".form-rab").show();
+    $(".orang").hide();
+    $(".badan").show();
+  }
+  function hideAll(){
+    $(".form-rab").hide();
+  }
+  function cekJenis(){
+    var val = $("#jenis-akun").val();
+    if(val==0){
+      showBadan();
+    } else if(val==1) {
+      showOrang();
+    } else{
+      hideAll();
+    }
   }
 </script>

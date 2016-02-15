@@ -466,27 +466,32 @@
       $jabatan = $post['jabatan'];
       $golongan = $post['golongan'];
       $pns = $post['pns'];
+      $pajak_input = $post['pajak'];
 
       $status = $post['adendum'];
 
-      if ($golongan == 4) {
-        $pajak = '15';
-      }elseif ($golongan == 3) {
-        $pajak = '5';
-      }elseif ($golongan == 2) {
-        if ($pns == 1) {
-          $pajak = '0';
-        }else{
-          if ($npwp != "") {
-            $pajak = '5';
+      if($jenis==1){
+        if ($golongan == 4) {
+          $pajak = '15';
+        }elseif ($golongan == 3) {
+          $pajak = '5';
+        }elseif ($golongan == 2) {
+          if ($pns == 1) {
+            $pajak = '0';
           }else{
-            $pajak = '6';
+            if ($npwp != "") {
+              $pajak = '5';
+            }else{
+              $pajak = '6';
+            }
           }
+        }else{
+          $pajak = '0';
         }
-      }else{
-        $pajak = '0';
-      }
+      } else if($jenis == 0){
+        $pajak = $pajak_input;
 
+      }
       $query      = "INSERT INTO rabfull SET
         rabview_id  = '$id_rab_view',
         thang       = '$thang',
