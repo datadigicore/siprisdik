@@ -90,6 +90,9 @@ else {
     }
     else {
       switch ($data[1]) {
+        case 'report':
+          include ('view/content/report.php');
+        break;
         case 'table':
           include ('view/content/table.php');
         break;
