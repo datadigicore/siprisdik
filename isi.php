@@ -28,6 +28,12 @@ else {
         case 'user':
           include ('view/content/pengguna.php');
         break;
+        case 'edit_profile':
+          include ('view/content/edit_profile.php');
+        break;
+        case 'edit_pass':
+          include ('view/content/edit_pass.php');
+        break;
         case 'adduser':
           include ('view/content/pengguna-add.php');
         break;
@@ -90,6 +96,12 @@ else {
     }
     else {
       switch ($data[1]) {
+        case 'edit_profile':
+          include ('view/content/edit_profile.php');
+        break;
+        case 'edit_pass':
+          include ('view/content/edit_pass.php');
+        break;
         case 'report':
           include ('view/content/report.php');
         break;

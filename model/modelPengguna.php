@@ -27,7 +27,7 @@
 
     public function updatePengguna($data) {
       $id         = $data['id'];
-      $nama       = $data['nama'];
+      $nama       = $data['name'];
       $username   = $data['username'];
       $password   = $data['password'];
       $email      = $data['email'];
@@ -44,6 +44,45 @@
       
       $result = $this->query($query);
       return $result;
+    }
+
+    public function updatePengguna2($data) {
+      $id         = $data['id'];
+      $nama       = $data['name'];
+      $username   = $data['username'];
+      $email      = $data['email'];
+
+      $query       = "UPDATE pengguna SET
+        nama       = '$nama',
+        username   = '$username',
+        email      = '$email'
+        WHERE id   = '$id'
+      ";
+      
+      $result = $this->query($query);
+      $_SESSION['name'] = $name;
+      $_SESSION['username'] = $username;
+      $_SESSION['email'] = $email;
+      return $result;
+    }
+    public function updatePass($data) {
+      $id         = $data['id'];
+      $newpassword       = $data['newpassword'];
+      $query       = "UPDATE pengguna SET
+        password       = '$newpassword'
+        WHERE id   = '$id'
+      ";
+      
+      $result = $this->query($query);
+      return $result;
+    }
+
+    public function getPass($data){
+      $id         = $data['id'];
+      $query  = "SELECT password from pengguna where id = '$id'";
+      $result = $this->query($query);
+      $fetch  = $this->fetch_object($result);
+      return $fetch->password;
     }
 
     public function deletePengguna($id) {
