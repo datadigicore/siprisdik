@@ -2,9 +2,12 @@
 include 'config/application.php';
 
 $sess_id    = $_SESSION['user_id'];
+$id         = $_SESSION['id'];
 $name       = $purifier->purify($_POST[name]);
 $username   = $purifier->purify($_POST[username]);
 $password   = $utility->sha512($_POST[password]);
+$newpassword   = $utility->sha512($_POST[newpass]);
+$newpassword2  = $utility->sha512($_POST[newpass2]);
 // $hash_pass  = $utility->sha512($_POST[hash_pass]);
 $email      = $purifier->purify($_POST[email]);
 $level      = $purifier->purify($_POST[level]);
@@ -12,9 +15,12 @@ $direktorat     = $purifier->purify($_POST[direktorat]);
 $status     = $purifier->purify($_POST[status]);
 
 $data_pengguna = array(
+  "id"         => $id,
   "name"       => $name,
   "username"   => $username,
   "password"   => $password,
+  "newpassword"   => $newpassword,
+  "newpassword2"   => $newpassword2,
   "email"      => $email,
   "level"      => $level,
   "direktorat" => $direktorat,
@@ -71,6 +77,25 @@ switch ($process) {
   case 'edt':
     $pengguna->updatePengguna($data_pengguna);
     $utility->location_goto("content/setting");
+  break;
+  case 'edt-pass':
+    if($newpassword2==$newpassword){
+      $current_pass = $pengguna->getPass($data_pengguna);
+      
+      if($current_pass==$password){
+        $pengguna->updatePass($data_pengguna);
+        $utility->load("content/edit_pass","success","Password berhasil diubah");
+      } else {
+        $utility->load("content/edit_pass","warning","Password Gagal Diubah, Password lama tidak sesuai");
+      }
+      
+    } else {
+      $utility->load("content/edit_pass","warning","Password Gagal Diubah, Password baru tidak sama");
+    }
+  break;
+  case 'edt2':
+    $pengguna->updatePengguna2($data_pengguna);
+    $utility->load("content/edit_profile","success","Data berhasil diubah");
   break;
   case 'del':
     $pengguna->deletePengguna($hapuspengguna);
