@@ -42,7 +42,7 @@
 
               <div id="tbl_rute" class="hidden">  
                 <br>
-                <button class="form-control btn btn-primary btn-sm" onclick="tambahRute()"><i class="fa fa-plus"></i> Tambah Rute</button>
+                <a class="form-control btn btn-primary btn-sm" onclick="tambahRute()"><i class="fa fa-plus"></i> Tambah Rute</a>
               </div>
 
               <div id="nilai">
@@ -103,6 +103,13 @@
 </div>
 <script>
 
+  function getdatepicker(){
+    $(".tanggal").datepicker({ 
+      changeMonth: true,
+      changeYear: true,
+      format: 'dd/mm/yyyy' 
+    });
+  }
 
   $(document).ready(function() {
     $("#add-more-akun").click(function(){
@@ -273,27 +280,18 @@
           +'        <input type="hidden" name="perjalanan" value="true">'
           +'        <label>Rute</label>'
           +'        <input style="margin:5px auto" type="text" class="form-control" id="rute[]" name="rute[]" placeholder="Rute">'
-          +'        <script>'
-          +'          $(function (){'
-          +'            $("#datepicker").datepicker({ '
-          +'              changeMonth: true,'
-          +'              changeYear: true,'
-          +'              format: "dd/mm/yyyy" '
-          +'            });'
-          +'          })'
-          +'        </script>'
-          
+    
           +'        <label>Value</label>'
-          +'        <input style="margin:5px auto" type="text" class="form-control" id="value[]" name="value[]" placeholder="Value">'
+          +'        <input style="margin:5px auto" required type="text" class="form-control" id="value[]" name="value[]" placeholder="Value">'
                       
           +'        <label> Tanggal Berangkat</label>'
           +'        <div style="margin:5px auto" class="input-group">'
-          +'            <input type="text" class="form-control tgl" data-date-format="dd/mm/yyyy" id="datepicker" name="tgl_mulai[]" placeholder="Tanggal Berangkat">'
-          +'            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>'
+          +'            <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_mulai[]" name="tgl_mulai[]" placeholder="dd/mm/yyyy">'
+          +'             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>'
           +'        </div>'
           +'        <label> Tanggal Kembali</label>'
-          +'        <div style="margin:5px auto" class="input-group">'
-          +'             <input type="text" class="form-control tgl" data-date-format="dd/mm/yyyy" id="tgl_akhir[]" name="tgl_akhir[]" placeholder="Tanggal Berangkat">'
+          +'        <div class="input-group">'
+          +'             <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_akhir[]" name="tgl_akhir[]" placeholder="dd/mm/yyyy">'
           +'             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>'
           +'        </div>'
 
@@ -307,20 +305,23 @@
           +'        <input style="margin:5px auto" type="text" class="form-control" id="kota_tujuan[]" name="kota_tujuan[]" placeholder="Kota Tujuan">'
 
           +'        <label>Taxi Asal</label>'
-          +'        <input style="margin:5px auto" type="number" step="0.001" class="form-control" id="taxi_asal[]" name="taxi_asal[]" placeholder="Taxi Asal">'
+          +'        <input style="margin:5px auto" type="text" class="form-control" id="taxi_asal[]" name="taxi_asal[]" placeholder="Taxi Asal">'
 
           +'        <label>Taxi Tujuan</label>'
-          +'        <input style="margin:5px auto" type="number" step="0.001" class="form-control" id="taxi_tujuan[]" name="taxi_tujuan[]" placeholder="Taxi Tujuan">'
+          +'        <input style="margin:5px auto" type="text" class="form-control" id="taxi_tujuan[]" name="taxi_tujuan[]" placeholder="Taxi Tujuan">'
 
           +'    </div>'
           +'  </div>'
           +'</div>' );
+      getdatepicker();
   }
 
+    
   function simpan(){
-    $( "#formAkun" ).submit();
+    $( "form" ).submit();
+    
   }
-  
+  // $( "#formAkun" ).submit();
   
   $(function () {
      var table = $("#table").DataTable({

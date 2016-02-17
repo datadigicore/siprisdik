@@ -148,8 +148,14 @@ switch ($process) {
 		}
 		break;
 	case 'tambahAkun':
-	print_r($_POST);die;
-		$insert = $mdl_rab->tambahAkun($_POST);
+	echo "<pre>";
+	// print_r($_POST);die;
+		$akun = $_POST['kdakun'];
+		if ($akun == '524114' || $akun == '524119') {
+			$insert = $mdl_rab->tambahAkunPerjalanan($_POST);
+		}else{
+			$insert = $mdl_rab->tambahAkun($_POST);
+		}
     	$utility->load("content/rabakun/".$_POST['id_rabfull'],"success","Data berhasil dimasukkan ke dalam database");
 		break;
 	case 'tableAkun':

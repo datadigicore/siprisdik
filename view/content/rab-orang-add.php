@@ -32,12 +32,12 @@
               </div>
               <div class="form-group form-rab">
                   <label>Nama Penerima</label>
-                  <input type="text" class="form-control" value="<?= $penerima ?>" id="penerima" name="penerima" placeholder="Nama Penerima">
+                  <input type="text" class="form-control" required value="<?= $penerima ?>" id="penerima" name="penerima" placeholder="Nama Penerima">
               </div>
               <div class="form-group form-rab orang">
                   <label>Golongan</label>
-                  <select class="form-control" id="golongan" required name="golongan">
-                    <option>-- Pilih --</option>
+                  <select class="form-control" id="golongan" name="golongan">
+                    <option value="">-- Pilih --</option>
                     <option value="1">I</option>
                     <option value="2">II</option>
                     <option value="3">III</option>
@@ -46,7 +46,7 @@
               </div>
               <div class="form-group form-rab orang">
                   <label>PNS / Non PNS</label>
-                  <select class="form-control" id="pns" required name="pns">
+                  <select class="form-control" id="pns" name="pns">
                     <option>-- Pilih --</option>
                     <option value="1">PNS</option>
                     <option value="0">Non PNS</option>
@@ -54,11 +54,11 @@
               </div>
               <div class="form-group form-rab orang">
                    <label>Jabatan Dalam Tugas</label>
-                   <input type="text" class="form-control" value="<?= $jabatan ?>" id="jabatan" name="jabatan" placeholder="Jabatan Dalam Tugas">
+                   <input type="text"  class="form-control" value="<?= $jabatan ?>" id="jabatan" name="jabatan" placeholder="Jabatan Dalam Tugas">
               </div>
               <div class="form-group form-rab badan">
                 <label>Besar Pajak</label>
-                <input type="text" class="form-control" value="<?= $pajak ?>" id="pajak" name="pajak" placeholder="Besar Pajak">
+                <input type="number" class="form-control" value="<?= $pajak ?>" id="pajak" name="pajak" placeholder="Besar Pajak">
             </div>
             </div>
             <div class="box-footer">
@@ -84,12 +84,15 @@
 
 <script>
   $(function () {
-
     cekJenis();
+    getnpwp();
+  });
 
+  function getnpwp(){
+    var jenis = $('#jenis-akun').val();
     $.ajax({
       type: "POST",
-      url: "<?php echo $url_rewrite;?>process/rab/getnpwp",
+      url: "<?php echo $url_rewrite;?>process/rab/getnpwp/"+jenis,
       data: { },
       success: function(data){
         var obj = jQuery.parseJSON(data);
@@ -103,14 +106,11 @@
         });
       },
     });
-
-
-  });
+  }
 
 
 
   function cnpwp(npwp){
-    // var npwp = $('#npwp').val();
     var jenis = $('#jenis-akun').val();
     
       $.ajax({
@@ -128,6 +128,9 @@
               $('#pns').val(pns);
               var jabatan = obj.jabatan;
               $('#jabatan').val(jabatan);
+            }else{
+              var pajak = obj.pajak;
+              $('#pajak').val(pajak);
             }
             var penerima = obj.penerima;
             $('#penerima').val(penerima);
@@ -172,8 +175,10 @@
     var val = $("#jenis-akun").val();
     if(val==0){
       showBadan();
+      getnpwp();
     } else if(val==1) {
       showOrang();
+      getnpwp();
     } else{
       hideAll();
     }

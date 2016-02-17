@@ -115,7 +115,8 @@ switch ($process) {
     $datatable->get_table($table, $key, $column,$where,$dataArray);
     break;
   case 'getnpwp':
-    $npwp = $mdl_rab->getnpwp();
+    $jenis = $data[3];
+    $npwp = $mdl_rab->getnpwp($jenis);
     echo json_encode($npwp);
     break;
   case 'getout':
