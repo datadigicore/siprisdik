@@ -60,7 +60,7 @@
       ";
       
       $result = $this->query($query);
-      $_SESSION['name'] = $name;
+      $_SESSION['nama'] = $nama;
       $_SESSION['username'] = $username;
       $_SESSION['email'] = $email;
       return $result;
