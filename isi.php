@@ -138,8 +138,24 @@ else {
           }
           break;
         case 'rabakun':
+          if ($data[2] == 'detail') {
+            $id_rabfull = $data[3];
+            $getrab = $mdl_rab->getrabfull($id_rabfull);
+            $getjalan = $mdl_rab->getjalanbyidrab($id_rabfull);
+            $datarkakl = $mdl_rab->getrkaklfull2($getrab);
+            include ('view/content/rab-add-detail.php');
+          } else if ($data[2] == 'edit') {
+            $id_rabfull = $data[3];
+            $getrab = $mdl_rab->getrabfull($id_rabfull);
+            $getjalan = $mdl_rab->getjalanbyidrab($id_rabfull);
+            $datarkakl = $mdl_rab->getrkaklfull2($getrab);
+            include ('view/content/rab-add-edit.php');
+          } else{
             $id_rabfull = $data[2];
-          include ('view/content/rab-add.php');
+            $getrab = $mdl_rab->getrabfull($id_rabfull);
+            $datarkakl = $mdl_rab->getrkaklfull2($getrab);
+            include ('view/content/rab-add.php');
+          }
           break;
         case 'rab51':
           if($data[3]=='addnew'){

@@ -148,8 +148,6 @@ switch ($process) {
 		}
 		break;
 	case 'tambahAkun':
-	echo "<pre>";
-	// print_r($_POST);die;
 		$akun = $_POST['kdakun'];
 		if ($akun == '524114' || $akun == '524119') {
 			$insert = $mdl_rab->tambahAkunPerjalanan($_POST);
@@ -157,6 +155,15 @@ switch ($process) {
 			$insert = $mdl_rab->tambahAkun($_POST);
 		}
     	$utility->load("content/rabakun/".$_POST['id_rabfull'],"success","Data berhasil dimasukkan ke dalam database");
+		break;
+	case 'editAkun':
+		$akun = $_POST['kdakun'];
+		if ($akun == '524114' || $akun == '524119') {
+			$insert = $mdl_rab->editAkunPerjalanan($_POST);
+		}else{
+			$insert = $mdl_rab->editAkun($_POST);
+		}
+    	$utility->load("content/rabakun/".$_POST['id_rabfull'],"success","Data berhasil diubah");
 		break;
 	case 'tableAkun':
 		$rabfull_id = $data[3];
@@ -185,13 +192,13 @@ switch ($process) {
 	      array( 'db' => 'rabfull.status',  'dt' => 6, 'formatter' => function($d,$row,$dataArray){ 
 	        if(($d==0 || $d==3) && $_SESSION['level'] != 0){
 	          return  '<div class="text-center">'.
-	                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Detail</a>'.
-	                    '<a style="margin:0 2px;" id="btn-trans" href="#" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i>&nbsp; Edit</a>'.
-	                    '<a style="margin:0 2px;" id="btn-trans" href="#" class="btn btn-flat btn-danger btn-sm" ><i class="fa fa-close"></i>&nbsp; Delete</a>'.
+	                    '<a style="margin:0 2px;" id="btn-detail" href="'.$dataArray['url_rewrite'].'content/rabakun/detail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Detail</a>'.
+	                    '<a style="margin:0 2px;" id="btn-edit" href="'.$dataArray['url_rewrite'].'content/rabakun/edit/'.$row[0].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i>&nbsp; Edit</a>'.
+	                    '<a style="margin:0 2px;" id="btn-del" href="#delrab" data-toggle="modal" class="btn btn-flat btn-danger btn-sm" ><i class="fa fa-close"></i>&nbsp; Delete</a>'.
 	                  '</div>';
 	        }else{
 	        	return  '<div class="text-center">'.
-		                    '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Detail</a>'.
+		                    '<a style="margin:0 2px;" id="btn-detail" href="'.$dataArray['url_rewrite'].'content/rabakun/detail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Detail</a>'.
 		                '</div>';
 	        }
 	      })
@@ -247,6 +254,13 @@ switch ($process) {
 			}
 		}
 		echo json_encode($data);
+		break;
+	case 'delrab':
+		$id_rabfull = $_POST['id_rab_del'];
+		$getrabfull = $mdl_rab->getrabfull($id_rabfull);
+		$mdl_rab->delrabdetail($id_rabfull);
+		$getidrab = $mdl_rab->getminrabid($getrabfull);
+    	$utility->load("content/rabakun/".$getidrab->id,"success","Data berhasil dihapus");
 		break;
 	default:
 		$utility->location_goto(".");

@@ -24,6 +24,30 @@
               <i class="icon fa fa-warning"></i><?php echo $_POST['message']; ?>
             </div>
           <?php endif ?>
+            <table class="display table table-bordered table-striped" >
+              <tr>
+                <th class="col-md-1"><label>RKAKL</label></th>
+                <th class="col-md-1"><label>Penerima</label></th>
+              </tr>
+              <tr>
+                <td>
+                <table>
+                <tr><td valign="top">Tahun</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->THANG?></td></tr>
+                <tr><td valign="top">Kegiatan</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMGIAT?></td></tr>
+                <tr><td valign="top">Output</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMOUTPUT?></td></tr>
+                <tr><td valign="top">Sub Output</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMSOUTPUT?></td></tr>
+                <tr><td valign="top">Komponen</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMKMPNEN?></td></tr>
+                <tr><td valign="top">Sub Komponen</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NmSkmpnen?></td></tr>
+                </table>
+                </td>
+                <td>
+                <table>
+                <tr><td valign="top">NPWP</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $getrab->npwp;?></td></tr>
+                <tr><td valign="top">Nama</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $getrab->penerima;?></td></tr>
+                </table>
+                </td>
+            </table>
+            <br>
             <input type="hidden" id="id_rabfull" name="id_rabfull" value="<?php echo $id_rabfull?>" />
             <a style="" id="add-more-akun" href="#" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Tambah Akun</a>
             <div class="well" id="div-tambah-akun" style="display:none"> 
@@ -101,7 +125,61 @@
   </div>
   </section>
 </div>
+<div class="modal fade" id="delrab">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="<?php echo $url_rewrite;?>process/rab_rinci/delrab" method="POST">
+        <div class="modal-header" style="background-color:#111F3F !important; color:white;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" style="color:white">×</span></button>
+          <h4 class="modal-title">Dialog Box</h4>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="id_rab_del" name="id_rab_del" value="" />
+          <div class="form-group">
+            <label>Apakah Anda Yakin Ingin Menghapus Data ?</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" data-dismiss="modal" class="btn btn-flat btn-warning">Tidak</button>
+          <button type="submit" class="btn btn-flat btn-success">Ya</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <script>
+  var table;
+  $(function () {
+    table = $("#table").DataTable({
+      "oLanguage": {
+        "sInfoFiltered": ""
+      },
+      "processing": true,
+      "serverSide": true,
+      "scrollX": true,
+      "ajax": {
+        "url": "<?php echo $url_rewrite;?>process/rab_rinci/tableAkun/<?php echo $id_rabfull; ?>",
+        "type": "GET"
+      },
+      "columnDefs" : [
+        {"targets" : 0,
+         "visible" : false},
+        {"targets" : 1},
+        {"targets" : 2},
+        {"targets" : 3},
+        {"targets" : 4},
+        {"targets" : 5},
+      ],
+      "order": [[ 0, "desc" ]]
+    });
+
+    $(document).on("click", "#btn-del", function (){
+      var tr = $(this).closest('tr');
+      tabrow = table.row(tr);
+      $("#id_rab_del").val(tabrow.data()[0]);
+    });
+  });
 
   function getdatepicker(){
     $(".tanggal").datepicker({ 
@@ -121,6 +199,7 @@
       var val = $("#kode-akun").val();
       generateForm(val);
     });
+    
     $(document).on("click",".btn-dismiss",function(){
       var val = $(this).attr("value");
       //alert(val);
@@ -318,33 +397,7 @@
 
     
   function simpan(){
-    $( "form" ).submit();
-    
+    $( "#formAkun" ).submit();
   }
-  // $( "#formAkun" ).submit();
-  
-  $(function () {
-     var table = $("#table").DataTable({
-      "oLanguage": {
-        "sInfoFiltered": ""
-      },
-      "processing": true,
-      "serverSide": true,
-      "scrollX": true,
-      "ajax": {
-        "url": "<?php echo $url_rewrite;?>process/rab_rinci/tableAkun/<?php echo $id_rabfull; ?>",
-        "type": "GET"
-      },
-      "columnDefs" : [
-        {"targets" : 0,
-         "visible" : false},
-        {"targets" : 1},
-        {"targets" : 2},
-        {"targets" : 3},
-        {"targets" : 4},
-        {"targets" : 5},
-      ],
-      "order": [[ 0, "desc" ]]
-    });
-  });
+
 </script>
