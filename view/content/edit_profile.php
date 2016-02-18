@@ -27,7 +27,7 @@
               <div class="form-group ">
                 <label class="col-md-2 control-label">Nama</label>
                 <div class="col-md-9">
-                  <input type="text" class="form-control input-profile" value="<?= $_SESSION['nama'] ?>" id="nama" name="nama" placeholder="Nama" readonly="true">
+                  <input type="text" class="form-control input-profile" value="<?= $_SESSION['nama'] ?>" id="name" name="name" placeholder="Nama" readonly="true">
                 </div>
               </div>
               <div class="form-group ">
