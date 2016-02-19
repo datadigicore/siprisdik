@@ -4,7 +4,11 @@
       Data RAB 
     </h1>
     <ol class="breadcrumb">
-      <li><i class="fa fa-user"></i> Tambah RAB</li>
+      <li><i class="fa fa-table"></i> <b>
+        <a href="<?php echo $url_rewrite?>content/rab"> Data RAB</a> 
+        > Tambah RAB 
+        </b>
+      </li>
     </ol>
   </section>
   <section class="content">

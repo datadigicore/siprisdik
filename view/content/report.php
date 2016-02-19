@@ -11,7 +11,7 @@
   </section>
   <section class="content">
     <div class="row">
-      <div class="col-md-9 col-xs-12">
+      <div class="col-md-12 col-xs-12">
         <div class="nav-tabs-custom">
           <ul class="nav nav-tabs nav-justified">
             <!-- <li class="dropdown active">
@@ -25,12 +25,12 @@
                 <li><a href="#tab_4" data-toggle="tab" aria-expanded="true">Kuitansi Transport Lokal</a></li>
               </ul>
             </li> -->
-            <li><a href="#tab_7" data-toggle="tab" aria-expanded="true">Surat Perintah Pembayaran</a></li>
+            <li class="active"><a href="#tab_7" data-toggle="tab" aria-expanded="true">Surat Perintah Pembayaran</a></li>
             <li><a href="#tab_5" data-toggle="tab" aria-expanded="true">Rincian Permintaan Pengeluaran</a></li>
             <li><a href="#tab_6" data-toggle="tab" aria-expanded="true">Surat Pertanggung Jawaban Belanja</a></li>
           </ul>
           <div class="tab-content" style="padding:5px 0 0 0;">
-            <div class="tab-pane active" id="tab_1">
+            <div class="tab-pane" id="tab_1">
               <form method="POST" action="<?php echo $url_rewrite;?>process/report/Kuitansi_Honor_Uang_Saku">
               <div class="box-body" style="padding-bottom:0;">
                 <div class="form-group">
@@ -144,7 +144,7 @@
               </div>        
               </form>
             </div>
-            <div class="tab-pane" id="tab_7">
+            <div class="tab-pane active" id="tab_7">
               <form method="POST" action="<?php echo $url_rewrite;?>process/report/SPP">
               <div class="box-body" style="padding-bottom:0;">
 <!--                 <div class="form-group">

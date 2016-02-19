@@ -5,7 +5,16 @@
       <small>Menu</small>
     </h1>
     <ol class="breadcrumb">
-      <li><i class="fa fa-table"></i> Detail</li>
+      <li><i class="fa fa-table"></i> 
+        <b>
+        <a href="<?php echo $url_rewrite?>content/rab"> Data RAB</a> 
+        > 
+        <a href="<?php echo $url_rewrite?>content/rabdetail/<?php echo $getrab->rabview_id;?>"> Orang/Badan </a>
+        >
+        <a href="<?php echo $url_rewrite?>content/rabakun/<?php echo $getrab->id;?>"> Transaksi </a>
+        >
+        Detail </b>
+      </li>
     </ol>
   </section>
   <section class="content">
@@ -38,68 +47,80 @@
 
               <?php if($datarkakl[0]->KDAKUN !== "524119" && $datarkakl[0]->KDAKUN !== "524114"){?>
               <div id="nilai">
-                <label>Value</label>
-                <input style="margin:5px auto" type="number" class="form-control" name="value" id="value" value="<?php echo number_format($getrab->value);?>" readonly />
+                <label>Jumlah</label>
+                <input style="margin:5px auto" type="text" class="form-control" name="value" id="value" value="<?php echo number_format($getrab->value,2);?>" readonly />
               </div>
               <?php }?>
             </div>
+            <div id="perjalanan">
+              <?php for ($i=0; $i < count($getjalan); $i++) {  ?>
+              <div class="col-xs-4 well">
+                <!-- <div class="box box-warning"> -->
+                  <!-- <div class="box-header with-border"> -->
+                    <h3 class="box-title" style="margin-top:6px;">Perincian</h3>
+                    <!-- <div class="box-tools pull-right"> -->
+                      <!-- <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i> -->
+                      <!-- </button> -->
+                    <!-- </div> -->
+                  <!-- </div> -->
+                  <!-- <div class="box-body"> -->
+                      <input type="hidden" name="perjalanan" value="true">
+                      <label>Rute</label>
+                      <input style="margin:5px auto" type="text" class="form-control" id="rute[]" name="rute[]" value="<?php echo $getjalan[$i]->rute;?>" readonly>
+
+                      <label> Tanggal Berangkat</label>
+                      <div style="margin:5px auto" class="input-group">
+                          <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_mulai[]" name="tgl_mulai[]" value="<?php echo date('d/m/Y', strtotime($getjalan[$i]->tgl_mulai) );?>" readonly>
+                           <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                      </div>
+                      <label> Tanggal Kembali</label>
+                      <div class="input-group">
+                           <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_akhir[]" name="tgl_akhir[]" value="<?php echo date('d/m/Y', strtotime($getjalan[$i]->tgl_akhir) );?>" readonly>
+                           <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                      </div>
+
+                      <label>Alat Transportasi</label>
+                      <input style="margin:5px auto" type="text" class="form-control" id="alat_trans[]" name="alat_trans[]" value="<?php echo $getjalan[$i]->alat_trans;?>" readonly>
+
+                      <label>Kota Asal</label>
+                      <input style="margin:5px auto" type="text" class="form-control" id="kota_asal[]" name="kota_asal[]" value="<?php echo $getjalan[$i]->kota_asal;?>" readonly>
+
+                      <label>Kota Tujuan</label>
+                      <input style="margin:5px auto" type="text" class="form-control" id="kota_tujuan[]" name="kota_tujuan[]" value="<?php echo $getjalan[$i]->kota_tujuan;?>" readonly>
+
+                      <label>Taxi Asal</label>
+                      <input style="margin:5px auto" type="text" class="form-control" id="taxi_asal[]" name="taxi_asal[]" value="<?php echo $getjalan[$i]->taxi_asal;?>" readonly>
+
+                      <label>Taxi Tujuan</label>
+                      <input style="margin:5px auto" type="text" class="form-control" id="taxi_tujuan[]" name="taxi_tujuan[]" value="<?php echo $getjalan[$i]->taxi_tujuan;?>" readonly>
+
+                      <label>Jumlah</label>
+                      <input style="margin:5px auto" type="text" class="form-control" id="value[]" name="value[]" value="<?php echo $getjalan[$i]->value;?>" readonly>
+                          
+                  <!-- </div> -->
+                <!-- </div> -->
+              </div> 
+              <?php }?>
+            </div>
+
+            <?php if($_SESSION['level'] != 0){?>
+              <?php if($getrab->status == 0 || $getrab->status == 3 || $getrab->status == 5){ ?>
+              <div id="tbl_edit" class="col-xs-12">
+                <a href="<?php echo $url_rewrite.'content/rabakun/edit/'.$id_rabfull;?>" class="btn btn-flat btn-warning btn-lg col-xs-12"><i class="fa fa-pencil"></i> Edit Akun</a>
+              </div>
+              <?php }?>
+            <?php }?>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="perjalanan" class="row">
-    <?php for ($i=0; $i < count($getjalan); $i++) {  ?>
-    <div class="col-xs-4">
-      <div class="box box-warning">
-        <div class="box-header with-border">
-          <h3 class="box-title" style="margin-top:6px;">Rute</h3>
-          <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-            </button>
-          </div>
-        </div>
-        <div class="box-body">
-            <input type="hidden" name="perjalanan" value="true">
-            <label>Rute</label>
-            <input style="margin:5px auto" type="text" class="form-control" id="rute[]" name="rute[]" value="<?php echo $getjalan[$i]->rute;?>" readonly>
+  <!-- <div id="perjalanan" class="row">
 
-            <label>Value</label>
-            <input style="margin:5px auto" type="text" class="form-control" id="value[]" name="value[]" value="<?php echo $getjalan[$i]->value;?>" readonly>
-                
-            <label> Tanggal Berangkat</label>
-            <div style="margin:5px auto" class="input-group">
-                <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_mulai[]" name="tgl_mulai[]" value="<?php echo date('d/m/Y', strtotime($getjalan[$i]->tgl_mulai) );?>" readonly>
-                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-            </div>
-            <label> Tanggal Kembali</label>
-            <div class="input-group">
-                 <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_akhir[]" name="tgl_akhir[]" value="<?php echo date('d/m/Y', strtotime($getjalan[$i]->tgl_akhir) );?>" readonly>
-                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-            </div>
-
-            <label>Alat Transportasi</label>
-            <input style="margin:5px auto" type="text" class="form-control" id="alat_trans[]" name="alat_trans[]" value="<?php echo $getjalan[$i]->alat_trans;?>" readonly>
-
-            <label>Kota Asal</label>
-            <input style="margin:5px auto" type="text" class="form-control" id="kota_asal[]" name="kota_asal[]" value="<?php echo $getjalan[$i]->kota_asal;?>" readonly>
-
-            <label>Kota Tujuan</label>
-            <input style="margin:5px auto" type="text" class="form-control" id="kota_tujuan[]" name="kota_tujuan[]" value="<?php echo $getjalan[$i]->kota_tujuan;?>" readonly>
-
-            <label>Taxi Asal</label>
-            <input style="margin:5px auto" type="text" class="form-control" id="taxi_asal[]" name="taxi_asal[]" value="<?php echo $getjalan[$i]->taxi_asal;?>" readonly>
-
-            <label>Taxi Tujuan</label>
-            <input style="margin:5px auto" type="text" class="form-control" id="taxi_tujuan[]" name="taxi_tujuan[]" value="<?php echo $getjalan[$i]->taxi_tujuan;?>" readonly>
-
-        </div>
-      </div>
-    </div> 
-    <?php }?>
-  </div>
+  </div> -->
   
-  <div id="tbl_edit" class="row">
+  <?php if($_SESSION['level'] != 0){?>
+  <!-- <div id="tbl_edit" class="row">
     <div class="col-xs-12">
       <div class="box box-warning">
         <div class="box-footer">
@@ -107,6 +128,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
+  <?php }?>
   </section>
 </div>

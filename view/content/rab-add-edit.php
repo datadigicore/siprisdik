@@ -5,7 +5,17 @@
       <small>Menu</small>
     </h1>
     <ol class="breadcrumb">
-      <li><i class="fa fa-table"></i> Edit</li>
+      <li><i class="fa fa-table"></i> 
+        <b>
+        <a href="<?php echo $url_rewrite?>content/rab"> Data RAB</a> 
+        > 
+        <a href="<?php echo $url_rewrite?>content/rabdetail/<?php echo $getrab->rabview_id;?>"> Orang/Badan </a>
+        >
+        <a href="<?php echo $url_rewrite?>content/rabakun/<?php echo $getrab->id;?>"> Transaksi </a>
+        >
+        Edit </b>
+        </b>
+      </li>
     </ol>
   </section>
   <section class="content">
@@ -28,22 +38,76 @@
               <select style="margin:5px auto" class="form-control" id="noitem" name="noitem" required />
               </select>
 
-              <?php if($datarkakl[0]->KDAKUN == '521211') $bahan = ''; else $bahan = 'hidden'; ?>
-              <div id="bahan" class="<?php echo $bahan;?>">
+              <div id="bahan">
+              <?php if($datarkakl[0]->KDAKUN == '521211') {?>
                 <label>PPN</label>
                 <input style="margin:5px auto" type="number" class="form-control" name="ppn" id="ppn" value="<?php echo $getrab->ppn?>" placeholder="PPN" />
+              <?php }?>
               </div>
 
-              <div id="tbl_rute" class="hidden">  
-                <br>
-                <a class="form-control btn btn-primary btn-sm" onclick="tambahRute()"><i class="fa fa-plus"></i> Tambah Rute</a>
+              <div id="tbl_rute">
               </div>
 
-              <?php if($datarkakl[0]->KDAKUN !== "524119" && $datarkakl[0]->KDAKUN !== "524114") $nilai = ''; else $nilai = 'hidden';?>
-              <div id="nilai" class="<?php echo $nilai;?>">
-                <label>Value</label>
+              <div id="nilai">
+              <?php if($datarkakl[0]->KDAKUN !== "524119" && $datarkakl[0]->KDAKUN !== "524114") {?>
+                <label>Jumlah</label>
                 <input style="margin:5px auto" type="number" class="form-control" name="value" id="value" value="<?php echo $getrab->value;?>" />
+              <?php }?>
               </div>
+            </div>
+            <div id="perjalanan">
+              <?php for ($i=0; $i < count($getjalan); $i++) {  ?>
+              <div class="col-xs-4 well">
+                <!-- <div class="box box-warning"> -->
+                  <!-- <div class="box-header with-border"> -->
+                    <h3 class="box-title" style="margin-top:6px;">Perincian</h3>
+                    <!-- <div class="box-tools pull-right"> -->
+                      <!-- <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i> -->
+                      <!-- </button> -->
+                    <!-- </div> -->
+                  <!-- </div> -->
+                  <!-- <div class="box-body"> -->
+                      <input type="hidden" name="perjalanan" value="true">
+                      <label>Rute</label>
+                      <input style="margin:5px auto" type="text" class="form-control" id="rute[]" name="rute[]" value="<?php echo $getjalan[$i]->rute;?>" >
+
+                      <label> Tanggal Berangkat</label>
+                      <div style="margin:5px auto" class="input-group">
+                          <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_mulai[]" name="tgl_mulai[]" value="<?php echo date('d/m/Y', strtotime($getjalan[$i]->tgl_mulai) );?>" >
+                           <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                      </div>
+                      <label> Tanggal Kembali</label>
+                      <div class="input-group">
+                           <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_akhir[]" name="tgl_akhir[]" value="<?php echo date('d/m/Y', strtotime($getjalan[$i]->tgl_akhir) );?>" >
+                           <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                      </div>
+
+                      <label>Alat Transportasi</label>
+                      <input style="margin:5px auto" type="text" class="form-control" id="alat_trans[]" name="alat_trans[]" value="<?php echo $getjalan[$i]->alat_trans;?>" >
+
+                      <label>Kota Asal</label>
+                      <input style="margin:5px auto" type="text" class="form-control" id="kota_asal[]" name="kota_asal[]" value="<?php echo $getjalan[$i]->kota_asal;?>" >
+
+                      <label>Kota Tujuan</label>
+                      <input style="margin:5px auto" type="text" class="form-control" id="kota_tujuan[]" name="kota_tujuan[]" value="<?php echo $getjalan[$i]->kota_tujuan;?>">
+
+                      <label>Taxi Asal</label>
+                      <input style="margin:5px auto" type="text" class="form-control" id="taxi_asal[]" name="taxi_asal[]" value="<?php echo $getjalan[$i]->taxi_asal;?>" >
+
+                      <label>Taxi Tujuan</label>
+                      <input style="margin:5px auto" type="text" class="form-control" id="taxi_tujuan[]" name="taxi_tujuan[]" value="<?php echo $getjalan[$i]->taxi_tujuan;?>" >
+
+                      <label>Jumlah</label>
+                      <input style="margin:5px auto" type="text" class="form-control" id="value[]" name="value[]" value="<?php echo $getjalan[$i]->value;?>" >
+                          
+                  <!-- </div> -->
+                <!-- </div> -->
+              </div> 
+              <?php }?>
+            </div>
+
+            <div id="tbl_save" class="col-xs-12">
+              <button type="submit" onclick="simpan()" class="btn btn-flat btn-success btn-lg"><i class="fa fa-save"></i> Simpan Akun</a></button>
             </div>
         </div>
       </div>
@@ -51,58 +115,11 @@
   </div>
   <?php }?>
 
-  <div id="perjalanan" class="row">
-    <?php for ($i=0; $i < count($getjalan); $i++) {  ?>
-    <div class="col-xs-4">
-      <div class="box box-warning">
-        <div class="box-header with-border">
-          <h3 class="box-title" style="margin-top:6px;">Rute</h3>
-          <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-            </button>
-          </div>
-        </div>
-        <div class="box-body">
-            <input type="hidden" name="perjalanan" value="true">
-            <label>Rute</label>
-            <input style="margin:5px auto" type="text" class="form-control" id="rute[]" name="rute[]" value="<?php echo $getjalan[$i]->rute;?>" >
+<!--   <div id="perjalanan" class="row">
 
-            <label>Value</label>
-            <input style="margin:5px auto" type="text" class="form-control" id="value[]" name="value[]" value="<?php echo $getjalan[$i]->value;?>" >
-                
-            <label> Tanggal Berangkat</label>
-            <div style="margin:5px auto" class="input-group">
-                <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_mulai[]" name="tgl_mulai[]" value="<?php echo date('d/m/Y', strtotime($getjalan[$i]->tgl_mulai) );?>" >
-                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-            </div>
-            <label> Tanggal Kembali</label>
-            <div class="input-group">
-                 <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_akhir[]" name="tgl_akhir[]" value="<?php echo date('d/m/Y', strtotime($getjalan[$i]->tgl_akhir) );?>" >
-                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-            </div>
-
-            <label>Alat Transportasi</label>
-            <input style="margin:5px auto" type="text" class="form-control" id="alat_trans[]" name="alat_trans[]" value="<?php echo $getjalan[$i]->alat_trans;?>" >
-
-            <label>Kota Asal</label>
-            <input style="margin:5px auto" type="text" class="form-control" id="kota_asal[]" name="kota_asal[]" value="<?php echo $getjalan[$i]->kota_asal;?>" >
-
-            <label>Kota Tujuan</label>
-            <input style="margin:5px auto" type="text" class="form-control" id="kota_tujuan[]" name="kota_tujuan[]" value="<?php echo $getjalan[$i]->kota_tujuan;?>">
-
-            <label>Taxi Asal</label>
-            <input style="margin:5px auto" type="text" class="form-control" id="taxi_asal[]" name="taxi_asal[]" value="<?php echo $getjalan[$i]->taxi_asal;?>" >
-
-            <label>Taxi Tujuan</label>
-            <input style="margin:5px auto" type="text" class="form-control" id="taxi_tujuan[]" name="taxi_tujuan[]" value="<?php echo $getjalan[$i]->taxi_tujuan;?>" >
-
-        </div>
-      </div>
-    </div> 
-    <?php }?>
   </div>
-  
-  <div id="tbl_save" class="row">
+ -->  
+<!--   <div id="tbl_save" class="row">
     <div class="col-xs-12">
       <div class="box box-success">
         <div class="box-footer">
@@ -110,7 +127,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   </form>
 
@@ -176,43 +193,61 @@
         $("#noitem").val("<?php echo $getrab->noitem;?>");
       });  
 
-    if(kdAkun=="524119" || kdAkun=="524114"){
-      $('#tbl_rute').removeClass('hidden');
-      $('#bahan').addClass('hidden');
-      $('#nilai').addClass('hidden');
-      $('#perjalanan').removeClass('hidden');
-    } else if(kdAkun == "521211"){
-      $('#tbl_rute').addClass('hidden');
-      $('#bahan').removeClass('hidden');
-      $('#nilai').removeClass('hidden');
-      $('#perjalanan').addClass('hidden');
-    } else {
-      $('#tbl_rute').addClass('hidden');
-      $('#bahan').addClass('hidden');
-      $('#nilai').removeClass('hidden');
-      $('#perjalanan').addClass('hidden');
-    }
+      if(kdAkun=="524119" || kdAkun=="524114"){
+        $('#tbl_rute').append('<br>'
+              +'  <a class="form-control btn btn-primary btn-sm" onclick="tambahRute()"><i class="fa fa-plus"></i> Tambah Rute</a>'
+              );
+        if (isEmpty($('#perjalanan'))) {
+          tambahRute();
+        }
+        $('#bahan').empty();
+        $('#nilai').empty();
+      } else if(kdAkun == "521211"){
+        if (isEmpty($('#bahan'))) {
+            $('#bahan').append('  <label>PPN</label>'
+          +'  <input style="margin:5px auto" type="number" class="form-control" name="ppn" id="ppn" value="" placeholder="PPN" required />'
+          );
+        }
+        if (isEmpty($('#nilai'))) {
+          $('#nilai').append('<label>Jumlah</label>'
+            +'  <input style="margin:5px auto" type="number" class="form-control" name="value" id="value" value="" placeholder="Jumlah" required />'
+            );
+        }
+        $('#perjalanan').empty();
+        $('#tbl_rute').empty();
+      } else {
+        $('#bahan').empty();
+        if (isEmpty($('#nilai'))) {
+          $('#nilai').append('<label>Jumlah</label>'
+            +'  <input style="margin:5px auto" type="number" class="form-control" name="value" id="value" value="" placeholder="Jumlah" required />'
+            );
+        }
+        $('#perjalanan').empty();
+        $('#tbl_rute').empty();
+      }
   }
+
+  function isEmpty( el ){
+      return !$.trim(el.html())
+  }
+  
 
   function tambahRute(){
     $('#perjalanan').append( ''
-          +'<div class="col-xs-4">'
-          +'  <div class="box box-warning">'
-          +'    <div class="box-header with-border">'
-          +'      <h3 class="box-title" style="margin-top:6px;">Tambah Rute</h3>'
-          +'      <div class="box-tools pull-right">'
-          +'        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>'
-          +'        </button>'
-          +'      </div>'
-          +'    </div>'
-          +'    <div class="box-body">'
+          +'<div id="tambah_rinci" class="col-xs-4 well">'
+          // +'  <div class="box box-warning">'
+          // +'    <div class="box-header with-border">'
+          +'      <h3 class="box-title" style="margin-top:6px;">Perincian</h3>'
+          // +'      <div class="box-tools pull-right">'
+          // +'        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>'
+          // +'        </button>'
+          // +'      </div>'
+          // +'    </div>'
+          // +'    <div class="box-body">'
           +'        <input type="hidden" name="perjalanan" value="true">'
           +'        <label>Rute</label>'
           +'        <input style="margin:5px auto" type="text" class="form-control" id="rute[]" name="rute[]" placeholder="Rute">'
-    
-          +'        <label>Value</label>'
-          +'        <input style="margin:5px auto" required type="text" class="form-control" id="value[]" name="value[]" placeholder="Value">'
-                      
+            
           +'        <label> Tanggal Berangkat</label>'
           +'        <div style="margin:5px auto" class="input-group">'
           +'            <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_mulai[]" name="tgl_mulai[]" placeholder="dd/mm/yyyy">'
@@ -239,8 +274,11 @@
           +'        <label>Taxi Tujuan</label>'
           +'        <input style="margin:5px auto" type="text" class="form-control" id="taxi_tujuan[]" name="taxi_tujuan[]" placeholder="Taxi Tujuan">'
 
-          +'    </div>'
-          +'  </div>'
+          +'        <label>Jumlah</label>'
+          +'        <input style="margin:5px auto" required type="text" class="form-control" id="value[]" name="value[]" placeholder="Jumlah">'
+              
+          // +'    </div>'
+          // +'  </div>'
           +'</div>' );
       getdatepicker();
   }

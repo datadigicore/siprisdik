@@ -5,7 +5,15 @@
       <small>Menu</small>
     </h1>
     <ol class="breadcrumb">
-      <li><i class="fa fa-table"></i> Data RAB</li>
+      <li><i class="fa fa-table"></i>
+        <b>
+        <a href="<?php echo $url_rewrite?>content/rab"> Data RAB</a> 
+        > 
+        <a href="<?php echo $url_rewrite?>content/rabdetail/<?php echo $getrab->rabview_id;?>"> Orang/Badan </a>
+        >
+         Transaksi </a>
+        </b>
+      </li>
     </ol>
   </section>
   <section class="content">
@@ -15,7 +23,7 @@
     <div class="col-xs-12">
       <div class="box">
         <div class="box-header">
-          <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya</h3>
+          <h3 class="box-title" style="margin-top:6px;">Transaksi</h3>
         </div>
         <div class="box-body" >
           <?php if (isset($_POST['message'])): ?>
@@ -49,7 +57,9 @@
             </table>
             <br>
             <input type="hidden" id="id_rabfull" name="id_rabfull" value="<?php echo $id_rabfull?>" />
-            <a style="" id="add-more-akun" href="#" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Tambah Akun</a>
+            <?php if($getrab->status == 0 || $getrab->status == 3 || $getrab->status == 5){ ?>
+            <a style="" id="add-more-akun" href="#" class="btn btn-flat btn-success btn-lg"><i class="fa fa-plus"></i> Tambah Transaksi</a>
+            <?php }?>
             <div class="well" id="div-tambah-akun" style="display:none"> 
               <label>Kode Akun</label>
               <select style="margin:5px auto" class="form-control" id="kode-akun" name="kdakun" onchange="chakun()" required />
@@ -59,20 +69,20 @@
               <select style="margin:5px auto" class="form-control" id="noitem" name="noitem" required />
               </select>
 
-              <div id="bahan" class="hidden">
-                <label>PPN</label>
-                <input style="margin:5px auto" type="number" class="form-control" name="ppn" id="ppn" value="" placeholder="PPN" required />
+              <div id="bahan">
               </div>
 
-              <div id="tbl_rute" class="hidden">  
-                <br>
-                <a class="form-control btn btn-primary btn-sm" onclick="tambahRute()"><i class="fa fa-plus"></i> Tambah Rute</a>
+              <div id="tbl_rute">  
               </div>
 
               <div id="nilai">
-                <label>Value</label>
-                <input style="margin:5px auto" type="number" class="form-control" name="value" id="value" value="" placeholder="Value" required />
               </div>
+            </div>
+            <div id="perjalanan">
+            </div>
+
+            <div id="tbl_save" class="col-xs-12 hidden">
+              <button type="submit" onclick="simpan()" class="btn btn-flat btn-success btn-lg"><i class="fa fa-save"></i> Simpan Akun</a></button>
             </div>
         </div>
       </div>
@@ -80,18 +90,18 @@
   </div>
   <?php }?>
 
-  <div id="perjalanan" class="row">
-  </div>
+  <!-- <div id="perjalanan" class="row">
+  </div> -->
   
-  <div id="tbl_save" class="row hidden">
-    <div class="col-xs-12">
-      <div class="box box-success">
-        <div class="box-footer">
-          <button type="submit" onclick="simpan()" class="btn btn-flat btn-success btn-lg col-xs-12"><i class="fa fa-save"></i> Simpan Akun</a></button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- <div id="tbl_save" class="row hidden"> -->
+    <!-- <div class="col-xs-12"> -->
+      <!-- <div class="box box-success"> -->
+        <!-- <div class="box-footer"> -->
+          <!-- <button type="submit" onclick="simpan()" class="btn btn-flat btn-success btn-lg"><i class="fa fa-save"></i> Simpan Akun</a></button> -->
+        <!-- </div> -->
+      <!-- </div> -->
+    <!-- </div> -->
+  <!-- </div> -->
 
   </form>
 
@@ -325,19 +335,28 @@
          };
         } else {
           if(kdAkun=="524119" || kdAkun=="524114"){
-            $('#tbl_rute').removeClass('hidden');
-            $('#bahan').addClass('hidden');
-            $('#nilai').addClass('hidden');
+            $('#tbl_rute').append('<br>'
+                  +'  <a class="form-control btn btn-primary btn-sm" onclick="tambahRute()"><i class="fa fa-plus"></i> Tambah Rute</a>'
+                  );
+            tambahRute();
+            $('#bahan').empty();
+            $('#nilai').empty();
           } else if(kdAkun == "521211"){
-            $('#tbl_rute').addClass('hidden');
-            $('#bahan').removeClass('hidden');
-            $('#nilai').removeClass('hidden');
-            $('#perjalanan').addClass('hidden');
+            $('#bahan').append('  <label>PPN</label>'
+              +'  <input style="margin:5px auto" type="number" class="form-control" name="ppn" id="ppn" value="" placeholder="PPN" required />'
+              );
+            $('#nilai').append('<label>Jumlah</label>'
+              +'  <input style="margin:5px auto" type="number" class="form-control" name="value" id="value" value="" placeholder="Jumlah" required />'
+              );
+            $('#perjalanan').empty();
+            $('#tbl_rute').empty();
           } else {
-            $('#tbl_rute').addClass('hidden');
-            $('#bahan').addClass('hidden');
-            $('#nilai').removeClass('hidden');
-            $('#perjalanan').addClass('hidden');
+            $('#bahan').empty();
+            $('#nilai').append('<label>Jumlah</label>'
+              +'  <input style="margin:5px auto" type="number" class="form-control" name="value" id="value" value="" placeholder="Jumlah" required />'
+              );
+            $('#perjalanan').empty();
+            $('#tbl_rute').empty();
           }
         }
       },
@@ -346,23 +365,20 @@
 
   function tambahRute(){
     $('#perjalanan').append( ''
-          +'<div class="col-xs-4">'
-          +'  <div class="box box-warning">'
-          +'    <div class="box-header with-border">'
-          +'      <h3 class="box-title" style="margin-top:6px;">Tambah Rute</h3>'
-          +'      <div class="box-tools pull-right">'
-          +'        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>'
-          +'        </button>'
-          +'      </div>'
-          +'    </div>'
-          +'    <div class="box-body">'
+          +'<div class="col-xs-4 well">'
+          // +'  <div class="box box-warning">'
+          // +'    <div class="box-header with-border">'
+          +'      <h3 class="box-title" style="margin-top:6px;">Perincian</h3>'
+          // +'      <div class="box-tools pull-right">'
+          // +'        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>'
+          // +'        </button>'
+          // +'      </div>'
+          // +'    </div>'
+          // +'    <div class="box-body">'
           +'        <input type="hidden" name="perjalanan" value="true">'
           +'        <label>Rute</label>'
           +'        <input style="margin:5px auto" type="text" class="form-control" id="rute[]" name="rute[]" placeholder="Rute">'
     
-          +'        <label>Value</label>'
-          +'        <input style="margin:5px auto" required type="text" class="form-control" id="value[]" name="value[]" placeholder="Value">'
-                      
           +'        <label> Tanggal Berangkat</label>'
           +'        <div style="margin:5px auto" class="input-group">'
           +'            <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_mulai[]" name="tgl_mulai[]" placeholder="dd/mm/yyyy">'
@@ -389,9 +405,13 @@
           +'        <label>Taxi Tujuan</label>'
           +'        <input style="margin:5px auto" type="text" class="form-control" id="taxi_tujuan[]" name="taxi_tujuan[]" placeholder="Taxi Tujuan">'
 
-          +'    </div>'
-          +'  </div>'
-          +'</div>' );
+          +'        <label>Jumlah</label>'
+          +'        <input style="margin:5px auto" required type="text" class="form-control" id="value[]" name="value[]" placeholder="Jumlah">'
+                      
+          // +'    </div>'
+          // +'  </div>'
+          +'</div>' 
+          );
       getdatepicker();
   }
 

@@ -5,7 +5,7 @@
       <small>Menu</small>
     </h1>
     <ol class="breadcrumb">
-      <li><i class="fa fa-table"></i> Data RAB</li>
+      <li><i class="fa fa-table"></i> <b>Data RAB</b></li>
     </ol>
   </section>
   <section class="content">

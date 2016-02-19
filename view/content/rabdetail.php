@@ -5,7 +5,13 @@
       <small>Menu</small>
     </h1>
     <ol class="breadcrumb">
-      <li><i class="fa fa-table"></i> Data RAB</li>
+      <li><i class="fa fa-table"></i>
+        <b>
+        <a href="<?php echo $url_rewrite?>content/rab"> Data RAB</a> 
+        > 
+        Orang/Badan </a>
+        </b>
+      </li>
     </ol>
   </section>
   <section class="content">

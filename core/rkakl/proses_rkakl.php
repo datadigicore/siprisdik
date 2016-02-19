@@ -71,13 +71,13 @@ switch ($process) {
       array( 'db' => 'tahun',   'dt' => 4 ),
       array( 'db' => 'status', 'dt' => 5, 'formatter' => function($d,$row){ 
         if($d==1){
-          return '<i>Digunakan</i>';
+          return '<i>Digunakan</i> - Revisi '.$row[8];
         }
         if($d==2){
-          return '<i>Disusun</i>';
+          return '<i>Disusun</i> - Revisi '.$row[8];
         }
         else {
-          return '<i>Direvisi</i>';
+          return '<i>Direvisi</i> - Revisi '.$row[8];
         }
       }),
       array( 'db' => 'status',  'dt' => 6, 'formatter' => function($d,$row){ 
@@ -100,6 +100,7 @@ switch ($process) {
         }
       }),
       array( 'db' => 'filesave',  'dt' => 7),
+      array( 'db' => 'versi',  'dt' => 8),
     );
     $datatable->get_rkakl_view($table, $key, $column);
   break;

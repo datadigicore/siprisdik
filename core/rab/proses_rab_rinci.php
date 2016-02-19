@@ -30,16 +30,26 @@ switch ($process) {
 	      	elseif($d == 2) return '<center>II</center>';
 	      	elseif($d == 3) return '<center>III</center>';
 	      	elseif($d == 4) return '<center>VI</center>';
-	      	
+	      	else return '<center>N/A</center>';
 	      }),
 	      array( 'db' => 'pns',  'dt' => 5 , 'formatter' => function($d, $row){
 	      	if ($d == 0) {
-	      		return 'Non PNS';
+	      		if ($row[2] == 0) {
+	      			return '<center>N/A</center>';
+	      		}else{
+	      			return 'Non PNS';
+	      		}
 	      	}else{
 	      		return 'PNS';
 	      	}
 	      }),
-	      array( 'db' => 'jabatan', 'dt' => 6),
+	      array( 'db' => 'jabatan', 'dt' => 6, 'formatter' => function($d, $row){
+	      	if ($row[2]  == 0) {
+	      		return '<center>N/A</center>';
+	      	}else{
+	      		return $d;
+	      	}
+	      }),
 	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 7),
 	      array( 'db' => 'SUM(value)', 'dt' => 8, 'formatter' => function($d,$row){ 
 	      	return number_format($d,2);
@@ -79,7 +89,11 @@ switch ($process) {
 	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."word".'" class="btn btn-flat btn-info btn-sm"><i class="fa fa-file"></i>&nbsp; Kuitansi (Word)</a>';
 	      		}
 	      	}else{
-	      		$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Add Akun</a>';
+	      		if ($d == 0 || $d == 3 || $d == 5) {
+	      			$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Add Akun</a>';
+	      		}else{
+	      			$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; View Akun</a>';
+	      		}
 	      		if ($d == 2 || $d == 5 || $d == 4) {
 	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."pdf".'" class="btn btn-flat btn-danger btn-sm"><i class="fa fa-file"></i>&nbsp; Kuitansi (PDF)</a>';
 	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."word".'" class="btn btn-flat btn-info btn-sm"><i class="fa fa-file"></i>&nbsp; Kuitansi (Word)</a>';
@@ -148,13 +162,17 @@ switch ($process) {
 		}
 		break;
 	case 'tambahAkun':
-		$akun = $_POST['kdakun'];
-		if ($akun == '524114' || $akun == '524119') {
-			$insert = $mdl_rab->tambahAkunPerjalanan($_POST);
+		if (isset($_POST)) {
+			$akun = $_POST['kdakun'];
+			if ($akun == '524114' || $akun == '524119') {
+				$insert = $mdl_rab->tambahAkunPerjalanan($_POST);
+			}else{
+				$insert = $mdl_rab->tambahAkun($_POST);
+			}
+    		$utility->load("content/rabakun/".$_POST['id_rabfull'],"success","Data berhasil dimasukkan ke dalam database");
 		}else{
-			$insert = $mdl_rab->tambahAkun($_POST);
+			$utility->location_goto(".");
 		}
-    	$utility->load("content/rabakun/".$_POST['id_rabfull'],"success","Data berhasil dimasukkan ke dalam database");
 		break;
 	case 'editAkun':
 		$akun = $_POST['kdakun'];

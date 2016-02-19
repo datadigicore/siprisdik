@@ -635,6 +635,7 @@
         $jabatan    = $cekfetch->jabatan;
         $pns        = $cekfetch->pns;
         $pajak      = $cekfetch->pajak;
+        $status      = $cekfetch->status;
 
         $pph        = ($pajak/100) * $value; 
 
@@ -656,6 +657,7 @@
           kdakun      = '$kdakun',
           noitem      = '$noitem',
           value       = '$value',
+          status       = '$status',
 
           deskripsi   = '$deskripsi',
           tanggal     = '$tanggal',
@@ -1091,10 +1093,10 @@
       $kdsoutput  = $data->kdsoutput;
       $kdkmpnen   = $data->kdkmpnen;
       $kdskmpnen  = $data->kdskmpnen;
-      $kdakun  = $data->kdakun;
-      $noitem  = $data->noitem;
-
-      $query  = "SELECT * FROM rkakl_full
+      if ($data->kdakun != "") {
+        $kdakun  = $data->kdakun;
+        $noitem  = $data->noitem;
+        $query  = "SELECT * FROM rkakl_full
                             WHERE THANG   ='$thang'
                             AND KDPROGRAM ='$kdprogram'
                             AND KDGIAT    ='$kdgiat'
@@ -1105,6 +1107,17 @@
                             AND KDAKUN    ='$kdakun'
                             AND NOITEM    ='$noitem'
                             LIMIT 1";
+      }else{
+        $query  = "SELECT * FROM rkakl_full
+                            WHERE THANG   ='$thang'
+                            AND KDPROGRAM ='$kdprogram'
+                            AND KDGIAT    ='$kdgiat'
+                            AND KDOUTPUT  ='$kdoutput'
+                            AND KDSOUTPUT ='$kdsoutput'
+                            AND KDKMPNEN  ='$kdkmpnen'
+                            AND KDSKMPNEN ='$kdskmpnen'
+                            LIMIT 1";
+      }
       $result    = $this->query($query);
       while ($rkakl = $this->fetch_object($result)) {
         $all[] = $rkakl;
