@@ -10,16 +10,19 @@ session_start();
 #Gunadarma University
 include '../config/application.php';
 // $kodeUniversitas=$_GET['kodeUniversitas'];
- $id_rabfull=$_GET['id_rabfull'];
- $query1 = $db->query("SELECT * FROM rabfull where id ='$id_rabfull'");
- $row1 = $db->fetch_object($query1);
+ // $id_rabfull=$_GET['id_rabfull'];
+ // $query1 = $db->query("SELECT * FROM rabfull where id ='$id_rabfull'");
+ // $row1 = $db->fetch_object($query1);
  // print_r($row1);die;
 
 
 $direktorat = $_SESSION['direktorat'];
- $qry = $db->query("select distinct f.kdakun as KDAKUN, r.NMAKUN from rabfull f inner join rkakl_full r on f.kdakun = r.KDAKUN  where f.kdgiat='$direktorat' order by KDAKUN");
+ // $qry = $db->query("select distinct f.kdakun as KDAKUN, r.NMAKUN from rabfull f inner join rkakl_full r on f.kdakun = r.KDAKUN  where f.kdgiat='$direktorat' order by KDAKUN");
+  $qry="select distinct K.KDAKUN, K.NMAKUN from rkakl_full as K where K.KDGIAT like '%$direktorat%'			
+ 					";
+ $qrye = $db->query($qry);
  // echo "<option value=\"\" >--Pilih Kode Akun--</option>";
- while ($row = $db->fetch_object($qry)) {
+ while ($row = $db->fetch_object($qrye)) {
      $akun[$row->KDAKUN] = $row->NMAKUN ;
  }
  echo json_encode($akun);

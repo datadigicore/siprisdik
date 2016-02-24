@@ -1896,7 +1896,8 @@
 
  
 
-public function daftar_peng_riil($result){
+public function daftar_peng_riil($result,$det){
+  $direktorat = $det['kdgiat'];
   $asal=""; $tujuan=""; $alat_trans=""; $tiket=0; $airport_tax=0;
   $taxi_asal=0; $taxi_tujuan=0; $jml_hari=1; $uang_harian=0; $penerima; $jabatan;
   $jenis_transport="";
