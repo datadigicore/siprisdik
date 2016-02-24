@@ -162,9 +162,11 @@ switch ($process) {
 		}
 		break;
 	case 'tambahAkun':
+		// echo "<pre>";
+		// print_r($_POST);die;
 		if (isset($_POST)) {
 			$akun = $_POST['kdakun'];
-			if ($akun == '524114' || $akun == '524119') {
+			if ($akun == '524119') {
 				$insert = $mdl_rab->tambahAkunPerjalanan($_POST);
 			}else{
 				$insert = $mdl_rab->tambahAkun($_POST);
@@ -176,7 +178,7 @@ switch ($process) {
 		break;
 	case 'editAkun':
 		$akun = $_POST['kdakun'];
-		if ($akun == '524114' || $akun == '524119') {
+		if ($akun == '524119') {
 			$insert = $mdl_rab->editAkunPerjalanan($_POST);
 		}else{
 			$insert = $mdl_rab->editAkun($_POST);

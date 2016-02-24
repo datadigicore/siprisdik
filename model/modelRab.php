@@ -782,10 +782,6 @@
           kdakun      = '$kdakun',
           noitem      = '$noitem',
 
-          deskripsi   = '$deskripsi',
-          tanggal     = '$tanggal',
-          lokasi      = '$lokasi',
-
           jenis       = '$jenis',
           penerima    = '$penerima',
           npwp        = '$npwp',
@@ -799,20 +795,27 @@
         $id_rabfull = $this->insert_id($result); 
         $sub_query = "";
         $value_total = 0;
-        for ($i=0; $i < count($data['value']); $i++) { 
-          $tgl_mulai    = date('Y-m-d', strtotime(str_replace('-', '/', $data['tgl_mulai'][$i])));
-          $tgl_akhir    = date('Y-m-d', strtotime(str_replace('-', '/', $data['tgl_akhir'][$i])));
+        $countperjalanan = 1;
+        for ($i=0; $i < $countperjalanan; $i++) { 
+          // $tgl_mulai    = date('Y-m-d', strtotime(str_replace('-', '/', )));
+          // $tgl_akhir    = date('Y-m-d', strtotime(str_replace('-', '/', $data['tgl_akhir'][$i])));
+          $pecah1 = explode("/", $data['tgl_mulai'][$i]);
+          $tgl_mulai = $pecah1[2].'-'.$pecah1[1].'-'.$pecah1[0];
+          $pecah2 = explode("/", $data['tgl_akhir'][$i]);
+          $tgl_akhir = $pecah2[2].'-'.$pecah2[1].'-'.$pecah2[0];
+
           $alat_trans   = $data['alat_trans'][$i];
           $kota_asal    = $data['kota_asal'][$i];
           $kota_tujuan  = $data['kota_tujuan'][$i];
           $taxi_asal    = $data['taxi_asal'][$i];
           $taxi_tujuan  = $data['taxi_tujuan'][$i];
           $rute         = $data['rute'][$i];
+          $harga_tiket  = $data['harga_tiket'][$i];
+          $uang_harian  = $data['uang_harian'][$i];
+          $lama_hari    = $data['lama_hari'][$i];
 
-          $value        = $data['value'][$i];
-          $pph          = ($pajak/100) * $value; 
-
-          $value_total  += $value;
+          $value_total  = $taxi_asal + $taxi_tujuan + $harga_tiket + ($uang_harian * $lama_hari);
+          $pph        = ($pajak/100) * $value_total; 
 
           $sub_query = "tgl_mulai   = '$tgl_mulai',
                         tgl_akhir   = '$tgl_akhir',
@@ -821,65 +824,44 @@
                         kota_tujuan = '$kota_tujuan',
                         taxi_asal   = '$taxi_asal',
                         taxi_tujuan = '$taxi_tujuan',
-                        rute        = '$rute'
+                        rute        = '$rute',
+                        harga_tiket = '$harga_tiket',
+                        uang_harian = '$uang_harian',
+                        lama_hari   = '$lama_hari'
                         ";
 
-          $queryjalan   = "INSERT INTO perjalanan SET
-            rabfull_id  = '$id_rabfull',
-            thang       = '$thang',
-            kdprogram   = '$kdprogram',
-            kdgiat      = '$kdgiat',
-            kdoutput    = '$kdoutput',
-            kdsoutput   = '$kdsoutput',
-            kdkmpnen    = '$kdkmpnen',
-            kdskmpnen   = '$kdskmpnen',
-            kdakun      = '$kdakun',
-            noitem      = '$noitem',
-            value       = '$value',
-
-            deskripsi   = '$deskripsi',
-            tanggal     = '$tanggal',
-            lokasi      = '$lokasi',
-
-            jenis       = '$jenis',
-            penerima    = '$penerima',
-            npwp        = '$npwp',
-            golongan    = '$golongan',
-            jabatan     = '$jabatan',
-            pns         = '$pns',
+          $queryjalan   = "UPDATE rabfull SET 
 
             pajak       = '$pajak',
             pph         = '$pph',
-            ".$sub_query;
+            value         = '$value_total',
+            ".$sub_query."
+            where id = '$id_rabfull'";
           $resultjalan = $this->query($queryjalan);
         }
-
-        $pajak      = $cekfetch->pajak;
-        $pph        = ($pajak/100) * $value_total; 
-
-        $query = "UPDATE rabfull SET 
-                    value   ='$value_total',
-                    pph     = '$pph'
-                  where id='$id_rabfull'";
-        $result = $this->query($query);
-        return $result;
+        return $resultjalan;
       }else{
         $sub_query = "";
         $value_total = 0;
-        for ($i=0; $i < count($data['value']); $i++) { 
-          $tgl_mulai    = date('Y-m-d', strtotime(str_replace('-', '/', $data['tgl_mulai'][$i])));
-          $tgl_akhir    = date('Y-m-d', strtotime(str_replace('-', '/', $data['tgl_akhir'][$i])));
+        $countperjalanan = 1;
+        for ($i=0; $i < $countperjalanan; $i++) { 
+          $pecah1 = explode("/", $data['tgl_mulai'][$i]);
+          $tgl_mulai = $pecah1[2].'-'.$pecah1[1].'-'.$pecah1[0];
+          $pecah2 = explode("/", $data['tgl_akhir'][$i]);
+          $tgl_akhir = $pecah2[2].'-'.$pecah2[1].'-'.$pecah2[0];
+
           $alat_trans   = $data['alat_trans'][$i];
           $kota_asal    = $data['kota_asal'][$i];
           $kota_tujuan  = $data['kota_tujuan'][$i];
           $taxi_asal    = $data['taxi_asal'][$i];
           $taxi_tujuan  = $data['taxi_tujuan'][$i];
           $rute         = $data['rute'][$i];
+          $harga_tiket  = $data['harga_tiket'][$i];
+          $uang_harian  = $data['uang_harian'][$i];
+          $lama_hari    = $data['lama_hari'][$i];
 
-          $value        = $data['value'][$i];
-          $pph          = ($pajak/100) * $value; 
-
-          $value_total  += $value;
+          $value_total  = $taxi_asal + $taxi_tujuan + $harga_tiket + ($uang_harian * $lama_hari);
+          $pph        = ($pajak/100) * $value_total; 
 
           $sub_query = "tgl_mulai   = '$tgl_mulai',
                         tgl_akhir   = '$tgl_akhir',
@@ -888,51 +870,23 @@
                         kota_tujuan = '$kota_tujuan',
                         taxi_asal   = '$taxi_asal',
                         taxi_tujuan = '$taxi_tujuan',
-                        rute        = '$rute'
+                        rute        = '$rute',
+                        harga_tiket = '$harga_tiket',
+                        uang_harian = '$uang_harian',
+                        lama_hari   = '$lama_hari'
                         ";
 
-          $queryjalan   = "INSERT INTO perjalanan SET
-            rabfull_id  = '$id_rabfull',
-            thang       = '$thang',
-            kdprogram   = '$kdprogram',
-            kdgiat      = '$kdgiat',
-            kdoutput    = '$kdoutput',
-            kdsoutput   = '$kdsoutput',
-            kdkmpnen    = '$kdkmpnen',
-            kdskmpnen   = '$kdskmpnen',
-            kdakun      = '$kdakun',
-            noitem      = '$noitem',
-            value       = '$value',
-
-            deskripsi   = '$deskripsi',
-            tanggal     = '$tanggal',
-            lokasi      = '$lokasi',
-
-            jenis       = '$jenis',
-            penerima    = '$penerima',
-            npwp        = '$npwp',
-            golongan    = '$golongan',
-            jabatan     = '$jabatan',
-            pns         = '$pns',
-
+          $queryjalan   = "UPDATE rabfull SET 
+            kdakun       = '$kdakun',
+            noitem       = '$noitem',
             pajak       = '$pajak',
             pph         = '$pph',
-            ".$sub_query;
+            value         = '$value_total',
+            ".$sub_query."
+            where id = '$id_rabfull'";
           $resultjalan = $this->query($queryjalan);
         }
-
-        $pajak      = $cekfetch->pajak;
-        $pph        = ($pajak/100) * $value_total; 
-
-        $query = "UPDATE rabfull SET 
-                    kdakun  ='$kdakun', 
-                    noitem  ='$noitem', 
-                    value   ='$value_total',
-
-                    pph     = '$pph'
-                  where id='$id_rabfull'";
-        $result = $this->query($query);
-        return $result;
+        return $resultjalan;
       }
     }
 
@@ -957,10 +911,6 @@
       $kdakun     = $data['kdakun'];
       $noitem     = $data['noitem'];
 
-      $deskripsi  = $cekfetch->deskripsi;
-      $tanggal    = $cekfetch->tanggal;
-      $lokasi     = $cekfetch->lokasi;
-
       $jenis      = $cekfetch->jenis;
       $penerima   = $cekfetch->penerima;
       $npwp       = $cekfetch->npwp;
@@ -971,20 +921,26 @@
         
       $sub_query = "";
       $value_total = 0;
-      for ($i=0; $i < count($data['value']); $i++) { 
-        $tgl_mulai    = date('Y-m-d', strtotime(str_replace('-', '/', $data['tgl_mulai'][$i])));
-        $tgl_akhir    = date('Y-m-d', strtotime(str_replace('-', '/', $data['tgl_akhir'][$i])));
+      $countperjalanan = 1;
+      for ($i=0; $i < $countperjalanan; $i++) { 
+        // $tgl_mulai    = date('Y-m-d', strtotime(str_replace('-', '/', $data['tgl_mulai'][$i])));
+        // $tgl_akhir    = date('Y-m-d', strtotime(str_replace('-', '/', $data['tgl_akhir'][$i])));
+        $pecah1 = explode("/", $data['tgl_mulai'][$i]);
+        $tgl_mulai = $pecah1[2].'-'.$pecah1[1].'-'.$pecah1[0];
+        $pecah2 = explode("/", $data['tgl_akhir'][$i]);
+        $tgl_akhir = $pecah2[2].'-'.$pecah2[1].'-'.$pecah2[0];
         $alat_trans   = $data['alat_trans'][$i];
         $kota_asal    = $data['kota_asal'][$i];
         $kota_tujuan  = $data['kota_tujuan'][$i];
         $taxi_asal    = $data['taxi_asal'][$i];
         $taxi_tujuan  = $data['taxi_tujuan'][$i];
         $rute         = $data['rute'][$i];
+        $harga_tiket  = $data['harga_tiket'][$i];
+        $uang_harian  = $data['uang_harian'][$i];
+        $lama_hari    = $data['lama_hari'][$i];
 
-        $value        = $data['value'][$i];
-        $pph          = ($pajak/100) * $value; 
-
-        $value_total  += $value;
+        $value_total  = $taxi_asal + $taxi_tujuan + $harga_tiket + ($uang_harian * $lama_hari);
+        $pph          = ($pajak/100) * $value_total; 
 
         $sub_query = "tgl_mulai   = '$tgl_mulai',
                       tgl_akhir   = '$tgl_akhir',
@@ -993,7 +949,10 @@
                       kota_tujuan = '$kota_tujuan',
                       taxi_asal   = '$taxi_asal',
                       taxi_tujuan = '$taxi_tujuan',
-                      rute        = '$rute'
+                      rute        = '$rute',
+                      harga_tiket = '$harga_tiket',
+                      uang_harian = '$uang_harian',
+                      lama_hari   = '$lama_hari'
                       ";
 
         $queryjalan   = "INSERT INTO perjalanan SET
@@ -1008,10 +967,6 @@
           kdakun      = '$kdakun',
           noitem      = '$noitem',
           value       = '$value',
-
-          deskripsi   = '$deskripsi',
-          tanggal     = '$tanggal',
-          lokasi      = '$lokasi',
 
           jenis       = '$jenis',
           penerima    = '$penerima',

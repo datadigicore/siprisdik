@@ -45,7 +45,7 @@
               </div>
               <?php } ?>
 
-              <?php if($datarkakl[0]->KDAKUN !== "524119" && $datarkakl[0]->KDAKUN !== "524114"){?>
+              <?php if($datarkakl[0]->KDAKUN !== "524119"){?>
               <div id="nilai">
                 <label>Jumlah</label>
                 <input style="margin:5px auto" type="text" class="form-control" name="value" id="value" value="<?php echo number_format($getrab->value,2);?>" readonly />
@@ -54,51 +54,118 @@
             </div>
             <div id="perjalanan">
               <?php for ($i=0; $i < count($getjalan); $i++) {  ?>
-              <div class="col-xs-4 well">
-                <!-- <div class="box box-warning"> -->
-                  <!-- <div class="box-header with-border"> -->
-                    <h3 class="box-title" style="margin-top:6px;">Perincian</h3>
-                    <!-- <div class="box-tools pull-right"> -->
-                      <!-- <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i> -->
-                      <!-- </button> -->
-                    <!-- </div> -->
-                  <!-- </div> -->
-                  <!-- <div class="box-body"> -->
+              <div class="col-xs-12 well">
+                <h3 class="box-title" style="margin-top:6px;">Perincian</h3>
                       <input type="hidden" name="perjalanan" value="true">
-                      <label>Rute</label>
-                      <input style="margin:5px auto" type="text" class="form-control" id="rute[]" name="rute[]" value="<?php echo $getjalan[$i]->rute;?>" readonly>
-
-                      <label> Tanggal Berangkat</label>
-                      <div style="margin:5px auto" class="input-group">
-                          <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_mulai[]" name="tgl_mulai[]" value="<?php echo date('d/m/Y', strtotime($getjalan[$i]->tgl_mulai) );?>" readonly>
-                           <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                      </div>
-                      <label> Tanggal Kembali</label>
-                      <div class="input-group">
-                           <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_akhir[]" name="tgl_akhir[]" value="<?php echo date('d/m/Y', strtotime($getjalan[$i]->tgl_akhir) );?>" readonly>
-                           <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                      </div>
-
+                      <table class="col-xs-12">
+                      <tr>
+                      <td>
                       <label>Alat Transportasi</label>
-                      <input style="margin:5px auto" type="text" class="form-control" id="alat_trans[]" name="alat_trans[]" value="<?php echo $getjalan[$i]->alat_trans;?>" readonly>
+                      </td>
+                      <td>&nbsp;:&nbsp;</td>
+                      <td>
+                      <input style="margin:5px auto" type="text" class="form-control" id="alat_trans[]" name="alat_trans[]" placeholder="Alat Transportasi" value="<?php echo $getjalan[$i]->alat_trans?>" readonly>
+                      </td>
+                      </tr>
 
+                      <tr>
+                      <td>
+                      <label>Rute</label>
+                      </td>
+                      <td>&nbsp;:&nbsp;</td>
+                      <td>
+                      <input style="margin:5px auto" type="text" class="form-control" id="rute[]" name="rute[]" placeholder="Rute" value="<?php echo $getjalan[$i]->rute?>" readonly>
+                      </td>
+                      <td>&nbsp;</td>
+                      <td>
+                      <label>Tiket</label>
+                      </td>
+                      <td>&nbsp;:&nbsp;</td>
+                      <td>
+                      <input style="margin:5px auto" type="text" class="form-control" id="tiket[]" name="tiket[]" placeholder="0.00"  value="<?php echo $getjalan[$i]->harga_tiket?>" readonly>
+                      </td>
+                      </tr>
+
+                      <tr>
+                      <td>
                       <label>Kota Asal</label>
-                      <input style="margin:5px auto" type="text" class="form-control" id="kota_asal[]" name="kota_asal[]" value="<?php echo $getjalan[$i]->kota_asal;?>" readonly>
-
+                      </td>
+                      <td>&nbsp;:&nbsp;</td>
+                      <td>
+                      <input style="margin:5px auto" type="text" class="form-control" id="kota_asal[]" name="kota_asal[]" placeholder="Kota Asal" value="<?php echo $getjalan[$i]->kota_asal;?>" readonly>
+                      </td>
+                      <td>&nbsp;</td>
+                      <td>
                       <label>Kota Tujuan</label>
-                      <input style="margin:5px auto" type="text" class="form-control" id="kota_tujuan[]" name="kota_tujuan[]" value="<?php echo $getjalan[$i]->kota_tujuan;?>" readonly>
+                      </td>
+                      <td>&nbsp;:&nbsp;</td>
+                      <td>
+                      <input style="margin:5px auto" type="text" class="form-control" id="kota_tujuan[]" name="kota_tujuan[]" placeholder="Kota Tujuan" value="<?php echo $getjalan[$i]->kota_tujuan;?>" readonly>
+                      </td>
+                      </tr>
 
+                      <tr>
+                      <td>
                       <label>Taxi Asal</label>
-                      <input style="margin:5px auto" type="text" class="form-control" id="taxi_asal[]" name="taxi_asal[]" value="<?php echo $getjalan[$i]->taxi_asal;?>" readonly>
-
+                      </td>
+                      <td>&nbsp;:&nbsp;</td>
+                      <td>
+                      <input style="margin:5px auto" type="text" class="form-control" id="taxi_asal[]" name="taxi_asal[]" placeholder="0.00" value="<?php echo $getjalan[$i]->taxi_asal;?>" readonly>
+                      </td>
+                      <td>&nbsp;</td>
+                      <td>
                       <label>Taxi Tujuan</label>
-                      <input style="margin:5px auto" type="text" class="form-control" id="taxi_tujuan[]" name="taxi_tujuan[]" value="<?php echo $getjalan[$i]->taxi_tujuan;?>" readonly>
+                      </td>
+                      <td>&nbsp;:&nbsp;</td>
+                      <td>
+                      <input style="margin:5px auto" type="text" class="form-control" id="taxi_tujuan[]" name="taxi_tujuan[]" placeholder="0.00" value="<?php echo $getjalan[$i]->taxi_tujuan;?>" readonly>
+                      </td>
+                      </tr>
+                      
+                      <tr>
+                      <td>
+                      <label> Tanggal Berangkat</label>
+                      </td>
+                      <td>&nbsp;:&nbsp;</td>
+                      <td>
+                      <div style="margin:5px auto" class="input-group">
+                          <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_mulai[]" name="tgl_mulai[]" placeholder="dd/mm/yyyy" value="<?php echo date('d/m/Y', strtotime($getjalan[$i]->tgl_mulai) );?>" readonly>
+                           <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                      </div>
+                      </td>
+                      </tr>
 
-                      <label>Jumlah</label>
-                      <input style="margin:5px auto" type="text" class="form-control" id="value[]" name="value[]" value="<?php echo $getjalan[$i]->value;?>" readonly>
-                          
-                  <!-- </div> -->
-                <!-- </div> -->
+                      <tr>
+                      <td>
+                      <label> Tanggal Kembali</label>
+                      </td>
+                      <td>&nbsp;:&nbsp;</td>
+                      <td>
+                      <div class="input-group">
+                           <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_akhir[]" name="tgl_akhir[]" placeholder="dd/mm/yyyy" value="<?php echo date('d/m/Y', strtotime($getjalan[$i]->tgl_akhir) );?>"  readonly>
+                           <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                      </div>
+                      </td>
+                      </tr>
+
+                      <tr>
+                      <td>
+                      <label>Jumlah Hari</label>
+                      </td>
+                      <td>&nbsp;:&nbsp;</td>
+                      <td>
+                      <input style="margin:5px auto" type="text" class="form-control" id="lama_hari[]" name="lama_hari[]" placeholder="0" value="<?php echo $getjalan[$i]->lama_hari;?>" readonly>
+                      </td>
+                      <td>&nbsp;</td>
+                      <td>
+                      <label>Uang Harian</label>
+                      </td>
+                      <td>&nbsp;:&nbsp;</td>
+                      <td>
+                      <input style="margin:5px auto" type="text" class="form-control" id="uang_harian[]" name="uang_harian[]" placeholder="0.00" value="<?php echo $getjalan[$i]->uang_harian;?>" readonly>
+                      </td>
+                      </tr>
+                  </table>
               </div> 
               <?php }?>
             </div>

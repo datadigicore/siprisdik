@@ -345,7 +345,7 @@
         
       }
       if($dinas==1){
-        $query = "SELECT golongan, tingkat_jalan,  jabatan, kota_asal, kota_tujuan, harga_tiket, airport_tax, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
+        $query = "SELECT golongan,  jabatan, kota_asal, kota_tujuan, rute, harga_tiket, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
         // print_r($query);
         $result = $this->query($query);
         $array = $this->fetch_array($result, $det_giat);
