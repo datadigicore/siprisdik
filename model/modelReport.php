@@ -345,7 +345,7 @@
         
       }
       if($dinas==1){
-        $query = "SELECT golongan,  jabatan, kota_asal, kota_tujuan, rute, harga_tiket, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
+        $query = "SELECT golongan, npwp, lokasi,  jabatan, kota_asal, kota_tujuan, rute, harga_tiket, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
         // print_r($query);
         $result = $this->query($query);
         $array = $this->fetch_array($result, $det_giat);
@@ -1290,7 +1290,9 @@
       $lama_hari=null;
       $tgl_mulai = null;
       $tgl_akhir = null;
-      $penerima=nul;
+      $penerima=null;
+      $npwp=null;
+      $lokasi=null;
 
       foreach ($data as $value) {
         if($value[golongan]!=""){ $golongan = $value[golongan]; }
@@ -1302,6 +1304,8 @@
         if($value[lama_hari]!="") $lama_hari = $value[lama_hari];
         if($value[tgl_mulai]!="") $tgl_mulai = $value[tgl_mulai];
         if($value[tgl_akhir]!="") $tgl_akhir = $value[tgl_akhir];
+        if($value[npwp]!="") $npwp = $value[npwp];
+        if($value[lokasi]!="") $lokasi = $value[lokasi];
         $penerima=$value[penerima];
       }
 
@@ -1332,7 +1336,7 @@
                     <tr>
                       <td>2</td>
                       <td>Nama/NIP Pegawai Yang Diperintahkan</td>
-                      <td colspan="2">'.$penerima.'</td>
+                      <td colspan="2">'.$penerima." / ".$npwp.'</td>
                     </tr> 
                     <tr>
                         <td>3</td>
@@ -1420,18 +1424,19 @@
 
                 </table>
                 <p style="font-size:0.8em">*) Coret yang tidak perlu</p>';
+        $date = getdate();
         echo '
               <table style="text-align: left; width: 100%; font-size:84%; border-collapse: collapse; font-family:serif"  >
 
               <tr>
                 <td width="60%"></td>
                 <td>Dikeluarkan Di </td>
-                <td> :................................................</td>
+                <td> : '.$lokasi.'</td>
               </tr>
               <tr>
                 <td width="60%"></td>
                 <td>Pada Tanggal</td>
-                <td> :................................................ </td>
+                <td> : '.$date['mday']." / ".$date['mon']." / ".$date['year'].'</td>
               </tr>
 
               </table>';
@@ -1441,14 +1446,16 @@
     }
 
     //Rincian Biaya Perjalanan Dinas
-    public function Rincian_Biaya_PD($result){
+    public function Rincian_Biaya_PD($result,$det){
+      $direktorat=$det['kdgiat'];
+      $penerima;
       // $jml=0; 
       // $query = "SELECT kota_asal, kota_tujuan, tiket, airport_tax, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima, npwp FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
       // print_r($query);
       // $result = $this->query($query);
       // $array = $this->fetch_array($result);
       $asal=""; $tujuan=""; $alat_trans; $tiket=0; $airport_tax=0;
-      $taxi_asal=0; $taxi_tujuan=0; $jml_hari=1; $uang_harian=0;
+      $taxi_asal=0; $taxi_tujuan=0; $jml_hari=1; $uang_harian=0; $lokasi;
       $jml_uang_harian;
       // print_r($result);
       foreach ($result as $val) {
@@ -1461,7 +1468,8 @@
         if($val[taxi_tujuan]>0) $taxi_tujuan = $val[taxi_tujuan];
         if($val[lama_hari]>0)   $jml_hari = $val[lama_hari];
         if($val[uang_harian]>0) $uang_harian = $val[uang_harian];   
-               
+        if($val[lokasi]!="") $lokasi = $val[lokasi];   
+        $penerima=$val[penerima];
       }
       $jml_uang_harian = $jml_hari * $uang_harian;
       $total = $tiket + $airport_tax + $taxi_asal + $taxi_tujuan +$jml_uang_harian;
@@ -1564,12 +1572,20 @@
                 </tr>';                
 
       echo '</table>';
+      
+      $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
+      $arr_pb = $this->fetch_array($result_pb);
+      $bpp = $arr_pb[bpp];
+      $nip_bpp = $arr_pb[nip_bpp];
+      $ppk = $arr_pb[ppk];
+      $nip_ppk = $arr_pb[nip_ppk];
+      $date = getdate();
       echo '<table style="text-align: justify; width: 100%; font-size:84%; font-family:serif"  >
             <tr>
 
             <td></td>
             <td width="23%"></td>
-            <td>Jakarta, .............................................</td>
+            <td>'.$lokasi.','.$date['mday']." / ".$date['mon']." / ".$date['year'].'</td>
           </tr>
 
           <tr>
@@ -1593,14 +1609,14 @@
             <td></td>
           </tr>
           <tr>
-            <td>......................................</td>
+            <td>'.$bpp.'</td>
             <td width="23%"></td>
-            <td>......................................</td>
+            <td>'.$penerima.'</td>
           </tr>
           <tr>
-            <td></td>
+            <td>NIP '.$nip_bpp.'</td>
             <td width="23%"></td>
-            <td>NIP ...............................</td>
+            <td></td>
           </tr>  
           </table>';
     echo '<p>______________________________________________________________________________________________________</p>';
@@ -1882,7 +1898,7 @@
 
 public function daftar_peng_riil($result){
   $asal=""; $tujuan=""; $alat_trans=""; $tiket=0; $airport_tax=0;
-  $taxi_asal=0; $taxi_tujuan=0; $jml_hari=1; $uang_harian=0;
+  $taxi_asal=0; $taxi_tujuan=0; $jml_hari=1; $uang_harian=0; $penerima; $jabatan;
   $jenis_transport="";
 
   foreach ($result as $val) {
@@ -1894,7 +1910,9 @@ public function daftar_peng_riil($result){
     if($val[taxi_asal]>0)   $taxi_asal = $val[taxi_asal];
     if($val[taxi_tujuan]>0) $taxi_tujuan = $val[taxi_tujuan];
     if($val[lama_hari]>0)   $jml_hari = $val[lama_hari];
-    if($val[uang_harian]>0) $uang_harian = $val[uang_harian];   
+    if($val[uang_harian]>0) $uang_harian = $val[uang_harian];  
+    $penerima = $val['penerima'];
+    $jabatan = $val['jabatan'];
                
   }
   if($alat_trans=="pesawat"){
@@ -1943,7 +1961,7 @@ public function daftar_peng_riil($result){
           <td></td>
           <td>Jabatan</td>
           <td>:</td>
-          <td></td>
+          <td>'.$jabatan.'</td>
         </tr>
         <tr>
           <td colspan="4"> <br></br><br></br> </td>
@@ -2034,11 +2052,17 @@ public function daftar_peng_riil($result){
 
 
   echo  '</table>';
-
+$result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
+      $arr_pb = $this->fetch_array($result_pb);
+      $bpp = $arr_pb[bpp];
+      $nip_bpp = $arr_pb[nip_bpp];
+      $ppk = $arr_pb[ppk];
+      $nip_ppk = $arr_pb[nip_ppk];
+      $date = getdate();
       echo '<table  style="width: 100%; text-align:left; border-collapse:collapse; font-size:80%;">
         <tr>
           <td width="60%">Mengetahui</td>
-          <td>Jakarta, ..................................................</td>
+          <td>Jakarta, '.$date['mday']." / ".$date['mon']." / ".$date['year'].'</td>
         </tr>
         <tr>
           <td>Pejabat Pembuat Komitmen</td>
@@ -2049,12 +2073,12 @@ public function daftar_peng_riil($result){
           <td><br></br><br></br></td>
         </tr>
         <tr>
-          <td style="font-weight:bold">Ridwan</td>
+          <td style="font-weight:bold">'.$ppk.'</td>
           <td>'.$penerima.'</td>
         </tr>
         
         <tr>
-          <td>NIP. 1962121019920310011</td>
+          <td>NIP. '.$nip_ppk.'</td>
           <td></td>
         </tr>
       </table>';
