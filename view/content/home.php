@@ -173,7 +173,7 @@
           }
         },
         series: [{
-          name: 'Brands',
+          name: 'Prosentase',
           colorByPoint: true,
           data: [{
             name: 'Dana RKAKL',

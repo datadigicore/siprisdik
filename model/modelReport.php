@@ -28,7 +28,7 @@
       }
       $resultJumlah = $this->query("SELECT sum(jumlah) as totjum from rkakl_full");
       $newJumlah = $this->fetch_object($resultJumlah);
-      $arrayName = array('0' => 'RKAKL FULL', '1' => floatval($newJumlah->totjum));
+      $arrayName = array('0' => 'TOTAL SISA ANGGARAN', '1' => floatval($newJumlah->totjum));
       array_push($newresult, $arrayName);
       // print_r($newresult);
       echo json_encode($newresult);
