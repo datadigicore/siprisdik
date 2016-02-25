@@ -1,6 +1,7 @@
 <?php
   require_once __DIR__ . "/../utility/database/mysql_db.php";
   require_once __DIR__ . "/../library/mPDF/mpdf.php";
+  // include 'config/application.php';
 
   class modelReport extends mysql_db {
 
@@ -179,7 +180,6 @@
       return $no_kw;
     }
     public function cetak_dok($id,$pil_akun,$format){
-      
       $result = $this->query("SELECT rabview_id, npwp, kdgiat, kdprogram, kdoutput, kdsoutput, kdkmpnen, kdskmpnen from rabfull where id='$id' ");
       $res = $this->fetch_array($result);
       $rabv_id = $res[rabview_id];
@@ -353,7 +353,7 @@
       }
 
       if($transport_lokal>0){
-        $nmr_kuitansi = $this->log_kwitansi($det_giat,"524113","");
+        $nmr_kuitansi = $this->log_kwitansi($det_giat,"524114");
         // echo " Return : ".$nmr_kuitansi;
         $this->Kuitansi_Honorarium($result, $det_giat, "Transport Lokal",$transport_lokal,"524113", $nmr_kuitansi);
         echo '<pagebreak />';
@@ -376,6 +376,7 @@
       if($dinas==1){
         $query = "SELECT golongan, npwp, lokasi,  jabatan, kota_asal, kota_tujuan, rute, harga_tiket, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
         // print_r($query);
+        $nmr_kuitansi = $this->log_kwitansi($det_giat,"524119");
         $result = $this->query($query);
         $array = $this->fetch_array($result, $det_giat);
         $this->SPPD($result, $det_giat);
@@ -554,7 +555,7 @@
 
     }
 
-    public function SPP($data){
+    public function SPP($data, $post){
       ob_start();
       echo '<table cellpadding="1" style="border-collapse:collapse; font-size:0.85em;">
 
@@ -567,8 +568,8 @@
               <td></td>
               <td></td>
               <td width="2%"></td>
-              <td style="font-weight:bold;" colspan="3" align="right">Tanggal : 31 Desember 2016 Nomor :</td>
-              <td style="font-weight:bold;"  colspan="5" >00675/LEMKERMA/673474/2016</td>
+              <td style="font-weight:bold;" colspan="3" align="right">Tanggal : '.date('d M Y',strtotime($post['tanggal'])).' Nomor :</td>
+              <td style="font-weight:bold;"  colspan="5" >'.$post['nomor'].'</td>
              </tr>
              <tr>
               <td></td>
@@ -1512,6 +1513,7 @@
         <tr>
             <td align="left">Tanggal</td>
             <td align="left">:</td>
+            <td align="left">'.date("d F Y").'</td>
         </tr> 
                
 
@@ -1774,11 +1776,11 @@
               <tr>
                 <td style="text-align: center;"> Mengetahui/Setuju dibayar  </td>
                 <td style="text-align: center;">Lunas Dibayar</td>
-                <td style="text-align: center;">........................ 2016</td>
+                <td style="text-align: center;">'.date("d F Y").'</td>
               </tr>              
               <tr>
                 <td style="text-align: center;">Pejabat Pembuat Komitmen,</td>
-                <td style="text-align center;">Tgl...........................</td>
+                <td style="text-align center;">Tgl '.date("d F Y").'</td>
                 <td style="text-align: center;">Penerima</td>
               </tr>
               <tr>
@@ -1872,7 +1874,7 @@
 
                 <td style="text-align center;"></td>
                 <td style="text-align: center;"></td>
-                <td style="text-align: left;">Jakarta, ..............................</td>
+                <td style="text-align: left;">Jakarta, '.date("d F Y").'</td>
               </tr>
 
               <tr>
@@ -1945,7 +1947,7 @@ public function daftar_peng_riil($result,$det){
     $jabatan = $val['jabatan'];
                
   }
-  if($alat_trans=="pesawat"){
+  if($val[harga_tiket]>0){
     $jenis_transport="Transportasi Udara";
   }
   else {
@@ -1997,7 +1999,7 @@ public function daftar_peng_riil($result,$det){
           <td colspan="4"> <br></br><br></br> </td>
         </tr>
         <tr>
-          <td colspan="4">Berdasarkan Surat Perjalanan Dinas (SPD) Tanggal _______________________ Nomor: ___________________________, dengan ini saya menyatakan dengan sesungguhnya bahwa:</td>
+          <td colspan="4">Berdasarkan Surat Perjalanan Dinas (SPD) Tanggal '.date("d F Y").' Nomor: ___________________________, dengan ini saya menyatakan dengan sesungguhnya bahwa:</td>
         </tr>
         <tr>
           <td colspan="4"><br></br><br></br></td>
@@ -2411,6 +2413,9 @@ function terbilang($x, $style=4) {
     $hasil .= " RUPIAH";
     return $hasil;
 }
+
+ 
+
   }
 
 ?>

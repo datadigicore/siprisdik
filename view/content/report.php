@@ -147,10 +147,16 @@
             <div class="tab-pane active" id="tab_7">
               <form method="POST" action="<?php echo $url_rewrite;?>process/report/SPP">
               <div class="box-body" style="padding-bottom:0;">
-<!--                 <div class="form-group">
-                  <input type="text" name="tgl_awal" class="form-control" id="tgl_awal" placeholder="Tanggal Awal">
+                <div class="form-group">
+                  <label>Tanggal</label>
+                  <input type="text" name="tanggal" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tanggal" placeholder="dd/mm/yyyy">
                 </div>
                 <div class="form-group">
+                  <label>Nomor</label>
+                  <input type="text" name="nomor" class="form-control" id="nomor" placeholder="Nomor">
+                </div>
+
+                <!--<div class="form-group">
                   <input type="text" name="tgl_akhir" class="form-control" id="tgl_akhir" placeholder="Tanggal Akhir" >
                 </div> -->
               </div>
@@ -184,7 +190,16 @@
       $("#"+val).remove();
       $("#kode-akun option[value='"+val+"']").show();
     });
+    getdatepicker();
   });
+
+  function getdatepicker(){
+    $(".tanggal").datepicker({ 
+      changeMonth: true,
+      changeYear: true,
+      format: 'dd/mm/yyyy' 
+    });
+  }
 
 
   function generateForm(kdAkun){

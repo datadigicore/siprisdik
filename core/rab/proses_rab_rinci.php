@@ -245,7 +245,7 @@ switch ($process) {
 		$getakun = $mdl_rab->getakungroup($getrab);
 		// print_r($getakun);die;
 		$data['error'] = false;
-		if (count($getakun) >= 2) {
+		if (count($getakun) > 2) {
 			$data['error'] = '1';
 			for ($i=0; $i < count($getakun); $i++) { 
 				if ($kdakun == $getakun[$i]->kdakun) {
