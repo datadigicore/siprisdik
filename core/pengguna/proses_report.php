@@ -31,6 +31,28 @@ switch ($data[2]) {
   case 'cetak_dok':
     $report->cetak_dok($id,$param[1],$format);
   break;
+  case 'laporan_bulanan_TA':
+    $report->getRkaklFull();
+    $objectExcel->setActiveSheetIndex(0); 
+    $rowCount = 1; 
+    $objectExcel->getActiveSheet()->SetCellValue('A'.$rowCount,'Firstname');
+    $objectExcel->getActiveSheet()->SetCellValue('B'.$rowCount,'Lastname');
+    $objectExcel->getActiveSheet()->SetCellValue('C'.$rowCount,'Branch');
+    $objectExcel->getActiveSheet()->SetCellValue('D'.$rowCount,'Gender');
+    $objectExcel->getActiveSheet()->SetCellValue('E'.$rowCount,'Mobileno');
+    $objectExcel->getActiveSheet()->SetCellValue('F'.$rowCount,'Email');
+    while($row = mysql_fetch_array($result)){ 
+    $rowCount++;
+    $objectExcel->getActiveSheet()->SetCellValue('A'.$rowCount, $row['0']);
+    $objectExcel->getActiveSheet()->SetCellValue('B'.$rowCount, $row['1']);
+    $objectExcel->getActiveSheet()->SetCellValue('C'.$rowCount, $row['2']);
+    $objectExcel->getActiveSheet()->SetCellValue('D'.$rowCount, $row['3']);
+    $objectExcel->getActiveSheet()->SetCellValue('E'.$rowCount, $row['4']);
+    $objectExcel->getActiveSheet()->SetCellValue('F'.$rowCount, $row['5']);
+    } 
+    $objWriter = new PHPExcel_Writer_Excel2007($objectExcel); 
+    $objWriter->save('some_excel_file.xlsx');
+  break;
   case 'Rincian_Biaya_PD':
 
     $report->rincian_biaya_PD($data[3]);

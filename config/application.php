@@ -6,6 +6,7 @@ date_default_timezone_set('Asia/Jakarta');
 require_once __DIR__ .'/config.php';
 require_once __DIR__ .'/../utility/database/mysql_db.php';
 require_once __DIR__ .'/../utility/utilityCode.php';
+require_once __DIR__ .'/../utility/PHPExcel.php';
 require_once __DIR__ .'/../utility/datatable.php';
 require_once __DIR__ .'/../library/security/HTMLPurifier.auto.php';
 // ====================================================
@@ -22,6 +23,7 @@ require_once __DIR__ .'/../model/modelRab.php';
 $config      = new config();
 $db          = new mysql_db();
 $utility     = new utilityCode();
+$objectExcel = new PHPExcel();
 $datatable   = new datatable();
 $login       = new modelLogin();
 $pengguna    = new modelPengguna();
