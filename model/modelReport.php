@@ -452,8 +452,12 @@
       $nip_bpp = $arr_pb[nip_bpp];
       $ppk = $arr_pb[ppk];
       $nip_ppk = $arr_pb[nip_ppk];
-      $sql = $this->query("SELECT r.NMITEM as nmitem, r.NMGIAT as nmgiat, r.NMAKUN as nmakun, f.kdgiat as kdgiat, f.kdprogram as kdprogram, f.kdoutput as kdoutput, f.kdakun as kdakun, f.penerima as penerima, f.tanggal as tanggal, f.value  as value, f.pajak as pajak, f.ppn as ppn, f.pph as pph FROM rabfull as f LEFT JOIN rkakl_full as r on f.kdgiat = r.KDGIAT and f.kdoutput = r.KDOUTPUT and f.kdkmpnen = r.KDKMPNEN and f.kdskmpnen = r.KDSKMPNEN  and f.kdakun = r.KDAKUN and f.noitem = r.NOITEM  where f.kdakun ='$data' and f.kdgiat='$direktorat' ");
-      $id = $this->fetch_array($sql);
+      $sql = "SELECT view.deskripsi as deskripsi, r.NMITEM as nmitem, r.NMGIAT as nmgiat, r.NMAKUN as nmakun, f.kdgiat as kdgiat, f.kdprogram as kdprogram, f.kdoutput as kdoutput, f.kdakun as kdakun, f.penerima as penerima, f.tanggal as tanggal, f.value  as value, f.pajak as pajak, f.ppn as ppn, f.pph as pph FROM rabfull as f LEFT JOIN rkakl_full as r on f.kdgiat = r.KDGIAT and f.kdoutput = r.KDOUTPUT and f.kdsoutput = r.KDSOUTPUT and f.kdkmpnen = r.KDKMPNEN and f.kdskmpnen = r.KDSKMPNEN  and f.kdakun = r.KDAKUN and f.noitem = r.NOITEM  
+                LEFT JOIN rabview as view on f.rabview_id = view.id
+                where f.kdakun ='$data' and f.kdgiat='$direktorat' ";
+      // print_r($sql);
+      $res = $this->query($sql);
+      $id = $this->fetch_array($res);
       ob_start();
       // echo '<p align="center" style="font-weight:bold; text-decoration: underline;">SURAT PERNYATAAN TANGGUNG JAWAB BELANJA</p>';
       // echo '<p align="center" style="font-weight:bold;">Nomor : ___/SPTB/401196/XII/2016</p>';
@@ -492,8 +496,11 @@
                 <td align="left" width="2%">:</td>
                 <td align="left" >: 10.03.'.$id[kdprogram].'.'.$id[kdgiat].'.'.$id[kdoutput].'.'.$id[kdakun].'</td>
               </tr>
+              <tr>
+                <td colspan="4" style="border-top:1px solid;"></td>
+              </tr>
             </table>';
-      echo '<p align="center" style="font-weight:bold;">______________________________________________________________________________________________________</p>';
+      // echo '<p align="center" style="font-weight:bold;">______________________________________________________________________________________________________</p>';
       echo '<p align="left" style="font-size:0.65em;">Yang    bertandatangan  di    bawah  ini    atas  nama    Kuasa    Pengguna    Anggaran    Satuan Kerja Direktorat Jendral Kelembagaan Ilmu Pengetahuan Teknologi Dan Pendidikan Tinggi menyatakan  bahwa  saya  bertanggungjawab  secara  formal  dan  material  atas 
             segala  pengeluaran  yang  telah  dibayar  lunas  oleh  Bendahara  Pengeluaran  kepada  yang  berhak menerima  serta  kebenaran  perhitungan  dan  setoran  pajak  yang  telah  dipungut  atas  pembayaran tersebut dengan perincian sebagai berikut:</p>';
       
@@ -517,18 +524,18 @@
       $tot_value = 0;
       $tot_ppn = 0;
       $tot_pph = 0;
-      foreach ($sql as $value) {
+      foreach ($res as $value) {
         $item=explode("[", $value[nmitem]);
         echo '<tr>
                 <td>'.$no.'</td>
                 <td>'.$value[kdakun].'</td>
                 <td>'.$value[penerima].'</td>
-                <td style="text-align: justify;">'." Biaya ".$item[0]." kegiatan ".$value[nmgiat].", tgl. ".$this->konversi_tanggal($value[tanggal],"").'</td>
+                <td style="text-align: justify;">'." Biaya ".$item[0]." kegiatan ".$value[deskripsi].", tgl. ".$this->konversi_tanggal($value[tanggal],"").'</td>
                 <td>'.$this->konversi_tanggal($value[tanggal],"/").'</td>
                 <td>'."-".'</td>
                 <td align="right">'.number_format($value[value],0,",",".").'</td>
-                <td>'.number_format($value[ppn],0,",",".").'</td>
-                <td>'.number_format($value[ppn],0,",",".").'</td>
+                <td align="right">'.number_format($value[ppn],0,",",".").'</td>
+                <td align="right">'.number_format($value[pph],0,",",".").'</td>
             </tr>';
             $tot_value += $value[value];
             $no++;
@@ -538,7 +545,7 @@
         
       
       echo '<tr>
-              <td colspan="6">JUMLAH</td>
+              <td colspan="6" align="center">JUMLAH</td>
               <td align="right">'.number_format($tot_value,0,",",".").'</td>
               <td align="right">'.number_format($tot_ppn,0,",",".").'</td>
               <td align="right">'.number_format($tot_pph,0,",",".").'</td>
@@ -1008,8 +1015,17 @@
 
     }
     // DAFTAR RINCIAN PERMINTAAN PENGELUARAN
-    public function Rincian_Permintaan_Pengeluaran($data){
-      $sql = $this->query("SELECT kdakun, penerima, tanggal, sum(value) as jumlah FROM `rabfull` where kdakun like '$data%' GROUP BY kdakun order by kdakun asc ");
+    public function Rincian_Permintaan_Pengeluaran($data, $direktorat){
+      $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
+      $arr_pb = $this->fetch_array($result_pb);
+      $bpp = $arr_pb[bpp];
+      $nip_bpp = $arr_pb[nip_bpp];
+      $ppk = $arr_pb[ppk];
+      $nip_ppk = $arr_pb[nip_ppk];
+      $sql = $this->query("SELECT kdakun, penerima, tanggal, sum(value) as jumlah FROM `rabfull` where kdakun like '$data%' and kdgiat='$direktorat' GROUP BY kdakun order by kdakun asc ");
+      $sql_pagu = $this->query("SELECT SUM(JUMLAH) as jumlah from rkakl_full where KDAKUN like '$data%' and KDGIAT='$direktorat' ");
+      $data_pagu = $this->fetch_array($sql_pagu);
+      $jumlah_pagu = $data_pagu['jumlah'];
       ob_start();
       echo '<table cellpadding="3" style="width: 100%; font-size:0.7em; border-collapse: collapse;">
               <tr>
@@ -1030,7 +1046,7 @@
                 <td colspan="2">: Ditjen Kelembagaan Iptek dan Dikti</td>
                 <td style="border-left: 1px solid; border-right: 1px solid;" colspan="2">1. GU NIHIL</td>
                 <td>7. KODE KEGIATAN<br></td>
-                <td style="border-right: 1px solid;">:</td>
+                <td style="border-right: 1px solid;">: '.$direktorat.'</td>
               </tr>
               <tr>
                 <td style="border-left: 1px solid;">3. Lokasi<br></td>
@@ -1042,7 +1058,7 @@
               <tr>
                 <td style="border-left: 1px solid;">4. Kantor / Satuan Kerja<br></td>
                 <td colspan="2">: Ditjen Kelembagaan Iptek dan Dikti</td>
-                <td style="border-left: 1px solid; border-right: 1px solid;" colspan="2" rowspan="2">Rp. </td>
+                <td style="border-left: 1px solid; border-right: 1px solid;" colspan="2" rowspan="2">Rp. '.number_format($jumlah_pagu,2,",",".").'</td>
                 <td>9. TAHUN ANGGARAN<br></td>
                 <td style="border-right: 1px solid;">: 2016</td>
               </tr>
@@ -1078,7 +1094,7 @@
                 <td style="border: 1px solid;  text-align:center;">-</td>
                 <td style="border: 1px solid;  text-align:center;">'.$data[kdakun].'</td>
                 <td style="border: 1px solid;  text-align:center;">Terlampir Pada SPTB</td>
-                <td style="border: 1px solid;  text-align:center;">'.number_format($data[jumlah],0,",",".").'</td>
+                <td style="border: 1px solid;  text-align:right;">'.number_format($data[jumlah],0,",",".").'</td>
               </tr>';
               $no++;
       }
@@ -1126,12 +1142,12 @@
             <tr>
               <td></td>
               <td width="60%"></td>
-              <td style="font-weight:bold">Sudarsono</td>
+              <td style="font-weight:bold">'.$ppk.'</td>
             </tr>
             <tr>
               <td></td>
               <td width="60%"></td>
-              <td>NIP. 19640920 198403 1 001</td>
+              <td>NIP. '.$nip_ppk.'</td>
             </tr>  
             </table>';
             $html = ob_get_contents();

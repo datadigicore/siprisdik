@@ -94,6 +94,26 @@
               <form method="POST" action="<?php echo $url_rewrite;?>process/report/Rincian_Permintaan_Pengeluaran">
               <div class="box-body" style="padding-bottom:0;">
                 <div class="form-group">
+                  <div class="form-group">
+                  <label>Direktorat</label>
+                  <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
+                      <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                          <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                          <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                          <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                            <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                            <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
+                      <?php } ?>
+                  </select>
+                </div>
                   <label>Pilih Kode MAK</label>
                   <select style="margin:5px auto" class="form-control" id="kode-mak" name="kode-mak" onchange="" >
                       <option value="51" >51 Belanja Pegawai</option>
@@ -117,12 +137,30 @@
             <div class="tab-pane" id="tab_6">
               <form method="POST" action="<?php echo $url_rewrite;?>process/report/SPTB">
               <div class="box-body" style="padding-bottom:0;">
-<!--                 <div class="form-group">
-                  <input type="text" name="tgl_awal" class="form-control" id="tgl_awal" placeholder="Tanggal Awal">
+                <div class="form-group">
+                  <label>Direktorat</label>
+                  <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
+                      <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                          <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                          <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                          <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                            <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                            <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
+                      <?php } ?>
+                  </select>
                 </div>
                 <div class="form-group">
+                  <label>Tanggal Akhir</label>
                   <input type="text" name="tgl_akhir" class="form-control" id="tgl_akhir" placeholder="Tanggal Akhir" >
-                </div> -->
+                </div>
                 <div class="form-group">
                   <label>Kode Akun</label>
                   <select style="margin:5px auto" class="form-control" id="kode-akun" name="kode-akun" onchange="" >
