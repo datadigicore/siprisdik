@@ -220,10 +220,14 @@
       $item_honor = "0";
       $item_transport = "0";
       $item_uangsaku = "0";
-      $uang_saku_dalam = 0;
+      $uang_saku_dalam_113 = 0;
+      $uang_saku_dalam_114 = 0;
       $uang_saku_luar = 0;
-      $honor = 0;
-      $transport_lokal = 0;
+      $honor_213 = 0;
+      $honor_151 = 0;
+      $honor_115 = 0;
+      $transport_lokal_113 = 0;
+      $transport_lokal_114 = 0;
       $item = "";
       $golongan; 
       $pns;
@@ -240,7 +244,7 @@
         $kondisi_akun = " rab.rabview_id='$rabv_id' and rab.npwp='$npwp' order by rab.kdakun asc ";
       }
       // $result = $this->query("SELECT rab.alat_trans, rab.kota_asal, rab.kota_tujuan, rab.lama_hari, rab.tgl_mulai, rab.tgl_akhir, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rab.rabview_id='$rabv_id' and rab.npwp='$npwp' order by rab.kdakun asc ");
-      $sql = "SELECT rab.penerima, rab.jabatan, rab.pns, rab.golongan, rab.kdakun, rkkl.NMGIAT, rab.value, rab.pajak, rab.ppn, rab.pph, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where ".$kondisi_akun." ";
+      $sql = "SELECT rab.penerima, rab.jabatan, rab.pns, rab.golongan, rab.kdakun, rkkl.NMGIAT, rab.value, rab.pajak, rab.ppn, rab.pph, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where ".$kondisi_akun." ";
       // print($sql);
       $result = $this->query($sql);
       // while($res=$this->fetch_array($result)){
@@ -256,37 +260,45 @@
         // echo "<br>".$res[NMITEM]."<br>";
         if($res[kdakun]=="521213"){
           $item_honor = "1";
-          $honor += $res[value];
+          $honor_213 += $res[value];
           // $pot = "";
           // $pph=0;
           $id_akun="521213";
         }
+        //521115
+
         else if($res[kdakun]=="522151"){
           $item_honor = "1";
-          $honor += $res[value];
+          $honor_151 += $res[value];
           $id_akun="522151";
+          
+        }
+        else if($res[kdakun]=="521115"){
+          $item_honor = "1";
+          $honor_115 += $res[value];
+          $id_akun="521115";
           
         }
         else if($res[kdakun]=="524113"){
           if(substr($res[NMITEM],1,8)!=="ransport"){
             $item_uangsaku = "1";
-            $uang_saku_dalam +=$res[value];
+            $uang_saku_dalam_113 +=$res[value];
           }
           else
           {
             $item_transport = "1";
-            $transport_lokal +=$res[value];
+            $transport_lokal_113 +=$res[value];
           }
           
         }
         else if($res[kdakun]=="524114"){
           if(substr($res[NMITEM],1,8)!=="ransport"){
             $item_uangsaku = "1";
-            $uang_saku_dalam +=$res[value];
+            $uang_saku_dalam_114 +=$res[value];
           }
           else{
             $item_transport = "1";
-            $transport_lokal +=$res[value];
+            $transport_lokal_114 +=$res[value];
           }
         }
         else if($res[kdakun]=="524119"){
@@ -341,21 +353,43 @@
                           'npwp'      => $npwp );
       ob_start();
       // print_r($dt_akun);
-      if($honor>0){
-          $nmr_kuitansi = $this->log_kwitansi($det_giat,$id_akun);
-          $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "Honorarium",$honor, $nmr_kuitansi);
+      if($honor_115>0){
+          $nmr_kuitansi = $this->log_kwitansi($det_giat,"521115");
+          $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "Honorarium",$honor_115,$id_akun, $nmr_kuitansi);
           echo '<pagebreak />';
       }
-      if($uang_saku_dalam>0){
+      if($honor_151>0){
+          $nmr_kuitansi = $this->log_kwitansi($det_giat,"522151");
+          $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "Honorarium",$honor_151,$id_akun, $nmr_kuitansi);
+          echo '<pagebreak />';
+      }
+      if($honor_213>0){
+          $nmr_kuitansi = $this->log_kwitansi($det_giat,"521213");
+          $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "Honorarium",$honor_213,$id_akun, $nmr_kuitansi);
+          echo '<pagebreak />';
+      }
+      if($uang_saku_dalam_113>0){
           $nmr_kuitansi = $this->log_kwitansi($det_giat,"524113");
-          $this->Kuitansi_Honorarium($result, $det_giat, "Uang Saku",$uang_saku_dalam, $nmr_kuitansi);
+          $this->Kuitansi_Honorarium($result, $det_giat, "Uang Saku",$uang_saku_dalam_113,"524113", $nmr_kuitansi);
           echo '<pagebreak />';
       }
 
-      if($transport_lokal>0){
+      if($transport_lokal_113>0){
+        $nmr_kuitansi = $this->log_kwitansi($det_giat,"524113");
+        // echo " Return : ".$nmr_kuitansi;
+        $this->Kuitansi_Honorarium($result, $det_giat, "Transport Lokal",$transport_lokal_113,"524113", $nmr_kuitansi);
+        echo '<pagebreak />';
+      }
+      if($uang_saku_dalam_114>0){
+          $nmr_kuitansi = $this->log_kwitansi($det_giat,"524114");
+          $this->Kuitansi_Honorarium($result, $det_giat, "Uang Saku",$uang_saku_dalam_114,"524114", $nmr_kuitansi);
+          echo '<pagebreak />';
+      }
+
+      if($transport_lokal_114>0){
         $nmr_kuitansi = $this->log_kwitansi($det_giat,"524114");
         // echo " Return : ".$nmr_kuitansi;
-        $this->Kuitansi_Honorarium($result, $det_giat, "Transport Lokal",$transport_lokal,"524113", $nmr_kuitansi);
+        $this->Kuitansi_Honorarium($result, $det_giat, "Transport Lokal",$transport_lokal_114,"524114", $nmr_kuitansi);
         echo '<pagebreak />';
       }
 
@@ -1738,7 +1772,7 @@
               if($value[kdakun]==$kd_akun and $value[kdakun]!== "521213" and $value[kdakun]!== "522151"and $value[kdakun]!== "524114"and $value[kdakun]!== "524113"and $value[kdakun]!== "524119" ){
                 echo '<tr>
                         <td width="21%"></td>
-                        <td width="40%">'.$value[NMITEM].'</td>
+                        <td width="40%">'.substr($value[NMITEM],0,strpos($value[NMITEM],"[")-1).'</td>
                         <td> : Rp. </td>
                         <td align="right">'."".number_format($value[value],0,",",".").'</td>
                       </tr>';
@@ -1780,7 +1814,7 @@
               </tr>              
               <tr>
                 <td style="text-align: center;">Pejabat Pembuat Komitmen,</td>
-                <td style="text-align center;">Tgl '.date("d F Y").'</td>
+                <td style="text-align center;">Tgl '.'...........................'.'</td>
                 <td style="text-align: center;">Penerima</td>
               </tr>
               <tr>
@@ -1817,7 +1851,7 @@
                     <td style= "vertical-align: bottom;" style=" font-weight:bold; text-align: center;">BUKTI PEMOTONGAN PPh pasal 21</td>
                 </tr>  
                 <tr>
-                    <td style= "vertical-align: bottom;" style="  font-weight:bold; text-align: center;" >Nomor : ........................</td>
+                    <td style= "vertical-align: bottom;" style="  font-weight:bold; text-align: center;" >Nomor : '.$nmr_kw."/".$det['kdgiat'].".".$det['kdoutput'].".".$det['kdsoutput'].".".$det['kdkmpnen']."/2016".'</td>
                 </tr>                
                 
                 </table>';
