@@ -2151,25 +2151,52 @@ $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat whe
 
 }
     public function pengajuan_UMK($data) {
-      // $sql = $this->query("SELECT kdgiat, kdprogram, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, deskripsi, tanggal, lokasi, sum(uang_muka) as uang_muka, sum(uang_harian) as uang_harian, sum(uang_saku) as uang_saku, sum(honor_output) as honor_output, sum(honor_profesi) as honor_profesi, sum(tiket) as tiket, sum(biaya_akom) as akom, sum(trans_lokal) as trans_lokal FROM rabfull where rabview_id='$data' ");
-      
-      // $res = $this->fetch_array($sql);
-      // $kdgiat= $res[kdgiat];
-      // $kdprogram = $res[kdprogram];
-      // $kdoutput = $res[kdoutput];
-      // $kdsoutput = $res[kdsoutput];
-      // $kdkmpnen = $res[kdkmpnen];
-      // $kdskmpnen = $res[kdskmpnen];
-      // $deskripsi = $res[deskripsi];
-      // $tanggal = $res[tanggal];
-      // $lokasi = $res[lokasi];
-      // $uang_muka = $res[uang_muka];    
-
-      // $sql2 = $this->query("SELECT NMGIAT, NMOUTPUT, NMKMPNEN, NmSkmpnen FROM rkakl_full where KDPROGRAM = '$kdprogram' and KDOUTPUT='$kdoutput' and KDSOUTPUT='$kdsoutput' and KDKMPNEN = '$kdkmpnen'; ");
-      // $res2 = $this->fetch_array($sql2);
-      // print_r("SELECT NMGIAT, NMOUTPUT, NMKMPNEN, NmSkmpnen FROM rkakl_full where KDPROGRAM = '$kdprogram' and KDOUTPUT='$kdoutput' ");
-      $result = $this->query("SELECT rab.tanggal, rab.deskripsi, rab.lokasi, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ");
+      $uang_harian_saku=0;
+      $honorarium=0;
+      $Akomodasi=0;
+      $taxi_lokal=0;
+      $tiket=0;
+      $lain2=0;
+      $tot=0;
+      $result = $this->query("SELECT rab.tanggal, rab.deskripsi, rab.lokasi, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rkkl.NMGIAT, rab.value, rab.uang_harian, rab.uang_muka, rab.uang_saku, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ");
       $res2 = $this->fetch_array($result);
+      $direktorat=$res2['kdgiat'];
+      foreach($result as $rs) {
+              if(substr($rs[NMITEM],1,8)=="ransport" or $rs[taxi_tujuan]>0 or $rs[taxi_asal]>0){
+                // echo "Masuk Transport : ".$res[NMITEM]."<br>";
+                $taxi_lokal += $rs[value]+$rs[taxi_asal]+$rs[taxi_tujuan];
+                $tot        +=$rs[value]+$rs[taxi_asal]+$rs[taxi_tujuan];
+                // echo "NIlai taxt :  dan".$taxi_lokal." total  ".$tot;
+              }
+              else if(substr($rs[NMITEM],1,3)=="ang"){
+                // echo "Uang Harian: ".$rs[NMITEM]."<br>";
+                $uang_harian_saku += $rs[uang_harian]+$rs[uang_saku]+$rs[value];
+                $tot              += $rs[uang_harian]+$rs[uang_saku]+$rs[value];
+                // echo "NIlai Uang ".$uang_harian_saku." total  ".$tot;
+              }
+              else if(substr($rs[NMITEM],1,9)=="onorarium"){
+                // echo "Honrarium: ".$rs[NMITEM]."<br>";
+                $honorarium += $rs[value];
+                $tot              += $rs[value];
+                // echo "NIlai Honor ".$honorarium." total  ".$tot;
+              }
+              else if(substr($rs[NMITEM],1,4)=="iket"){
+                $tiket += $rs[value]+$rs[harga_tiket];
+                $tot              += $rs[value]+$rs[harga_tiket];
+              }
+              else{
+                $lain2 += $rs[value];
+                $tot   += $rs[value];
+                // echo "Lainnya";
+              }
+                             
+        }
+      $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
+      $arr_pb = $this->fetch_array($result_pb);
+      $bpp = $arr_pb[bpp];
+      $nip_bpp = $arr_pb[nip_bpp];
+      $ppk = $arr_pb[ppk];
+      $nip_ppk = $arr_pb[nip_ppk];
       ob_start();
       echo  '<table  cellpadding="3" style="width: 100%;  text-align:left; border-collapse:collapse; font-size:0.85em;">
             <tr>
@@ -2234,32 +2261,73 @@ $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat whe
                 <td>9</td>
                 <td>Kebutuhan Biaya</td>
                 <td>:</td>
+                <td>1. Uang Harian / Uang Saku</td>
+                <td>: Rp.</td>
+                <td align="right">'.number_format($uang_harian_saku,2,",",".").'</td>
+              </tr>
+              <tr>
                 <td></td>
                 <td></td>
                 <td></td>
-              </tr>';
-              $no=1;
-              $tot=0;
-        foreach($result as $rs) {
+                <td>2. Honorarium</td>
+                <td>: Rp.</td>
+                <td align="right">'.number_format($honorarium,2,",",".").'</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>3. Akomodasi</td>
+                <td>: Rp.</td>
+                <td align="right">'.number_format($Akomodasi,2,",",".").'</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>4. Taxi / transport lokal</td>
+                <td>: Rp.</td>
+                <td align="right">'.number_format($taxi_lokal,2,",",".").'</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>5. Tiket</td>
+                <td>: Rp.</td>
+                <td align="right">'.number_format($tiket,2,",",".").'</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>6. Lain-lain</td>
+                <td>: Rp.</td>
+                <td align="right">'.number_format($lain2,2,",",".").'</td>
+              </tr>
+              ';
+              // $no=1;
+              // $tot=0;
+        // foreach($result as $rs) {
 
-         echo '<tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>'.$no.". ".$rs[NMITEM].'</td>
-                <td>: Rp. </td>
-                <td>'.number_format($rs[value],0,",",".").'</td>
-              </tr>';
-              $no++;
-              $tot+=$rs[value];
-        }
+        //  echo '<tr>
+        //         <td></td>
+        //         <td></td>
+        //         <td></td>
+        //         <td>'.$no.". ".$rs[NMITEM].'</td>
+        //         <td>: Rp. </td>
+        //         <td>'.number_format($rs[value],0,",",".").'</td>
+        //       </tr>';
+        //       $no++;
+        //       $tot+=$rs[value];
+        // }
         echo '<tr>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td style="font-weight:bold;">JUMLAH</td>
                 <td style="font-weight:bold;">: Rp. </td>
-                <td style="font-weight:bold;">'.number_format($tot,0,",",".").'</td>
+                <td align="right" style="font-weight:bold;">'.number_format($tot,2,",",".").'</td>
               </tr>
               <tr>
                 <td>10</td>
@@ -2309,7 +2377,7 @@ $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat whe
                 <td></td>
                 <td style="border-left: 1px solid black;  border-right: 1px solid black;">Josephine Margaretta</td>
                 <td ></td>
-                <td style="border-left: 1px solid black; border-right: 1px solid black;">....................................</td>
+                <td style="border-left: 1px solid black; border-right: 1px solid black;">'.$ppk.'</td>
               </tr> 
               <tr>
                 <td></td>
@@ -2317,7 +2385,7 @@ $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat whe
                 <td></td>
                 <td style="border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;">NIP. 19870613 201012 2 009</td>
                 <td></td>
-                <td style="border-bottom: 1px solid black; border-left: 1px solid black;  border-right: 1px solid black;">NIP. ....................................</td>
+                <td style="border-bottom: 1px solid black; border-left: 1px solid black;  border-right: 1px solid black;">NIP. '.$nip_ppk.'</td>
               </tr>
             </table>';
             $html = ob_get_contents();
