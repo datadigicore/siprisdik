@@ -14,82 +14,14 @@
       <div class="col-md-12 col-xs-12">
         <div class="nav-tabs-custom">
           <ul class="nav nav-tabs nav-justified">
-            <!-- <li class="dropdown active">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                Macam-macam Kuitansi <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu" style="background:white;">
-                <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="false">Kuitansi Honor & Uang Saku</a></li>
-                <li><a href="#tab_2" data-toggle="tab" aria-expanded="false">Kuitansi Rincian Perjalanan Dinas</a></li>
-                <li><a href="#tab_3" data-toggle="tab" aria-expanded="true">Kuitansi SPPD Perjalanan Dinas</a></li>
-                <li><a href="#tab_4" data-toggle="tab" aria-expanded="true">Kuitansi Transport Lokal</a></li>
-              </ul>
-            </li> -->
-            <li class="active"><a href="#tab_7" data-toggle="tab" aria-expanded="true">Surat Perintah Pembayaran</a></li>
+
+            <li class="active"><a href="#tab_6" data-toggle="tab" aria-expanded="true">Surat Pertanggung Jawaban Belanja</a></li>
             <li><a href="#tab_5" data-toggle="tab" aria-expanded="true">Rincian Permintaan Pengeluaran</a></li>
-            <li><a href="#tab_6" data-toggle="tab" aria-expanded="true">Surat Pertanggung Jawaban Belanja</a></li>
+            <li ><a href="#tab_7" data-toggle="tab" aria-expanded="true">Surat Perintah Pembayaran</a></li>
+            
+            
           </ul>
           <div class="tab-content" style="padding:5px 0 0 0;">
-            <div class="tab-pane" id="tab_1">
-              <form method="POST" action="<?php echo $url_rewrite;?>process/report/Kuitansi_Honor_Uang_Saku">
-              <div class="box-body" style="padding-bottom:0;">
-                <div class="form-group">
-                  <input type="text" name="tgl_awal" class="form-control" id="tgl_awal" placeholder="Tanggal Awal">
-                </div>
-                <div class="form-group">
-                  <input type="text" name="tgl_akhir" class="form-control" id="tgl_akhir" placeholder="Tanggal Akhir" >
-                </div>
-              </div>
-              <div class="box-footer">
-                <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>
-              </div>        
-              </form>
-            </div>
-            <div class="tab-pane" id="tab_2">
-              <form method="POST" action="<?php echo $url_rewrite;?>process/report/Rincian_Biaya_PD">
-              <div class="box-body" style="padding-bottom:0;">
-                <div class="form-group">
-                  <input type="text" name="tgl_awal" class="form-control" id="tgl_awal" placeholder="Tanggal Awal">
-                </div>
-                <div class="form-group">
-                  <input type="text" name="tgl_akhir" class="form-control" id="tgl_akhir" placeholder="Tanggal Akhir" >
-                </div>
-              </div>
-              <div class="box-footer">
-                <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>
-              </div>
-              </form>
-            </div>
-            <div class="tab-pane" id="tab_3">
-              <form method="POST" action="<?php echo $url_rewrite;?>process/report/SPPD">
-              <div class="box-body" style="padding-bottom:0;">
-                <div class="form-group">
-                  <input type="text" name="tgl_awal" class="form-control" id="tgl_awal" placeholder="Tanggal Awal">
-                </div>
-                <div class="form-group">
-                  <input type="text" name="tgl_akhir" class="form-control" id="tgl_akhir" placeholder="Tanggal Akhir" >
-                </div>
-              </div>
-              <div class="box-footer">
-                <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>
-              </div>        
-              </form>
-            </div>
-            <div class="tab-pane" id="tab_4">
-              <form method="POST" action="<?php echo $url_rewrite;?>process/report/Kuitansi_Honorarium">
-              <div class="box-body" style="padding-bottom:0;">
-                <div class="form-group">
-                  <input type="text" name="tgl_awal" class="form-control" id="tgl_awal" placeholder="Tanggal Awal">
-                </div>
-                <div class="form-group">
-                  <input type="text" name="tgl_akhir" class="form-control" id="tgl_akhir" placeholder="Tanggal Akhir" >
-                </div>
-              </div>
-              <div class="box-footer">
-                <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>
-              </div>        
-              </form>
-            </div>
             <div class="tab-pane" id="tab_5">
               <form method="POST" action="<?php echo $url_rewrite;?>process/report/Rincian_Permintaan_Pengeluaran">
               <div class="box-body" style="padding-bottom:0;">
@@ -120,21 +52,31 @@
                       <option value="52" >52 Belanja Barang</option>
                       <option value="53" >53 Belanja Modal</option>
                   </select>
+                  <div class="form-group">
+                  <label>Bulan</label>
+                    <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
+                      <option value="01">Januari</option>
+                      <option value="02">Februari</option>
+                      <option value="03">Maret</option>
+                      <option value="04">April</option>
+                      <option value="05">Mei</option>
+                      <option value="06">Juni</option>
+                      <option value="07">Juli</option>
+                      <option value="08">Agustus</option>
+                      <option value="09">September</option>
+                      <option value="10">Oktober</option>
+                      <option value="11">November</option>
+                      <option value="12">Desember</option>
+                    </select>
                 </div>
-
-                <!-- <div class="form-group">
-                  <input type="text" name="tgl_awal" class="form-control" id="tgl_awal" placeholder="Tanggal Awal">
                 </div>
-                <div class="form-group">
-                  <input type="text" name="tgl_akhir" class="form-control" id="tgl_akhir" placeholder="Tanggal Akhir" >
-                </div> -->
               </div>
               <div class="box-footer">
                 <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>
               </div>        
               </form>
             </div>
-            <div class="tab-pane" id="tab_6">
+            <div class="tab-pane  active" id="tab_6">
               <form method="POST" action="<?php echo $url_rewrite;?>process/report/SPTB">
               <div class="box-body" style="padding-bottom:0;">
                 <div class="form-group">
@@ -158,8 +100,21 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label>Tanggal Akhir</label>
-                  <input type="text" name="tgl_akhir" class="form-control" id="tgl_akhir" placeholder="Tanggal Akhir" >
+                  <label>Bulan</label>
+                    <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
+                      <option value="01">Januari</option>
+                      <option value="02">Februari</option>
+                      <option value="03">Maret</option>
+                      <option value="04">April</option>
+                      <option value="05">Mei</option>
+                      <option value="06">Juni</option>
+                      <option value="07">Juli</option>
+                      <option value="08">Agustus</option>
+                      <option value="09">September</option>
+                      <option value="10">Oktober</option>
+                      <option value="11">November</option>
+                      <option value="12">Desember</option>
+                    </select>
                 </div>
                 <div class="form-group">
                   <label>Kode Akun</label>
@@ -182,7 +137,7 @@
               </div>        
               </form>
             </div>
-            <div class="tab-pane active" id="tab_7">
+            <div class="tab-pane" id="tab_7">
               <form method="POST" action="<?php echo $url_rewrite;?>process/report/SPP">
               <div class="box-body" style="padding-bottom:0;">
                 <div class="form-group">
@@ -193,10 +148,43 @@
                   <label>Nomor</label>
                   <input type="text" name="nomor" class="form-control" id="nomor" placeholder="Nomor">
                 </div>
-
-                <!--<div class="form-group">
-                  <input type="text" name="tgl_akhir" class="form-control" id="tgl_akhir" placeholder="Tanggal Akhir" >
-                </div> -->
+                 <div class="form-group">
+                  <label>Direktorat</label>
+                  <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
+                      <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                          <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                          <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                          <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                            <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                            <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
+                      <?php } ?>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Bulan</label>
+                    <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
+                      <option value="01">Januari</option>
+                      <option value="02">Februari</option>
+                      <option value="03">Maret</option>
+                      <option value="04">April</option>
+                      <option value="05">Mei</option>
+                      <option value="06">Juni</option>
+                      <option value="07">Juli</option>
+                      <option value="08">Agustus</option>
+                      <option value="09">September</option>
+                      <option value="10">Oktober</option>
+                      <option value="11">November</option>
+                      <option value="12">Desember</option>
+                    </select>
+                </div>               
               </div>
               <div class="box-footer">
                 <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>

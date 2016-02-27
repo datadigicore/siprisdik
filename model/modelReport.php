@@ -596,9 +596,10 @@
 
     }
 
-    public function SPP($data, $post){
+    public function SPP($kdgiat, $bulan ,$post, $kdmak){
+      $sql = $this->query("SELECT kdakun, penerima, tanggal, sum(case when month(tanggal)='$bulan' then value else 0 end) as jumlah, sum(case when month(tanggal)<'$bulan' then value else 0 end) as jml_lalu FROM `rabfull` where  kdgiat='$kdgiat'  GROUP BY kdakun order by kdakun asc ");
       ob_start();
-      echo '<table cellpadding="1" style="border-collapse:collapse; font-size:0.85em;">
+      echo '<table cellpadding="1" style="border-collapse:collapse; font-size:0.7em;">
 
              <tr>
               <td colspan="12" style="font-weight:bold; font-size:1.3em;" align="center">SURAT PERMINTAAN
@@ -662,7 +663,7 @@
               <td>Kode Kegiatan</td>
               <td></td>
               <td></td>
-              <td >[ 5696 ]</td>
+              <td >[ '.$kdgiat.' ]</td>
              </tr>
              <tr>
               <td>3. </td>
@@ -762,7 +763,7 @@
               <td colspan=2>Jumlah pembayaran</td>
               <td>:</td>
               <td>1) dengan angka:</td>
-              <td colspan=3>#REF!</td>
+              <td colspan=3></td>
               <td ></td>
               <td ></td>
               <td ></td>
@@ -773,7 +774,7 @@
               <td colspan=2>yang dimintakan</td>
               <td>:</td>
               <td>2) dengan huruf :</td>
-              <td colspan=7 align=center style="width:442pt">#NAME?</td>
+              <td colspan=7 align=center ></td>
              </tr>
              <tr>
               <td>2. </td>
@@ -902,6 +903,23 @@
               <td style="border:1px solid"  align="center" colspan=2>6 = ( 4+5)</td>
               <td style="border:1px solid"  align="center"  >7 = (3-6)</td>
              </tr>';
+      while($data=$this->fetch_array($sql)){
+        $pagu=$this->hitung_pagu($kdgiat, $data['kdakun']);
+        $spp_ini = $data['jumlah'];
+        $spp_lalu = $data['jml_lalu'];
+        $tot_spp = $spp_lalu+$spp_ini;
+        $sisa_dana = $pagu-$tot_spp;
+        echo '<tr>
+                <td style="border-left:1px solid; border-right:1px solid;" align="right"></td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="left">'.$data['kdakun'].'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($pagu,2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($spp_lalu,2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($spp_ini,2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($tot_spp,2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" align="right">'.number_format($sisa_dana,2,",",".").'</td>
+              </tr>';
+
+      }
       echo   '<tr>
               <td style="border-top:1px solid; border-bottom:1px solid; border-left:1px solid; "  ></td>
               <td style="border-top:1px solid; border-bottom:1px solid; "    ></td>
@@ -1015,17 +1033,21 @@
 
     }
     // DAFTAR RINCIAN PERMINTAAN PENGELUARAN
-    public function Rincian_Permintaan_Pengeluaran($data, $direktorat){
+    public function Rincian_Permintaan_Pengeluaran($data, $direktorat, $bulan){
       $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
       $arr_pb = $this->fetch_array($result_pb);
       $bpp = $arr_pb[bpp];
       $nip_bpp = $arr_pb[nip_bpp];
       $ppk = $arr_pb[ppk];
       $nip_ppk = $arr_pb[nip_ppk];
-      $sql = $this->query("SELECT kdakun, penerima, tanggal, sum(value) as jumlah FROM `rabfull` where kdakun like '$data%' and kdgiat='$direktorat' GROUP BY kdakun order by kdakun asc ");
+      $sql = $this->query("SELECT kdakun, penerima, tanggal, sum(value) as jumlah FROM `rabfull` where kdakun like '$data%' and kdgiat='$direktorat' and month(tanggal)='$bulan' GROUP BY kdakun order by kdakun asc ");
       $sql_pagu = $this->query("SELECT SUM(JUMLAH) as jumlah from rkakl_full where KDAKUN like '$data%' and KDGIAT='$direktorat' ");
       $data_pagu = $this->fetch_array($sql_pagu);
       $jumlah_pagu = $data_pagu['jumlah'];
+      
+      $sql_lalu = $this->query("SELECT sum(value) as jml_lalu from rabfull where kdakun like '$data%' and kdgiat='$direktorat' and month(tanggal)<'$bulan' GROUP BY kdakun ");
+      $data_jml_lalu = $this->fetch_array($sql_lalu);
+      $jml_lalu = $data_jml_lalu['jml_lalu'];
       ob_start();
       echo '<table cellpadding="3" style="width: 100%; font-size:0.7em; border-collapse: collapse;">
               <tr>
@@ -1086,6 +1108,7 @@
                 <td style="border: 1px solid;  text-align:center;">PENERIMA</td>
               </tr>';
       $no=1;
+      $jml_ini=0;
       while($data=$this->fetch_array($sql)){
         echo '<tr>
                 <td style="border: 1px solid;  text-align:center;">'.$no.'</td>
@@ -1094,26 +1117,29 @@
                 <td style="border: 1px solid;  text-align:center;">-</td>
                 <td style="border: 1px solid;  text-align:center;">'.$data[kdakun].'</td>
                 <td style="border: 1px solid;  text-align:center;">Terlampir Pada SPTB</td>
-                <td style="border: 1px solid;  text-align:right;">'.number_format($data[jumlah],0,",",".").'</td>
+                <td style="border: 1px solid;  text-align:right;">'.number_format($data[jumlah],2,",",".").'</td>
               </tr>';
+              $jml_ini+=$data[jumlah];
               $no++;
       }
       $no--;
+      if($jml_lalu=='') $jml_lalu=0;
+      $total_spp = $jml_ini+$jml_lalu;
       echo'   <tr>
                 <td style="border-right: 1px solid; border-left: 1px solid; border-top: 1px solid;  text-align:center;"> Jumlah Lampiran :</td>
                 <td style="border: 1px solid;  text-align:center;" colspan="5">Jumlah SPP ini (Rp)</td>
-                <td style="border-bottom: 1px solid; border-right: 1px solid;" colspan="5"></td>
+                <td style="border-bottom: 1px solid; border-right: 1px solid; text-align:right;" colspan="5">'.number_format($jml_ini,2,",",".").'</td>
 
               </tr>
               <tr>
                 <td style="border-right: 1px solid; border-left: 1px solid;  text-align:center;">'.$no.'</td>
                 <td style="border: 1px solid;  text-align:center;" colspan="5">SPM/SPP Sebelum SPP ini atas beban sub kegiatan ini</td>
-                <td style="border-bottom: 1px solid; border-right: 1px solid;" colspan="5"></td>
+                <td style="border-bottom: 1px solid; border-right: 1px solid; text-align:right;" colspan="5">'.number_format($jml_lalu,2,",",".").'</td>
               </tr>
               <tr>
                 <td style="border-left: 1px solid; border-bottom: 1px solid;"></td>
                 <td style="border: 1px solid;  text-align:center;" colspan="5">Jumlah s.d. SPP ini atas beban sub kegiatan ini</td>
-                <td style="border-bottom: 1px solid; border-right: 1px solid;" colspan="5"></td>
+                <td style="border-bottom: 1px solid; border-right: 1px solid; text-align:right;" colspan="5">'.number_format($total_spp,2,",",".").'</td>
               </tr>
             </table>';
       echo '<table style="text-align: justify; width: 100%; font-size:84%;"  >
@@ -2440,6 +2466,12 @@ $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat whe
       }
       return $temp;
 
+}
+
+function hitung_pagu($kdgiat, $kdakun){
+  $sql = $this->query("SELECT sum(JUMLAH) as jml from rkakl_full where KDGIAT='$kdgiat' and KDAKUN='$kdakun' GROUP BY KDAKUN ");
+  $data = $this->fetch_array($sql);
+  return $data['jml'];
 }
 
 function konversi_tanggal($tgl,$type)

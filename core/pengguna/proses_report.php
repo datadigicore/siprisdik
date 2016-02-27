@@ -64,8 +64,10 @@ switch ($data[2]) {
     $report->SPPD($data_pengguna);
   break;
   case 'SPP':
-    $post = $_POST;
-    $report->SPP($data_pengguna,$post);
+    $kode_mak = $purifier->purify($_POST['kode-mak']);
+    $direktorat = $purifier->purify($_POST['direktorat']);
+    $bulan = $purifier->purify($_POST['bulan']);
+    $report->SPP($direktorat, $bulan);
   break;
   case 'SPTB':
     $kode_akun = $purifier->purify($_POST['kode-akun']);
@@ -86,7 +88,8 @@ switch ($data[2]) {
   case 'Rincian_Permintaan_Pengeluaran':
     $kode_mak = $purifier->purify($_POST['kode-mak']);
     $direktorat = $purifier->purify($_POST['direktorat']);
-    $report->Rincian_Permintaan_Pengeluaran($kode_mak, $direktorat);
+    $bulan = $purifier->purify($_POST['bulan']);
+    $report->Rincian_Permintaan_Pengeluaran($kode_mak, $direktorat, $bulan);
   break;
   // case 'laporan':
   //   // require_once 'Classes/PHPExcel.php';
