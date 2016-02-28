@@ -67,7 +67,7 @@ switch ($data[2]) {
     $kode_mak = $purifier->purify($_POST['kode-mak']);
     $direktorat = $purifier->purify($_POST['direktorat']);
     $bulan = $purifier->purify($_POST['bulan']);
-    $report->SPP($direktorat, $bulan);
+    $report->SPP($direktorat, $bulan, $_POST,$kode_mak);
   break;
   case 'SPTB':
     $kode_akun = $purifier->purify($_POST['kode-akun']);

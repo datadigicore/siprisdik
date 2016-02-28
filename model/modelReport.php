@@ -597,7 +597,7 @@
     }
 
     public function SPP($kdgiat, $bulan ,$post, $kdmak){
-      $sql = $this->query("SELECT kdakun, penerima, tanggal, sum(case when month(tanggal)='$bulan' then value else 0 end) as jumlah, sum(case when month(tanggal)<'$bulan' then value else 0 end) as jml_lalu FROM `rabfull` where  kdgiat='$kdgiat'  GROUP BY kdakun order by kdakun asc ");
+      $sql = $this->query("SELECT kdakun, penerima, tanggal, sum(case when month(tanggal)='$bulan' then value else 0 end) as jumlah, sum(case when month(tanggal)<'$bulan' then value else 0 end) as jml_lalu FROM `rabfull` where  kdgiat='$kdgiat' and kdakun like '$kdmak%' GROUP BY kdakun order by kdakun asc ");
       ob_start();
       echo '<table cellpadding="1" style="border-collapse:collapse; font-size:0.7em;">
 
@@ -640,11 +640,14 @@
               <td></td>
              </tr>
              <tr>
+              <td colspan="13" style="border-bottom:1px solid;"></td>
+             </tr>
+             <tr>
               <td>1. </td>
               <td colspan=2>Kementerian/Lembaga</td>
               <td>:</td>
               <td colspan=2>Kemenristek Dikti</td>
-            
+              
               <td>[ 042 ]</td>
               <td>7. </td>
               <td>Kegiatan</td>
@@ -727,27 +730,27 @@
               <td></td>
              </tr>
              <tr>
-              <td colspan=12><br></br></td>
+              <td colspan=12 style="border-top:1px solid;"><br></br></td>
              </tr>
              <tr>
               <td></td>
-              <td colspan=10>KEPADA</td>
-              <td></td>
-             </tr>
-             <tr>
-              <td></td>
-              <td colspan=10>Yth. Pejabat Penanda Tangan Surat Perintah Membayar</td>
+              <td colspan=10 style="font-weight:bold; text-align:center;">KEPADA</td>
               <td></td>
              </tr>
              <tr>
               <td></td>
-              <td colspan=10>Direktorat Jenderal Kelembagaan Ilmu Pengetahuan
+              <td colspan=10 style="font-weight:bold; text-align:center;">Yth. Pejabat Penanda Tangan Surat Perintah Membayar</td>
+              <td></td>
+             </tr>
+             <tr>
+              <td></td>
+              <td colspan=10 style="font-weight:bold; text-align:center;">Direktorat Jenderal Kelembagaan Ilmu Pengetahuan
               Teknologi dan Pendidikan Tinggi</td>
               <td></td>
              </tr>
              <tr>
               <td></td>
-              <td colspan=10>di- Kota Jakarta Pusat</td>
+              <td colspan=10 style="font-weight:bold; text-align:center;">di- Kota Jakarta Pusat</td>
               <td></td>
              </tr>
              <tr>
@@ -755,7 +758,7 @@
              </tr>
              <tr>
               <td colspan=12 >Berdasarkan DIPA Nomor : DIPA-042.03.1.401196/2016, Tgl. 1
-              Desember2015 dan, bersama ini kami
+              Desember 2015 dan, bersama ini kami
               ajukan pembayaran sebagai berikut :</td>
              </tr>
              <tr>
@@ -793,7 +796,7 @@
               <td>3. </td>
               <td colspan=2>Jenis Belanja</td>
               <td>:</td>
-              <td>52 (Belanja Barang)</td>
+              <td>'.$kdmak.'</td>
               <td></td>
               <td></td>
               <td></td>
@@ -902,13 +905,28 @@
               <td style="border:1px solid"  align="center" colspan=2>5</td>
               <td style="border:1px solid"  align="center" colspan=2>6 = ( 4+5)</td>
               <td style="border:1px solid"  align="center"  >7 = (3-6)</td>
+             </tr>
+             <tr>
+              <td style="border:1px solid" align="center">I</td>
+              <td style="border:1px solid"  align="center" colspan=2>Sub. Kegiatan & MAK</td>
+              <td style="border:1px solid"  align="center" colspan=2></td>
+              <td style="border:1px solid"  align="center" colspan=2></td>
+              <td style="border:1px solid"  align="center" colspan=2></td>
+              <td style="border:1px solid"  align="center" colspan=2></td>
+              <td style="border:1px solid"  align="center"  ></td>
              </tr>';
+      $tot_pagu=0; $tot_spp_ini=0; $tot_spp_lalu=0; $acc_tot_spp=0;$tot_sisa_dana=0;
       while($data=$this->fetch_array($sql)){
         $pagu=$this->hitung_pagu($kdgiat, $data['kdakun']);
+        $tot_pagu+=$pagu;
         $spp_ini = $data['jumlah'];
+        $tot_spp_ini+=$spp_ini;
         $spp_lalu = $data['jml_lalu'];
+        $tot_spp_lalu += $spp_lalu;
         $tot_spp = $spp_lalu+$spp_ini;
+        $acc_tot_spp+=$tot_spp;
         $sisa_dana = $pagu-$tot_spp;
+        $tot_sisa_dana+=$sisa_dana;
         echo '<tr>
                 <td style="border-left:1px solid; border-right:1px solid;" align="right"></td>
                 <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="left">'.$data['kdakun'].'</td>
@@ -920,6 +938,16 @@
               </tr>';
 
       }
+
+      echo '<tr>
+                <td style="border-left:1px solid; border:1px solid;" align="right"></td>
+                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="center">JUMLAH I</td>
+                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($tot_pagu,2,",",".").'</td>
+                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($tot_spp_lalu,2,",",".").'</td>
+                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($tot_spp_ini,2,",",".").'</td>
+                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($acc_tot_spp,2,",",".").'</td>
+                <td style="border-left:1px solid; border:1px solid;" align="right">'.number_format($tot_sisa_dana,2,",",".").'</td>
+              </tr>';
       echo   '<tr>
               <td style="border-top:1px solid; border-bottom:1px solid; border-left:1px solid; "  ></td>
               <td style="border-top:1px solid; border-bottom:1px solid; "    ></td>
