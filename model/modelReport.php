@@ -597,7 +597,8 @@
     }
 
     public function SPP($kdgiat, $bulan ,$post, $kdmak){
-      $sql = $this->query("SELECT kdakun, penerima, tanggal, sum(case when month(tanggal)='$bulan' then value else 0 end) as jumlah, sum(case when month(tanggal)<'$bulan' then value else 0 end) as jml_lalu FROM `rabfull` where  kdgiat='$kdgiat' and kdakun like '$kdmak%' GROUP BY kdakun order by kdakun asc ");
+      $sql = $this->query("SELECT kdakun, sum(case when month(tanggal)='$bulan' then value else 0 end) as jumlah, sum(case when month(tanggal)<'$bulan' then value else 0 end) as jml_lalu FROM `rabfull` where  kdgiat='$kdgiat' and kdakun like '$kdmak%' GROUP BY kdakun order by kdakun asc ");
+      $sql2 = $this->query("SELECT substring(kdakun,1,2) as kdakun, sum(case when month(tanggal)='$bulan' then value else 0 end) as jumlah, sum(case when month(tanggal)<'$bulan' then value else 0 end) as jml_lalu FROM `rabfull` where  kdgiat='$kdgiat' GROUP BY kdakun order by kdakun asc ");
       ob_start();
       echo '<table cellpadding="1" style="border-collapse:collapse; font-size:0.7em;">
 
@@ -948,21 +949,111 @@
                 <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($acc_tot_spp,2,",",".").'</td>
                 <td style="border-left:1px solid; border:1px solid;" align="right">'.number_format($tot_sisa_dana,2,",",".").'</td>
               </tr>';
-      echo   '<tr>
-              <td style="border-top:1px solid; border-bottom:1px solid; border-left:1px solid; "  ></td>
-              <td style="border-top:1px solid; border-bottom:1px solid; "    ></td>
-              <td style="border-top:1px solid; border-bottom:1px solid; border-right:1px solid;  "  >JUMLAH II</td>
-              <td style="border-top:1px solid; border-bottom:1px solid; solid;  "  ></td>
-              <td style="border-top:1px solid; border-bottom:1px solid; border-right:1px solid;  "  ></td>
-              <td style="border-top:1px solid; border-bottom:1px solid; solid;  "  ></td>
-              <td style="border-top:1px solid; border-bottom:1px solid; border-right:1px solid;  "  ></td>
-              <td style="border-top:1px solid; border-bottom:1px solid; solid;  "  ></td>
-              <td style="border-top:1px solid; border-bottom:1px solid; border-right:1px solid;  "  ></td>
-              <td style="border-top:1px solid; border-bottom:1px solid; solid;  "  ></td>
-              <td style="border-top:1px solid; border-bottom:1px solid; border-right:1px solid;  "  ></td>
-              <td style="border:1px solid;" ></td>
-             </tr>
-             <tr>
+      
+      $init = $this->fetch_array($sql2);
+
+      $pagu=$this->hitung_pagu($kdgiat, $init['kdakun']); 
+      $spp_ini=$init['jumlah']; 
+      $spp_lalu=$init['jml_lalu'];
+      $tot_spp=$spp_ini+$spp_lalu;
+      $sisa_dana=$pagu-$tot_spp; 
+      
+
+      $tot_pagu=$pagu; 
+      $tot_spp_ini=$spp_ini; 
+      $tot_spp_lalu=$spp_lalu; 
+      $acc_tot_spp=$tot_spp;
+      $tot_sisa_dana=$sisa_dana;
+      $kd_akun=$init['kdakun'];
+      $init=0;
+      while($dt2=$this->fetch_array($sql2)){
+        
+        if($kd_akun!=$dt2['kdakun'] and $init==0){
+          echo '<tr>
+                <td style="border-left:1px solid; border-right:1px solid;" align="right"></td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="left">'.$kd_akun.'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($pagu,2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($spp_lalu,2,",",".").'</td>';
+          if($kd_akun==$kdmak) {
+            echo '<td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($spp_ini,2,",",".").'</td>';
+          }
+          else{
+            echo '<td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.'-'.'</td>';
+          }
+          echo '<td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($tot_spp,2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" align="right">'.number_format($sisa_dana,2,",",".").'</td>
+              </tr>';
+            $init=1;
+            $spp_ini = 0;
+            $spp_lalu = 0;
+            $sisa_dana = 0;
+            $tot_spp = 0;
+            $pagu=0;
+        }
+        $pagu=$this->hitung_pagu($kdgiat, $dt2['kdakun']);
+        if($dt2['kdakun']==$kdmak){
+          $spp_ini += $dt2['jumlah'];
+          $spp_lalu += $dt2['jml_lalu'];
+          $sisa_dana += $pagu-$tot_spp;
+          $tot_spp += $spp_lalu+$spp_ini;
+
+          $tot_pagu+=$pagu;
+          $tot_spp_lalu += $spp_lalu;
+          $acc_tot_spp+=$tot_spp;
+          $tot_spp_ini+=$spp_ini;
+          $tot_sisa_dana+=$sisa_dana;
+        }
+        else{
+          $spp_ini += 0;
+          $spp_lalu += $dt2['jml_lalu'];
+          $sisa_dana += $pagu-$dt2['jml_lalu'];
+          $tot_spp += $spp_lalu;
+
+          $tot_pagu+=$pagu;
+          $tot_spp_lalu += $spp_lalu;
+          $acc_tot_spp+=$tot_spp;
+          $tot_spp_ini+=$spp_ini;
+          $tot_sisa_dana+=$sisa_dana;
+        }
+        
+       if($kd_akun!=$dt2['kdakun'] and $init==1){
+        
+        echo '<tr>
+                <td style="border-left:1px solid; border-right:1px solid;" align="right"></td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="left">'.$dt2['kdakun'].'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($pagu,2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($spp_lalu,2,",",".").'</td>';
+          if($dt2['kdakun']==$kdmak) {
+            echo '<td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($spp_ini,2,",",".").'</td>';
+          }
+          else{
+            echo '<td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.'-'.'</td>';
+          $sisa_dana = $pagu-$spp_lalu;
+
+          }
+        echo '<td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($tot_spp,2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" align="right">'.number_format($sisa_dana,2,",",".").'</td>
+              </tr>';
+
+        $spp_ini = 0;
+        $spp_lalu = 0;
+        $sisa_dana = 0;
+        $tot_spp = 0;
+        $kd_akun=$dt2['kdakun'];
+
+        }
+
+      }
+      echo '<tr>
+                <td style="border-left:1px solid; border:1px solid;" align="right"></td>
+                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="center">JUMLAH II</td>
+                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($tot_pagu,2,",",".").'</td>
+                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($tot_spp_lalu,2,",",".").'</td>
+                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($tot_spp_ini,2,",",".").'</td>
+                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($acc_tot_spp,2,",",".").'</td>
+                <td style="border-left:1px solid; border:1px solid;" align="right">'.number_format($tot_sisa_dana,2,",",".").'</td>
+              </tr>';
+      echo  '<tr>
               <td style="border-top:1px solid; border-bottom:1px solid; border-left:1px solid; "  colspan=3>Uang Persediaan</td>
               <td style="border-left:1px solid; border-bottom:1px solid;" ></td>
               <td style="border-right:1px solid; border-bottom:1px solid;" ></td>
@@ -2497,7 +2588,7 @@ $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat whe
 }
 
 function hitung_pagu($kdgiat, $kdakun){
-  $sql = $this->query("SELECT sum(JUMLAH) as jml from rkakl_full where KDGIAT='$kdgiat' and KDAKUN='$kdakun' GROUP BY KDAKUN ");
+  $sql = $this->query("SELECT sum(JUMLAH) as jml from rkakl_full where KDGIAT='$kdgiat' and KDAKUN like '$kdakun%' GROUP BY KDAKUN ");
   $data = $this->fetch_array($sql);
   return $data['jml'];
 }
