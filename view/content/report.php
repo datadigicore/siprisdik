@@ -19,6 +19,8 @@
             <li><a href="#tab_5" data-toggle="tab" aria-expanded="true">Rincian Permintaan Pengeluaran</a></li>
             <li ><a href="#tab_7" data-toggle="tab" aria-expanded="true">Surat Perintah Pembayaran</a></li>
             <li ><a href="#tab_8" data-toggle="tab" aria-expanded="true">Realisasi Daya Serap Per kegiatan</a></li>
+            <li ><a href="#tab_9" data-toggle="tab" aria-expanded="true">Rekap Realisasi Daya Serap Per kegiatan</a></li>
+            <li ><a href="#tab_10" data-toggle="tab" aria-expanded="true">Rekap Total Realisasi Daya Serap</a></li>
             
             
           </ul>
@@ -200,6 +202,98 @@
             </div>
             <div class="tab-pane" id="tab_8">
               <form method="POST" action="<?php echo $url_rewrite;?>process/report/Daya_Serap">
+              <div class="box-body" style="padding-bottom:0;">
+                 <div class="form-group">
+                  <label>Direktorat</label>
+                  <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
+                      <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                          <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                          <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                          <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                            <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                            <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
+                      <?php } ?>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Bulan</label>
+                    <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
+                      <option value="01">Januari</option>
+                      <option value="02">Februari</option>
+                      <option value="03">Maret</option>
+                      <option value="04">April</option>
+                      <option value="05">Mei</option>
+                      <option value="06">Juni</option>
+                      <option value="07">Juli</option>
+                      <option value="08">Agustus</option>
+                      <option value="09">September</option>
+                      <option value="10">Oktober</option>
+                      <option value="11">November</option>
+                      <option value="12">Desember</option>
+                    </select>
+                </div>               
+              </div>
+              <div class="box-footer">
+                <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>
+              </div>        
+              </form>
+            </div>
+            <div class="tab-pane" id="tab_9">
+              <form method="POST" action="<?php echo $url_rewrite;?>process/report/Rekap_Daya_Serap">
+              <div class="box-body" style="padding-bottom:0;">
+                 <div class="form-group">
+                  <label>Direktorat</label>
+                  <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
+                      <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                          <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                          <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                          <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                            <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                            <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
+                      <?php } ?>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Bulan</label>
+                    <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
+                      <option value="01">Januari</option>
+                      <option value="02">Februari</option>
+                      <option value="03">Maret</option>
+                      <option value="04">April</option>
+                      <option value="05">Mei</option>
+                      <option value="06">Juni</option>
+                      <option value="07">Juli</option>
+                      <option value="08">Agustus</option>
+                      <option value="09">September</option>
+                      <option value="10">Oktober</option>
+                      <option value="11">November</option>
+                      <option value="12">Desember</option>
+                    </select>
+                </div>               
+              </div>
+              <div class="box-footer">
+                <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>
+              </div>        
+              </form>
+            </div>
+            <div class="tab-pane" id="tab_10">
+              <form method="POST" action="<?php echo $url_rewrite;?>process/report/Rekap_Total">
               <div class="box-body" style="padding-bottom:0;">
                  <div class="form-group">
                   <label>Direktorat</label>
