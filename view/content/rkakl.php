@@ -27,11 +27,13 @@
               <thead style="background-color:#11245B;color:white;">
                 <tr>
                   <th>id</th>
-                  <th>Tanggal Import</th>
-                  <th>Nama File Import</th>
-                  <th>Keterangan</th>
                   <th>Tahun RKAKL</th>
+                  <th>Tanggal DIPA</th>
+                  <th>Nomor DIPA</th>
+                  <!-- <th>Nama File Import</th> -->
+                  <!-- <th>Keterangan</th> -->
                   <th>Status</th>
+                  <th>Aksi</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -62,8 +64,17 @@
             </select>
           </div>
           <div class="form-group">
-            <textarea rows="5" type="text" class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan" style="resize:none;" required></textarea>
+            <label>Tanggal DIPA</label>
+            <input type="text" class="form-control tanggal" id="tanggal" name="tanggal" placeholder="dd/mm/yyyy">
           </div>
+          <div class="form-group">
+            <label>Nomor DIPA</label>
+            <input type="text" class="form-control" id="no_dipa" name="no_dipa" placeholder="Nomor DIPA">
+          </div>
+          <!-- <div class="form-group">
+            <label>Keterangan</label>
+            <textarea rows="5" type="text" class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan" style="resize:none;" required></textarea>
+          </div> -->
           <div class="form-group">
             <input type="file" id="fileimport" name="fileimport" style="display:none;">
             <a id="selectbtn" class="btn btn-flat btn-primary" style="position:absolute;right:16px;">Select File</a>
@@ -93,7 +104,16 @@
             <input type="text" class="form-control" id="tglimport" name="tglimport" placeholder="Tanggal Import" readonly>
           </div>
           <div class="form-group">
-            <textarea rows="5" type="text" class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan" style="resize:none;" required></textarea>
+            <label>Tanggal DIPA</label>
+            <input type="text" class="form-control tanggal" id="tanggal" name="tanggal" placeholder="dd/mm/yyyy">
+          </div>
+          <div class="form-group">
+            <label>Nomor DIPA</label>
+            <input type="text" class="form-control" id="no_dipa" name="no_dipa" placeholder="Nomor DIPA">
+          </div>
+          <div class="form-group">
+            <label>Pesan Revisi</label>
+            <textarea rows="5" type="text" class="form-control" id="pesan" name="pesan" placeholder="Pesan Revisi" style="resize:none;" required></textarea>
           </div>
           <div class="form-group">
             <input type="file" id="fileimport-revisi" name="fileimport" style="display:none;">
@@ -108,7 +128,36 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="lihatpesan">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header" style="background-color:#111F3F !important; color:white;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" style="color:white">×</span></button>
+          <h4 class="modal-title">Revisi Data RKAKL</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <input type="text" class="form-control" id="vtglimport" name="vtglimport" placeholder="Tanggal Import" readonly>
+          </div>
+          <div class="form-group">
+            <label>Tanggal DIPA</label>
+            <input type="text" class="form-control tanggal" id="vtanggal" name="vtanggal" placeholder="dd/mm/yyyy" readonly>
+          </div>
+          <div class="form-group">
+            <label>Nomor DIPA</label>
+            <input type="text" class="form-control" id="vno_dipa" name="vno_dipa" placeholder="Nomor DIPA" readonly>
+          </div>
+          <div class="form-group">
+            <label>Pesan Revisi</label>
+            <textarea rows="5" type="text" class="form-control" id="vpesan" name="vpesan" placeholder="Pesan Revisi" style="resize:none;" readonly></textarea>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
 <script>
+
   $(function () {
     $('#selectbtn').click(function () {
       $("#fileimport").trigger('click');
@@ -141,17 +190,32 @@
         {"targets" : 3},
         {"targets" : 4},
         {"targets" : 5},
-        {"targets" : 6},
-        {"targets" : 7,
+        {"targets" : 6,
          "visible" : false},
       ],
       "order": [[ 0, "desc" ]]
     });
+    $('.tanggal').mask('00/00/0000');
+    $(".tanggal").datepicker({ 
+      changeMonth: true,
+      changeYear: true,
+      format: 'dd/mm/yyyy' 
+    });
+
     $(document).on("click", "#btn-edt", function (){
       var tr = $(this).closest('tr');
       tabrow = table.row(tr);
-      $("#tglimport").val('Tahun Anggaran : '+tabrow.data()[4]);
-      $("#thnanggaran").val(tabrow.data()[4]);
+      $("#tglimport").val('Tahun Anggaran : '+tabrow.data()[1]);
+      $("#thnanggaran").val(tabrow.data()[1]);
+    });
+    $(document).on("click", "#btn-pesan", function (){
+      var tr = $(this).closest('tr');
+      tabrow = table.row(tr);
+      $("#vtglimport").val('Tahun Anggaran : '+tabrow.data()[1]);
+      // alert('no 2 : '+tabrow.data()[2])
+      $("#vtanggal").val(tabrow.data()[2]);
+      $("#vno_dipa").val(tabrow.data()[3]);
+      $("#vpesan").val(tabrow.data()[8]);
     });
     $(document).on("click", "#btn-viw", function (){
       var tr = $(this).closest('tr');

@@ -9,6 +9,8 @@
       $keterangan = $data['keterangan'];
       $tahun      = $data['tahun'];
       $status     = $data['status'];
+      $no_dipa    = $data['no_dipa'];
+
       $query      = "UPDATE rkakl_view SET
         status    = '0' WHERE
         tahun     = '$tahun'
@@ -19,9 +21,22 @@
       while ($fetch = $this->fetch_object($result)) {
         $versi = $fetch->max_versi;
       }
-      if (is_null($versi)) {
+      if (isset($data['pesan'])) {
+        $pesan = $data['pesan'];
+        $query      = "UPDATE rkakl_view SET
+          pesan    = '$pesan' 
+          WHERE tahun     = '$tahun'
+          AND versi       = '$versi'
+        ";
+        $result = $this->query($query);
+      }else{
+        $pesan = "";
+      }
+
+      if (empty($versi) && $versi !== '0') {
         $query      = "INSERT INTO rkakl_view SET
           tanggal   = '$tanggal',
+          no_dipa   = '$no_dipa',
           filename  = '$filename',
           filesave  = '$filesave',
           keterangan= '$keterangan',
@@ -34,11 +49,13 @@
         $newversi   = $versi+1;
         $query      = "INSERT INTO rkakl_view SET
           tanggal   = '$tanggal',
+          no_dipa   = '$no_dipa',
           filename  = '$filename',
           filesave  = '$filesave',
           keterangan= '$keterangan',
           tahun     = '$tahun',
           status    = '$status',
+          pesan    = '$pesan',
           versi     = '$newversi'
         ";
         $result = $this->query($query);
