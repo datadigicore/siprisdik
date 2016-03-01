@@ -2323,7 +2323,7 @@ $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat whe
               if(substr($rs[NMITEM],1,8)=="ransport" or $rs[taxi_tujuan]>0 or $rs[taxi_asal]>0){
                 // echo "Masuk Transport : ".$res[NMITEM]."<br>";
                 $taxi_lokal += $rs[value]+$rs[taxi_asal]+$rs[taxi_tujuan];
-                $tot        +=$rs[value]+$rs[taxi_asal]+$rs[taxi_tujuan];
+                $tot        += $rs[value]+$rs[taxi_asal]+$rs[taxi_tujuan];
                 // echo "NIlai taxt :  dan".$taxi_lokal." total  ".$tot;
               }
               else if(substr($rs[NMITEM],1,3)=="ang"){
@@ -2340,7 +2340,7 @@ $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat whe
               }
               else if(substr($rs[NMITEM],1,4)=="iket"){
                 $tiket += $rs[value]+$rs[harga_tiket];
-                $tot              += $rs[value]+$rs[harga_tiket];
+                $tot   += $rs[value]+$rs[harga_tiket];
               }
               else{
                 $lain2 += $rs[value];
