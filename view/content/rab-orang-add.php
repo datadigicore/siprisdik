@@ -16,8 +16,8 @@
     </ol>
   </section>
   <section class="content">
-    <div class="row">
-      <div class="col-md-9 col-xs-12">
+    <div class="row" id="formorang">
+      <div class="col-md-6 col-xs-12">
         <div class="box">
           <div class="box-header with-border">
             <h3 class="box-title" style="margin-top:6px;">Tambah Orang / Badan</h3>
@@ -35,12 +35,16 @@
                 </select>
               </div>
               <div class="form-group form-rab">
+                  <label>Nama Penerima</label>
+                  <input type="text" class="form-control" required value="<?= $penerima ?>" id="penerima" name="penerima" placeholder="Nama Penerima">
+              </div>
+              <div class="form-group form-rab">
                   <label>NPWP</label>
                   <input type="text" class="form-control" value="<?= $npwp ?>" id="npwp" name="npwp" placeholder="NPWP">
               </div>
-              <div class="form-group form-rab">
-                  <label>Nama Penerima</label>
-                  <input type="text" class="form-control" required value="<?= $penerima ?>" id="penerima" name="penerima" placeholder="Nama Penerima">
+              <div class="form-group form-rab orang">
+                  <label>NIP</label>
+                  <input type="text" class="form-control" value="<?= $nip ?>" id="nip" name="nip" placeholder="NIP">
               </div>
               <div class="form-group form-rab orang">
                   <label>Golongan</label>
@@ -67,7 +71,7 @@
               <div class="form-group form-rab badan">
                 <label>Besar Pajak</label>
                 <input type="number" class="form-control" value="<?= $pajak ?>" id="pajak" name="pajak" placeholder="Besar Pajak">
-            </div>
+              </div>
             </div>
             <div class="box-footer">
               <button type="button" data-dismiss="modal" class="btn btn-flat btn-warning">Cancel</button>
@@ -87,6 +91,13 @@
          </div>        
       </div>
     </div>
+    <div class="row">
+      <div class="col-md-12 col-xs-12">
+        <div class="form-group">
+          <button id="tambahorang" class="btn btn-primary"><i class="fa fa-plus"></i> Tambah</button>
+        </div>
+      </div>
+    </div>
   </section>
 </div>
 
@@ -94,6 +105,9 @@
   $(function () {
     cekJenis();
     getnpwp();
+    $(document).on("click", "#tambahorang", function (){
+      tambahorang();
+    });
   });
 
   function getnpwp(){
@@ -104,8 +118,8 @@
       data: { },
       success: function(data){
         var obj = jQuery.parseJSON(data);
-        var avai_npwp = obj.npwp;
-        $( "#npwp" ).autocomplete({
+        var avai_npwp = obj.penerima;
+        $( "#penerima" ).autocomplete({
           source: avai_npwp,
           select: function (event, ui) {
             // cnpwp(jenis);
@@ -116,20 +130,22 @@
     });
   }
 
-
-
-  function cnpwp(npwp){
+  function cnpwp(penerima){
     var jenis = $('#jenis-akun').val();
-    
+
       $.ajax({
         type: "POST",
         url: "<?php echo $url_rewrite;?>process/rab_rinci/getorang",
-        data: { 'npwp':npwp,
+        data: { 'penerima':penerima,
                 'jenis':jenis },
         success: function(data){
           var obj = jQuery.parseJSON(data);
           if (obj != null) {
+            var npwp = obj.npwp;
+            $('#npwp').val(npwp);
             if(jenis==1){
+              var nip = obj.nip;
+              $('#nip').val(nip);
               var golongan = obj.golongan;
               $('#golongan').val(golongan);
               var pns = obj.pns;
@@ -140,8 +156,6 @@
               var pajak = obj.pajak;
               $('#pajak').val(pajak);
             }
-            var penerima = obj.penerima;
-            $('#penerima').val(penerima);
           };
         }
       });
@@ -162,9 +176,7 @@
       }
     });
   }
-
   
-
   function showOrang(){
     $(".form-rab").show();
     $(".orang").show();
@@ -176,9 +188,11 @@
     $(".orang").hide();
     $(".badan").show();
   }
+
   function hideAll(){
     $(".form-rab").hide();
   }
+
   function cekJenis(){
     var val = $("#jenis-akun").val();
     if(val==0){
@@ -191,4 +205,5 @@
       hideAll();
     }
   }
+
 </script>

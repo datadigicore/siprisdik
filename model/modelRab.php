@@ -4,13 +4,13 @@
   class modelRab extends mysql_db {
 
     public function getOrang($data){
-      $npwp = $data['npwp'];
+      $penerima = $data['penerima'];
       $jenis = $data['jenis'];
-      $query  = "SELECT penerima, npwp, pajak, golongan, jabatan, pns FROM rabfull as r 
-                  where npwp = '$npwp' and jenis='$jenis' group by r.npwp";
+      $query  = "SELECT * FROM rabfull as r 
+                  where penerima = '$penerima' and jenis='$jenis' group by r.npwp order by id desc";
       $result = $this->query($query);
       while ($fetch = $this->fetch_array($result)) {
-        $data['penerima'] = $fetch['penerima'];
+        $data['nip'] = $fetch['nip'];
         $data['npwp'] = $fetch['npwp'];
         $data['pajak'] = $fetch['pajak'];
         $data['golongan'] = $fetch['golongan'];
@@ -114,11 +114,12 @@
     }
 
     public function getnpwp($jenis){
-      $query = "SELECT npwp FROM rabfull where jenis = '$jenis' and (npwp != '' or npwp is not null) group by npwp";
+      $query = "SELECT npwp, penerima FROM rabfull where jenis = '$jenis' and (npwp != '' or npwp is not null) group by npwp";
       $result = $this->query($query);
       $i=0;
       while ($fetch  = $this->fetch_object($result)) {
         $data['npwp'][$i] = $fetch->npwp;
+        $data['penerima'][$i] = $fetch->penerima;
         $i++;
       }
       return $data;
@@ -126,16 +127,19 @@
 
     public function save($data){
       $direktorat = $data['direktorat'];
-      $tahun = $data['tahun'];
-      $prog = $data['prog'];
-      $output = $data['output'];
-      $soutput = $data['soutput'];
-      $komp = $data['komp'];
-      $skomp = $data['skomp'];
-      $uraian = $data['uraian'];
-      $t = explode("/", $data['tanggal']);
-      $tgl=$t[2].'-'.$t[1].'-'.$t[0];
-      $lokasi = $data['lokasi'];
+      $tahun      = $data['tahun'];
+      $prog       = $data['prog'];
+      $output     = $data['output'];
+      $soutput    = $data['soutput'];
+      $komp       = $data['komp'];
+      $skomp      = $data['skomp'];
+      $uraian     = $data['uraian'];
+      $t          = explode("/", $data['tanggal']);
+      $tgl        = $t[2].'-'.$t[1].'-'.$t[0];
+      $t2         = explode("/", $data['tanggal_akhir']);
+      $tgl_akhir  = $t2[2].'-'.$t2[1].'-'.$t2[0];
+      $lokasi     = $data['lokasi'];
+      $tempat     = $data['tempat'];
 
       $query      = "INSERT INTO rabview SET
         thang       = '$tahun',
@@ -144,10 +148,12 @@
         kdoutput    = '$output',
         kdsoutput   = '$soutput',
         kdkmpnen    = '$komp',
-        kdskmpnen    = '$skomp',
+        kdskmpnen   = '$skomp',
         deskripsi   = '$uraian',
         tanggal     = '$tgl',
+        tanggal_akhir = '$tgl_akhir',
         lokasi      = '$lokasi',
+        tempat      = '$tempat',
         status      = '0'
       ";
       $result = $this->query($query);
@@ -167,6 +173,8 @@
       $value = $data['jumlah'];
       $t = explode("/", $data['tanggal']);
       $tgl=$t[2].'-'.$t[1].'-'.$t[0];
+      $t2         = explode("/", $data['tanggal_akhir']);
+      $tgl_akhir  = $t2[2].'-'.$t2[1].'-'.$t2[0];
 
       $query      = "INSERT INTO rabfull SET
         thang       = '$tahun',
@@ -179,6 +187,7 @@
         kdakun    = '$akun',
         deskripsi   = '$deskripsi',
         tanggal     = '$tgl',
+        tanggal_akhir     = '$tgl_akhir',
         value     = '$value',
         status      = '0'
       ";
@@ -196,7 +205,10 @@
       $uraian = $data['uraian'];
       $t = explode("/", $data['tanggal']);
       $tgl=$t[2].'-'.$t[1].'-'.$t[0];
+      $t2         = explode("/", $data['tanggal_akhir']);
+      $tgl_akhir  = $t2[2].'-'.$t2[1].'-'.$t2[0];
       $lokasi = $data['lokasi'];
+      $tempat = $data['tempat'];
 
       $query      = "UPDATE rabview SET
         thang       = '$tahun',
@@ -206,7 +218,9 @@
         kdskmpnen   = '$skomp',
         deskripsi   = '$uraian',
         tanggal     = '$tgl',
-        lokasi      = '$lokasi'
+        tanggal_akhir = '$tgl_akhir',
+        lokasi      = '$lokasi',
+        tempat      = '$tempat'
         WHERE id = '$idview'
       ";
 
@@ -218,7 +232,9 @@
         kdskmpnen   = '$skomp',
         deskripsi   = '$uraian',
         tanggal     = '$tgl',
-        lokasi      = '$lokasi'
+        tanggal_akhir = '$tgl_akhir',
+        lokasi      = '$lokasi',
+        tempat      = '$tempat'
         WHERE rabview_id = '$idview'
       ";
       $result = $this->query($query);
@@ -238,6 +254,8 @@
       $value = $data['jumlah'];
       $t = explode("/", $data['tanggal']);
       $tgl=$t[2].'-'.$t[1].'-'.$t[0];
+      $t2         = explode("/", $data['tanggal_akhir']);
+      $tgl_akhir  = $t2[2].'-'.$t2[1].'-'.$t2[0];
 
       $query      = "UPDATE rabfull SET
         thang       = '$tahun',
@@ -248,6 +266,7 @@
         kdakun      = '$akun',
         deskripsi   = '$deskripsi',
         tanggal     = '$tgl',
+        tanggal_akhir = '$tgl_akhir',
         value       = '$value'
         WHERE id = '".$idrab."'
       ";
@@ -500,8 +519,7 @@
     }
 
     public function getview($id){
-      $query  = "SELECT id,thang,kdprogram,kdgiat,kdoutput,kdsoutput,kdkmpnen,kdskmpnen, deskripsi,tanggal,lokasi,
-                        status
+      $query  = "SELECT *
                  FROM rabview as r where id = '$id'";
       $result = $this->query($query);
       $data  = $this->fetch_array($result);
@@ -527,11 +545,14 @@
       $kdskmpnen  = $getview['kdskmpnen'];
       $deskripsi  = $getview['deskripsi'];
       $tanggal    = $getview['tanggal'];
+      $tanggal_akhir = $getview['tanggal_akhir'];
       $lokasi     = $getview['lokasi'];
+      $tempat     = $getview['tempat'];
 
       $jenis = $post['jenis-akun'];
       $penerima = $post['penerima'];
       $npwp = $post['npwp'];
+      $nip = $post['nip'];
       $jabatan = $post['jabatan'];
       $golongan = $post['golongan'];
       $pns = $post['pns'];
@@ -572,11 +593,14 @@
         kdskmpnen   = '$kdskmpnen',
         deskripsi   = '$deskripsi',
         tanggal     = '$tanggal',
+        tanggal_akhir = '$tanggal_akhir',
         lokasi      = '$lokasi',
+        tempat      = '$tempat',
 
         jenis       = '$jenis',
         penerima    = '$penerima',
         npwp        = '$npwp',
+        nip        = '$nip',
         jabatan     = '$jabatan',
         golongan    = '$golongan',
         pns         = '$pns',
