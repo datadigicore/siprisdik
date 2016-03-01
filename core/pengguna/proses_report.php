@@ -91,6 +91,23 @@ switch ($data[2]) {
     $bulan = $purifier->purify($_POST['bulan']);
     $report->Rincian_Permintaan_Pengeluaran($kode_mak, $direktorat, $bulan);
   break;
+  case 'Daya_Serap':
+    $direktorat = $purifier->purify($_POST['direktorat']);
+    $bulan = $purifier->purify($_POST['bulan']);
+    $report->realisasi_daya_serap($direktorat, $bulan);
+  break;
+  case 'Rekap_Daya_Serap':
+    $direktorat = $purifier->purify($_POST['direktorat']);
+    $bulan = $purifier->purify($_POST['bulan']);
+    // echo $direktorat." ".$bulan;
+    $report->rekap_realisasi_daya_serap($direktorat, $bulan);
+  break;
+  case 'Rekap_Total':
+    $direktorat = $purifier->purify($_POST['direktorat']);
+    $bulan = $purifier->purify($_POST['bulan']);
+    // echo $direktorat." ".$bulan;
+    $report->rekap_total($direktorat, $bulan);
+  break;
   // case 'laporan':
   //   // require_once 'Classes/PHPExcel.php';
   //   // Create new PHPExcel object

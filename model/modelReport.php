@@ -949,23 +949,24 @@
                 <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($acc_tot_spp,2,",",".").'</td>
                 <td style="border-left:1px solid; border:1px solid;" align="right">'.number_format($tot_sisa_dana,2,",",".").'</td>
               </tr>';
-      
+      $spp_ini_fix=$tot_spp_ini;
+      $tot_pagu=0; $tot_spp_ini=0; $tot_spp_lalu=0; $acc_tot_spp=0;$tot_sisa_dana=0;
       $init = $this->fetch_array($sql2);
 
-      $pagu=$this->hitung_pagu($kdgiat, $init['kdakun']); 
-      $spp_ini=$init['jumlah']; 
-      $spp_lalu=$init['jml_lalu'];
-      $tot_spp=$spp_ini+$spp_lalu;
-      $sisa_dana=$pagu-$tot_spp; 
+      $pagu       =$this->hitung_pagu($kdgiat, $init['kdakun']); 
+      $spp_ini    =$init['jumlah']; 
+      $spp_lalu   =$init['jml_lalu'];
+      $tot_spp    =$spp_ini+$spp_lalu;
+      $sisa_dana  =$pagu-$tot_spp; 
       
 
-      $tot_pagu=$pagu; 
-      $tot_spp_ini=$spp_ini; 
-      $tot_spp_lalu=$spp_lalu; 
-      $acc_tot_spp=$tot_spp;
+      $tot_pagu     =$pagu; 
+      $tot_spp_ini  =$spp_ini; 
+      $tot_spp_lalu =$spp_lalu; 
+      $acc_tot_spp  =$tot_spp;
       $tot_sisa_dana=$sisa_dana;
-      $kd_akun=$init['kdakun'];
-      $init=0;
+      $kd_akun      =$init['kdakun'];
+      $init         =0;
       while($dt2=$this->fetch_array($sql2)){
         
         if($kd_akun!=$dt2['kdakun'] and $init==0){
@@ -978,6 +979,9 @@
             echo '<td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($spp_ini,2,",",".").'</td>';
           }
           else{
+            $sisa_dana = $pagu-$spp_lalu;
+            $tot_spp = $spp_lalu;
+            $tot_sisa_dana=$sisa_dana;
             echo '<td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.'-'.'</td>';
           }
           echo '<td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($tot_spp,2,",",".").'</td>
@@ -990,31 +994,19 @@
             $tot_spp = 0;
             $pagu=0;
         }
-        $pagu=$this->hitung_pagu($kdgiat, $dt2['kdakun']);
-        if($dt2['kdakun']==$kdmak){
+
+          $pagu=$this->hitung_pagu($kdgiat, $dt2['kdakun']);
           $spp_ini += $dt2['jumlah'];
           $spp_lalu += $dt2['jml_lalu'];
           $sisa_dana += $pagu-$tot_spp;
           $tot_spp += $spp_lalu+$spp_ini;
 
-          $tot_pagu+=$pagu;
+          // $tot_pagu+=$pagu;
           $tot_spp_lalu += $spp_lalu;
-          $acc_tot_spp+=$tot_spp;
-          $tot_spp_ini+=$spp_ini;
+          
+          $tot_spp_ini+=$spp_ini_fix;
           $tot_sisa_dana+=$sisa_dana;
-        }
-        else{
-          $spp_ini += 0;
-          $spp_lalu += $dt2['jml_lalu'];
-          $sisa_dana += $pagu-$dt2['jml_lalu'];
-          $tot_spp += $spp_lalu;
-
-          $tot_pagu+=$pagu;
-          $tot_spp_lalu += $spp_lalu;
-          $acc_tot_spp+=$tot_spp;
-          $tot_spp_ini+=$spp_ini;
-          $tot_sisa_dana+=$sisa_dana;
-        }
+        
         
        if($kd_akun!=$dt2['kdakun'] and $init==1){
         
@@ -1024,7 +1016,9 @@
                 <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($pagu,2,",",".").'</td>
                 <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($spp_lalu,2,",",".").'</td>';
           if($dt2['kdakun']==$kdmak) {
-            echo '<td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($spp_ini,2,",",".").'</td>';
+            echo '<td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($spp_ini_fix,2,",",".").'</td>';
+            $tot_spp = $spp_lalu+$spp_ini_fix;
+            $sisa_dana = $pagu - $tot_spp;
           }
           else{
             echo '<td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.'-'.'</td>';
@@ -1040,19 +1034,22 @@
         $sisa_dana = 0;
         $tot_spp = 0;
         $kd_akun=$dt2['kdakun'];
-
+        $tot_pagu+=$pagu;
+        $acc_tot_spp+=$tot_spp;
         }
 
       }
-      echo '<tr>
-                <td style="border-left:1px solid; border:1px solid;" align="right"></td>
-                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="center">JUMLAH II</td>
-                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($tot_pagu,2,",",".").'</td>
-                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($tot_spp_lalu,2,",",".").'</td>
-                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($tot_spp_ini,2,",",".").'</td>
-                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($acc_tot_spp,2,",",".").'</td>
-                <td style="border-left:1px solid; border:1px solid;" align="right">'.number_format($tot_sisa_dana,2,",",".").'</td>
-              </tr>';
+      
+
+      // echo '<tr>
+      //           <td style="border-left:1px solid; border:1px solid;" align="right"></td>
+      //           <td style="border-left:1px solid; border:1px solid;" colspan=2 align="center">JUMLAH II</td>
+      //           <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($tot_pagu,2,",",".").'</td>
+      //           <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($tot_spp_lalu,2,",",".").'</td>
+      //           <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($spp_ini_fix,2,",",".").'</td>
+      //           <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($acc_tot_spp,2,",",".").'</td>
+      //           <td style="border-left:1px solid; border:1px solid;" align="right">'.number_format($tot_sisa_dana,2,",",".").'</td>
+      //         </tr>';
       echo  '<tr>
               <td style="border-top:1px solid; border-bottom:1px solid; border-left:1px solid; "  colspan=3>Uang Persediaan</td>
               <td style="border-left:1px solid; border-bottom:1px solid;" ></td>
@@ -2326,7 +2323,7 @@ $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat whe
               if(substr($rs[NMITEM],1,8)=="ransport" or $rs[taxi_tujuan]>0 or $rs[taxi_asal]>0){
                 // echo "Masuk Transport : ".$res[NMITEM]."<br>";
                 $taxi_lokal += $rs[value]+$rs[taxi_asal]+$rs[taxi_tujuan];
-                $tot        +=$rs[value]+$rs[taxi_asal]+$rs[taxi_tujuan];
+                $tot        += $rs[value]+$rs[taxi_asal]+$rs[taxi_tujuan];
                 // echo "NIlai taxt :  dan".$taxi_lokal." total  ".$tot;
               }
               else if(substr($rs[NMITEM],1,3)=="ang"){
@@ -2343,7 +2340,7 @@ $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat whe
               }
               else if(substr($rs[NMITEM],1,4)=="iket"){
                 $tiket += $rs[value]+$rs[harga_tiket];
-                $tot              += $rs[value]+$rs[harga_tiket];
+                $tot   += $rs[value]+$rs[harga_tiket];
               }
               else{
                 $lain2 += $rs[value];
@@ -2554,9 +2551,669 @@ $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat whe
       
     }
 
-    public function readPengguna($data) {
-      
+    public function realisasi_daya_serap($dir, $tanggal ) {
+      // $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, value  FROM rabfull group by kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun order by kdgiat asc, kdoutput asc, kdsoutput asc, kdkmpnen asc, kdskmpnen asc, kdakun asc ";
+      $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, NMAKUN,  jumlah  FROM rkakl_full where kdgiat like '%$dir%' group by kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun order by kdgiat asc, kdoutput asc, kdsoutput asc, kdkmpnen asc, kdskmpnen asc, kdakun asc ";
+      $res = $this->query($sql);
+      ob_start();
+      echo '<table style="width: 100%;  text-align:left; border-collapse:collapse; font-size:0.95em;">
+                <tr>
+                  <td colspan="15" style="text-align:center; font-weight:bold">LAPORAN REALISASI DAYA SERAP PER KEGIATAN</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Nama Satker</td>
+                  <td>:</td>
+                  <td colspan="12" align="left" >Direktorat Jenderal Kelembagaan Iptek dan Dikti</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Kode Kegiatan</td>
+                  <td>:</td>
+                  <td colspan="12" align="left">401196</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Nomor Tanggal DIPA</td>
+                  <td>:</td>
+                  <td colspan="12" align="left">DIPA-042-03.1.401196/2016, tgl. 7 Desember 2016</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Propinsi DKI</td>
+                  <td>:</td>
+                  <td colspan="12" align="left">DKI</td> 
+                <tr>
+                  <td colspan="2">Departemen</td>
+                  <td>:</td>
+                  <td colspan="12" align="left">Kementerian Ristek dan Dikti</td>
+                </tr>
+                </tr>
+                <tr>
+                  <td colspan="2">Program</td>
+                  <td>:</td>
+                  <td colspan="12" align="left">Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Jumlah Anggaran</td>
+                  <td>:</td>
+                  <td colspan="12" align="left">-</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Kemajuan Fisik (%)</td>
+                  <td>:</td>
+                  <td colspan="12" align="left">-</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Kemajuan Keu. (%)</td>
+                  <td>:</td>
+                  <td colspan="12" align="left">-</td>
+                </tr>
+                
+                </table>';
+
+      echo '<table  style="width: 100%;  text-align:left; border-collapse:collapse; font-size:0.75em;">
+              <tr>
+                <td rowspan="2" style="text-align:center; border:1px solid;">No. Kode</td>
+                <td rowspan="2" colspan="2" style="text-align:center; border:1px solid;">Uraian Kegiatan/Jenis Pengeluaran</td>
+                <td rowspan="2" style="text-align:center; border:1px solid; ">Volume Kegiatan</td>
+                <td rowspan="2" style="text-align:center; border:1px solid; ">Alokasi Dana Dalam DIPA</td>
+                <td colspan="3" style="text-align:center; border:1px solid;">Jumlah Pengeluaran s/d Bulan Lalu</td>
+                <td colspan="3" style="text-align:center; border:1px solid;">Jumlah Pengeluaran Bulan Ini </td>
+                <td rowspan="2" style="text-align:center; border:1px solid;">Jumlah Pengeluaran</td>
+                <td rowspan="2" style="text-align:center; border:1px solid;">Sisa Anggaran</td>
+                <td colspan="2" style="text-align:center; border:1px solid;">Presentasi Daya Serap</td>
+              </tr>
+              <tr>
+                <td style="text-align:center; border:1px solid;">SP2D LS</td>
+                <td style="text-align:center; border:1px solid;">SP2D GU</td>
+                <td style="text-align:center; border:1px solid;">Jumlah</td>
+                <td style="text-align:center; border:1px solid;">SPM LS</td>
+                <td style="text-align:center; border:1px solid;">SPM GU</td>
+                <td style="text-align:center; border:1px solid;">Jumlah</td>
+                <td style="text-align:center; border:1px solid;">%Fisik</td>
+                <td style="text-align:center; border:1px solid;">%keu</td>
+              </tr>';
+      $kd_dir=""; $kdout=""; $kdsout=""; $kdkmp=""; $kdskmp="";
+      $acc_alokasi = 0;
+      $acc_sp2d_ls_lalu = 0;
+      $acc_sp2d_gu_lalu = 0;
+      $acc_sp2d_lalu = 0;
+      $acc_sp2d_ls_ini = 0;
+      $acc_sp2d_gu_ini = 0;
+      $acc_sp2d_ini = 0;
+      $acc_sisa_ang = 0;
+      foreach ($res as $value) {
+        if($kd_dir!=$value['kdgiat']){
+          $nmdir = $this->get_nama($value['kdgiat']);
+          $nilai = $this->get_realisasi($tanggal, $value['kdgiat']);
+          $jml = $nilai['jml_lalu']+$nilai['jumlah'];
+          $sisa = $nmdir['jumlah']-$jml;
+          $acc_alokasi += $nmdir['jumlah'];
+          $acc_sp2d_ls_lalu += 0;
+          $acc_sp2d_gu_lalu += $nilai['jml_lalu'];
+          $acc_sp2d_lalu += $nilai['jml_lalu'];
+          $acc_sp2d_ls_ini = 0;
+          $acc_sp2d_gu_ini += $nilai['jumlah'];
+          $acc_sp2d_ini += $nilai['jumlah'];
+          $acc_sisa_ang += $sisa;
+          echo '<tr>
+                  <td colspan="15" style="border-bottom:1px solid"></td>
+                </tr>';
+          echo '<tr>
+                  <td style="border-left:1px solid; font-weight:bold;" align="left" >'.$value['kdgiat'].'</td>
+                  <td style="border-left:1px solid; font-weight:bold; " colspan="2">'.$nmdir['kdgiat'].'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nmdir['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml,2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                </tr>';
+        }
+
+        if(($kd_dir!=$value['kdgiat'] and $kdout!=$value['kdoutput']) or ($kd_dir!=$value['kdgiat']) or ($kd_dir==$value['kdgiat'] and $kdout!=$value['kdoutput'])){
+          $nmdir = $this->get_nama($value['kdgiat'], $value['kdoutput'] );
+          $nilai = $this->get_realisasi($tanggal, $value['kdgiat'], $value['kdoutput']);
+          $jml = $nilai['jml_lalu']+$nilai['jumlah'];
+          $sisa = $nmdir['jumlah']-$jml;
+          echo '<tr>
+                  <td style="border-left:1px solid; font-weight:bold;" align="center">'.$value['kdoutput'].'</td>
+                  <td style="border-left:1px solid; font-weight:bold;" colspan="2">'.$nmdir['kdout'].'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nmdir['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml,2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                </tr>';
+        }
+
+        if(($kd_dir!=$value['kdgiat'] and $kdout!=$value['kdoutput'] and $kdsout!=$value['kdsoutput']) or ($kd_dir!=$value['kdgiat'])  or ($kd_dir==$value['kdgiat'] and $kdout==$value['kdoutput'] and $kdsout!=$value['kdsoutput'] ) ){
+          $nmdir = $this->get_nama($value['kdgiat'], $value['kdoutput'], $value['kdsoutput'] );
+          $nilai = $this->get_realisasi($tanggal, $value['kdgiat'], $value['kdoutput'], $value['kdsoutput'] );
+          $jml = $nilai['jml_lalu']+$nilai['jumlah'];
+          $sisa = $nmdir['jumlah']-$jml;
+          echo '<tr>
+                  <td style="border-left:1px solid; font-weight:bold;" align="center">'.''.'</td>
+                  <td style="border-left:1px solid; font-weight:bold;" colspan="2">'.$value['kdsoutput']."  ".$nmdir['kdsout'].'</td>
+                  <td style="border-left:1px solid;">'.''.'</td>
+                  <td style="border-left:1px solid;">'.''.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nmdir['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml,2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                </tr>';
+        }
+
+        if(($kd_dir!=$value['kdgiat'] and $kdout!=$value['kdoutput'] and $kdsout!=$value['kdsoutput'] and $kdkmp!=$value['kdkmpnen']) or ($kd_dir!=$value['kdgiat']) or ($kd_dir==$value['kdgiat'] and $kdout==$value['kdoutput'] and $kdsout==$value['kdsoutput'] and $kdkmp!=$value['kdkmpnen'] ) ){
+          $nmdir = $this->get_nama($value['kdgiat'], $value['kdoutput'], $value['kdsoutput'], $value['kdkmpnen'] );
+          $nilai = $this->get_realisasi($tanggal, $value['kdgiat'], $value['kdoutput'], $value['kdsoutput'], $value['kdkmpnen'] );
+          $jml = $nilai['jml_lalu']+$nilai['jumlah'];
+          $sisa = $nmdir['jumlah']-$jml;
+          echo '<tr>
+                  <td style="border-left:1px solid;"  align="center">'.''.'</td>
+                  <td style="border-left:1px solid; font-weight:bold;" colspan="2">'.$value['kdkmpnen']." ".$nmdir['kdkmp'].'</td>
+                  <td style="border-left:1px solid;">'.''.'</td>
+                  <td style="border-left:1px solid;">'.''.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nmdir['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml,2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                </tr>';
+        }
+
+        if(($kd_dir!=$value['kdgiat'] and $kdout!=$value['kdoutput'] and $kdsout!=$value['kdsoutput'] and $kdkmp!=$value['kdkmpnen'] and $kdskmp!=$value['kdskmpnen']) or ($kd_dir!=$value['kdgiat']) or ($kd_dir==$value['kdgiat'] and $kdout==$value['kdoutput'] and $kdsout==$value['kdsoutput'] and $kdkmp==$value['kdkmpnen'] and $kdskmp!=$value['kdskmpnen'] ) ){
+          $nmdir = $this->get_nama($value['kdgiat'], $value['kdoutput'], $value['kdsoutput'], $value['kdkmpnen'], $value['kdskmpnen'] );
+          $nilai = $this->get_realisasi($tanggal, $value['kdgiat'], $value['kdoutput'], $value['kdsoutput'], $value['kdkmpnen'], $value['kdskmpnen'], $value['kdakun'] );
+          $jml = $nilai['jml_lalu']+$nilai['jumlah'];
+          $sisa = $nmdir['jumlah']-$jml;
+           echo '<tr>
+                  <td style="border-left:1px solid" align="center">'.''.'</td>
+                  <td style="border-left:1px solid;">'.''.'</td>
+                  <td style=" font-weight:bold;" colspan="1">'.$value['kdskmpnen']."  ".$nmdir['kdskmp'].'</td>
+                  <td style="border-left:1px solid;">'.''.'</td>
+                  <td style="border-left:1px solid;">'.''.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nmdir['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml,2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                </tr>';
+        }
+          $kd_dir = $value['kdgiat'];
+          $kdout = $value['kdoutput'];
+          $kdsout = $value['kdsoutput'];
+          $kdkmp = $value['kdkmpnen'];
+          $kdskmp = $value['kdskmpnen'];
+          
+         // if(($kd_dir!=$value['kdgiat'] and $kdout!=$value['kdoutput'] and $kdsout!=$value['kdsoutput'] and $kdkmp!=$value['kdkmpnen'] and $kdskmp!=$value['kdskmpnen']) or ($kd_dir!=$value['kdgiat']) or ($kd_dir==$value['kdgiat'] and $kdout==$value['kdoutput'] and $kdsout==$value['kdsoutput'] and $kdkmp==$value['kdkmpnen'] and $kdskmp==$value['kdskmpnen'] ) ){
+          $nilai = $this->get_realisasi($tanggal, $value['kdgiat'], $value['kdoutput'], $value['kdsoutput'], $value['kdkmpnen'], $value['kdskmpnen'], $value['kdakun']);
+          $jml = $nilai['jml_lalu']+$nilai['jumlah'];
+          $sisa = $value['jumlah']-$jml;
+          echo '<tr>
+                  <td style="border-left:1px solid" align="center">'.''.'</td>
+                  <td style="border-left:1px solid"  colspan="2">'.$value['kdakun']." ".$value['NMAKUN'].'</td>
+                  <td style="border-left:1px solid;">'.''.'</td>
+                  <td style="border-left:1px solid;">'.''.'</td>
+                  <td style="border-left:1px solid; text-align:right;">'.number_format($value['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right;  ">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; ">'.number_format($jml,2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; ">'.number_format($sisa,2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                </tr>';
+          
+      // }
     }
+          echo '<tr>
+                  
+                  <td style="border:1px solid; text-align:center;" colspan="4">'.'TOTAL'.'</td>
+                  <td style="border:1px solid; text-align:right;">'.'-'.'</td>
+                  <td style="border:1px solid; text-align:right; font-weight:bold;">'.number_format($acc_alokasi,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right; ">'.'-'.'</td>
+                  <td style="border:1px solid; text-align:right; font-weight:bold;">'.number_format($acc_sp2d_lalu,2,",",".").'</td>
+                  <td style="border:1px solid;">'.'-'.'</td>
+                  <td style="border:1px solid;">'.'-'.'</td>
+                  <td style="border:1px solid; text-align:right; font-weight:bold; ">'.number_format($acc_sp2d_ini,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right; font-weight:bold;">'.number_format($acc_tot_spp,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right; font-weight:bold; ">'.number_format($acc_sisa_ang,2,",",".").'</td>
+                  <td style="border:1px solid;">'.'-'.'</td>
+                  <td style="border:1px solid; border-right:1px solid;">'.'-'.'</td>
+                </tr>';
+          echo '<tr>
+                  <td colspan="15" style="border-top:1px solid"></td>
+                </tr>';
+      echo '</table>';
+      $html = ob_get_contents();
+      ob_clean();
+      $this->create_pdf("Realisasi Per Kegiatan","A4-L",$html);
+    }
+
+public function rekap_realisasi_daya_serap($dir, $tanggal ) {
+      // $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, value  FROM rabfull group by kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun order by kdgiat asc, kdoutput asc, kdsoutput asc, kdkmpnen asc, kdskmpnen asc, kdakun asc ";
+      $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, NMAKUN,  jumlah  FROM rkakl_full where kdgiat like '%$dir%' group by kdgiat, kdoutput, kdakun order by kdgiat asc, kdoutput asc, kdakun asc ";
+      $res = $this->query($sql);
+      ob_start();
+      echo '<table style="width: 100%;  text-align:left; border-collapse:collapse; font-size:0.95em;">
+                <tr>
+                  <td colspan="15" style="text-align:center; font-weight:bold">LAPORAN REALISASI DAYA SERAP PER KEGIATAN</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Nama Satker</td>
+                  <td>:</td>
+                  <td colspan="12" align="left" >Direktorat Jenderal Kelembagaan Iptek dan Dikti</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Kode Kegiatan</td>
+                  <td>:</td>
+                  <td colspan="12" align="left">401196</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Nomor Tanggal DIPA</td>
+                  <td>:</td>
+                  <td colspan="12" align="left">DIPA-042-03.1.401196/2016, tgl. 7 Desember 2016</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Propinsi DKI</td>
+                  <td>:</td>
+                  <td colspan="12" align="left">DKI</td> 
+                <tr>
+                  <td colspan="2">Departemen</td>
+                  <td>:</td>
+                  <td colspan="12" align="left">Kementerian Ristek dan Dikti</td>
+                </tr>
+                </tr>
+                <tr>
+                  <td colspan="2">Program</td>
+                  <td>:</td>
+                  <td colspan="12" align="left">Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Jumlah Anggaran</td>
+                  <td>:</td>
+                  <td colspan="12" align="left">-</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Kemajuan Fisik (%)</td>
+                  <td>:</td>
+                  <td colspan="12" align="left">-</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Kemajuan Keu. (%)</td>
+                  <td>:</td>
+                  <td colspan="12" align="left">-</td>
+                </tr>
+                
+                </table>';
+
+      echo '<table  style="width: 100%;  text-align:left; border-collapse:collapse; font-size:0.75em;">
+              <tr>
+                <td rowspan="2" style="text-align:center; border:1px solid;">No. Kode</td>
+                <td rowspan="2" colspan="2" style="text-align:center; border:1px solid;">Uraian Kegiatan/Jenis Pengeluaran</td>
+                <td rowspan="2" style="text-align:center; border:1px solid; ">Volume Kegiatan</td>
+                <td rowspan="2" style="text-align:center; border:1px solid; ">Alokasi Dana Dalam DIPA</td>
+                <td colspan="3" style="text-align:center; border:1px solid;">Jumlah Pengeluaran s/d Bulan Lalu</td>
+                <td colspan="3" style="text-align:center; border:1px solid;">Jumlah Pengeluaran Bulan Ini </td>
+                <td rowspan="2" style="text-align:center; border:1px solid;">Jumlah Pengeluaran</td>
+                <td rowspan="2" style="text-align:center; border:1px solid;">Sisa Anggaran</td>
+                <td colspan="2" style="text-align:center; border:1px solid;">Presentasi Daya Serap</td>
+              </tr>
+              <tr>
+                <td style="text-align:center; border:1px solid;">SP2D LS</td>
+                <td style="text-align:center; border:1px solid;">SP2D GU</td>
+                <td style="text-align:center; border:1px solid;">Jumlah</td>
+                <td style="text-align:center; border:1px solid;">SPM LS</td>
+                <td style="text-align:center; border:1px solid;">SPM GU</td>
+                <td style="text-align:center; border:1px solid;">Jumlah</td>
+                <td style="text-align:center; border:1px solid;">%Fisik</td>
+                <td style="text-align:center; border:1px solid;">%keu</td>
+              </tr>';
+      $kd_dir=""; $kdout=""; $kdsout=""; $kdkmp=""; $kdskmp="";
+      $acc_alokasi = 0;
+      $acc_sp2d_ls_lalu = 0;
+      $acc_sp2d_gu_lalu = 0;
+      $acc_sp2d_lalu = 0;
+      $acc_sp2d_ls_ini = 0;
+      $acc_sp2d_gu_ini = 0;
+      $acc_sp2d_ini = 0;
+      $acc_sisa_ang = 0;
+      foreach ($res as $value) {
+        if($kd_dir!=$value['kdgiat']){
+          $nmdir = $this->get_nama($value['kdgiat']);
+          $nilai = $this->get_realisasi($tanggal, $value['kdgiat']);
+          $jml = $nilai['jml_lalu']+$nilai['jumlah'];
+          $sisa = $nmdir['jumlah']-$jml;
+          $acc_alokasi += $nmdir['jumlah'];
+          $acc_sp2d_ls_lalu += 0;
+          $acc_sp2d_gu_lalu += $nilai['jml_lalu'];
+          $acc_sp2d_lalu += $nilai['jml_lalu'];
+          $acc_sp2d_ls_ini = 0;
+          $acc_sp2d_gu_ini += $nilai['jumlah'];
+          $acc_sp2d_ini += $nilai['jumlah'];
+          $acc_sisa_ang += $sisa;
+          echo '<tr>
+                  <td colspan="15" style="border-bottom:1px solid"></td>
+                </tr>';
+          echo '<tr>
+                  <td style="border-left:1px solid; font-weight:bold;" align="left" >'.$value['kdgiat'].'</td>
+                  <td style="border-left:1px solid; font-weight:bold; " colspan="2">'.$nmdir['kdgiat'].'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nmdir['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml,2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                </tr>';
+        }
+
+        if(($kd_dir!=$value['kdgiat'] and $kdout!=$value['kdoutput']) or ($kd_dir!=$value['kdgiat']) or ($kd_dir==$value['kdgiat'] and $kdout!=$value['kdoutput'])){
+          $nmdir = $this->get_nama($value['kdgiat'], $value['kdoutput'] );
+          $nilai = $this->get_realisasi($tanggal, $value['kdgiat'], $value['kdoutput']);
+          $jml = $nilai['jml_lalu']+$nilai['jumlah'];
+          $sisa = $nmdir['jumlah']-$jml;
+          echo '<tr>
+                  <td style="border-left:1px solid; font-weight:bold;" align="center">'.$value['kdoutput'].'</td>
+                  <td style="border-left:1px solid; font-weight:bold;" colspan="2">'.$nmdir['kdout'].'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nmdir['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml,2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                </tr>';
+        }
+
+        
+          $kd_dir = $value['kdgiat'];
+          $kdout = $value['kdoutput'];
+          $kdsout = $value['kdsoutput'];
+          $kdkmp = $value['kdkmpnen'];
+          $kdskmp = $value['kdskmpnen'];
+          
+         // if(($kd_dir!=$value['kdgiat'] and $kdout!=$value['kdoutput'] and $kdsout!=$value['kdsoutput'] and $kdkmp!=$value['kdkmpnen'] and $kdskmp!=$value['kdskmpnen']) or ($kd_dir!=$value['kdgiat']) or ($kd_dir==$value['kdgiat'] and $kdout==$value['kdoutput'] and $kdsout==$value['kdsoutput'] and $kdkmp==$value['kdkmpnen'] and $kdskmp==$value['kdskmpnen'] ) ){
+          
+          $nilai = $this->get_realisasi($tanggal, $value['kdgiat'], $value['kdoutput'], 0, 0, 0, $value['kdakun']);
+          $jml = $nilai['jml_lalu']+$nilai['jumlah'];
+          $sisa = $value['jumlah']-$jml;
+          echo '<tr>
+                  <td style="border-left:1px solid" align="center">'.''.'</td>
+                  <td style="border-left:1px solid"  colspan="2">'.$value['kdakun']." ".$value['NMAKUN'].'</td>
+                  <td style="border-left:1px solid;">'.''.'</td>
+                  <td style="border-left:1px solid;">'.''.'</td>
+                  <td style="border-left:1px solid; text-align:right;">'.number_format($value['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right;  ">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; ">'.number_format($jml,2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; ">'.number_format($sisa,2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                </tr>';
+          
+      // }
+    }
+          echo '<tr>
+                  
+                  <td style="border:1px solid; text-align:center;" colspan="4">'.'TOTAL'.'</td>
+                  <td style="border:1px solid; text-align:right;">'.'-'.'</td>
+                  <td style="border:1px solid; text-align:right; font-weight:bold;">'.number_format($acc_alokasi,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right; ">'.'-'.'</td>
+                  <td style="border:1px solid; text-align:right; font-weight:bold;">'.number_format($acc_sp2d_lalu,2,",",".").'</td>
+                  <td style="border:1px solid;">'.'-'.'</td>
+                  <td style="border:1px solid;">'.'-'.'</td>
+                  <td style="border:1px solid; text-align:right; font-weight:bold; ">'.number_format($acc_sp2d_ini,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right; font-weight:bold;">'.number_format($acc_tot_spp,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right; font-weight:bold; ">'.number_format($acc_sisa_ang,2,",",".").'</td>
+                  <td style="border:1px solid;">'.'-'.'</td>
+                  <td style="border:1px solid; border-right:1px solid;">'.'-'.'</td>
+                </tr>';
+          echo '<tr>
+                  <td colspan="15" style="border-top:1px solid"></td>
+                </tr>';
+      echo '</table>';
+      $html = ob_get_contents();
+      ob_clean();
+      $this->create_pdf("Pengajuan UMK","A4-L",$html);
+    }
+
+    public function rekap_total($dir, $tanggal ) {
+      // $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, value  FROM rabfull group by kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun order by kdgiat asc, kdoutput asc, kdsoutput asc, kdkmpnen asc, kdskmpnen asc, kdakun asc ";
+      $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, NMAKUN,  jumlah  FROM rkakl_full where kdgiat like '%$dir%' group by kdgiat, kdoutput order by kdgiat asc, kdoutput asc";
+      $res = $this->query($sql);
+      ob_start();
+       
+  
+
+      echo '<table style="width: 100%;  text-align:left; border-collapse:collapse; font-size:0.7em;">
+              <tr>
+                <td colspan="20" style="font-size:1em; font-weight:bold; text-align:center;">Laporan Realisasi Daya Serap Pelaksanaan DIPA TA 2016</td>
+              </tr>
+              <tr>
+                <td colspan="20" style="font-size:1em; font-weight:bold; text-align:center;">Bulan :  '.''.' 2016</td>
+              </tr>
+              <tr>
+                <td colspan="20" style="font-size:1em; font-weight:bold; text-align:center;"> Direktorat Jenderal Kelembagaan Ilmu Pengetahuan Teknologi dan Pendidikan Tinggi</td>
+              </tr>
+              <tr>
+                <td colspan="20" style="font-size:1em; font-weight:bold; text-align:center;">Satker Ditjen Kelembagaan Iptek dan Dikti</td>
+              </tr>
+              <tr>
+                <td colspan="20"><br></br></td>
+              </tr>
+              <tr>
+              <td rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Kode Satker'."\n".'/keg/'."\n".'sub keg</td>
+              <td rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Uraian Satker/'."\n".'Kegiatan/'."\n".'Sub Kegiatan</td>
+              <td colspan="3" style="font-weight:bold; text-align:center; border:1px solid; ">Sasaran</td>
+              <td rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Sumber Dana</td>
+              <td colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Belanja Pegawai</td>
+              <td colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Belanja Barang</td>
+              <td colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Belanja Modal</td>
+              <td colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Belanja Bantuan Sosial</td>
+              <td colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Jumlah</td>
+              <td colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Presentase Daya Serap</td>
+              <td rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Sisa Anggaram</td>
+              <td rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Ket</td>
+            </tr>
+            <tr>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Satuan</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Sasaran</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Alokasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Alokasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid;">Alokasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Alokasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Alokasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">% Fisik</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">% Keu</td>
+             </tr>';
+      $kd_dir=""; $kdout=""; $kdsout=""; $kdkmp=""; $kdskmp="";
+      $tot_dipa_51 = 0;
+      $tot_dipa_52 = 0;
+      $tot_dipa_53 = 0;
+      $tot_dipa_57 = 0;
+      $tot_nilai_51 = 0;
+      $tot_nilai_52 = 0;
+      $tot_nilai_53 = 0;
+      $tot_nilai_57 = 0;
+      $tot_sisa=0;
+      $acc_alokasi = 0;
+
+      foreach ($res as $value) {
+        if($kd_dir!=$value['kdgiat']){
+          $nmdir = $this->get_nama($value['kdgiat']);
+          $dipa_51 = $this->get_nama($value['kdgiat'],"","","","","51");
+          $dipa_52 = $this->get_nama($value['kdgiat'],"","","","","52");
+          $dipa_53 = $this->get_nama($value['kdgiat'],"","","","","53");
+          $dipa_57 = $this->get_nama($value['kdgiat'],"","","","","57");
+          $nilai_51 = $this->get_realisasi($tanggal, $value['kdgiat'],0,0,0,0,"51");
+          $nilai_52 = $this->get_realisasi($tanggal, $value['kdgiat'],0,0,0,0,"52");
+          $nilai_53 = $this->get_realisasi($tanggal, $value['kdgiat'],0,0,0,0,"53");
+          $nilai_57 = $this->get_realisasi($tanggal, $value['kdgiat'],0,0,0,0,"57");
+          $jml = $nilai['jml_lalu']+$nilai['jumlah'];
+          $sisa = $nmdir['jumlah']-$jml;
+          $jml_dipa = $dipa_51['jumlah']+$dipa_52['jumlah']+$dipa_53['jumlah']+$dipa_57['jumlah'];
+          $jml_nilai = $nilai_51['jumlah']+$nilai_52['jumlah']+$nilai_53['jumlah']+$nilai_57['jumlah'];
+          $tot_dipa_51 += $dipa_51['jumlah'];
+          $tot_dipa_52 += $dipa_52['jumlah'];
+          $tot_dipa_53 += $dipa_53['jumlah'];
+          $tot_dipa_57 += $dipa_57['jumlah'];
+          $tot_nilai_51 += $nilai_51['jumlah'];
+          $tot_nilai_52 += $nilai_52['jumlah'];
+          $tot_nilai_53 += $nilai_53['jumlah'];
+          $tot_nilai_57 += $nilai_57['jumlah'];
+          $tot_sisa+=$jml_dipa-$jml_nilai;
+          $acc_alokasi += $jml_dipa;
+
+          $acc_sisa_ang += $sisa;
+          echo '<tr>
+                  <td colspan="20" style="border-bottom:1px solid"></td>
+                </tr>';
+          echo '<tr>
+                  <td style="border-left:1px solid; font-weight:bold;" align="center" >'.$value['kdgiat'].'</td>
+                  <td style="border-left:1px solid; font-weight:bold; " >'.$nmdir['kdgiat'].'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.'RM'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($dipa_51['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nilai_51['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($dipa_52['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai_52['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($dipa_53['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai_53['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($dipa_57['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai_57['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml_dipa,2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml_nilai,2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                </tr>';
+        }
+
+        if(($kd_dir!=$value['kdgiat'] and $kdout!=$value['kdoutput']) or ($kd_dir!=$value['kdgiat']) or ($kd_dir==$value['kdgiat'] and $kdout!=$value['kdoutput'])){
+          $nmdir = $this->get_nama($value['kdgiat'], $value['kdoutput'],"","","","" );
+          $dipa_51 = $this->get_nama($value['kdgiat'],$value['kdoutput'],"","","","51");
+          $dipa_52 = $this->get_nama($value['kdgiat'],$value['kdoutput'],"","","","52");
+          $dipa_53 = $this->get_nama($value['kdgiat'],$value['kdoutput'],"","","","53");
+          $dipa_57 = $this->get_nama($value['kdgiat'],$value['kdoutput'],"","","","57");
+          $nilai_51 = $this->get_realisasi($tanggal, $value['kdgiat'],$value['kdoutput'],0,0,0,"51");
+          $nilai_52 = $this->get_realisasi($tanggal, $value['kdgiat'],$value['kdoutput'],0,0,0,"52");
+          $nilai_53 = $this->get_realisasi($tanggal, $value['kdgiat'],$value['kdoutput'],0,0,0,"53");
+          $nilai_57 = $this->get_realisasi($tanggal, $value['kdgiat'],$value['kdoutput'],0,0,0,"57");
+          $jml = $nilai['jml_lalu']+$nilai['jumlah'];
+          
+          $jml_dipa = $dipa_51['jumlah']+$dipa_52['jumlah']+$dipa_53['jumlah']+$dipa_57['jumlah'];
+          $jml_nilai = $nilai_51['jumlah']+$nilai_52['jumlah']+$nilai_53['jumlah']+$nilai_57['jumlah'];
+          $sisa=$jml_dipa-$jml_nilai;
+         echo '<tr>
+                  <td style="border-left:1px solid;" align="center" >'.$value['kdoutput'].'</td>
+                  <td style="border-left:1px solid; " >'.$nmdir['kdout'].'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.'RM'.'</td>
+                  <td style="border-left:1px solid; text-align:right; ">'.number_format($dipa_51['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; ">'.number_format($nilai_51['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right;  ">'.number_format($dipa_52['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right;  ">'.number_format($nilai_52['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right;  ">'.number_format($dipa_53['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right;  ">'.number_format($nilai_53['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right;  ">'.number_format($dipa_57['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right;  ">'.number_format($nilai_57['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; ">'.number_format($jml_dipa,2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; ">'.number_format($jml_nilai,2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right;  ">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right;  ">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:right;  ">'.number_format($sisa,2,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                </tr>';
+        }
+
+        
+          $kd_dir = $value['kdgiat'];
+          $kdout = $value['kdoutput'];
+
+          
+       
+    }
+                     echo '<tr>
+                  <td style="border:1px solid;" align="center" colspan="6">'.'TOTAL'.'</td>
+                  <td style="border:1px solid; text-align:right; ">'.number_format($tot_dipa_51,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right; ">'.number_format($tot_nilai_51,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right;  ">'.number_format($tot_dipa_52,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right;  ">'.number_format($tot_nilai_52['jumlah'],2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right;  ">'.number_format($tot_dipa_53,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right;  ">'.number_format($tot_nilai_53,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right;  ">'.number_format($tot_dipa_57,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right;  ">'.number_format($tot_nilai_57,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right; ">'.number_format($jml_dipa,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right; ">'.number_format($jml_nilai,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right;  ">'.'-'.'</td>
+                  <td style="border:1px solid; text-align:right;  ">'.'-'.'</td>
+                  <td style="border:1px solid; text-align:right;  ">'.number_format($tot_sisa,2,",",".").'</td>
+                  <td style="border:1px solid; border-right:1px solid;">'.'-'.'</td>
+                </tr>';
+
+          echo '<tr>
+                  <td colspan="15" style="border-top:1px solid"></td>
+                </tr>';
+      echo '</table>';
+      $html = ob_get_contents();
+      // ob_clean();
+      $this->create_pdf("Pengajuan UMK","A4-L",$html);
+    }
+
     function kekata($x) {
       $x = abs($x);
       $angka = array("", "satu", "dua", "tiga", "empat", "lima",
@@ -2587,8 +3244,95 @@ $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat whe
 
 }
 
+     function get_nama($kdgiat, $kdout, $kdsout, $kdkmp, $kdskmp, $kdakun)
+     {
+      $q_out = $q_sout = $q_kmp = $q_skmp = $kd_akun = " ";
+      if($kdout!=""){ 
+        $q_out = " and KDOUTPUT='$kdout' "; 
+        $k_out = " ,NMOUTPUT "; 
+      }
+      if($kdsout!=""){ 
+        $q_sout = " and KDSOUTPUT='$kdsout' "; 
+        $k_sout = " ,NMSOUTPUT "; 
+      }
+      if($kdkmp!=""){ 
+        $q_kmp = " and KDKMPNEN='$kdkmp' ";  
+        $k_kmp = " ,NMKMPNEN "; 
+      }
+      if($kdskmp!=""){ 
+        $q_skmp = " and KDSKMPNEN='$kdskmp' "; 
+        $k_skmp = " ,NMSKMPNEN "; 
+      }
+      if($kdakun!=""){ 
+        $q_akun = " and KDAKUN='$kdakun' "; 
+        $k_skmp = " ,NMAKUN ";
+        if(strlen($kdakun)==2){
+          $q_akun = " and kdakun like '$kdakun%' "; 
+        }  
+      }
+      $query = " SELECT SUM(JUMLAH) as jumlah, NMGIAT ".$k_out." ".$k_sout." ".$k_kmp." ".$k_skmp." FROM rkakl_full WHERE kdgiat LIKE '%$kdgiat%' ".$q_out.$q_sout.$q_kmp.$q_skmp.$q_akun;
+      
+      
+      $res = $this->query($query);
+      $data = $this->fetch_array($res);
+
+      $hasil = array(
+                    "kdgiat" => $data['NMGIAT'],
+                    "kdout" => $data['NMOUTPUT'],
+                    "kdsout" => $data['NMSOUTPUT'],
+                    "kdkmp" => $data['NMKMPNEN'],
+                    "kdskmp" => $data['NMSKMPNEN'],
+                    "kdakun" => $data['NMAKUN'],
+                    "jumlah" => $data['jumlah']
+                    );
+      return $hasil;
+
+    }
+
+    function get_realisasi($tanggal, $kdgiat, $kdout, $kdsout, $kdkmp, $kdskmp, $kdakun)
+     {
+      $q_out = $q_sout = $q_kmp = $q_skmp = $kd_akun = "";
+      if($kdout!=0){ 
+        $q_out = " and kdoutput='$kdout' "; 
+        $k_out = " ,NMOUTPUT "; 
+      }
+      if($kdsout!=0){ 
+        $q_sout = " and kdsoutput='$kdsout' "; 
+        $k_sout = " ,NMSOUTPUT "; 
+      }
+      if($kdkmp!=0){ 
+        $q_kmp = " and kdkmpnen='$kdkmp' ";  
+        $k_kmp = " ,NMKMPNEN "; 
+      }
+      if($kdskmp!=0){ 
+        $q_skmp = " and kdskmpnen='$kdskmp' "; 
+        $k_skmp = " ,NMSKMPNEN "; 
+      }
+      if($kdakun!=0){ 
+        $q_akun = " and kdakun='$kdakun' "; 
+        $k_skmp = " ,NMAKUN ";
+        if(strlen($kdakun)==2){
+          $q_akun = " and kdakun like '$kdakun%' "; 
+        } 
+        
+      }
+      // echo "akuns : ".$kdakun;
+      $query = " SELECT SUM(case when month(tanggal)<'$tanggal' then value else 0 end) as jml_lalu, SUM(case when month(tanggal)='$tanggal' then value else 0 end) as jumlah FROM rabfull WHERE kdgiat LIKE '%$kdgiat%' ".$q_out.$q_sout.$q_kmp.$q_skmp.$q_akun;
+      // print_r($query);
+      
+      $res = $this->query($query);
+      $data = $this->fetch_array($res);
+
+     $data = array(
+              "jml_lalu" => $data['jml_lalu'],
+              "jumlah" => $data['jumlah']
+              );
+      return $data;
+
+    }
+
 function hitung_pagu($kdgiat, $kdakun){
-  $sql = $this->query("SELECT sum(JUMLAH) as jml from rkakl_full where KDGIAT='$kdgiat' and KDAKUN like '$kdakun%' GROUP BY KDAKUN ");
+  $sql = $this->query("SELECT sum(JUMLAH) as jml from rkakl_full where KDGIAT='$kdgiat' and KDAKUN like '$kdakun%' ");
   $data = $this->fetch_array($sql);
   return $data['jml'];
 }
