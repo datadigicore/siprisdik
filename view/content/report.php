@@ -32,6 +32,9 @@
                   <div class="form-group">
                   <label>Direktorat</label>
                   <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
+                      <?php if($_SESSION['level'] == 0){ ?>
+                          <option value="">Semua Direktorat</option>
+                      <?php } ?>
                       <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
                           <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
                       <?php } ?>
@@ -85,6 +88,9 @@
                 <div class="form-group">
                   <label>Direktorat</label>
                   <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
+                      <?php if($_SESSION['level'] == 0){ ?>
+                          <option value="">Semua Direktorat</option>
+                      <?php } ?>
                       <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
                           <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
                       <?php } ?>
@@ -154,6 +160,9 @@
                  <div class="form-group">
                   <label>Direktorat</label>
                   <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
+                      <?php if($_SESSION['level'] == 0){ ?>
+                          <option value="">Semua Direktorat</option>
+                      <?php } ?>
                       <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
                           <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
                       <?php } ?>
@@ -206,6 +215,9 @@
                  <div class="form-group">
                   <label>Direktorat</label>
                   <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
+                      <?php if($_SESSION['level'] == 0){ ?>
+                          <option value="">Semua Direktorat</option>
+                      <?php } ?>
                       <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
                           <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
                       <?php } ?>
@@ -252,6 +264,9 @@
                  <div class="form-group">
                   <label>Direktorat</label>
                   <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
+                      <?php if($_SESSION['level'] == 0){ ?>
+                          <option value="">Semua Direktorat</option>
+                      <?php } ?>
                       <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
                           <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
                       <?php } ?>
@@ -298,6 +313,9 @@
                  <div class="form-group">
                   <label>Direktorat</label>
                   <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
+                      <?php if($_SESSION['level'] == 0){ ?>
+                          <option value="">Semua Direktorat</option>
+                      <?php } ?>
                       <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
                           <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
                       <?php } ?>

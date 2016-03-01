@@ -3028,39 +3028,63 @@ public function rekap_realisasi_daya_serap($dir, $tanggal ) {
        
   
 
-      echo '<table style="width: 100%;  text-align:left; border-collapse:collapse; font-size:0.7em;" border="1">
-                <tr>
-            <td rowspan="2" >Kode Satker/keg/sub keg</td>
-            <td rowspan="2" >Uraian Satker/Kegiatan/Sub Kegiatan</td>
-            <td colspan="3">Sasaran</td>
-            <td rowspan="2">Sumber Dana</td>
-            <td colspan="2">Belanja Pegawai</td>
-            <td colspan="2">Belanja Barang</td>
-            <td colspan="2">Belanja Modal</td>
-            <td colspan="2">Belanja Bantuan Sosial</td>
-            <td colspan="2">Jumlah</td>
-            <td colspan="2">Presentase Daya Serap</td>
-            <td rowspan="2">Sisa Anggaram</td>
-            <td rowspan="2">Ket</td>
-          </tr>
-          <tr>
-            <td>Satuan</td>
-            <td>Sasaran</td>
-            <td>Realisasi</td>
-            <td>Alokasi</td>
-            <td>Realisasi</td>
-            <td>Alokasi</td>
-            <td>Realisasi</td>
-            <td>Alokasi</td>
-            <td>Realisasi</td>
-            <td>Alokasi</td>
-            <td>Realisasi</td>
-            <td>Alokasi</td>
-            <td>Realisasi</td>
-            <td>% Fisik</td>
-            <td>% Keu</td>
-           </tr>';
+      echo '<table style="width: 100%;  text-align:left; border-collapse:collapse; font-size:0.7em;">
+              <tr>
+                <td colspan="20" style="font-size:1em; font-weight:bold; text-align:center;">Laporan Realisasi Daya Serap Pelaksanaan DIPA TA 2016</td>
+              </tr>
+              <tr>
+                <td colspan="20" style="font-size:1em; font-weight:bold; text-align:center;">Bulan :  '.''.' 2016</td>
+              </tr>
+              <tr>
+                <td colspan="20" style="font-size:1em; font-weight:bold; text-align:center;"> Direktorat Jenderal Kelembagaan Ilmu Pengetahuan Teknologi dan Pendidikan Tinggi</td>
+              </tr>
+              <tr>
+                <td colspan="20" style="font-size:1em; font-weight:bold; text-align:center;">Satker Ditjen Kelembagaan Iptek dan Dikti</td>
+              </tr>
+              <tr>
+                <td colspan="20"><br></br></td>
+              </tr>
+              <tr>
+              <td rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Kode Satker'."\n".'/keg/'."\n".'sub keg</td>
+              <td rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Uraian Satker/'."\n".'Kegiatan/'."\n".'Sub Kegiatan</td>
+              <td colspan="3" style="font-weight:bold; text-align:center; border:1px solid; ">Sasaran</td>
+              <td rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Sumber Dana</td>
+              <td colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Belanja Pegawai</td>
+              <td colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Belanja Barang</td>
+              <td colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Belanja Modal</td>
+              <td colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Belanja Bantuan Sosial</td>
+              <td colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Jumlah</td>
+              <td colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Presentase Daya Serap</td>
+              <td rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Sisa Anggaram</td>
+              <td rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Ket</td>
+            </tr>
+            <tr>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Satuan</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Sasaran</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Alokasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Alokasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid;">Alokasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Alokasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Alokasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">% Fisik</td>
+              <td style="font-weight:bold; text-align:center; border:1px solid; ">% Keu</td>
+             </tr>';
       $kd_dir=""; $kdout=""; $kdsout=""; $kdkmp=""; $kdskmp="";
+      $tot_dipa_51 = 0;
+      $tot_dipa_52 = 0;
+      $tot_dipa_53 = 0;
+      $tot_dipa_57 = 0;
+      $tot_nilai_51 = 0;
+      $tot_nilai_52 = 0;
+      $tot_nilai_53 = 0;
+      $tot_nilai_57 = 0;
+      $tot_sisa=0;
       $acc_alokasi = 0;
 
       foreach ($res as $value) {
@@ -3078,7 +3102,15 @@ public function rekap_realisasi_daya_serap($dir, $tanggal ) {
           $sisa = $nmdir['jumlah']-$jml;
           $jml_dipa = $dipa_51['jumlah']+$dipa_52['jumlah']+$dipa_53['jumlah']+$dipa_57['jumlah'];
           $jml_nilai = $nilai_51['jumlah']+$nilai_52['jumlah']+$nilai_53['jumlah']+$nilai_57['jumlah'];
-          $sisa=$jml_dipa-$jml_nilai;
+          $tot_dipa_51 += $dipa_51['jumlah'];
+          $tot_dipa_52 += $dipa_52['jumlah'];
+          $tot_dipa_53 += $dipa_53['jumlah'];
+          $tot_dipa_57 += $dipa_57['jumlah'];
+          $tot_nilai_51 += $nilai_51['jumlah'];
+          $tot_nilai_52 += $nilai_52['jumlah'];
+          $tot_nilai_53 += $nilai_53['jumlah'];
+          $tot_nilai_57 += $nilai_57['jumlah'];
+          $tot_sisa+=$jml_dipa-$jml_nilai;
           $acc_alokasi += $jml_dipa;
 
           $acc_sisa_ang += $sisa;
@@ -3086,7 +3118,7 @@ public function rekap_realisasi_daya_serap($dir, $tanggal ) {
                   <td colspan="20" style="border-bottom:1px solid"></td>
                 </tr>';
           echo '<tr>
-                  <td style="border-left:1px solid; font-weight:bold;" align="left" >'.$value['kdgiat'].'</td>
+                  <td style="border-left:1px solid; font-weight:bold;" align="center" >'.$value['kdgiat'].'</td>
                   <td style="border-left:1px solid; font-weight:bold; " >'.$nmdir['kdgiat'].'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
@@ -3125,7 +3157,7 @@ public function rekap_realisasi_daya_serap($dir, $tanggal ) {
           $jml_nilai = $nilai_51['jumlah']+$nilai_52['jumlah']+$nilai_53['jumlah']+$nilai_57['jumlah'];
           $sisa=$jml_dipa-$jml_nilai;
          echo '<tr>
-                  <td style="border-left:1px solid;" align="left" >'.$value['kdoutput'].'</td>
+                  <td style="border-left:1px solid;" align="center" >'.$value['kdoutput'].'</td>
                   <td style="border-left:1px solid; " >'.$nmdir['kdout'].'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
@@ -3155,6 +3187,23 @@ public function rekap_realisasi_daya_serap($dir, $tanggal ) {
           
        
     }
+                     echo '<tr>
+                  <td style="border:1px solid;" align="center" colspan="6">'.'TOTAL'.'</td>
+                  <td style="border:1px solid; text-align:right; ">'.number_format($tot_dipa_51,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right; ">'.number_format($tot_nilai_51,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right;  ">'.number_format($tot_dipa_52,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right;  ">'.number_format($tot_nilai_52['jumlah'],2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right;  ">'.number_format($tot_dipa_53,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right;  ">'.number_format($tot_nilai_53,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right;  ">'.number_format($tot_dipa_57,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right;  ">'.number_format($tot_nilai_57,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right; ">'.number_format($jml_dipa,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right; ">'.number_format($jml_nilai,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right;  ">'.'-'.'</td>
+                  <td style="border:1px solid; text-align:right;  ">'.'-'.'</td>
+                  <td style="border:1px solid; text-align:right;  ">'.number_format($tot_sisa,2,",",".").'</td>
+                  <td style="border:1px solid; border-right:1px solid;">'.'-'.'</td>
+                </tr>';
 
           echo '<tr>
                   <td colspan="15" style="border-top:1px solid"></td>
