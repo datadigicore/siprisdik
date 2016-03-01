@@ -84,8 +84,8 @@
                 <input type="text" class="form-control" id="tempat" name="tempat" placeholder="Tempat Kegiatan" required />
               </div>
               <div class="form-group">
-                <label>Lokasi Kegiatan</label>
-                <input type="text" class="form-control" id="lokasi" name="lokasi" placeholder="Lokasi Kegiatan" required />
+                <label>Kota</label>
+                <input type="text" class="form-control" id="lokasi" name="lokasi" placeholder="Kota" required />
               </div>
               
             </div>

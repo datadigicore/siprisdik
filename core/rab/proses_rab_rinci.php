@@ -16,7 +16,42 @@ switch ($process) {
 	    $key   = "id";
 	    $column = array(
 	      array( 'db' => 'id',      'dt' => 0 ),
-	      array( 'db' => 'penerima',  'dt' => 1),
+	      array( 'db' => 'penerima',  'dt' => 1, 'formatter' => function($d, $row){
+	      	if ($row[2]  == 0) {
+	      		$nip = 'N/A';
+	      	}else{
+	      		$nip = $row[10];
+	      	}
+
+	      	if ($row[11] == 1) $gol = 'I';
+	      	elseif($row[11] == 2) $gol =  'II';
+	      	elseif($row[11] == 3) $gol =  'III';
+	      	elseif($row[11] == 4) $gol =  'VI';
+	      	else $gol =  'N/A';
+
+	      	if ($row[12] == 0) {
+	      		if ($row[2] == 0) {
+	      			$pns = 'N/A';
+	      		}else{
+	      			$pns = 'Non PNS';
+	      		}
+	      	}else{
+	      		$pns = 'PNS';
+	      	}
+
+	      	if ($row[2]  == 0) {
+	      		$jab = 'N/A';
+	      	}else{
+	      		$jab = $row[13];
+	      	}
+
+	      	return '<table><tr><td>Penerima</td><td> :&nbsp;</td><td>'.$d.'</td></tr>'.
+                 '<tr><td>NPWP</td><td> :&nbsp;</td><td>'.$row[9].'</td></tr>'.
+                 '<tr><td>NIP</td><td> :&nbsp;</td><td>'.$nip.'</td></tr>'.
+                 '<tr><td>Golongan</td><td> :&nbsp;</td><td>'.$gol.'</td></tr>'.
+                 '<tr><td>Status PNS</td><td> :&nbsp;</td><td>'.$pns.'</td></tr>'.
+                 '<tr><td>Jabatan</td><td> :&nbsp;</td><td>'.$jab.'</td></tr></table>';
+	      }),
 	      array( 'db' => 'jenis',  'dt' => 2, 'formatter' => function($d, $row){
 	      	if ($d == 0) {
 	      		return 'Badan';
@@ -24,37 +59,11 @@ switch ($process) {
 	      		return 'Perorangan';
 	      	}
 	      }),
-	      array( 'db' => 'npwp',  'dt' => 3),
-	      array( 'db' => 'golongan',  'dt' => 4 , 'formatter' => function($d, $row){
-	      	if ($d == 1) return '<center>I</center>';
-	      	elseif($d == 2) return '<center>II</center>';
-	      	elseif($d == 3) return '<center>III</center>';
-	      	elseif($d == 4) return '<center>VI</center>';
-	      	else return '<center>N/A</center>';
-	      }),
-	      array( 'db' => 'pns',  'dt' => 5 , 'formatter' => function($d, $row){
-	      	if ($d == 0) {
-	      		if ($row[2] == 0) {
-	      			return '<center>N/A</center>';
-	      		}else{
-	      			return 'Non PNS';
-	      		}
-	      	}else{
-	      		return 'PNS';
-	      	}
-	      }),
-	      array( 'db' => 'jabatan', 'dt' => 6, 'formatter' => function($d, $row){
-	      	if ($row[2]  == 0) {
-	      		return '<center>N/A</center>';
-	      	}else{
-	      		return $d;
-	      	}
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 7),
-	      array( 'db' => 'SUM(value)', 'dt' => 8, 'formatter' => function($d,$row){ 
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 3),
+	      array( 'db' => 'SUM(value)', 'dt' => 4, 'formatter' => function($d,$row){ 
 	      	return number_format($d,2);
 	      }),
-	      array( 'db' => 'status',  'dt' => 9, 'formatter' => function($d,$row, $dataArray){ 
+	      array( 'db' => 'status',  'dt' => 5, 'formatter' => function($d,$row, $dataArray){ 
 	        if($d==0){
 	          return '<i>Belum Diajukan</i>';
 	        }
@@ -80,7 +89,7 @@ switch ($process) {
 	          return '<i>Penutupan Anggaran</i>';
 	        }
 	      }),
-	      array( 'db' => 'status',  'dt' => 10, 'formatter' => function($d,$row, $dataArray){ 
+	      array( 'db' => 'status',  'dt' => 6, 'formatter' => function($d,$row, $dataArray){ 
 	      	$button =  '<div class="text-center btn-group-vertical">';
 	      	if ($_SESSION['level'] == 0) {
 	      		$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; View Akun</a>';
@@ -102,14 +111,14 @@ switch ($process) {
 	        $button .='</div>';
 	        return $button;
 	      }),
-		  array( 'db' => 'no_kuitansi', 'dt' => 11, 'formatter' => function($d,$row){
+		  array( 'db' => 'no_kuitansi', 'dt' => 7, 'formatter' => function($d,$row){
 		  	if ($d != "") {
 		  		return '<center>'.$d.'</center>';
 		  	}else{
 		  		return '<center>N/A</center>';
 		  	}
 		  }),
-		  array('db' => 'status', 'dt'=>12, 'formatter' => function($d,$row, $dataArray){
+		  array('db' => 'status', 'dt'=>8, 'formatter' => function($d,$row, $dataArray){
 		  	
 		  	if ($_SESSION['level'] == 0) {
 		  		if ($row[11] != "" && ($d == 2 || $d == 5)) {
@@ -132,7 +141,12 @@ switch ($process) {
 		  	}
 		  	
 		  	return $button;
-		  })
+		  }),
+	      array( 'db' => 'npwp',  'dt' => 9),
+	      array( 'db' => 'nip',  'dt' => 10),
+	      array( 'db' => 'golongan',  'dt' => 11),
+	      array( 'db' => 'pns',  'dt' => 12),
+	      array( 'db' => 'jabatan', 'dt' => 13),
 	    );
 		$where = 'rabview_id = "'.$rabview_id.'"';
 		$group = 'npwp';

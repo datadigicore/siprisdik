@@ -176,6 +176,8 @@
       tabrow = table.row(tr);
       $("#id_rab_del").val(tabrow.data()[0]);
     });
+
+    
   });
 
   function getdatepicker(){
@@ -184,6 +186,12 @@
       changeYear: true,
       format: 'dd/mm/yyyy' 
     });
+  }
+
+  function mask(){
+    $('.tanggal').mask('00/00/0000');
+    $('.uang').mask('000.000.000.000.000.000.000', {reverse: true});
+    $('.nomor').mask('0000');
   }
 
   $(document).ready(function() {
@@ -330,21 +338,22 @@
             $('#nilai').empty();
           } else if(kdAkun == "521211"){
             $('#bahan').append('  <label>PPN</label>'
-              +'  <input style="margin:5px auto" type="number" class="form-control" name="ppn" id="ppn" value="" placeholder="PPN" required />'
+              +'  <input style="margin:5px auto" type="text" class="form-control nomor" name="ppn" id="ppn" value="" placeholder="PPN" required />'
               );
             $('#nilai').append('<label>Jumlah</label>'
-              +'  <input style="margin:5px auto" type="number" class="form-control" name="value" id="value" value="" placeholder="Jumlah" required />'
+              +'  <input style="margin:5px auto" type="text" class="form-control uang" name="value" id="value" value="" placeholder="Jumlah" required />'
               );
             $('#perjalanan').empty();
             $('#tbl_rute').empty();
           } else {
             $('#bahan').empty();
             $('#nilai').append('<label>Jumlah</label>'
-              +'  <input style="margin:5px auto" type="number" class="form-control" name="value" id="value" value="" placeholder="Jumlah" required />'
+              +'  <input style="margin:5px auto" type="text" class="form-control" name="value" id="value" value="" placeholder="Jumlah" required />'
               );
             $('#perjalanan').empty();
             $('#tbl_rute').empty();
           }
+          mask();
         }
       },
     });
@@ -355,7 +364,7 @@
           +'<div class="col-xs-12 well">'
           +'      <h3 class="box-title" style="margin-top:6px;">Perincian</h3>'
           +'        <input type="hidden" name="perjalanan" value="true">'
-          +'        <table class="col-xs-12">'
+          +'        <table>'
           +'        <tr>'
           +'        <td>'
           +'        <label>Alat Transportasi</label>'
@@ -380,7 +389,7 @@
           +'        </td>'
           +'        <td>&nbsp;:&nbsp;</td>'
           +'        <td>'
-          +'        <input style="margin:5px auto" type="number" class="form-control" id="harga_tiket[]" name="harga_tiket[]" placeholder="0.00">'
+          +'        <input style="margin:5px auto" type="text" class="form-control uang" id="harga_tiket[]" name="harga_tiket[]" placeholder="Harga Tiket">'
           +'        </td>'
           +'        </tr>'
 
@@ -408,7 +417,7 @@
           +'        </td>'
           +'        <td>&nbsp;:&nbsp;</td>'
           +'        <td>'
-          +'        <input style="margin:5px auto" type="number" class="form-control" id="taxi_asal[]" name="taxi_asal[]" placeholder="0.00">'
+          +'        <input style="margin:5px auto" type="text" class="form-control uang" id="taxi_asal[]" name="taxi_asal[]" placeholder="Jumlah Taxi Asal">'
           +'        </td>'
           +'        <td>&nbsp;</td>'
           +'        <td>'
@@ -416,7 +425,7 @@
           +'        </td>'
           +'        <td>&nbsp;:&nbsp;</td>'
           +'        <td>'
-          +'        <input style="margin:5px auto" type="number" class="form-control" id="taxi_tujuan[]" name="taxi_tujuan[]" placeholder="0.00">'
+          +'        <input style="margin:5px auto" type="text" class="form-control uang" id="taxi_tujuan[]" name="taxi_tujuan[]" placeholder="Jumlah Taksi Tujuan">'
           +'        </td>'
           +'        </tr>'
 
@@ -452,7 +461,7 @@
           +'        </td>'
           +'        <td>&nbsp;:&nbsp;</td>'
           +'        <td>'
-          +'        <input style="margin:5px auto" type="number" class="form-control" id="lama_hari[]" name="lama_hari[]" placeholder="0">'
+          +'        <input style="margin:5px auto" type="text" class="form-control nomor" id="lama_hari[]" name="lama_hari[]" placeholder="0">'
           +'        </td>'
           +'        <td>&nbsp;</td>'
           +'        <td>'
@@ -460,7 +469,7 @@
           +'        </td>'
           +'        <td>&nbsp;:&nbsp;</td>'
           +'        <td>'
-          +'        <input style="margin:5px auto" type="number" class="form-control" id="uang_harian[]" name="uang_harian[]" placeholder="0.00">'
+          +'        <input style="margin:5px auto" type="text" class="form-control uang" id="uang_harian[]" name="uang_harian[]" placeholder="Jumlah Uang per Hari">'
           +'        </td>'
           +'        </tr>'
 

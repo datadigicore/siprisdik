@@ -85,8 +85,8 @@
                 <input type="text" class="form-control" id="tempat" name="tempat" value="<?php echo $getview['tempat'];?>" placeholder="Tempat Kegiatan" required />
               </div>
               <div class="form-group">
-                <label>Lokasi Kegiatan</label>
-                <input type="text" class="form-control" id="lokasi" name="lokasi" value="<?php echo $getview['lokasi'];?>" placeholder="Lokasi Kegiatan" required />
+                <label>Kota</label>
+                <input type="text" class="form-control" id="lokasi" name="lokasi" value="<?php echo $getview['lokasi'];?>" placeholder="Kota" required />
               </div>
               
             </div>
