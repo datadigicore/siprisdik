@@ -17,7 +17,6 @@
     </ol>
   </section>
   <section class="content">
-  <?php if($_SESSION['level'] != 0){ ?>
   <form class="form-horizontal" role="form" id="formAkun" enctype="multipart/form-data" method="post" action="<?= $url_rewrite ?>process/rab_rinci/tambahAkun">
   <div class="row">
     <div class="col-xs-12">
@@ -57,8 +56,10 @@
             </table>
             <br>
             <input type="hidden" id="id_rabfull" name="id_rabfull" value="<?php echo $id_rabfull?>" />
+            <?php if($_SESSION['level'] != 0){ ?>
             <?php if($getrab->status == 0 || $getrab->status == 3 || $getrab->status == 5){ ?>
             <a style="" id="add-more-akun" href="#" class="btn btn-flat btn-success btn-lg"><i class="fa fa-plus"></i> Tambah Transaksi</a>
+            <?php }?>
             <?php }?>
             <div class="well" id="div-tambah-akun" style="display:none"> 
               <label>Kode Akun</label>
@@ -88,7 +89,6 @@
       </div>
     </div>
   </div>
-  <?php }?>
 
   </form>
 
@@ -107,10 +107,8 @@
                 <th>No</th>
                 <th>Kode Akun</th>
                 <th>Nama Akun</th>
-                <th>No. Item</th>
-                <th>Nama Item</th>
                 <th>Nilai (Rupiah)</th>
-                <th>Status</th>
+                <th>Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -165,8 +163,6 @@
         {"targets" : 1},
         {"targets" : 2},
         {"targets" : 3},
-        {"targets" : 4},
-        {"targets" : 5},
       ],
       "order": [[ 0, "desc" ]]
     });
@@ -340,6 +336,7 @@
             $('#bahan').append('  <label>PPN</label>'
               +'  <input style="margin:5px auto" type="text" class="form-control nomor" name="ppn" id="ppn" value="" placeholder="PPN" required />'
               );
+            $('#nilai').empty();
             $('#nilai').append('<label>Jumlah</label>'
               +'  <input style="margin:5px auto" type="text" class="form-control uang" name="value" id="value" value="" placeholder="Jumlah" required />'
               );
@@ -347,8 +344,9 @@
             $('#tbl_rute').empty();
           } else {
             $('#bahan').empty();
+            $('#nilai').empty();
             $('#nilai').append('<label>Jumlah</label>'
-              +'  <input style="margin:5px auto" type="text" class="form-control" name="value" id="value" value="" placeholder="Jumlah" required />'
+              +'  <input style="margin:5px auto" type="text" class="form-control uang" name="value" id="value" value="" placeholder="Jumlah" required />'
               );
             $('#perjalanan').empty();
             $('#tbl_rute').empty();

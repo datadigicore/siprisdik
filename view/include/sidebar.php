@@ -38,20 +38,20 @@
               </ul>
             </li> -->
       <?php endif ?>
-      <?php if ($_SESSION['level'] != 0 && $_SESSION['direktorat'] == 5696): ?>
+      <?php if ($_SESSION['level'] != 0 ): ?>
         <li class="active"><a href="<?php echo $url_rewrite;?>content/home"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
         <li><a href="<?php echo $url_rewrite;?>content/rab"><i class="fa fa-table"></i> <span>Data RAB</span></a></li>   
+        <?php if($_SESSION['direktorat'] == 5696){ ?>
         <li class="treeview">
           <a href="#">
             <i class="fa fa-table"></i> <span><span>Data RAB (51)</span>
             <i class="fa fa-angle-left pull-right"></i>
           </a>
           <ul class="treeview-menu">
-            <?php if($_SESSION['direktorat'] == 5696){ ?>
             <li><a href="<?php echo $url_rewrite;?>content/rab51/5696"><i class="fa fa-table"></i> <span>Dukungan Manajemen untuk <br>Program Peningkatan Kualitas <br>Kelembagaan Iptek dan Dikti</span></a></li>
-            <?php }?>
           </ul>
-        </li>   
+        </li>  
+        <?php }?> 
         <li><a href="<?php echo $url_rewrite;?>content/report"><i class="fa fa-file-text"></i> <span>Cetak Surat</span></a></li>
       <?php endif ?>
     </ul>

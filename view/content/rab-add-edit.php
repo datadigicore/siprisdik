@@ -41,7 +41,7 @@
               <div id="bahan">
               <?php if($datarkakl[0]->KDAKUN == '521211') {?>
                 <label>PPN</label>
-                <input style="margin:5px auto" type="number" class="form-control" name="ppn" id="ppn" value="<?php echo $getrab->ppn?>" placeholder="PPN" />
+                <input style="margin:5px auto" type="text" class="form-control nomor" name="ppn" id="ppn" value="<?php echo $getrab->ppn?>" placeholder="PPN" />
               <?php }?>
               </div>
 
@@ -51,23 +51,23 @@
               <div id="nilai">
               <?php if($datarkakl[0]->KDAKUN !== "524119" ) {?>
                 <label>Jumlah</label>
-                <input style="margin:5px auto" type="number" class="form-control" name="value" id="value" value="<?php echo $getrab->value;?>" />
+                <input style="margin:5px auto" type="text" class="form-control uang" name="value" id="value" value="<?php echo number_format($getrab->value);?>" />
               <?php }?>
               </div>
             </div>
             <div id="perjalanan">
-              <?php for ($i=0; $i < count($getjalan); $i++) {  ?>
+              <?php if ($getrab->alat_trans != "" || $getrab->kota_asal != "") { ?>
               <div class="col-xs-12 well">
                 <h3 class="box-title" style="margin-top:6px;">Perincian</h3>
                       <input type="hidden" name="perjalanan" value="true">
-                      <table class="col-xs-12">
+                      <table>
                       <tr>
                       <td>
                       <label>Alat Transportasi</label>
                       </td>
                       <td>&nbsp;:&nbsp;</td>
                       <td>
-                      <input style="margin:5px auto" type="text" class="form-control" id="alat_trans[]" name="alat_trans[]" placeholder="Alat Transportasi" value="<?php echo $getjalan[$i]->alat_trans?>">
+                      <input style="margin:5px auto" type="text" class="form-control" id="alat_trans[]" name="alat_trans[]" placeholder="Alat Transportasi" value="<?php echo $getrab->alat_trans?>">
                       </td>
                       </tr>
 
@@ -77,7 +77,7 @@
                       </td>
                       <td>&nbsp;:&nbsp;</td>
                       <td>
-                      <input style="margin:5px auto" type="text" class="form-control" id="rute[]" name="rute[]" placeholder="Rute" value="<?php echo $getjalan[$i]->rute?>">
+                      <input style="margin:5px auto" type="text" class="form-control" id="rute[]" name="rute[]" placeholder="Rute" value="<?php echo $getrab->rute?>">
                       </td>
                       <td>&nbsp;</td>
                       <td>
@@ -85,7 +85,7 @@
                       </td>
                       <td>&nbsp;:&nbsp;</td>
                       <td>
-                      <input style="margin:5px auto" type="text" class="form-control" id="tiket[]" name="tiket[]" placeholder="0.00"  value="<?php echo $getjalan[$i]->harga_tiket?>">
+                      <input style="margin:5px auto" type="text" class="form-control uang" id="harga_tiket[]" name="harga_tiket[]" placeholder="0.00"  value="<?php echo number_format($getrab->harga_tiket)?>">
                       </td>
                       </tr>
 
@@ -95,7 +95,7 @@
                       </td>
                       <td>&nbsp;:&nbsp;</td>
                       <td>
-                      <input style="margin:5px auto" type="text" class="form-control" id="kota_asal[]" name="kota_asal[]" placeholder="Kota Asal" value="<?php echo $getjalan[$i]->kota_asal;?>">
+                      <input style="margin:5px auto" type="text" class="form-control" id="kota_asal[]" name="kota_asal[]" placeholder="Kota Asal" value="<?php echo $getrab->kota_asal;?>">
                       </td>
                       <td>&nbsp;</td>
                       <td>
@@ -103,7 +103,7 @@
                       </td>
                       <td>&nbsp;:&nbsp;</td>
                       <td>
-                      <input style="margin:5px auto" type="text" class="form-control" id="kota_tujuan[]" name="kota_tujuan[]" placeholder="Kota Tujuan" value="<?php echo $getjalan[$i]->kota_tujuan;?>">
+                      <input style="margin:5px auto" type="text" class="form-control" id="kota_tujuan[]" name="kota_tujuan[]" placeholder="Kota Tujuan" value="<?php echo $getrab->kota_tujuan;?>">
                       </td>
                       </tr>
 
@@ -113,7 +113,7 @@
                       </td>
                       <td>&nbsp;:&nbsp;</td>
                       <td>
-                      <input style="margin:5px auto" type="text" class="form-control" id="taxi_asal[]" name="taxi_asal[]" placeholder="0.00" value="<?php echo $getjalan[$i]->taxi_asal;?>">
+                      <input style="margin:5px auto" type="text" class="form-control uang" id="taxi_asal[]" name="taxi_asal[]" placeholder="0.00" value="<?php echo number_format($getrab->taxi_asal);?>">
                       </td>
                       <td>&nbsp;</td>
                       <td>
@@ -121,7 +121,7 @@
                       </td>
                       <td>&nbsp;:&nbsp;</td>
                       <td>
-                      <input style="margin:5px auto" type="text" class="form-control" id="taxi_tujuan[]" name="taxi_tujuan[]" placeholder="0.00" value="<?php echo $getjalan[$i]->taxi_tujuan;?>">
+                      <input style="margin:5px auto" type="text" class="form-control uang" id="taxi_tujuan[]" name="taxi_tujuan[]" placeholder="0.00" value="<?php echo number_format($getrab->taxi_tujuan);?>">
                       </td>
                       </tr>
                       
@@ -132,7 +132,7 @@
                       <td>&nbsp;:&nbsp;</td>
                       <td>
                       <div style="margin:5px auto" class="input-group">
-                          <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_mulai[]" name="tgl_mulai[]" placeholder="dd/mm/yyyy" value="<?php echo date('d/m/Y', strtotime($getjalan[$i]->tgl_mulai) );?>">
+                          <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_mulai[]" name="tgl_mulai[]" placeholder="dd/mm/yyyy" value="<?php echo date('d/m/Y', strtotime($getrab->tgl_mulai) );?>">
                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                       </div>
                       </td>
@@ -145,7 +145,7 @@
                       <td>&nbsp;:&nbsp;</td>
                       <td>
                       <div class="input-group">
-                           <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_akhir[]" name="tgl_akhir[]" placeholder="dd/mm/yyyy" value="<?php echo date('d/m/Y', strtotime($getjalan[$i]->tgl_akhir) );?>" >
+                           <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_akhir[]" name="tgl_akhir[]" placeholder="dd/mm/yyyy" value="<?php echo date('d/m/Y', strtotime($getrab->tgl_akhir) );?>" >
                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                       </div>
                       </td>
@@ -157,7 +157,7 @@
                       </td>
                       <td>&nbsp;:&nbsp;</td>
                       <td>
-                      <input style="margin:5px auto" type="text" class="form-control" id="lama_hari[]" name="lama_hari[]" placeholder="0" value="<?php echo $getjalan[$i]->lama_hari;?>">
+                      <input style="margin:5px auto" type="text" class="form-control nomor" id="lama_hari[]" name="lama_hari[]" placeholder="0" value="<?php echo $getrab->lama_hari;?>">
                       </td>
                       <td>&nbsp;</td>
                       <td>
@@ -165,12 +165,12 @@
                       </td>
                       <td>&nbsp;:&nbsp;</td>
                       <td>
-                      <input style="margin:5px auto" type="text" class="form-control" id="uang_harian[]" name="uang_harian[]" placeholder="0.00" value="<?php echo $getjalan[$i]->uang_harian;?>">
+                      <input style="margin:5px auto" type="text" class="form-control uang" id="uang_harian[]" name="uang_harian[]" placeholder="0.00" value="<?php echo number_format($getrab->uang_harian);?>">
                       </td>
                       </tr>
                   </table>
               </div> 
-              <?php }?>
+              <?php } ?>
             </div>
 
             <div id="tbl_save" class="col-xs-12">
@@ -194,6 +194,9 @@
       changeYear: true,
       format: 'dd/mm/yyyy' 
     });
+    $('.tanggal').mask('00/00/0000');
+    $('.uang').mask('000.000.000.000.000.000.000', {reverse: true});
+    $('.nomor').mask('0000');
   }
 
   $(document).ready(function() {
@@ -258,12 +261,12 @@
       } else if(kdAkun == "521211"){
         if (isEmpty($('#bahan'))) {
             $('#bahan').append('  <label>PPN</label>'
-          +'  <input style="margin:5px auto" type="number" class="form-control" name="ppn" id="ppn" value="" placeholder="PPN" required />'
+          +'  <input style="margin:5px auto" type="text" class="form-control nomor" name="ppn" id="ppn" value="" placeholder="PPN" required />'
           );
         }
         if (isEmpty($('#nilai'))) {
           $('#nilai').append('<label>Jumlah</label>'
-            +'  <input style="margin:5px auto" type="number" class="form-control" name="value" id="value" value="" placeholder="Jumlah" required />'
+            +'  <input style="margin:5px auto" type="text" class="form-control uang" name="value" id="value" value="" placeholder="Jumlah" required />'
             );
         }
         $('#perjalanan').empty();
@@ -272,7 +275,7 @@
         $('#bahan').empty();
         if (isEmpty($('#nilai'))) {
           $('#nilai').append('<label>Jumlah</label>'
-            +'  <input style="margin:5px auto" type="number" class="form-control" name="value" id="value" value="" placeholder="Jumlah" required />'
+            +'  <input style="margin:5px auto" type="text" class="form-control uang" name="value" id="value" value="" placeholder="Jumlah" required />'
             );
         }
         $('#perjalanan').empty();
@@ -286,122 +289,123 @@
   
 
   function tambahRute(){
-    $('#perjalanan').append( ''
-          +'<div class="col-xs-12 well">'
-          +'      <h3 class="box-title" style="margin-top:6px;">Perincian</h3>'
-          +'        <input type="hidden" name="perjalanan" value="true">'
-          +'        <table class="col-xs-12">'
-          +'        <tr>'
-          +'        <td>'
-          +'        <label>Alat Transportasi</label>'
-          +'        </td>'
-          +'        <td>&nbsp;:&nbsp;</td>'
-          +'        <td>'
-          +'        <input style="margin:5px auto" type="text" class="form-control" id="alat_trans[]" name="alat_trans[]" placeholder="Alat Transportasi">'
-          +'        </td>'
-          +'        </tr>'
 
-          +'        <tr>'
-          +'        <td>'
-          +'        <label>Rute</label>'
-          +'        </td>'
-          +'        <td>&nbsp;:&nbsp;</td>'
-          +'        <td>'
-          +'        <input style="margin:5px auto" type="text" class="form-control" id="rute[]" name="rute[]" placeholder="Rute">'
-          +'        </td>'
-          +'        <td>&nbsp;</td>'
-          +'        <td>'
-          +'        <label>Tiket</label>'
-          +'        </td>'
-          +'        <td>&nbsp;:&nbsp;</td>'
-          +'        <td>'
-          +'        <input style="margin:5px auto" type="text" class="form-control" id="tiket[]" name="tiket[]" placeholder="0.00">'
-          +'        </td>'
-          +'        </tr>'
+    // $('#perjalanan').append( ''
+    //       +'<div class="col-xs-12 well">'
+    //       +'      <h3 class="box-title" style="margin-top:6px;">Perincian</h3>'
+    //       +'        <input type="hidden" name="perjalanan" value="true">'
+    //       +'        <table class="col-xs-12">'
+    //       +'        <tr>'
+    //       +'        <td>'
+    //       +'        <label>Alat Transportasi</label>'
+    //       +'        </td>'
+    //       +'        <td>&nbsp;:&nbsp;</td>'
+    //       +'        <td>'
+    //       +'        <input style="margin:5px auto" type="text" class="form-control" id="alat_trans[]" name="alat_trans[]" placeholder="Alat Transportasi">'
+    //       +'        </td>'
+    //       +'        </tr>'
 
-          +'        <tr>'
-          +'        <td>'
-          +'        <label>Kota Asal</label>'
-          +'        </td>'
-          +'        <td>&nbsp;:&nbsp;</td>'
-          +'        <td>'
-          +'        <input style="margin:5px auto" type="text" class="form-control" id="kota_asal[]" name="kota_asal[]" placeholder="Kota Asal">'
-          +'        </td>'
-          +'        <td>&nbsp;</td>'
-          +'        <td>'
-          +'        <label>Kota Tujuan</label>'
-          +'        </td>'
-          +'        <td>&nbsp;:&nbsp;</td>'
-          +'        <td>'
-          +'        <input style="margin:5px auto" type="text" class="form-control" id="kota_tujuan[]" name="kota_tujuan[]" placeholder="Kota Tujuan">'
-          +'        </td>'
-          +'        </tr>'
+    //       +'        <tr>'
+    //       +'        <td>'
+    //       +'        <label>Rute</label>'
+    //       +'        </td>'
+    //       +'        <td>&nbsp;:&nbsp;</td>'
+    //       +'        <td>'
+    //       +'        <input style="margin:5px auto" type="text" class="form-control" id="rute[]" name="rute[]" placeholder="Rute">'
+    //       +'        </td>'
+    //       +'        <td>&nbsp;</td>'
+    //       +'        <td>'
+    //       +'        <label>Tiket</label>'
+    //       +'        </td>'
+    //       +'        <td>&nbsp;:&nbsp;</td>'
+    //       +'        <td>'
+    //       +'        <input style="margin:5px auto" type="text" class="form-control" id="tiket[]" name="tiket[]" placeholder="0.00">'
+    //       +'        </td>'
+    //       +'        </tr>'
 
-          +'        <tr>'
-          +'        <td>'
-          +'        <label>Taxi Asal</label>'
-          +'        </td>'
-          +'        <td>&nbsp;:&nbsp;</td>'
-          +'        <td>'
-          +'        <input style="margin:5px auto" type="text" class="form-control" id="taxi_asal[]" name="taxi_asal[]" placeholder="0.00">'
-          +'        </td>'
-          +'        <td>&nbsp;</td>'
-          +'        <td>'
-          +'        <label>Taxi Tujuan</label>'
-          +'        </td>'
-          +'        <td>&nbsp;:&nbsp;</td>'
-          +'        <td>'
-          +'        <input style="margin:5px auto" type="text" class="form-control" id="taxi_tujuan[]" name="taxi_tujuan[]" placeholder="0.00">'
-          +'        </td>'
-          +'        </tr>'
+    //       +'        <tr>'
+    //       +'        <td>'
+    //       +'        <label>Kota Asal</label>'
+    //       +'        </td>'
+    //       +'        <td>&nbsp;:&nbsp;</td>'
+    //       +'        <td>'
+    //       +'        <input style="margin:5px auto" type="text" class="form-control" id="kota_asal[]" name="kota_asal[]" placeholder="Kota Asal">'
+    //       +'        </td>'
+    //       +'        <td>&nbsp;</td>'
+    //       +'        <td>'
+    //       +'        <label>Kota Tujuan</label>'
+    //       +'        </td>'
+    //       +'        <td>&nbsp;:&nbsp;</td>'
+    //       +'        <td>'
+    //       +'        <input style="margin:5px auto" type="text" class="form-control" id="kota_tujuan[]" name="kota_tujuan[]" placeholder="Kota Tujuan">'
+    //       +'        </td>'
+    //       +'        </tr>'
 
-          +'        <tr>'
-          +'        <td>'
-          +'        <label> Tanggal Berangkat</label>'
-          +'        </td>'
-          +'        <td>&nbsp;:&nbsp;</td>'
-          +'        <td>'
-          +'        <div style="margin:5px auto" class="input-group">'
-          +'            <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_mulai[]" name="tgl_mulai[]" placeholder="dd/mm/yyyy">'
-          +'             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>'
-          +'        </div>'
-          +'        </td>'
-          +'        </tr>'
+    //       +'        <tr>'
+    //       +'        <td>'
+    //       +'        <label>Taxi Asal</label>'
+    //       +'        </td>'
+    //       +'        <td>&nbsp;:&nbsp;</td>'
+    //       +'        <td>'
+    //       +'        <input style="margin:5px auto" type="text" class="form-control" id="taxi_asal[]" name="taxi_asal[]" placeholder="0.00">'
+    //       +'        </td>'
+    //       +'        <td>&nbsp;</td>'
+    //       +'        <td>'
+    //       +'        <label>Taxi Tujuan</label>'
+    //       +'        </td>'
+    //       +'        <td>&nbsp;:&nbsp;</td>'
+    //       +'        <td>'
+    //       +'        <input style="margin:5px auto" type="text" class="form-control" id="taxi_tujuan[]" name="taxi_tujuan[]" placeholder="0.00">'
+    //       +'        </td>'
+    //       +'        </tr>'
 
-          +'        <tr>'
-          +'        <td>'
-          +'        <label> Tanggal Kembali</label>'
-          +'        </td>'
-          +'        <td>&nbsp;:&nbsp;</td>'
-          +'        <td>'
-          +'        <div class="input-group">'
-          +'             <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_akhir[]" name="tgl_akhir[]" placeholder="dd/mm/yyyy">'
-          +'             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>'
-          +'        </div>'
-          +'        </td>'
-          +'        </tr>'
+    //       +'        <tr>'
+    //       +'        <td>'
+    //       +'        <label> Tanggal Berangkat</label>'
+    //       +'        </td>'
+    //       +'        <td>&nbsp;:&nbsp;</td>'
+    //       +'        <td>'
+    //       +'        <div style="margin:5px auto" class="input-group">'
+    //       +'            <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_mulai[]" name="tgl_mulai[]" placeholder="dd/mm/yyyy">'
+    //       +'             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>'
+    //       +'        </div>'
+    //       +'        </td>'
+    //       +'        </tr>'
 
-          +'        <tr>'
-          +'        <td>'
-          +'        <label>Jumlah Hari</label>'
-          +'        </td>'
-          +'        <td>&nbsp;:&nbsp;</td>'
-          +'        <td>'
-          +'        <input style="margin:5px auto" type="text" class="form-control" id="lama_hari[]" name="lama_hari[]" placeholder="0">'
-          +'        </td>'
-          +'        <td>&nbsp;</td>'
-          +'        <td>'
-          +'        <label>Uang Harian</label>'
-          +'        </td>'
-          +'        <td>&nbsp;:&nbsp;</td>'
-          +'        <td>'
-          +'        <input style="margin:5px auto" type="text" class="form-control" id="uang_harian[]" name="uang_harian[]" placeholder="0.00">'
-          +'        </td>'
-          +'        </tr>'
+    //       +'        <tr>'
+    //       +'        <td>'
+    //       +'        <label> Tanggal Kembali</label>'
+    //       +'        </td>'
+    //       +'        <td>&nbsp;:&nbsp;</td>'
+    //       +'        <td>'
+    //       +'        <div class="input-group">'
+    //       +'             <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_akhir[]" name="tgl_akhir[]" placeholder="dd/mm/yyyy">'
+    //       +'             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>'
+    //       +'        </div>'
+    //       +'        </td>'
+    //       +'        </tr>'
 
-          +'</div>' 
-          );
-    getdatepicker();
+    //       +'        <tr>'
+    //       +'        <td>'
+    //       +'        <label>Jumlah Hari</label>'
+    //       +'        </td>'
+    //       +'        <td>&nbsp;:&nbsp;</td>'
+    //       +'        <td>'
+    //       +'        <input style="margin:5px auto" type="text" class="form-control" id="lama_hari[]" name="lama_hari[]" placeholder="0">'
+    //       +'        </td>'
+    //       +'        <td>&nbsp;</td>'
+    //       +'        <td>'
+    //       +'        <label>Uang Harian</label>'
+    //       +'        </td>'
+    //       +'        <td>&nbsp;:&nbsp;</td>'
+    //       +'        <td>'
+    //       +'        <input style="margin:5px auto" type="text" class="form-control" id="uang_harian[]" name="uang_harian[]" placeholder="0.00">'
+    //       +'        </td>'
+    //       +'        </tr>'
+
+    //       +'</div>' 
+    //       );
+    // getdatepicker();
   }
 
     

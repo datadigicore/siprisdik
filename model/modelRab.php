@@ -645,7 +645,7 @@
 
         $kdakun     = $data['kdakun'];
         $noitem     = $data['noitem'];
-        $value      = $data['value'];
+        $value      = str_replace(".", "", $data['value']);
 
         $deskripsi  = $cekfetch->deskripsi;
         $tanggal    = $cekfetch->tanggal;
@@ -703,7 +703,7 @@
       }else{
         $kdakun     = $data['kdakun'];
         $noitem     = $data['noitem'];
-        $value      = $data['value'];
+        $value      = str_replace(".", "", $data['value']);
 
         $pajak      = $cekfetch->pajak;
         $pph        = ($pajak/100) * $value; 
@@ -731,14 +731,10 @@
       $cek  = "SELECT * FROM rabfull where id='$id_rabfull'";
       $cekresult = $this->query($cek);
       $cekfetch  = $this->fetch_object($cekresult);
-      
-      //delete perjalanan
-      $deljalan = "DELETE FROM perjalanan where rabfull_id = '$id_rabfull'";
-      $resdel = $this->query($deljalan);
 
       $kdakun     = $data['kdakun'];
       $noitem     = $data['noitem'];
-      $value      = $data['value'];
+      $value      = str_replace(".", "", $data['value']);
 
       $pajak      = $cekfetch->pajak;
       $pph        = ($pajak/100) * $value; 
@@ -794,27 +790,27 @@
         $rabview_id = $cekfetch->rabview_id;
         $pph        = ($pajak/100) * $value; 
 
-        $query      = "INSERT INTO rabfull SET
-          rabview_id  = '$rabview_id',
-          thang       = '$thang',
-          kdprogram   = '$kdprogram',
-          kdgiat      = '$kdgiat',
-          kdoutput    = '$kdoutput',
-          kdsoutput   = '$kdsoutput',
-          kdkmpnen    = '$kdkmpnen',
-          kdskmpnen   = '$kdskmpnen',
-          kdakun      = '$kdakun',
-          noitem      = '$noitem',
+        // $query      = "INSERT INTO rabfull SET
+        //   rabview_id  = '$rabview_id',
+        //   thang       = '$thang',
+        //   kdprogram   = '$kdprogram',
+        //   kdgiat      = '$kdgiat',
+        //   kdoutput    = '$kdoutput',
+        //   kdsoutput   = '$kdsoutput',
+        //   kdkmpnen    = '$kdkmpnen',
+        //   kdskmpnen   = '$kdskmpnen',
+        //   kdakun      = '$kdakun',
+        //   noitem      = '$noitem',
 
-          jenis       = '$jenis',
-          penerima    = '$penerima',
-          npwp        = '$npwp',
-          golongan    = '$golongan',
-          jabatan     = '$jabatan',
-          pns         = '$pns',
-          pajak       = '$pajak'
-        ";
-        $result = $this->query($query);
+        //   jenis       = '$jenis',
+        //   penerima    = '$penerima',
+        //   npwp        = '$npwp',
+        //   golongan    = '$golongan',
+        //   jabatan     = '$jabatan',
+        //   pns         = '$pns',
+        //   pajak       = '$pajak'
+        // ";
+        // $result = $this->query($query);
 
         $id_rabfull = $this->insert_id($result); 
         $sub_query = "";
@@ -831,11 +827,11 @@
           $alat_trans   = $data['alat_trans'][$i];
           $kota_asal    = $data['kota_asal'][$i];
           $kota_tujuan  = $data['kota_tujuan'][$i];
-          $taxi_asal    = $data['taxi_asal'][$i];
-          $taxi_tujuan  = $data['taxi_tujuan'][$i];
+          $taxi_asal    = str_replace(".", "", $data['taxi_asal'][$i]);
+          $taxi_tujuan  = str_replace(".", "", $data['taxi_tujuan'][$i]);
           $rute         = $data['rute'][$i];
-          $harga_tiket  = $data['harga_tiket'][$i];
-          $uang_harian  = $data['uang_harian'][$i];
+          $harga_tiket  = str_replace(".", "", $data['harga_tiket'][$i]);
+          $uang_harian  = str_replace(".", "", $data['uang_harian'][$i]);
           $lama_hari    = $data['lama_hari'][$i];
 
           $value_total  = $taxi_asal + $taxi_tujuan + $harga_tiket + ($uang_harian * $lama_hari);
@@ -877,11 +873,11 @@
           $alat_trans   = $data['alat_trans'][$i];
           $kota_asal    = $data['kota_asal'][$i];
           $kota_tujuan  = $data['kota_tujuan'][$i];
-          $taxi_asal    = $data['taxi_asal'][$i];
-          $taxi_tujuan  = $data['taxi_tujuan'][$i];
+          $taxi_asal    = str_replace(".", "", $data['taxi_asal'][$i]);
+          $taxi_tujuan  = str_replace(".", "", $data['taxi_tujuan'][$i]);
           $rute         = $data['rute'][$i];
-          $harga_tiket  = $data['harga_tiket'][$i];
-          $uang_harian  = $data['uang_harian'][$i];
+          $harga_tiket  = str_replace(".", "", $data['harga_tiket'][$i]);
+          $uang_harian  = str_replace(".", "", $data['uang_harian'][$i]);
           $lama_hari    = $data['lama_hari'][$i];
 
           $value_total  = $taxi_asal + $taxi_tujuan + $harga_tiket + ($uang_harian * $lama_hari);
@@ -920,10 +916,6 @@
       $cekresult = $this->query($cek);
       $cekfetch  = $this->fetch_object($cekresult);
 
-      //delete perjalanan
-      $deljalan = "DELETE FROM perjalanan where rabfull_id = '$id_rabfull'";
-      $resdel = $this->query($deljalan);
-
       $thang      = $cekfetch->thang;
       $kdprogram  = $cekfetch->kdprogram;
       $kdgiat     = trim($cekfetch->kdgiat,"\x0D\x0A");
@@ -956,12 +948,13 @@
         $alat_trans   = $data['alat_trans'][$i];
         $kota_asal    = $data['kota_asal'][$i];
         $kota_tujuan  = $data['kota_tujuan'][$i];
-        $taxi_asal    = $data['taxi_asal'][$i];
-        $taxi_tujuan  = $data['taxi_tujuan'][$i];
+        $taxi_asal    = str_replace(".", "", $data['taxi_asal'][$i]);
+        $taxi_tujuan  = str_replace(".", "", $data['taxi_tujuan'][$i]);
         $rute         = $data['rute'][$i];
-        $harga_tiket  = $data['harga_tiket'][$i];
-        $uang_harian  = $data['uang_harian'][$i];
+        $harga_tiket  = str_replace(".", "", $data['harga_tiket'][$i]);
+        $uang_harian  = str_replace(".", "", $data['uang_harian'][$i]);
         $lama_hari    = $data['lama_hari'][$i];
+
 
         $value_total  = $taxi_asal + $taxi_tujuan + $harga_tiket + ($uang_harian * $lama_hari);
         $pph          = ($pajak/100) * $value_total; 
@@ -979,30 +972,6 @@
                       lama_hari   = '$lama_hari'
                       ";
 
-        $queryjalan   = "INSERT INTO perjalanan SET
-          rabfull_id  = '$id_rabfull',
-          thang       = '$thang',
-          kdprogram   = '$kdprogram',
-          kdgiat      = '$kdgiat',
-          kdoutput    = '$kdoutput',
-          kdsoutput   = '$kdsoutput',
-          kdkmpnen    = '$kdkmpnen',
-          kdskmpnen   = '$kdskmpnen',
-          kdakun      = '$kdakun',
-          noitem      = '$noitem',
-          value       = '$value',
-
-          jenis       = '$jenis',
-          penerima    = '$penerima',
-          npwp        = '$npwp',
-          golongan    = '$golongan',
-          jabatan     = '$jabatan',
-          pns         = '$pns',
-
-          pajak       = '$pajak',
-          pph         = '$pph',
-          ".$sub_query;
-        $resultjalan = $this->query($queryjalan);
       }
 
       $pajak      = $cekfetch->pajak;
@@ -1019,9 +988,9 @@
                   noitem  ='$noitem', 
                   value   ='$value_total',
                   pph     = '$pph',
-                  ppn     = '$ppn'
+                  ppn     = '$ppn',
+                  ".$sub_query."
                 where id='$id_rabfull'";
-
       $result = $this->query($query);
       return $result;
       
@@ -1105,8 +1074,6 @@
     }
 
     public function delrabdetail($id_rabfull){
-      $qjalan = "DELETE FROM perjalanan WHERE rabfull_id = '$id_rabfull'";
-      $resjalan = $this->query($qjalan);
 
       $query = "DELETE FROM rabfull WHERE id = '$id_rabfull'";
       $result = $this->query($query);
@@ -1124,14 +1091,10 @@
       return $data;    
     }
 
-    public function getjalanbyidrab($id_rabfull){
-      $query  = "SELECT *
-                 FROM perjalanan where rabfull_id = '$id_rabfull'";
+    public function pesanrevisi($id, $pesan){
+      $query = "UPDATE rabview set pesan = '$pesan' where id ='$id' ";
       $result = $this->query($query);
-      while ($jalan = $this->fetch_object($result)) {
-        $all[] = $jalan;
-      }
-      return $all;
+      return $result;
     }
 
   }

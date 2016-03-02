@@ -220,12 +220,33 @@
           <div class="form-group">
             <label>Apakah Anda Yakin Melakukan Revisi pada RAB ini ?</label>
           </div>
+          <div class="form-group">
+            <label>Pesan</label>
+            <textarea rows="5" type="text" class="form-control" id="pesan" name="pesan" placeholder="Pesan" style="resize:none;" required></textarea>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" data-dismiss="modal" class="btn btn-flat btn-warning">Tidak</button>
           <button type="submit" class="btn btn-flat btn-success">Ya</button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="pesanrevisi">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header" style="background-color:#111F3F !important; color:white;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" style="color:white">×</span></button>
+          <h4 class="modal-title">Info</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Pesan</label>
+            <textarea rows="5" type="text" class="form-control" id="vpesan" name="vpesan" placeholder="Pesan" style="resize:none;" readonly></textarea>
+          </div>
+        </div>
     </div>
   </div>
 </div>
@@ -295,6 +316,11 @@ var table;
       var tr = $(this).closest('tr');
       tabrow = table.row(tr);
       $("#id_rab_rev").val(tabrow.data()[0]);
+    });
+    $(document).on("click", "#btn-pesan", function (){
+      var tr = $(this).closest('tr');
+      tabrow = table.row(tr);
+      $("#vpesan").val(tabrow.data()[12]);
     });
     chprog();
   });

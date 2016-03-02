@@ -88,20 +88,23 @@ switch ($process) {
 	        elseif($d==7){
 	          return '<i>Penutupan Anggaran</i>';
 	        }
+	        elseif($d==8){
+	          return '<i>Dibatalkan</i>';
+	        }
 	      }),
 	      array( 'db' => 'status',  'dt' => 6, 'formatter' => function($d,$row, $dataArray){ 
 	      	$button =  '<div class="text-center btn-group-vertical">';
 	      	if ($_SESSION['level'] == 0) {
-	      		$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; View Akun</a>';
+	      		$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; Lihat Akun</a>';
 	      		if ($d == 2 || $d == 5 || $d == 4) {
 	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."pdf".'" class="btn btn-flat btn-danger btn-sm"><i class="fa fa-file"></i>&nbsp; Kuitansi (PDF)</a>';
 	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."word".'" class="btn btn-flat btn-info btn-sm"><i class="fa fa-file"></i>&nbsp; Kuitansi (Word)</a>';
 	      		}
 	      	}else{
 	      		if ($d == 0 || $d == 3 || $d == 5) {
-	      			$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Add Akun</a>';
+	      			$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Tambah Akun</a>';
 	      		}else{
-	      			$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; View Akun</a>';
+	      			$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Lihat Akun</a>';
 	      		}
 	      		if ($d == 2 || $d == 5 || $d == 4) {
 	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."pdf".'" class="btn btn-flat btn-danger btn-sm"><i class="fa fa-file"></i>&nbsp; Kuitansi (PDF)</a>';
@@ -121,11 +124,23 @@ switch ($process) {
 		  array('db' => 'status', 'dt'=>8, 'formatter' => function($d,$row, $dataArray){
 		  	
 		  	if ($_SESSION['level'] == 0) {
-		  		if ($row[11] != "" && ($d == 2 || $d == 5)) {
+		  		if ($row[7] != "" && $d == 4 ) {
+		  			$button =  '<div class="text-center btn-group-vertical">'.
+		  						'<a style="margin:0 2px;" id="btn-batal" href="#batal" class="btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-close"></i> Batal</a>'.
+		  						'</div>';
+		  		}elseif ($row[7] != "" && $d == 6 ) {
+		  			$button =  '<div class="text-center btn-group-vertical">'.
+		  						'<a style="margin:0 2px;" id="btn-btl-adn" href="#batal-adn" class="btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-close"></i> Batal</a>'.
+		  						'</div>';
+		  		}else{
+		  			$button = '<center>-</center>';
+		  		}
+		  	}elseif ($_SESSION['level'] == 2) {
+		  		if ($row[7] != "" && ($d == 2 || $d == 5)) {
 		  			$button =  '<div class="text-center btn-group-vertical">'.
 		  						'<a style="margin:0 2px;" id="btn-sah" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
 		  						'</div>';
-		  		}elseif ($row[11] != "" && ($d == 2 || $d == 5)) {
+		  		}elseif ($row[7] != "" && ($d == 2 || $d == 5)) {
 		  			$button =  '<div class="text-center btn-group-vertical">'.
 		  						'<a style="margin:0 2px;" id="btn-sah-adn" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
 		  						'</div>';
@@ -133,7 +148,7 @@ switch ($process) {
 		  			$button = '<center>-</center>';
 		  		}
 		  	}else{
-		  		if ($row[11] != "" && ($d == 2 || $d == 5)) {
+		  		if ($row[7] != "" && ($d == 2 || $d == 5)) {
 		  			$button = '<i>Belum Disahkan</i>';
 		  		}else{
 		  			$button = '<center>-</center>';
@@ -216,14 +231,15 @@ switch ($process) {
 	    $key   = "rabfull.`id`";
 	    $column = array(
 	      array( 'db' => 'rabfull.id',      'dt' => 0 ),
-	      array( 'db' => 'rabfull.kdakun',  'dt' => 1),
+	      array( 'db' => 'rabfull.kdakun',  'dt' => 1, 'formatter' => function($d,$row){
+	      	return '<table><tr><td>Kode Akun</td><td> :&nbsp;</td><td>'.$d.'</td></tr>'.
+                 '<tr><td>No Item</td><td> :&nbsp;</td><td>'.$row[5].'</td></tr></table>';
+	      }),
 	      array( 'db' => 'rkakl_full.NMAKUN',  'dt' => 2),
-	      array( 'db' => 'rabfull.noitem',  	'dt' => 3),
-	      array( 'db' => 'rkakl_full.NMITEM',  'dt' => 4 ),
-	      array( 'db' => 'rabfull.value', 'dt' => 5, 'formatter' => function($d,$row,$dataArray){
+	      array( 'db' => 'rabfull.value', 'dt' => 3, 'formatter' => function($d,$row,$dataArray){
 	      	return number_format($d,2);
 	      }),
-	      array( 'db' => 'rabfull.status',  'dt' => 6, 'formatter' => function($d,$row,$dataArray){ 
+	      array( 'db' => 'rabfull.status',  'dt' => 4, 'formatter' => function($d,$row,$dataArray){ 
 	        if(($d==0 || $d==3) && $_SESSION['level'] != 0){
 	          return  '<div class="text-center">'.
 	                    '<a style="margin:0 2px;" id="btn-detail" href="'.$dataArray['url_rewrite'].'content/rabakun/detail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Detail</a>'.
@@ -235,7 +251,8 @@ switch ($process) {
 		                    '<a style="margin:0 2px;" id="btn-detail" href="'.$dataArray['url_rewrite'].'content/rabakun/detail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Detail</a>'.
 		                '</div>';
 	        }
-	      })
+	      }),
+	      array( 'db' => 'rabfull.noitem', 'dt' => 5),
 	    );
 		$where = 'rabfull.thang 		= "'.$getdata->thang.'"
 				AND rabfull.kdprogram 	= "'.$getdata->kdprogram.'"
