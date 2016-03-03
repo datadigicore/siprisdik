@@ -607,6 +607,33 @@
       $sql2 = $this->query("SELECT sum(value) as jumlah FROM `rabfull` where  kdgiat='$kdgiat' and kdakun like '$kdmak%' and month(tanggal)='$bulan' ");
       $arr_sql2 = $this->fetch_array($sql2);
       $nilai_spp = $arr_sql2['jumlah'];
+
+      $pagu_51=$this->get_nama($kdgiat,"","","","","51");
+      $pagu_52=$this->get_nama($kdgiat,"","","","","52");
+      $pagu_53=$this->get_nama($kdgiat,"","","","","53");
+      $pagu_57=$this->get_nama($kdgiat,"","","","","57");
+
+      $nilai_51=$this->get_realisasi($bulan, $kdgiat,0,0,0,0,"51");
+      $nilai_52=$this->get_realisasi($bulan, $kdgiat,0,0,0,0,"52");
+      $nilai_53=$this->get_realisasi($bulan, $kdgiat,0,0,0,0,"53");
+      $nilai_57=$this->get_realisasi($bulan, $kdgiat,0,0,0,0,"57");
+
+      $tot_nilai_51 = $nilai_51['jml_lalu']+$nilai_51['jumlah'];
+      $tot_nilai_52 = $nilai_52['jml_lalu']+$nilai_52['jumlah'];
+      $tot_nilai_53 = $nilai_53['jml_lalu']+$nilai_53['jumlah'];
+      $tot_nilai_57 = $nilai_57['jml_lalu']+$nilai_57['jumlah'];
+
+      $sisa_dana_51 = $pagu_51['jumlah']-$tot_nilai_51;
+      $sisa_dana_52 = $pagu_52['jumlah']-$tot_nilai_52;
+      $sisa_dana_53 = $pagu_53['jumlah']-$tot_nilai_53;
+      $sisa_dana_57 = $pagu_57['jumlah']-$tot_nilai_57;
+
+      $acc_pagu = $pagu_51['jumlah']+$pagu_52['jumlah']+$pagu_53['jumlah']+$pagu_57['jumlah'];
+      $acc_lalu = $nilai_51['jml_lalu']+$nilai_52['jml_lalu']+$nilai_53['jml_lalu']+$nilai_57['jml_lalu'];
+      $acc_ini = $nilai_51['jumlah']+$nilai_52['jumlah']+$nilai_53['jumlah']+$nilai_57['jumlah'];
+      $acc_tot = $tot_nilai_51+$tot_nilai_52+$tot_nilai_53+$tot_nilai_57;
+      $acc_sisa_dana = $sisa_dana_57+$sisa_dana_53+$sisa_dana_52+$sisa_dana_51;
+
       $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$kdgiat' ");
       $arr_pb = $this->fetch_array($result_pb);
       $bpp = $arr_pb[bpp];
@@ -940,7 +967,7 @@
         $tot_sisa_dana+=$sisa_dana;
         echo '<tr>
                 <td style="border-left:1px solid; border-right:1px solid;" align="right"></td>
-                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="left">'.$data['kdakun'].'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="left">'."2016.003 - ".$data['kdakun'].'</td>
                 <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($pagu,2,",",".").'</td>
                 <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($spp_lalu,2,",",".").'</td>
                 <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($spp_ini,2,",",".").'</td>
@@ -1050,16 +1077,61 @@
 
       }
       
+      echo '<tr>
+                <td style="border-left:1px solid; border-right:1px solid;" align="right">II</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="center">Kegiatan & MAK</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right"></td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right"></td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right"></td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right"></td>
+                <td style="border-left:1px solid; border-right:1px solid;" align="right"></td>
+              </tr>';
+      echo '<tr>
+                <td style="border-left:1px solid; border-right:1px solid;" align="right"></td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="center">2016.51</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($pagu_51['jumlah'],2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($nilai_51['jml_lalu'],2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($nilai_51['jumlah'],2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($tot_nilai_51,2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" align="right">'.number_format($sisa_dana_51,2,",",".").'</td>
+              </tr>';
+      echo '<tr>
+                <td style="border-left:1px solid; border-right:1px solid;" align="right"></td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="center">2016.52</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($pagu_52['jumlah'],2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($nilai_52['jml_lalu'],2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($nilai_52['jumlah'],2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($tot_nilai_52,2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" align="right">'.number_format($sisa_dana_52,2,",",".").'</td>
+              </tr>';
+      echo '<tr>
+                <td style="border-left:1px solid; border-right:1px solid;" align="right"></td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="center">2016.53</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($pagu_53['jumlah'],2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($nilai_53['jml_lalu'],2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($nilai_53['jumlah'],2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($tot_nilai_53,2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" align="right">'.number_format($sisa_dana_53,2,",",".").'</td>
+              </tr>';
+      echo '<tr>
+                <td style="border-left:1px solid; border-right:1px solid;" align="right"></td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="center">2016.57</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($pagu_57['jumlah'],2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($nilai_57['jml_lalu'],2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($nilai_57['jumlah'],2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" colspan=2 align="right">'.number_format($tot_nilai_57,2,",",".").'</td>
+                <td style="border-left:1px solid; border-right:1px solid;" align="right">'.number_format($sisa_dana_57,2,",",".").'</td>
+              </tr>';
 
-      // echo '<tr>
-      //           <td style="border-left:1px solid; border:1px solid;" align="right"></td>
-      //           <td style="border-left:1px solid; border:1px solid;" colspan=2 align="center">JUMLAH II</td>
-      //           <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($tot_pagu,2,",",".").'</td>
-      //           <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($tot_spp_lalu,2,",",".").'</td>
-      //           <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($spp_ini_fix,2,",",".").'</td>
-      //           <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($acc_tot_spp,2,",",".").'</td>
-      //           <td style="border-left:1px solid; border:1px solid;" align="right">'.number_format($tot_sisa_dana,2,",",".").'</td>
-      //         </tr>';
+      echo '<tr>
+                <td style="border-left:1px solid; border:1px solid;" align="right"></td>
+                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="center">JUMLAH II</td>
+                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($acc_pagu,2,",",".").'</td>
+                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($acc_lalu,2,",",".").'</td>
+                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($acc_ini,2,",",".").'</td>
+                <td style="border-left:1px solid; border:1px solid;" colspan=2 align="right">'.number_format($acc_tot,2,",",".").'</td>
+                <td style="border-left:1px solid; border:1px solid;" align="right">'.number_format($acc_sisa_dana,2,",",".").'</td>
+              </tr>';
       echo  '<tr>
               <td style="border-top:1px solid; border-bottom:1px solid; border-left:1px solid; "  colspan=3>Uang Persediaan</td>
               <td style="border-left:1px solid; border-bottom:1px solid;" ></td>
