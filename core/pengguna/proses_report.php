@@ -2,8 +2,8 @@
 include 'config/application.php';
 // require_once __DIR__ . '/../../utility/PHPExcel/IOFactory.php';
 // require_once __DIR__ . '/../../utility/ExcelReader.php';
-require_once __DIR__ . '/../../utility/PHPExcel.php';
-    $object = new PHPExcel();
+require_once './utility/PHPExcel.php';
+require_once './utility/PHPExcel/IOFactory.php';
 
 $sess_id    = $_SESSION['user_id'];
 $direktorat = $_SESSION['direktorat'];
@@ -108,84 +108,12 @@ switch ($data[2]) {
     // echo $direktorat." ".$bulan;
     $report->rekap_total($direktorat, $bulan);
   break;
-  // case 'laporan':
-  //   // require_once 'Classes/PHPExcel.php';
-  //   // Create new PHPExcel object
-  //    
-  //   // Set properties
-  //   // $object->getProperties()->setCreator("Tempo")
-  //   //                ->setLastModifiedBy("Tempo")
-  //   //                ->setCategory("Approve by ");
-  //   // Add some data
-  //   $object->getActiveSheet()->getColumnDimension('A')->setWidth(50);
-  //   $object->getActiveSheet()->getColumnDimension('B')->setWidth(30);
-  //   $object->getActiveSheet()->getColumnDimension('C')->setWidth(30);
-  //   $object->getActiveSheet()->getColumnDimension('D')->setWidth(30);
-  //   $object->getActiveSheet()->getColumnDimension('E')->setWidth(30);
-  //   $object->getActiveSheet()->getColumnDimension('F')->setWidth(30);
-  //   $object->getActiveSheet()->mergeCells('A1:F1');
-  //   $object->getActiveSheet()->mergeCells('A2:F2');
-  //   $object->setActiveSheetIndex(0)
-  //               ->setCellValue('A1', 'Rekap Berita Approved by : '.$_GET['user'])
-  //               ->setCellValue('A4', 'Judul')
-  //               ->setCellValue('B4', 'Uploader')
-  //               ->setCellValue('C4', 'Approve Date')
-  //               ->setCellValue('D4', 'Delay Date')
-  //               ->setCellValue('E4', 'Drop Date')
-  //               ->setCellValue('F4', 'Post Edit Date');
-  //    
-  //   //add data
-  //   $counter=5;
-  //   $ex = $object->setActiveSheetIndex(0);
-  //   // while($d=mysql_fetch_array($q)){
-  //   //            
-  //   //           $time_approve='-';
-  //   //           $time_delay='-';
-  //   //           $time_drop='-';
-  //   //           $time_passed='-';
-  //   //            
-  //   //            
-  //   //           $status=$d['approved_status'];
-  //   //           $date=$d['date'];
-  //   //           if($status==1){
-  //   //             $time_approve=$date;
-  //   //           }
-  //   //           else if($status==2){
-  //   //             $time_delay=$date;
-  //   //           }
-  //   //           else if($status==3){
-  //   //             $time_drop=$date;
-  //   //           }
-  //   //           else if($status==4){
-  //   //             $time_passed=$date;
-  //   //           }
-  //   //           $ex->setCellValue("A".$counter,$d['judul']);
-  //   //           $ex->setCellValue("B".$counter,$d['sender']);
-  //   //           $ex->setCellValue("C".$counter,"$time_approve");
-  //   //           $ex->setCellValue("D".$counter,"$time_delay");
-  //   //           $ex->setCellValue("E".$counter,"$time_drop");
-  //   //           $ex->setCellValue("F".$counter,"$time_passed");
-  //   //           $counter=$counter+1;
-  //   //            
-  //   // }    
-  //    
-  //   // Rename sheet
-  //   $object->getActiveSheet()->setTitle('Detail_approve_');
-  //    
-  //    
-  //   // Set active sheet index to the first sheet, so Excel opens this as the first sheet
-  //   $object->setActiveSheetIndex(0);
-  //    
-  //    
-  //   // Redirect output to a client’s web browser (Excel2007)
-  //   header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-  //   header('Content-Disposition: attachment;filename="Detail_approve.xlsx"');
-  //   header('Cache-Control: max-age=0');
-  //    
-  //   $objWriter = PHPExcel_IOFactory::createWriter($object, 'Excel2007');
-  //   $objWriter->save();
-  //   exit;
-  //   break;
+  case 'serapan':
+    $direktorat = $purifier->purify($_POST['direktorat']);
+    $bulan = $purifier->purify($_POST['bulan']);
+    // echo $direktorat." ".$bulan;
+    $report->serapan($direktorat, $bulan);
+   break;
   default:
     
     echo $kdakun;
