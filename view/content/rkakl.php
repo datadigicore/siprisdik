@@ -225,9 +225,9 @@
       f.setAttribute('target','_blank');
       f.setAttribute('action','<?php echo $url_rewrite;?>process/rkakl/view');
       var i = document.createElement('input');
-      i.setAttribute('type','text');
+      i.setAttribute('type','hidden');
       i.setAttribute('name','filename');
-      i.setAttribute('value', tabrow.data()[7]);
+      i.setAttribute('value', tabrow.data()[6]);
       f.appendChild(i);
       document.body.appendChild(f);
       f.submit();

@@ -124,20 +124,28 @@ switch ($process) {
     ini_set('memory_limit', '-1');
     $filesave = $purifier->purify($_POST['filename']);
     $data = new Spreadsheet_Excel_Reader($path_upload.$filesave);
-    echo '<html>
-    <head>
-    <title>Sistem Informasi Pelaporan | Ristek Dikti</title>
-    <link rel="shortcut icon" type="image/png" href="'.$url_rewrite."static/dist/img/risetdikti.png".'"/>
-    <style>
-    table.excel {border-style:ridge;border-width:1;border-collapse:collapse;font-family:sans-serif;font-size:12px;}
-    table.excel thead th, table.excel tbody th {background:#CCCCCC;border-style:ridge;border-width:1;text-align: center;vertical-align:bottom;}
-    table.excel tbody th {text-align:center;width:20px;}
-    table.excel tbody td {vertical-align:bottom;}
-    table.excel tbody td {padding: 0 3px;border: 1px solid #EEEEEE;}
-    </style>
-    </head>
-    <body>'.$data->dump(true,true,1).'</body>
-    </html>';
+    if (empty($data->defaultColWidth)) {
+      echo '<script>
+              window.open("location", "_self", "");
+              window.close();
+            </script>';
+    }
+    else {
+      echo '<html>
+      <head>
+      <title>Sistem Informasi Pelaporan | Kemenpora</title>
+      <link rel="shortcut icon" type="image/png" href="'.$url_rewrite."static/dist/img/Kemenpora.png".'"/>
+      <style>
+      table.excel {border-style:ridge;border-width:1;border-collapse:collapse;font-family:sans-serif;font-size:12px;}
+      table.excel thead th, table.excel tbody th {background:#CCCCCC;border-style:ridge;border-width:1;text-align: center;vertical-align:bottom;}
+      table.excel tbody th {text-align:center;width:20px;}
+      table.excel tbody td {vertical-align:bottom;}
+      table.excel tbody td {padding: 0 3px;border: 1px solid #EEEEEE;}
+      </style>
+      </head>
+      <body>'.$data->dump(true,true,1).'</body>
+      </html>';
+    }
   break;
   default:
     $utility->location_goto(".");

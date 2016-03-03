@@ -399,7 +399,7 @@
                 <div class="form-group">
                   <label class="col-sm-3 control-label">Bulan</label>
                   <div class="col-sm-4">
-                    <select class="form-control" id="bulan" name="bulan" onchange="" >
+                    <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
                       <option value="01">Januari</option>
                       <option value="02">Februari</option>
                       <option value="03">Maret</option>
