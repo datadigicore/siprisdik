@@ -136,7 +136,7 @@ switch ($process) {
     table.excel tbody td {padding: 0 3px;border: 1px solid #EEEEEE;}
     </style>
     </head>
-    <body>'.$data->dump(true,true,1).'</body>
+    <body>'.$data->dump(true,true).'</body>
     </html>';
   break;
   default:

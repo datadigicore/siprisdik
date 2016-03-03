@@ -308,8 +308,8 @@
               <form class="form-horizontal" method="POST" action="<?php echo $url_rewrite;?>process/report/Rekap_Total">
               <div class="box-body well" style="padding-bottom:0;">
                  <div class="form-group">
+                  <div class="col-sm-12">
                   <label>Direktorat</label>
-                  <div class="col-sm-6">
                   <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
                       <?php if($_SESSION['level'] == 0){ ?>
                           <option value="">Semua Direktorat</option>
@@ -333,9 +333,9 @@
                   </div>
                 </div>
                 <div class="form-group">
+                  <div class="col-sm-12">
                   <label>Bulan</label>
-                  <div class="col-sm-6">
-                    <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
+                  <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
                       <option value="01">Januari</option>
                       <option value="02">Februari</option>
                       <option value="03">Maret</option>
