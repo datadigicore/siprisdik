@@ -1,6 +1,5 @@
 RewriteEngine on
-
- Rewriterule ^content/?      \/siprisdik/isi.php
- Rewriterule ^process/?      \/siprisdik/aksi.php
- Rewriterule ^login/?      \/siprisdik/core/login_proses.php
- Rewriterule ^signout/?      \/siprisdik/logout.php
+ Rewriterule ^content/?      \/dikti/isi.php
+ Rewriterule ^process/?      \/dikti/aksi.php
+ Rewriterule ^login/?      \/dikti/core/login_proses.php
+ Rewriterule ^signout/?      \/dikti/logout.php

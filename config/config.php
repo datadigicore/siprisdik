@@ -13,22 +13,22 @@
   $secretkey      = "sipdikti";
   $TITLE          = "Sistem Informasi Pelaporan";
   $domain         = "localhost";
-  $url_rewrite    = "http://localhost/siprisdik/";
-  $REQUEST        = "siprisdik/content";
-  $PROSES_REQUEST = "siprisdik/process";
+  $url_rewrite    = "http://202.125.94.116/dikti/";
+  $REQUEST        = "dikti/content";
+  $PROSES_REQUEST = "dikti/process";
   // $path           = "C:/xampp/htdocs/siprisdik/";
-  $path           = "/opt/lampp/htdocs/siprisdik/";
+  $path           = "/srv/www/htdocs/dikti/";
   // $path           = "/Applications/XAMPP/htdocs/siprisdik/";
   // $path_upload    = "C:/xampp/htdocs/siprisdik/static/uploads/";
-  $path_upload    = "/opt/lampp/htdocs/siprisdik/static/uploads/";
+  $path_upload    = "/srv/www/htdocs/dikti/static/uploads/";
   // $path_upload    = "/Applications/XAMPP/htdocs/siprisdik/static/uploads/";
 
   class config {
     public $db_host              = "localhost";
-    public $db_user              = "root";
-    public $db_pass              = "";
-    public $database             = "rkakl";
-    public $url_rewrite_class    = "http://localhost/siprisdik";
+    public $db_user              = "dikti";
+    public $db_pass              = "dikti123";
+    public $database             = "dikti_keuangan";
+    public $url_rewrite_class    = "http://202.125.94.116/dikti";
     public $session_expired_time = "7200";
     public $hashing_number       = "d1kt1w4rr10r5";
     public $debug                = 1;
