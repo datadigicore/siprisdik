@@ -53,18 +53,18 @@
               <?php }?>
             </div>
             <div id="perjalanan">
-              <?php for ($i=0; $i < count($getjalan); $i++) {  ?>
+              <?php if ($getrab->alat_trans != "" || $getrab->kota_asal != "") { ?>
               <div class="col-xs-12 well">
                 <h3 class="box-title" style="margin-top:6px;">Perincian</h3>
                       <input type="hidden" name="perjalanan" value="true">
-                      <table class="col-xs-12">
+                      <table>
                       <tr>
                       <td>
                       <label>Alat Transportasi</label>
                       </td>
                       <td>&nbsp;:&nbsp;</td>
                       <td>
-                      <input style="margin:5px auto" type="text" class="form-control" id="alat_trans[]" name="alat_trans[]" placeholder="Alat Transportasi" value="<?php echo $getjalan[$i]->alat_trans?>" readonly>
+                      <input style="margin:5px auto" type="text" class="form-control" id="alat_trans[]" name="alat_trans[]" placeholder="Alat Transportasi" value="<?php echo $getrab->alat_trans?>" readonly>
                       </td>
                       </tr>
 
@@ -74,7 +74,7 @@
                       </td>
                       <td>&nbsp;:&nbsp;</td>
                       <td>
-                      <input style="margin:5px auto" type="text" class="form-control" id="rute[]" name="rute[]" placeholder="Rute" value="<?php echo $getjalan[$i]->rute?>" readonly>
+                      <input style="margin:5px auto" type="text" class="form-control" id="rute[]" name="rute[]" placeholder="Rute" value="<?php echo $getrab->rute?>" readonly>
                       </td>
                       <td>&nbsp;</td>
                       <td>
@@ -82,7 +82,7 @@
                       </td>
                       <td>&nbsp;:&nbsp;</td>
                       <td>
-                      <input style="margin:5px auto" type="text" class="form-control" id="tiket[]" name="tiket[]" placeholder="0.00"  value="<?php echo $getjalan[$i]->harga_tiket?>" readonly>
+                      <input style="margin:5px auto" type="text" class="form-control uang" id="tiket[]" name="tiket[]" placeholder="0.00"  value="<?php echo $getrab->harga_tiket?>" readonly>
                       </td>
                       </tr>
 
@@ -92,7 +92,7 @@
                       </td>
                       <td>&nbsp;:&nbsp;</td>
                       <td>
-                      <input style="margin:5px auto" type="text" class="form-control" id="kota_asal[]" name="kota_asal[]" placeholder="Kota Asal" value="<?php echo $getjalan[$i]->kota_asal;?>" readonly>
+                      <input style="margin:5px auto" type="text" class="form-control" id="kota_asal[]" name="kota_asal[]" placeholder="Kota Asal" value="<?php echo $getrab->kota_asal;?>" readonly>
                       </td>
                       <td>&nbsp;</td>
                       <td>
@@ -100,7 +100,7 @@
                       </td>
                       <td>&nbsp;:&nbsp;</td>
                       <td>
-                      <input style="margin:5px auto" type="text" class="form-control" id="kota_tujuan[]" name="kota_tujuan[]" placeholder="Kota Tujuan" value="<?php echo $getjalan[$i]->kota_tujuan;?>" readonly>
+                      <input style="margin:5px auto" type="text" class="form-control" id="kota_tujuan[]" name="kota_tujuan[]" placeholder="Kota Tujuan" value="<?php echo $getrab->kota_tujuan;?>" readonly>
                       </td>
                       </tr>
 
@@ -110,7 +110,7 @@
                       </td>
                       <td>&nbsp;:&nbsp;</td>
                       <td>
-                      <input style="margin:5px auto" type="text" class="form-control" id="taxi_asal[]" name="taxi_asal[]" placeholder="0.00" value="<?php echo $getjalan[$i]->taxi_asal;?>" readonly>
+                      <input style="margin:5px auto" type="text" class="form-control uang" id="taxi_asal[]" name="taxi_asal[]" placeholder="0.00" value="<?php echo $getrab->taxi_asal;?>" readonly>
                       </td>
                       <td>&nbsp;</td>
                       <td>
@@ -118,7 +118,7 @@
                       </td>
                       <td>&nbsp;:&nbsp;</td>
                       <td>
-                      <input style="margin:5px auto" type="text" class="form-control" id="taxi_tujuan[]" name="taxi_tujuan[]" placeholder="0.00" value="<?php echo $getjalan[$i]->taxi_tujuan;?>" readonly>
+                      <input style="margin:5px auto" type="text" class="form-control uang" id="taxi_tujuan[]" name="taxi_tujuan[]" placeholder="0.00" value="<?php echo $getrab->taxi_tujuan;?>" readonly>
                       </td>
                       </tr>
                       
@@ -129,7 +129,7 @@
                       <td>&nbsp;:&nbsp;</td>
                       <td>
                       <div style="margin:5px auto" class="input-group">
-                          <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_mulai[]" name="tgl_mulai[]" placeholder="dd/mm/yyyy" value="<?php echo date('d/m/Y', strtotime($getjalan[$i]->tgl_mulai) );?>" readonly>
+                          <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_mulai[]" name="tgl_mulai[]" placeholder="dd/mm/yyyy" value="<?php echo date('d/m/Y', strtotime($getrab->tgl_mulai) );?>" readonly>
                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                       </div>
                       </td>
@@ -142,7 +142,7 @@
                       <td>&nbsp;:&nbsp;</td>
                       <td>
                       <div class="input-group">
-                           <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_akhir[]" name="tgl_akhir[]" placeholder="dd/mm/yyyy" value="<?php echo date('d/m/Y', strtotime($getjalan[$i]->tgl_akhir) );?>"  readonly>
+                           <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_akhir[]" name="tgl_akhir[]" placeholder="dd/mm/yyyy" value="<?php echo date('d/m/Y', strtotime($getrab->tgl_akhir) );?>"  readonly>
                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                       </div>
                       </td>
@@ -154,7 +154,7 @@
                       </td>
                       <td>&nbsp;:&nbsp;</td>
                       <td>
-                      <input style="margin:5px auto" type="text" class="form-control" id="lama_hari[]" name="lama_hari[]" placeholder="0" value="<?php echo $getjalan[$i]->lama_hari;?>" readonly>
+                      <input style="margin:5px auto" type="text" class="form-control nomor" id="lama_hari[]" name="lama_hari[]" placeholder="0" value="<?php echo $getrab->lama_hari;?>" readonly>
                       </td>
                       <td>&nbsp;</td>
                       <td>
@@ -162,7 +162,7 @@
                       </td>
                       <td>&nbsp;:&nbsp;</td>
                       <td>
-                      <input style="margin:5px auto" type="text" class="form-control" id="uang_harian[]" name="uang_harian[]" placeholder="0.00" value="<?php echo $getjalan[$i]->uang_harian;?>" readonly>
+                      <input style="margin:5px auto" type="text" class="form-control uang" id="uang_harian[]" name="uang_harian[]" placeholder="0.00" value="<?php echo $getrab->uang_harian;?>" readonly>
                       </td>
                       </tr>
                   </table>
@@ -199,3 +199,11 @@
   <?php }?>
   </section>
 </div>
+
+<script>
+  $(function (){
+    $('.tanggal').mask('00/00/0000');
+    $('.uang').mask('000.000.000.000.000.000.000,00', {reverse: true});
+    $('.nomor').mask('0000');
+  });  
+</script>

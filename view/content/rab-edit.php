@@ -73,12 +73,20 @@
                 <textarea rows="5" type="text" class="form-control" id="uraian" name="uraian" placeholder="Uraian Acara" style="resize:none;" required><?php echo $getview['deskripsi'];?></textarea>
               </div>
               <div class="form-group">
-                <label>Tanggal</label>
-                <input class="form-control" type="text" id="tanggal" name="tanggal" value="<?php echo date('d/m/Y',strtotime($getview['tanggal']));?>" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" />
+                <label>Tanggal Awal</label>
+                <input class="form-control tanggal" type="text" id="tanggal" name="tanggal" value="<?php echo date('d/m/Y',strtotime($getview['tanggal']));?>" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" />
               </div>
               <div class="form-group">
-                <label>Lokasi Kegiatan</label>
-                <input type="text" class="form-control" id="lokasi" name="lokasi" value="<?php echo $getview['lokasi'];?>" placeholder="Lokasi Kegiatan" required />
+                <label>Tanggal Akhir</label>
+                <input class="form-control tanggal" type="text" id="tanggal_akhir" name="tanggal_akhir" value="<?php echo date('d/m/Y',strtotime($getview['tanggal_akhir']));?>" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" />
+              </div>
+              <div class="form-group">
+                <label>Tempat Kegiatan</label>
+                <input type="text" class="form-control" id="tempat" name="tempat" value="<?php echo $getview['tempat'];?>" placeholder="Tempat Kegiatan" required />
+              </div>
+              <div class="form-group">
+                <label>Kota</label>
+                <input type="text" class="form-control" id="lokasi" name="lokasi" value="<?php echo $getview['lokasi'];?>" placeholder="Kota" required />
               </div>
               
             </div>
@@ -95,12 +103,7 @@
 <script>
 $(function() {
     $('#tahun').val('<?php echo $getview["thang"]; ?>');
-    $("#tanggal").datepicker({ 
-      changeMonth: true,
-      changeYear: true,
-      format: 'dd/mm/yyyy' 
-    });
-    $("#tanggal").datepicker({ 
+    $(".tanggal").datepicker({ 
       changeMonth: true,
       changeYear: true,
       format: 'dd/mm/yyyy' 

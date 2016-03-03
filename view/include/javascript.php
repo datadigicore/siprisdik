@@ -38,3 +38,6 @@
   <script src="<?php echo $url_rewrite;?>static/plugins/show-pass/bootstrap-show-password.min.js"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="<?php echo $url_rewrite;?>static/dist/js/demo.js"></script>
+  <!-- jQuery Mask -->
+  <script src="<?php echo $url_rewrite;?>static/dist/js/jquery.mask.js"></script>
+  <script src="<?php echo $url_rewrite;?>static/dist/js/jquery.mask.min.js"></script>

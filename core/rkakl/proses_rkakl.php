@@ -6,6 +6,12 @@ switch ($process) {
   case 'import':
     $thang = $purifier->purify($_POST['thang']);
     $revisi = $purifier->purify($_POST['revisi']);
+    
+    $tanggal = $purifier->purify($_POST['tanggal']);
+    $pecahtgl = explode("/", $tanggal);
+    $tanggal = $pecahtgl[2].'-'.$pecahtgl[1].'-'.$pecahtgl[0];
+
+    $no_dipa = $purifier->purify($_POST['no_dipa']);
     $result = $rkakl->checkThang($thang);
     if ($result->num_rows == 0 || $revisi == 'true') {
       if(isset($_POST) && !empty($_FILES['fileimport']['name'])) {
@@ -29,17 +35,24 @@ switch ($process) {
             }
             $allDataInSheet = $objPHPExcel->getActiveSheet()->toArray(NULL,TRUE,FALSE,TRUE);
             $data_insert = array(
-              "tanggal"    => date("Y-m-d H:i:s",$time),
+              "tanggal"    => $tanggal,
+              "no_dipa"   => $no_dipa,
               "filename"   => $path,
               "filesave"   => $target_name,
               "keterangan" => $purifier->purify($_POST['keterangan']),
               "tahun"      => $purifier->purify($_POST['thang'])
             );
+
             if ($thang == date("Y")+1) {
               $data_insert["status"] = 2;
             }
             else {
               $data_insert["status"] = 1;
+            }
+
+            //pesan revisi
+            if (isset($_POST['pesan'])) {
+              $data_insert['pesan'] = $_POST['pesan'];
             }
             $rkakl->clearRkakl($thang);
             $rkakl->insertRkakl($data_insert);
@@ -62,25 +75,26 @@ switch ($process) {
     $key   = "id";
     $column = array(
       array( 'db' => 'id',      'dt' => 0 ),
-      array( 'db' => 'tanggal',  'dt' => 1, 'formatter' => function( $d, $row ) {
-            return date( 'j-M-Y \&\n\b\s\p\&\n\b\s\p\&\n\b\s\p H:i', strtotime($d));
+      array( 'db' => 'tahun',   'dt' => 1 ),
+      array( 'db' => 'tanggal',  'dt' => 2, 'formatter' => function( $d, $row ) {
+            return date( 'j-M-Y', strtotime($d));
           }
       ),
-      array( 'db' => 'filename',  'dt' => 2),
-      array( 'db' => 'keterangan',  'dt' => 3 ),
-      array( 'db' => 'tahun',   'dt' => 4 ),
-      array( 'db' => 'status', 'dt' => 5, 'formatter' => function($d,$row){ 
+      array( 'db' => 'no_dipa',  'dt' => 3),
+      // array( 'db' => 'filename',  'dt' => 4),
+      // array( 'db' => 'keterangan',  'dt' => 4 ),
+      array( 'db' => 'status', 'dt' => 4, 'formatter' => function($d,$row){ 
         if($d==1){
-          return '<i>Digunakan</i> - Revisi '.$row[8];
+          return '<i>Digunakan</i> - Revisi '.$row[7];
         }
         if($d==2){
-          return '<i>Disusun</i> - Revisi '.$row[8];
+          return '<i>Disusun</i> - Revisi '.$row[7];
         }
         else {
-          return '<i>Direvisi</i> - Revisi '.$row[8];
+          return '<i>Direvisi</i> - Revisi '.$row[7];
         }
       }),
-      array( 'db' => 'status',  'dt' => 6, 'formatter' => function($d,$row){ 
+      array( 'db' => 'status',  'dt' => 5, 'formatter' => function($d,$row){ 
         if($d==1){
           return  '<div class="text-center">'.
                     '<a style="margin:0 2px;" id="btn-viw" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View</a>'.
@@ -96,11 +110,13 @@ switch ($process) {
         else{
           return  '<div class="text-center">'.
                     '<a style="margin:0 2px;" id="btn-viw" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View</a>'.
+                    '<a style="margin:0 2px;" id="btn-pesan" href="#lihatpesan" class="btn btn-flat btn-warning btn-sm" data-toggle="modal"><i class="fa fa-envelope"></i> Pesan</a>'.
                   '</div>';
         }
       }),
-      array( 'db' => 'filesave',  'dt' => 7),
-      array( 'db' => 'versi',  'dt' => 8),
+      array( 'db' => 'filesave',  'dt' => 6),
+      array( 'db' => 'versi',  'dt' => 7),
+      array( 'db' => 'pesan',  'dt' => 8),
     );
     $datatable->get_rkakl_view($table, $key, $column);
   break;

@@ -62,12 +62,12 @@
               <thead style="background-color:#11245B;color:white;">
                 <tr>
                   <th>No</th>
-                  <th>Nama</th>
+                  <th>Penerima</th>
                   <th>Keterangan</th>
-                  <th>NPWP</th>
+                  <!-- <th>NPWP</th>
                   <th>Golongan </th>
                   <th>PNS</th>
-                  <th>Jabatan</th>
+                  <th>Jabatan</th> -->
                   <th>Kode Akun</th>
                   <th>Total Dana RAB</th>
                   <th>Status</th>
