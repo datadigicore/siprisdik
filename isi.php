@@ -71,7 +71,7 @@ else {
           if ($data[2] == 'detail') {
             $id_rabfull = $data[3];
             $getrab = $mdl_rab->getrabfull($id_rabfull);
-            $getjalan = $mdl_rab->getjalanbyidrab($id_rabfull);
+            // $getjalan = $mdl_rab->getjalanbyidrab($id_rabfull);
             $datarkakl = $mdl_rab->getrkaklfull2($getrab);
             include ('view/content/rab-add-detail.php');
           } else{
@@ -152,13 +152,11 @@ else {
           if ($data[2] == 'detail') {
             $id_rabfull = $data[3];
             $getrab = $mdl_rab->getrabfull($id_rabfull);
-            $getjalan = $mdl_rab->getjalanbyidrab($id_rabfull);
             $datarkakl = $mdl_rab->getrkaklfull2($getrab);
             include ('view/content/rab-add-detail.php');
           } else if ($data[2] == 'edit') {
             $id_rabfull = $data[3];
             $getrab = $mdl_rab->getrabfull($id_rabfull);
-            $getjalan = $mdl_rab->getjalanbyidrab($id_rabfull);
             $datarkakl = $mdl_rab->getrkaklfull2($getrab);
             include ('view/content/rab-add-edit.php');
           } else{

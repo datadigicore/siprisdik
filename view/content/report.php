@@ -13,121 +13,145 @@
     <div class="row">
       <div class="col-md-12 col-xs-12">
         <div class="nav-tabs-custom">
-          <ul class="nav nav-tabs nav-justified">
-            <!-- <li class="dropdown active">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                Macam-macam Kuitansi <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu" style="background:white;">
-                <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="false">Kuitansi Honor & Uang Saku</a></li>
-                <li><a href="#tab_2" data-toggle="tab" aria-expanded="false">Kuitansi Rincian Perjalanan Dinas</a></li>
-                <li><a href="#tab_3" data-toggle="tab" aria-expanded="true">Kuitansi SPPD Perjalanan Dinas</a></li>
-                <li><a href="#tab_4" data-toggle="tab" aria-expanded="true">Kuitansi Transport Lokal</a></li>
-              </ul>
-            </li> -->
-            <li class="active"><a href="#tab_7" data-toggle="tab" aria-expanded="true">Surat Perintah Pembayaran</a></li>
-            <li><a href="#tab_5" data-toggle="tab" aria-expanded="true">Rincian Permintaan Pengeluaran</a></li>
-            <li><a href="#tab_6" data-toggle="tab" aria-expanded="true">Surat Pertanggung Jawaban Belanja</a></li>
+          <ul class="nav nav-pills nav-justified">
+
+            <li class="active"><a href="#tab_6" data-toggle="tab" aria-expanded="true"><b>Surat Pertanggung Jawaban Belanja</b></a></li>
+            <li><a href="#tab_5" data-toggle="tab" aria-expanded="true"><b>Rincian Permintaan Pengeluaran</b></a></li>
+            <li ><a href="#tab_7" data-toggle="tab" aria-expanded="true"><b>Surat Perintah <br>Pembayaran</b></a></li>
+            <li ><a href="#tab_8" data-toggle="tab" aria-expanded="true"><b>Realisasi Daya Serap Per kegiatan</b></a></li>
+            <li ><a href="#tab_9" data-toggle="tab" aria-expanded="true"><b>Rekap Realisasi Daya Serap Per kegiatan</b></a></li>
+            <li ><a href="#tab_10" data-toggle="tab" aria-expanded="true"><b>Rekap Total Realisasi Daya Serap</b></a></li>
+            
+            
           </ul>
           <div class="tab-content" style="padding:5px 0 0 0;">
-            <div class="tab-pane" id="tab_1">
-              <form method="POST" action="<?php echo $url_rewrite;?>process/report/Kuitansi_Honor_Uang_Saku">
-              <div class="box-body" style="padding-bottom:0;">
-                <div class="form-group">
-                  <input type="text" name="tgl_awal" class="form-control" id="tgl_awal" placeholder="Tanggal Awal">
-                </div>
-                <div class="form-group">
-                  <input type="text" name="tgl_akhir" class="form-control" id="tgl_akhir" placeholder="Tanggal Akhir" >
-                </div>
-              </div>
-              <div class="box-footer">
-                <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>
-              </div>        
-              </form>
-            </div>
-            <div class="tab-pane" id="tab_2">
-              <form method="POST" action="<?php echo $url_rewrite;?>process/report/Rincian_Biaya_PD">
-              <div class="box-body" style="padding-bottom:0;">
-                <div class="form-group">
-                  <input type="text" name="tgl_awal" class="form-control" id="tgl_awal" placeholder="Tanggal Awal">
-                </div>
-                <div class="form-group">
-                  <input type="text" name="tgl_akhir" class="form-control" id="tgl_akhir" placeholder="Tanggal Akhir" >
-                </div>
-              </div>
-              <div class="box-footer">
-                <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>
-              </div>
-              </form>
-            </div>
-            <div class="tab-pane" id="tab_3">
-              <form method="POST" action="<?php echo $url_rewrite;?>process/report/SPPD">
-              <div class="box-body" style="padding-bottom:0;">
-                <div class="form-group">
-                  <input type="text" name="tgl_awal" class="form-control" id="tgl_awal" placeholder="Tanggal Awal">
-                </div>
-                <div class="form-group">
-                  <input type="text" name="tgl_akhir" class="form-control" id="tgl_akhir" placeholder="Tanggal Akhir" >
-                </div>
-              </div>
-              <div class="box-footer">
-                <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>
-              </div>        
-              </form>
-            </div>
-            <div class="tab-pane" id="tab_4">
-              <form method="POST" action="<?php echo $url_rewrite;?>process/report/Kuitansi_Honorarium">
-              <div class="box-body" style="padding-bottom:0;">
-                <div class="form-group">
-                  <input type="text" name="tgl_awal" class="form-control" id="tgl_awal" placeholder="Tanggal Awal">
-                </div>
-                <div class="form-group">
-                  <input type="text" name="tgl_akhir" class="form-control" id="tgl_akhir" placeholder="Tanggal Akhir" >
-                </div>
-              </div>
-              <div class="box-footer">
-                <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>
-              </div>        
-              </form>
-            </div>
             <div class="tab-pane" id="tab_5">
-              <form method="POST" action="<?php echo $url_rewrite;?>process/report/Rincian_Permintaan_Pengeluaran">
-              <div class="box-body" style="padding-bottom:0;">
+              <form class="form-horizontal" method="POST" action="<?php echo $url_rewrite;?>process/report/Rincian_Permintaan_Pengeluaran">
+              <div class="box-body well" style="padding-bottom:0;">
                 <div class="form-group">
-                  <label>Pilih Kode MAK</label>
+                  <label class="col-sm-3 control-label">Direktorat</label>
+                  <div class="col-sm-4">
+                  <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
+                    <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                        <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
+                    <?php } ?>
+                    <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                        <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
+                    <?php } ?>
+                    <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                        <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
+                    <?php } ?>
+                    <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                          <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
+                    <?php } ?>
+                    <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                          <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
+                    <?php } ?>
+                  </select>
+                  </div>
+                  <div class="col-sm-5">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Pilih Kode MAK</label>
+                  <div class="col-sm-4">
                   <select style="margin:5px auto" class="form-control" id="kode-mak" name="kode-mak" onchange="" >
                       <option value="51" >51 Belanja Pegawai</option>
                       <option value="52" >52 Belanja Barang</option>
                       <option value="53" >53 Belanja Modal</option>
                   </select>
+                  </div>
+                  <div class="col-sm-5">
+                  </div>
                 </div>
 
-                <!-- <div class="form-group">
-                  <input type="text" name="tgl_awal" class="form-control" id="tgl_awal" placeholder="Tanggal Awal">
-                </div>
                 <div class="form-group">
-                  <input type="text" name="tgl_akhir" class="form-control" id="tgl_akhir" placeholder="Tanggal Akhir" >
-                </div> -->
+                  <label class="col-sm-3 control-label">Bulan</label>
+                  <div class="col-sm-4">
+                    <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
+                      <option value="01-Januari">Januari</option>
+                      <option value="02-Februari">Februari</option>
+                      <option value="03-Maret">Maret</option>
+                      <option value="04-April">April</option>
+                      <option value="05-Mei">Mei</option>
+                      <option value="06-Juni">Juni</option>
+                      <option value="07-Juli">Juli</option>
+                      <option value="08-Agustus">Agustus</option>
+                      <option value="09-September">September</option>
+                      <option value="10-Oktober">Oktober</option>
+                      <option value="11-November">November</option>
+                      <option value="12-Desember">Desember</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-5">
+                  </div>
+                </div>
               </div>
               <div class="box-footer">
-                <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>
+                <button type="submit" class="btn btn-flat btn-success pull-left"><i class="fa fa-print"></i> Cetak</button>
               </div>        
               </form>
             </div>
-            <div class="tab-pane" id="tab_6">
-              <form method="POST" action="<?php echo $url_rewrite;?>process/report/SPTB">
-              <div class="box-body" style="padding-bottom:0;">
-<!--                 <div class="form-group">
-                  <input type="text" name="tgl_awal" class="form-control" id="tgl_awal" placeholder="Tanggal Awal">
+            <div class="tab-pane  active" id="tab_6">
+              <form class="form-horizontal" method="POST" action="<?php echo $url_rewrite;?>process/report/SPTB">
+              <div class="box-body well" style="padding-bottom:0;">
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Direktorat</label>
+                  <div class="col-sm-4">
+                  <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
+                      <?php if($_SESSION['level'] == 0){ ?>
+                          <option value="">Semua Direktorat</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                          <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                          <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                          <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                            <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                            <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
+                      <?php } ?>
+                  </select>
+                  </div>
+                  <div class="col-sm-5">
+                  </div>
                 </div>
                 <div class="form-group">
-                  <input type="text" name="tgl_akhir" class="form-control" id="tgl_akhir" placeholder="Tanggal Akhir" >
-                </div> -->
+                  <label class="col-sm-3 control-label">Bulan</label>
+                  <div class="col-sm-4">
+                    <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
+                      <option value="01">Januari</option>
+                      <option value="02">Februari</option>
+                      <option value="03">Maret</option>
+                      <option value="04">April</option>
+                      <option value="05">Mei</option>
+                      <option value="06">Juni</option>
+                      <option value="07">Juli</option>
+                      <option value="08">Agustus</option>
+                      <option value="09">September</option>
+                      <option value="10">Oktober</option>
+                      <option value="11">November</option>
+                      <option value="12">Desember</option>
+                    </select>
+                </div>
+                <div class="col-sm-5">
+                </div>
+                </div>
                 <div class="form-group">
-                  <label>Kode Akun</label>
+                  <label class="col-sm-3 control-label">Kode Akun</label>
+                  <div class="col-sm-4">
                   <select style="margin:5px auto" class="form-control" id="kode-akun" name="kode-akun" onchange="" >
                                           
                   </select>
+                </div>
+                <div class="col-sm-5">
+                </div>
                 </div>
               </div>
               <!-- <div class="box-body">
@@ -140,28 +164,261 @@
                       </div>
                     </div> -->
               <div class="box-footer">
-                <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>
+                <button type="submit" class="btn btn-flat btn-success pull-left"><i class="fa fa-print"></i> Cetak</button>
               </div>        
               </form>
             </div>
-            <div class="tab-pane active" id="tab_7">
-              <form method="POST" action="<?php echo $url_rewrite;?>process/report/SPP">
-              <div class="box-body" style="padding-bottom:0;">
+            <div class="tab-pane" id="tab_7">
+              <form class="form-horizontal" method="POST" action="<?php echo $url_rewrite;?>process/report/SPP">
+              <div class="box-body well" style="padding-bottom:0;">
                 <div class="form-group">
-                  <label>Tanggal</label>
+                  <label class="col-sm-3 control-label">Tanggal</label>
+                  <div class="col-sm-4">
                   <input type="text" name="tanggal" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tanggal" placeholder="dd/mm/yyyy">
                 </div>
-                <div class="form-group">
-                  <label>Nomor</label>
-                  <input type="text" name="nomor" class="form-control" id="nomor" placeholder="Nomor">
+                <div class="col-sm-5">
                 </div>
-
-                <!--<div class="form-group">
-                  <input type="text" name="tgl_akhir" class="form-control" id="tgl_akhir" placeholder="Tanggal Akhir" >
-                </div> -->
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Nomor</label>
+                  <div class="col-sm-4">
+                  <input type="text" name="nomor" class="form-control" id="nomor" placeholder="Nomor">
+                  </div>
+                  <div class="col-sm-5">
+                  </div>
+                </div>
+                 <div class="form-group">
+                  <label class="col-sm-3 control-label">Direktorat</label>
+                  <div class="col-sm-4">
+                  <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
+                      <?php if($_SESSION['level'] == 0){ ?>
+                          <option value="">Semua Direktorat</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                          <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                          <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                          <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                            <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                            <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
+                      <?php } ?>
+                  </select>
+                </div>
+                <div class="col-sm-5">
+                </div>
+                </div>
+                <div class="form-group">
+                <label class="col-sm-3 control-label">Pilih Kode MAK</label>
+                  <div class="col-sm-4">
+                  <select style="margin:5px auto" class="form-control" id="kode-mak" name="kode-mak" onchange="" >
+                      <option value="51" >51 Belanja Pegawai</option>
+                      <option value="52" >52 Belanja Barang</option>
+                      <option value="53" >53 Belanja Modal</option>
+                  </select>
+                </div>
+                <div class="col-sm-5">
+                </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Bulan</label>
+                  <div class="col-sm-4">
+                    <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
+                      <option value="01">Januari</option>
+                      <option value="02">Februari</option>
+                      <option value="03">Maret</option>
+                      <option value="04">April</option>
+                      <option value="05">Mei</option>
+                      <option value="06">Juni</option>
+                      <option value="07">Juli</option>
+                      <option value="08">Agustus</option>
+                      <option value="09">September</option>
+                      <option value="10">Oktober</option>
+                      <option value="11">November</option>
+                      <option value="12">Desember</option>
+                    </select>
+                </div>       
+                <div class="col-sm-5">        
+                </div>               
+                </div>               
               </div>
               <div class="box-footer">
-                <button type="submit" class="btn btn-flat btn-success pull-right">Cetak</button>
+                <button type="submit" class="btn btn-flat btn-success pull-left"><i class="fa fa-print"></i> Cetak</button>
+              </div>        
+              </form>
+            </div>
+            <div class="tab-pane" id="tab_8">
+              <form class="form-horizontal" method="POST" action="<?php echo $url_rewrite;?>process/report/Daya_Serap">
+              <div class="box-body well" style="padding-bottom:0;">
+                 <div class="form-group">
+                  <label class="col-sm-3 control-label">Direktorat</label>
+                  <div class="col-sm-4">
+                  <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
+                      <?php if($_SESSION['level'] == 0){ ?>
+                          <!-- <option value="">Semua Direktorat</option> -->
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                          <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                          <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                          <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                            <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                            <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
+                      <?php } ?>
+                  </select>
+                </div>
+                <div class="col-sm-5">
+                </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Bulan</label>
+                  <div class="col-sm-4">
+                    <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
+                      <option value="01">Januari</option>
+                      <option value="02">Februari</option>
+                      <option value="03">Maret</option>
+                      <option value="04">April</option>
+                      <option value="05">Mei</option>
+                      <option value="06">Juni</option>
+                      <option value="07">Juli</option>
+                      <option value="08">Agustus</option>
+                      <option value="09">September</option>
+                      <option value="10">Oktober</option>
+                      <option value="11">November</option>
+                      <option value="12">Desember</option>
+                    </select>
+                </div>
+                <div class="col-sm-5">               
+                </div>               
+                </div>               
+              </div>
+              <div class="box-footer">
+                <button type="submit" class="btn btn-flat btn-success pull-left"><i class="fa fa-print"></i> Cetak</button>
+              </div>        
+              </form>
+            </div>
+            <div class="tab-pane" id="tab_9">
+              <form class="form-horizontal" method="POST" action="<?php echo $url_rewrite;?>process/report/Rekap_Daya_Serap">
+              <div class="box-body well" style="padding-bottom:0;">
+                 <div class="form-group">
+                  <label class="col-sm-3 control-label">Direktorat</label>
+                  <div class="col-sm-4">
+                  <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
+                      <?php if($_SESSION['level'] == 0){ ?>
+                          <option value="">Semua Direktorat</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                          <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                          <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                          <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                            <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                            <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
+                      <?php } ?>
+                  </select>
+                </div>
+                <div class="col-sm-5">
+                </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Bulan</label>
+                  <div class="col-sm-4">
+                    <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
+                      <option value="01">Januari</option>
+                      <option value="02">Februari</option>
+                      <option value="03">Maret</option>
+                      <option value="04">April</option>
+                      <option value="05">Mei</option>
+                      <option value="06">Juni</option>
+                      <option value="07">Juli</option>
+                      <option value="08">Agustus</option>
+                      <option value="09">September</option>
+                      <option value="10">Oktober</option>
+                      <option value="11">November</option>
+                      <option value="12">Desember</option>
+                    </select>
+                </div>
+                <div class="col-sm-5">               
+                </div>               
+                </div>               
+              </div>
+              <div class="box-footer">
+                <button type="submit" class="btn btn-flat btn-success pull-left"><i class="fa fa-print"></i> Cetak</button>
+              </div>        
+              </form>
+            </div>
+            <div class="tab-pane" id="tab_10">
+              <form class="form-horizontal" method="POST" action="<?php echo $url_rewrite;?>process/report/serapan">
+              <div class="box-body well" style="padding-bottom:0;">
+                 <div class="form-group">
+                  <label class="col-sm-3 control-label">Direktorat</label>
+                  <div class="col-sm-4">
+                  <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
+                      <?php if($_SESSION['level'] == 0){ ?>
+                          <option value="">Semua Direktorat</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                          <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                          <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                          <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                            <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                            <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
+                      <?php } ?>
+                  </select>
+                  </div>
+                  <div class="col-sm-5"></div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Bulan</label>
+                  <div class="col-sm-4">
+                    <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
+                      <option value="01">Januari</option>
+                      <option value="02">Februari</option>
+                      <option value="03">Maret</option>
+                      <option value="04">April</option>
+                      <option value="05">Mei</option>
+                      <option value="06">Juni</option>
+                      <option value="07">Juli</option>
+                      <option value="08">Agustus</option>
+                      <option value="09">September</option>
+                      <option value="10">Oktober</option>
+                      <option value="11">November</option>
+                      <option value="12">Desember</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-5"></div>
+                </div>               
+              </div>
+              <div class="box-footer">
+                <button type="submit" class="btn btn-flat btn-success pull-left"><i class="fa fa-print"></i> Cetak</button>
               </div>        
               </form>
             </div>
@@ -219,7 +476,7 @@
 
                      '<div class="panel-body">'+
                       
-                      '<form acion="#" method="POST" class="form-horizontal" name="form-'+kdAkun+'" id="form-'+kdAkun+'">';
+                      '<form action="#" method="POST" class="form-horizontal" name="form-'+kdAkun+'" id="form-'+kdAkun+'">';
         var isi ="";
         var form_footer= '<a class="btn btn-primary" type="submit" id="">Simpan Akun</a>'+
                       '</form>'+
