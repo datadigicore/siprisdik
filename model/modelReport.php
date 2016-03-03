@@ -242,7 +242,7 @@
         $kondisi_akun = " rab.rabview_id='$rabv_id' and rab.npwp='$npwp' order by rab.kdakun asc ";
       }
       // $result = $this->query("SELECT rab.alat_trans, rab.kota_asal, rab.kota_tujuan, rab.lama_hari, rab.tgl_mulai, rab.tgl_akhir, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rab.rabview_id='$rabv_id' and rab.npwp='$npwp' order by rab.kdakun asc ");
-      $sql = "SELECT rab.penerima, rab.nip, rab.jabatan, rab.pns, rab.golongan, rab.kdakun, rkkl.NMGIAT, rab.value, rab.pajak, rab.ppn, rab.pph, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where ".$kondisi_akun." ";
+      $sql = "SELECT rab.penerima, rab.nip, rab.jabatan, rab.pns, rab.golongan, rab.kdakun, rkkl.NMGIAT, rab.value, rab.pajak, rab.ppn, rab.pph, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM, rab.tanggal_akhir, rab.lokasi FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where ".$kondisi_akun." ";
       // print($sql);
       $result = $this->query($sql);
       // while($res=$this->fetch_array($result)){
@@ -594,12 +594,18 @@
       $this->create_pdf("SPTB","A4",$html);
     }
 
-    public function SPP($kdgiat, $bulan ,$post, $kdmak){
+    public function SPP($kdgiat, $bulan ,$post, $kdmak, $bulan_kata){
       $sql = $this->query("SELECT kdakun, sum(case when month(tanggal)='$bulan' then value else 0 end) as jumlah, sum(case when month(tanggal)<'$bulan' then value else 0 end) as jml_lalu FROM `rabfull` where  kdgiat='$kdgiat' and kdakun like '$kdmak%' GROUP BY kdakun order by kdakun asc ");
       // $sql2 = $this->query("SELECT substring(kdakun,1,2) as kdakun, sum(case when month(tanggal)='$bulan' then value else 0 end) as jumlah, sum(case when month(tanggal)<'$bulan' then value else 0 end) as jml_lalu FROM `rabfull` where  kdgiat='$kdgiat' GROUP BY kdakun order by kdakun asc ");
       $sql2 = $this->query("SELECT sum(value) as jumlah FROM `rabfull` where  kdgiat='$kdgiat' and kdakun like '$kdmak%' and month(tanggal)='$bulan' ");
       $arr_sql2 = $this->fetch_array($sql2);
       $nilai_spp = $arr_sql2['jumlah'];
+
+      $sql_no_dp = "SELECT no_dipa, date(tanggal) as tanggal from rkakl_view where status=1";
+      $res_no_dp = $this->query($sql_no_dp);
+      $dt_dp = $this->fetch_array($res_no_dp);
+      $nmr_dipa = $dt_dp['no_dipa'];
+      $tgl_dipa = $this->konversi_tanggal($dt_dp['tanggal']);
 
       $pagu_51=$this->get_nama($kdgiat,"","","","","51");
       $pagu_52=$this->get_nama($kdgiat,"","","","","52");
@@ -645,7 +651,7 @@
               <td></td>
               <td></td>
               <td width="2%"></td>
-              <td style="font-weight:bold;" colspan="3" align="right">Tanggal : '.date('d M Y',strtotime($post['tanggal'])).' Nomor :</td>
+              <td style="font-weight:bold;" colspan="3" align="right">Tanggal : 31 '.$bulan_kata.' 2016  Nomor :</td>
               <td style="font-weight:bold;"  colspan="5" >'.$post['nomor'].'</td>
              </tr>
              <tr>
@@ -792,8 +798,7 @@
               <td colspan=12><br></br></td>
              </tr>
              <tr>
-              <td colspan=12 >Berdasarkan DIPA Nomor : DIPA-042.03.1.401196/2016, Tgl. 1
-              Desember 2015 dan, bersama ini kami
+              <td colspan=12 >Berdasarkan DIPA Nomor : '.$nmr_dipa.', Tgl. '.$tgl_dipa.' dan, bersama ini kami
               ajukan pembayaran sebagai berikut :</td>
              </tr>
              <tr>
@@ -801,14 +806,14 @@
               <td colspan=2>Jumlah pembayaran</td>
               <td>:</td>
               <td>1) dengan angka:</td>
-              <td colspan="7" style="font-weight:bold; font-size:1.1em">'.number_format($nilai_spp,2,",",".").'</td>
+              <td colspan="7" style="font-weight:bold; font-size:1.2em">Rp. '.number_format($nilai_spp,0,".",",").',-</td>
              </tr>
              <tr>
               <td></td>
               <td colspan=2>yang dimintakan</td>
               <td>:</td>
               <td>2) dengan huruf :</td>
-              <td colspan=7 align=left style="font-weight:bold; font-size:1.1em">'.$this->terbilang($nilai_spp).'</td>
+              <td colspan=7 align=left style="font-weight:bold; font-size:1.2em">'.$this->terbilang($nilai_spp).'</td>
              </tr>
              <tr>
               <td>2. </td>
@@ -1126,16 +1131,14 @@
                 <td style="border-left:1px solid; border:1px solid;" align="right">'.number_format($acc_sisa_dana,2,",",".").'</td>
               </tr>';
       echo  '<tr>
-              <td style="border-top:1px solid; border-bottom:1px solid; border-left:1px solid; "  colspan=3>Uang Persediaan</td>
-              <td style="border-left:1px solid; border-bottom:1px solid;" ></td>
-              <td style="border-right:1px solid; border-bottom:1px solid;" ></td>
-              <td style="border-left:1px solid; border-bottom:1px solid;" ></td>
-              <td style="border-right:1px solid; border-bottom:1px solid;" ></td>
-              <td style="border-left:1px solid; border-bottom:1px solid;" ></td>
-              <td style="border-right:1px solid; border-bottom:1px solid;" ></td>
-              <td style="border-left:1px solid; border-bottom:1px solid;" ></td>
-              <td style="border-right:1px solid; border-bottom:1px solid;" ></td>>
-              <td style="border:1px solid;"></td>
+              <td style="border:1px solid; text-align:center;"  colspan="3">Uang Persediaan</td>
+              
+              <td style="border-right:1px solid; border-bottom:1px solid; text-align:right;" colspan="2">-</td>
+              
+              <td style="border-right:1px solid; border-bottom:1px solid; text-align:right;" colspan="2">-</td>
+              <td style="border-right:1px solid; border-bottom:1px solid; text-align:right;" colspan="2">-</td>
+                            <td style="border-right:1px solid; border-bottom:1px solid; text-align:right;" colspan="2">-</td>>
+              <td style="border:1px solid; text-align:right;">-</td>
              </tr>
              <tr >
               <td colspan="8" style="border-left:1px solid;">
@@ -1948,12 +1951,16 @@
              $penerima = $value[penerima];
              $npwp = $value[npwp];
           }
+          $tanggal_akhir = $value[tanggal_akhir];
+          $lokasi = $value[lokasi];
         }
       }
       else{
         foreach ($data as $value) {
-           $penerima = $value[penerima];
-           break;
+          $penerima = $value[penerima];
+          $tanggal_akhir = $value[tanggal_akhir];
+          $lokasi = $value[lokasi];
+          break;
         }
         $total=$val;
       }
@@ -2033,14 +2040,13 @@
            echo  '</table>';
         
         
-       
         echo '<br></br>
               <table style="text-align: center; width: 100%; font-size:0.7em;"  >
           
               <tr>
                 <td style="text-align: center;"> Mengetahui/Setuju dibayar  </td>
                 <td style="text-align: center;">Lunas Dibayar</td>
-                <td style="text-align: center;">'.date("d F Y").'</td>
+                <td style="text-align: center;">'.$lokasi.', '.$this->konversi_tanggal($tanggal_akhir,"").'</td>
               </tr>              
               <tr>
                 <td style="text-align: center;">Pejabat Pembuat Komitmen,</td>
@@ -2138,7 +2144,7 @@
 
                 <td style="text-align center;"></td>
                 <td style="text-align: center;"></td>
-                <td style="text-align: left;">Jakarta, '.date("d F Y").'</td>
+                <td style="text-align: left;">'.$lokasi.', '.$this->konversi_tanggal($tanggal_akhir,"").'</td>
               </tr>
 
               <tr>
@@ -3592,7 +3598,7 @@ public function daftar_peng_riil($result,$det){
             }
             if($data_tgl[1]=="08")
             {
-                $bulan="Agusts";
+                $bulan="Agustus";
             }
             if($data_tgl[1]=="09")
             {
@@ -3622,7 +3628,7 @@ public function daftar_peng_riil($result,$det){
       return $tanggal;
     }    
 
-    function terbilang($x, $style=4) {
+    function terbilang($x, $style=1) {
       if($x<0) {
       $hasil = "minus ". trim($this->kekata($x));
       } else {
@@ -3646,7 +3652,21 @@ public function daftar_peng_riil($result,$det){
       return $hasil;
     }
 
-    function serapan($direktorat, $bulan, $tahun){
+    function serapan($dir, $bulan, $tahun){
+      $arrbulan = array(
+                '01'=>"Januari",
+                '02'=>"Februari",
+                '03'=>"Maret",
+                '04'=>"April",
+                '05'=>"Mei",
+                '06'=>"Juni",
+                '07'=>"Juli",
+                '08'=>"Agustus",
+                '09'=>"September",
+                '10'=>"Oktober",
+                '11'=>"November",
+                '12'=>"Desember",
+            );
       $huruf = array('1' => 'A',
                      '2' => 'B',
                      '3' => 'C',
@@ -3675,7 +3695,7 @@ public function daftar_peng_riil($result,$det){
                      '26' => 'Z',
                      );
 
-      $bulan = 'Maret';
+      $bulan = $bulan;
       $tahun = '2016';
       $objPHPExcel = new PHPExcel();
       // Set properties
@@ -3703,6 +3723,14 @@ public function daftar_peng_riil($result,$det){
               'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
           )
       );
+      $objPHPExcel->getDefaultStyle()
+    ->getBorders()
+    ->getLeft()
+        ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+$objPHPExcel->getDefaultStyle()
+    ->getBorders()
+    ->getRight()
+        ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
       $sheet = $objPHPExcel->getActiveSheet()->setTitle('Rekap');
       $sheet->mergeCells('A1:T1');
@@ -3716,10 +3744,17 @@ public function daftar_peng_riil($result,$det){
       $sheet->getStyle("A6:T8")->applyFromArray($vertical);
       $sheet->getStyle("A6:T8")->applyFromArray($border);
 
+      $nmdir = $this->get_nama($dir);
+      if (isset($nmdir['kdgiat'])) {
+        $namadirek = $nmdir['kdgiat'];
+      }else{
+        $namadirek = "";
+      }
+
       $objPHPExcel->setActiveSheetIndex(0)
               ->setCellValue('A1', 'Laporan Resapan Realisasi Daya Serap')
-              ->setCellValue('A2', 'Bulan : '.$bulan.' '.$tahun)
-              ->setCellValue('A3', $direk['5696'])
+              ->setCellValue('A2', 'Bulan : '.$arrbulan[$bulan].' '.$tahun)
+              ->setCellValue('A3', $namadirek)
               ->setCellValue('A4', 'Satker Ditjen Kelembagaan Iptek dan Dikti');
           
       $sheet->mergeCells('A6:A7');
@@ -3772,6 +3807,7 @@ public function daftar_peng_riil($result,$det){
 
       $cell->setCellValue('A10','401196');
       $cell->setCellValue('B10','Ditjen Kelembagaan Iptek dan Dikti');
+      $sheet->getStyle('A10:B10')->getFont()->setBold(true);
 
       $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, NMAKUN,  jumlah  FROM rkakl_full where kdgiat like '%$dir%' group by kdgiat, kdoutput order by kdgiat asc, kdoutput asc";
       $res = $this->query($sql);
@@ -3790,10 +3826,50 @@ public function daftar_peng_riil($result,$det){
       $grandtotaldipa  = 0;
       $grandtotalnilai  = 0;
 
-      $row = '12';
+      for ($b=1; $b <= 20; $b++) { 
+          $sheet->getStyle($huruf[$b].'9')
+                      ->getBorders()
+                      ->getLeft()
+                      ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+          $sheet->getStyle($huruf[$b].'9')
+                      ->getBorders()
+                      ->getRight()
+                      ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+          $sheet->getStyle($huruf[$b].'10')
+                      ->getBorders()
+                      ->getLeft()
+                      ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+          $sheet->getStyle($huruf[$b].'10')
+                      ->getBorders()
+                      ->getRight()
+                      ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+        }
+      $row = '11';
 
       foreach ($res as $value) {
+        for ($b=1; $b <= 20; $b++) { 
+          $sheet->getStyle($huruf[$b].$row)
+                      ->getBorders()
+                      ->getLeft()
+                      ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+          $sheet->getStyle($huruf[$b].$row)
+                      ->getBorders()
+                      ->getRight()
+                      ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+        }
+
         if($kd_dir!=$value['kdgiat']){
+          $row++;
+          for ($b=1; $b <= 20; $b++) { 
+            $sheet->getStyle($huruf[$b].$row)
+                        ->getBorders()
+                        ->getLeft()
+                        ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+            $sheet->getStyle($huruf[$b].$row)
+                        ->getBorders()
+                        ->getRight()
+                        ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+          }
           $nmdir = $this->get_nama($value['kdgiat']);
           $dipa_51 = $this->get_nama($value['kdgiat'],"","","","","51");
           $dipa_52 = $this->get_nama($value['kdgiat'],"","","","","52");
@@ -3850,10 +3926,30 @@ public function daftar_peng_riil($result,$det){
           $cell->getStyle('A'.$row.':T'.$row)->getFont()->setBold(true);
 
           $row++;
+          for ($b=1; $b <= 20; $b++) { 
+            $sheet->getStyle($huruf[$b].$row)
+                        ->getBorders()
+                        ->getLeft()
+                        ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+            $sheet->getStyle($huruf[$b].$row)
+                        ->getBorders()
+                        ->getRight()
+                        ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+          }
         }
 
         if(($kd_dir!=$value['kdgiat'] and $kdout!=$value['kdoutput']) or ($kd_dir!=$value['kdgiat']) or ($kd_dir==$value['kdgiat'] and $kdout!=$value['kdoutput'])){
           $row++;
+          for ($b=1; $b <= 20; $b++) { 
+            $sheet->getStyle($huruf[$b].$row)
+                        ->getBorders()
+                        ->getLeft()
+                        ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+            $sheet->getStyle($huruf[$b].$row)
+                        ->getBorders()
+                        ->getRight()
+                        ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+          }
 
           $nmdir = $this->get_nama($value['kdgiat'], $value['kdoutput'],"","","","" );
           $dipa_51 = $this->get_nama($value['kdgiat'],$value['kdoutput'],"","","","51");
@@ -3897,11 +3993,33 @@ public function daftar_peng_riil($result,$det){
           $kdout = $value['kdoutput']; 
       }
       $row = $row+2;
+      for ($b=1; $b <= 20; $b++) { 
+        $sheet->getStyle($huruf[$b].($row-1))
+                    ->getBorders()
+                    ->getLeft()
+                    ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+        $sheet->getStyle($huruf[$b].($row-1))
+                    ->getBorders()
+                    ->getRight()
+                    ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+      }
+      for ($b=1; $b <= 20; $b++) { 
+        $sheet->getStyle($huruf[$b].($row-1))
+                    ->getBorders()
+                    ->getLeft()
+                    ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+        $sheet->getStyle($huruf[$b].($row-1))
+                    ->getBorders()
+                    ->getRight()
+                    ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+      }
 
       $persen_keu = ($grandtotalnilai / $grandtotaldipa) *100;
       $total_sisa = $grandtotaldipa - $grandtotalnilai;
 
       $cell->setCellValue('A'.$row,'Jumlah');
+      $cell->mergeCells('A'.$row.':F'.$row);
+      $sheet->getStyle("A".$row)->applyFromArray($horizontal);
       $cell->setCellValue('G'.$row,number_format($tot_dipa_51,2,",","."));
       $cell->setCellValue('H'.$row,number_format($tot_nilai_51,2,",","."));
       $cell->setCellValue('I'.$row,number_format($tot_dipa_52,2,",","."));
@@ -3916,6 +4034,27 @@ public function daftar_peng_riil($result,$det){
       $cell->setCellValue('R'.$row,number_format($persen_keu,2));
       $cell->setCellValue('S'.$row,number_format($total_sisa,2,",","."));
       $cell->setCellValue('T'.$row,'-');
+
+      $sheet->getStyle('A'.$row.':T'.$row)->getFont()->setBold(true);
+      $sheet->getStyle('A'.$row.':T'.$row)->applyFromArray($border);
+
+      $row = $row+2;
+      $cell->setCellValue('B'.$row,'Mengetahui/Menyetujui');
+      $cell->setCellValue('I'.$row,'Kepala Bagian Perencanaan dan Penganggaran');
+      $cell->setCellValue('Q'.$row,'Jakarta, '.$this->konversi_tanggal(date("Y-m-d"),""));
+      $row++;
+      $cell->setCellValue('B'.$row,'Kuasa Pengguna Anggaran');
+      $cell->setCellValue('I'.$row,'Ditjen Kelembagaan Iptek dan Dikti');
+      $cell->setCellValue('Q'.$row,'Bendahara Pengeluaran');
+      $row = $row+5;
+      $cell->setCellValue('B'.$row,'Agus Indarjo');
+      $cell->setCellValue('I'.$row,'Sawitri Isnandari');
+      $cell->setCellValue('Q'.$row,'Josephine Margaretta');
+      $sheet->getStyle('A'.$row.':T'.$row)->getFont()->setBold(true);
+      $row++;
+      $cell->setCellValue('B'.$row,'NIP. 19600505 198703 1 001');
+      $cell->setCellValue('I'.$row,'NIP. 19670206 199303 2 001');
+      $cell->setCellValue('Q'.$row,'NIP. 19870613 201012 2 009');
 
       header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       header('Content-Disposition: attachment;filename="Laporan Resapan Realisasi ('.$bulan.' '.$tahun.').xlsx"');

@@ -26,37 +26,48 @@
           </ul>
           <div class="tab-content" style="padding:5px 0 0 0;">
             <div class="tab-pane" id="tab_5">
-              <form method="POST" action="<?php echo $url_rewrite;?>process/report/Rincian_Permintaan_Pengeluaran">
+              <form class="form-horizontal" method="POST" action="<?php echo $url_rewrite;?>process/report/Rincian_Permintaan_Pengeluaran">
               <div class="box-body well" style="padding-bottom:0;">
                 <div class="form-group">
-                  <div class="form-group">
-                  <label>Direktorat</label>
+                  <label class="col-sm-3 control-label">Direktorat</label>
+                  <div class="col-sm-4">
                   <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
-                      <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
-                          <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
-                      <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
-                          <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
-                      <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
-                          <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
-                      <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
-                            <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
-                      <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
-                            <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
-                      <?php } ?>
+                    <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                        <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
+                    <?php } ?>
+                    <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                        <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
+                    <?php } ?>
+                    <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                        <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
+                    <?php } ?>
+                    <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                          <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
+                    <?php } ?>
+                    <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                          <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
+                    <?php } ?>
                   </select>
+                  </div>
+                  <div class="col-sm-5">
+                  </div>
                 </div>
-                  <label>Pilih Kode MAK</label>
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Pilih Kode MAK</label>
+                  <div class="col-sm-4">
                   <select style="margin:5px auto" class="form-control" id="kode-mak" name="kode-mak" onchange="" >
                       <option value="51" >51 Belanja Pegawai</option>
                       <option value="52" >52 Belanja Barang</option>
                       <option value="53" >53 Belanja Modal</option>
                   </select>
-                  <div class="form-group">
-                  <label>Bulan</label>
+                  </div>
+                  <div class="col-sm-5">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Bulan</label>
+                  <div class="col-sm-4">
                     <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
                       <option value="01-Januari">Januari</option>
                       <option value="02-Februari">Februari</option>
@@ -71,7 +82,9 @@
                       <option value="11-November">November</option>
                       <option value="12-Desember">Desember</option>
                     </select>
-                </div>
+                  </div>
+                  <div class="col-sm-5">
+                  </div>
                 </div>
               </div>
               <div class="box-footer">
@@ -80,14 +93,12 @@
               </form>
             </div>
             <div class="tab-pane  active" id="tab_6">
-              <form method="POST" action="<?php echo $url_rewrite;?>process/report/SPTB">
+              <form class="form-horizontal" method="POST" action="<?php echo $url_rewrite;?>process/report/SPTB">
               <div class="box-body well" style="padding-bottom:0;">
                 <div class="form-group">
-                  <label>Direktorat</label>
+                  <label class="col-sm-3 control-label">Direktorat</label>
+                  <div class="col-sm-4">
                   <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
-                      <?php if($_SESSION['level'] == 0){ ?>
-                          <option value="">Semua Direktorat</option>
-                      <?php } ?>
                       <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
                           <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
                       <?php } ?>
@@ -104,9 +115,13 @@
                             <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
                       <?php } ?>
                   </select>
+                  </div>
+                  <div class="col-sm-5">
+                  </div>
                 </div>
                 <div class="form-group">
-                  <label>Bulan</label>
+                  <label class="col-sm-3 control-label">Bulan</label>
+                  <div class="col-sm-4">
                     <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
                       <option value="01">Januari</option>
                       <option value="02">Februari</option>
@@ -122,11 +137,18 @@
                       <option value="12">Desember</option>
                     </select>
                 </div>
+                <div class="col-sm-5">
+                </div>
+                </div>
                 <div class="form-group">
-                  <label>Kode Akun</label>
+                  <label class="col-sm-3 control-label">Kode Akun</label>
+                  <div class="col-sm-4">
                   <select style="margin:5px auto" class="form-control" id="kode-akun" name="kode-akun" onchange="" >
                                           
                   </select>
+                </div>
+                <div class="col-sm-5">
+                </div>
                 </div>
               </div>
               <!-- <div class="box-body">
@@ -144,22 +166,35 @@
               </form>
             </div>
             <div class="tab-pane" id="tab_7">
-              <form method="POST" action="<?php echo $url_rewrite;?>process/report/SPP">
+              <form class="form-horizontal" method="POST" action="<?php echo $url_rewrite;?>process/report/SPP">
               <div class="box-body well" style="padding-bottom:0;">
-                <div class="form-group">
+
+<!--                 <div class="form-group">
                   <label>Tanggal</label>
                   <input type="text" name="tanggal" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tanggal" placeholder="dd/mm/yyyy">
+                </div> -->
+
+<!--                 <div class="form-group">
+                  <label class="col-sm-3 control-label">Tanggal</label>
+                  <div class="col-sm-4">
+                  <input type="text" name="tanggal" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tanggal" placeholder="dd/mm/yyyy">
                 </div>
+                <div class="col-sm-5">
+                </div>
+                </div> -->
+
                 <div class="form-group">
-                  <label>Nomor</label>
+                  <label class="col-sm-3 control-label">Nomor</label>
+                  <div class="col-sm-4">
                   <input type="text" name="nomor" class="form-control" id="nomor" placeholder="Nomor">
+                  </div>
+                  <div class="col-sm-5">
+                  </div>
                 </div>
                  <div class="form-group">
-                  <label>Direktorat</label>
+                  <label class="col-sm-3 control-label">Direktorat</label>
+                  <div class="col-sm-4">
                   <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
-                      <?php if($_SESSION['level'] == 0){ ?>
-                          <option value="">Semua Direktorat</option>
-                      <?php } ?>
                       <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
                           <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
                       <?php } ?>
@@ -177,28 +212,41 @@
                       <?php } ?>
                   </select>
                 </div>
-                <label>Pilih Kode MAK</label>
+                <div class="col-sm-5">
+                </div>
+                </div>
+                <div class="form-group">
+                <label class="col-sm-3 control-label">Pilih Kode MAK</label>
+                  <div class="col-sm-4">
                   <select style="margin:5px auto" class="form-control" id="kode-mak" name="kode-mak" onchange="" >
                       <option value="51" >51 Belanja Pegawai</option>
                       <option value="52" >52 Belanja Barang</option>
                       <option value="53" >53 Belanja Modal</option>
                   </select>
+                </div>
+                <div class="col-sm-5">
+                </div>
+                </div>
                 <div class="form-group">
-                  <label>Bulan</label>
+                  <label class="col-sm-3 control-label">Bulan</label>
+                  <div class="col-sm-4">
                     <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
-                      <option value="01">Januari</option>
-                      <option value="02">Februari</option>
-                      <option value="03">Maret</option>
-                      <option value="04">April</option>
-                      <option value="05">Mei</option>
-                      <option value="06">Juni</option>
-                      <option value="07">Juli</option>
-                      <option value="08">Agustus</option>
-                      <option value="09">September</option>
-                      <option value="10">Oktober</option>
-                      <option value="11">November</option>
-                      <option value="12">Desember</option>
+                      <option value="01-Januari">Januari</option>
+                      <option value="02-Februari">Februari</option>
+                      <option value="03-Maret">Maret</option>
+                      <option value="04-April">April</option>
+                      <option value="05-Mei">Mei</option>
+                      <option value="06-Juni">Juni</option>
+                      <option value="07-Juli">Juli</option>
+                      <option value="08-Agustus">Agustus</option>
+                      <option value="09-September">September</option>
+                      <option value="10-Oktober">Oktober</option>
+                      <option value="11-November">November</option>
+                      <option value="12-Desember">Desember</option>
                     </select>
+                </div>       
+                <div class="col-sm-5">        
+                </div>               
                 </div>               
               </div>
               <div class="box-footer">
@@ -207,13 +255,14 @@
               </form>
             </div>
             <div class="tab-pane" id="tab_8">
-              <form method="POST" action="<?php echo $url_rewrite;?>process/report/Daya_Serap">
+              <form class="form-horizontal" method="POST" action="<?php echo $url_rewrite;?>process/report/Daya_Serap">
               <div class="box-body well" style="padding-bottom:0;">
                  <div class="form-group">
-                  <label>Direktorat</label>
+                  <label class="col-sm-3 control-label">Direktorat</label>
+                  <div class="col-sm-4">
                   <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
                       <?php if($_SESSION['level'] == 0){ ?>
-                          <option value="">Semua Direktorat</option>
+                          <!-- <option value="">Semua Direktorat</option> -->
                       <?php } ?>
                       <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
                           <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
@@ -232,8 +281,12 @@
                       <?php } ?>
                   </select>
                 </div>
+                <div class="col-sm-5">
+                </div>
+                </div>
                 <div class="form-group">
-                  <label>Bulan</label>
+                  <label class="col-sm-3 control-label">Bulan</label>
+                  <div class="col-sm-4">
                     <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
                       <option value="01">Januari</option>
                       <option value="02">Februari</option>
@@ -248,6 +301,9 @@
                       <option value="11">November</option>
                       <option value="12">Desember</option>
                     </select>
+                </div>
+                <div class="col-sm-5">               
+                </div>               
                 </div>               
               </div>
               <div class="box-footer">
@@ -256,10 +312,11 @@
               </form>
             </div>
             <div class="tab-pane" id="tab_9">
-              <form method="POST" action="<?php echo $url_rewrite;?>process/report/Rekap_Daya_Serap">
+              <form class="form-horizontal" method="POST" action="<?php echo $url_rewrite;?>process/report/Rekap_Daya_Serap">
               <div class="box-body well" style="padding-bottom:0;">
                  <div class="form-group">
-                  <label>Direktorat</label>
+                  <label class="col-sm-3 control-label">Direktorat</label>
+                  <div class="col-sm-4">
                   <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
                       <?php if($_SESSION['level'] == 0){ ?>
                           <option value="">Semua Direktorat</option>
@@ -281,8 +338,12 @@
                       <?php } ?>
                   </select>
                 </div>
+                <div class="col-sm-5">
+                </div>
+                </div>
                 <div class="form-group">
-                  <label>Bulan</label>
+                  <label class="col-sm-3 control-label">Bulan</label>
+                  <div class="col-sm-4">
                     <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
                       <option value="01">Januari</option>
                       <option value="02">Februari</option>
@@ -297,6 +358,9 @@
                       <option value="11">November</option>
                       <option value="12">Desember</option>
                     </select>
+                </div>
+                <div class="col-sm-5">               
+                </div>               
                 </div>               
               </div>
               <div class="box-footer">
@@ -305,11 +369,11 @@
               </form>
             </div>
             <div class="tab-pane" id="tab_10">
-              <form class="form-horizontal" method="POST" action="<?php echo $url_rewrite;?>process/report/Rekap_Total">
+              <form class="form-horizontal" method="POST" action="<?php echo $url_rewrite;?>process/report/serapan">
               <div class="box-body well" style="padding-bottom:0;">
                  <div class="form-group">
-                  <div class="col-sm-12">
-                  <label>Direktorat</label>
+                  <label class="col-sm-3 control-label">Direktorat</label>
+                  <div class="col-sm-4">
                   <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
                       <?php if($_SESSION['level'] == 0){ ?>
                           <option value="">Semua Direktorat</option>
@@ -331,11 +395,12 @@
                       <?php } ?>
                   </select>
                   </div>
+                  <div class="col-sm-5"></div>
                 </div>
                 <div class="form-group">
-                  <div class="col-sm-12">
-                  <label>Bulan</label>
-                  <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
+                  <label class="col-sm-3 control-label">Bulan</label>
+                  <div class="col-sm-4">
+                    <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
                       <option value="01">Januari</option>
                       <option value="02">Februari</option>
                       <option value="03">Maret</option>
@@ -349,7 +414,8 @@
                       <option value="11">November</option>
                       <option value="12">Desember</option>
                     </select>
-                  </div>               
+                  </div>
+                  <div class="col-sm-5"></div>
                 </div>               
               </div>
               <div class="box-footer">
@@ -411,7 +477,7 @@
 
                      '<div class="panel-body">'+
                       
-                      '<form acion="#" method="POST" class="form-horizontal" name="form-'+kdAkun+'" id="form-'+kdAkun+'">';
+                      '<form action="#" method="POST" class="form-horizontal" name="form-'+kdAkun+'" id="form-'+kdAkun+'">';
         var isi ="";
         var form_footer= '<a class="btn btn-primary" type="submit" id="">Simpan Akun</a>'+
                       '</form>'+
