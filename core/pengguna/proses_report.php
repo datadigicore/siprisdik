@@ -40,7 +40,7 @@ switch ($data[2]) {
     $objectExcel->getActiveSheet()->SetCellValue('F'.$rowCount, $row['5']);
     } 
     $objWriter = new PHPExcel_Writer_Excel2007($objectExcel); 
-    $objWriter->save('some_excel_file.xlsx');
+    // $objWriter->save('some_excel_file.xlsx');
   break;
   case 'Rincian_Biaya_PD':
 
@@ -66,8 +66,10 @@ switch ($data[2]) {
   case 'SPP':
     $kode_mak = $purifier->purify($_POST['kode-mak']);
     $direktorat = $purifier->purify($_POST['direktorat']);
-    $bulan = $purifier->purify($_POST['bulan']);
-    $report->SPP($direktorat, $bulan, $_POST,$kode_mak);
+    $month = explode("-", $_POST['bulan']);
+    $bulan = $month[0];
+    $bulan_kata = $month[1];
+    $report->SPP($direktorat, $bulan, $_POST,$kode_mak, $bulan_kata);
   break;
   case 'SPTB':
     $kode_akun = $purifier->purify($_POST['kode-akun']);

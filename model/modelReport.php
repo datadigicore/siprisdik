@@ -601,12 +601,18 @@
       $this->create_pdf("SPTB","A4",$html);
     }
 
-    public function SPP($kdgiat, $bulan ,$post, $kdmak){
+    public function SPP($kdgiat, $bulan ,$post, $kdmak, $bulan_kata){
       $sql = $this->query("SELECT kdakun, sum(case when month(tanggal)='$bulan' then value else 0 end) as jumlah, sum(case when month(tanggal)<'$bulan' then value else 0 end) as jml_lalu FROM `rabfull` where  kdgiat='$kdgiat' and kdakun like '$kdmak%' GROUP BY kdakun order by kdakun asc ");
       // $sql2 = $this->query("SELECT substring(kdakun,1,2) as kdakun, sum(case when month(tanggal)='$bulan' then value else 0 end) as jumlah, sum(case when month(tanggal)<'$bulan' then value else 0 end) as jml_lalu FROM `rabfull` where  kdgiat='$kdgiat' GROUP BY kdakun order by kdakun asc ");
       $sql2 = $this->query("SELECT sum(value) as jumlah FROM `rabfull` where  kdgiat='$kdgiat' and kdakun like '$kdmak%' and month(tanggal)='$bulan' ");
       $arr_sql2 = $this->fetch_array($sql2);
       $nilai_spp = $arr_sql2['jumlah'];
+
+      $sql_no_dp = "SELECT no_dipa, date(tanggal) as tanggal from rkakl_view where status=1";
+      $res_no_dp = $this->query($sql_no_dp);
+      $dt_dp = $this->fetch_array($res_no_dp);
+      $nmr_dipa = $dt_dp['no_dipa'];
+      $tgl_dipa = $this->konversi_tanggal($dt_dp['tanggal']);
 
       $pagu_51=$this->get_nama($kdgiat,"","","","","51");
       $pagu_52=$this->get_nama($kdgiat,"","","","","52");
@@ -652,7 +658,7 @@
               <td></td>
               <td></td>
               <td width="2%"></td>
-              <td style="font-weight:bold;" colspan="3" align="right">Tanggal : '.date('d M Y',strtotime($post['tanggal'])).' Nomor :</td>
+              <td style="font-weight:bold;" colspan="3" align="right">Tanggal : 31 '.$bulan_kata.' 2016  Nomor :</td>
               <td style="font-weight:bold;"  colspan="5" >'.$post['nomor'].'</td>
              </tr>
              <tr>
@@ -799,8 +805,7 @@
               <td colspan=12><br></br></td>
              </tr>
              <tr>
-              <td colspan=12 >Berdasarkan DIPA Nomor : DIPA-042.03.1.401196/2016, Tgl. 1
-              Desember 2015 dan, bersama ini kami
+              <td colspan=12 >Berdasarkan DIPA Nomor : '.$nmr_dipa.', Tgl. '.$tgl_dipa.' dan, bersama ini kami
               ajukan pembayaran sebagai berikut :</td>
              </tr>
              <tr>
@@ -808,14 +813,14 @@
               <td colspan=2>Jumlah pembayaran</td>
               <td>:</td>
               <td>1) dengan angka:</td>
-              <td colspan="7" style="font-weight:bold; font-size:1.1em">'.number_format($nilai_spp,2,",",".").'</td>
+              <td colspan="7" style="font-weight:bold; font-size:1.2em">Rp. '.number_format($nilai_spp,0,".",",").',-</td>
              </tr>
              <tr>
               <td></td>
               <td colspan=2>yang dimintakan</td>
               <td>:</td>
               <td>2) dengan huruf :</td>
-              <td colspan=7 align=left style="font-weight:bold; font-size:1.1em">'.$this->terbilang($nilai_spp).'</td>
+              <td colspan=7 align=left style="font-weight:bold; font-size:1.2em">'.$this->terbilang($nilai_spp).'</td>
              </tr>
              <tr>
               <td>2. </td>
@@ -1133,16 +1138,14 @@
                 <td style="border-left:1px solid; border:1px solid;" align="right">'.number_format($acc_sisa_dana,2,",",".").'</td>
               </tr>';
       echo  '<tr>
-              <td style="border-top:1px solid; border-bottom:1px solid; border-left:1px solid; "  colspan=3>Uang Persediaan</td>
-              <td style="border-left:1px solid; border-bottom:1px solid;" ></td>
-              <td style="border-right:1px solid; border-bottom:1px solid;" ></td>
-              <td style="border-left:1px solid; border-bottom:1px solid;" ></td>
-              <td style="border-right:1px solid; border-bottom:1px solid;" ></td>
-              <td style="border-left:1px solid; border-bottom:1px solid;" ></td>
-              <td style="border-right:1px solid; border-bottom:1px solid;" ></td>
-              <td style="border-left:1px solid; border-bottom:1px solid;" ></td>
-              <td style="border-right:1px solid; border-bottom:1px solid;" ></td>>
-              <td style="border:1px solid;"></td>
+              <td style="border:1px solid; text-align:center;"  colspan="3">Uang Persediaan</td>
+              
+              <td style="border-right:1px solid; border-bottom:1px solid; text-align:right;" colspan="2">-</td>
+              
+              <td style="border-right:1px solid; border-bottom:1px solid; text-align:right;" colspan="2">-</td>
+              <td style="border-right:1px solid; border-bottom:1px solid; text-align:right;" colspan="2">-</td>
+                            <td style="border-right:1px solid; border-bottom:1px solid; text-align:right;" colspan="2">-</td>>
+              <td style="border:1px solid; text-align:right;">-</td>
              </tr>
              <tr >
               <td colspan="8" style="border-left:1px solid;">
@@ -3629,7 +3632,7 @@ public function daftar_peng_riil($result,$det){
       return $tanggal;
     }    
 
-    function terbilang($x, $style=4) {
+    function terbilang($x, $style=1) {
       if($x<0) {
       $hasil = "minus ". trim($this->kekata($x));
       } else {

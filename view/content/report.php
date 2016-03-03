@@ -85,9 +85,6 @@
                 <div class="form-group">
                   <label>Direktorat</label>
                   <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
-                      <?php if($_SESSION['level'] == 0){ ?>
-                          <option value="">Semua Direktorat</option>
-                      <?php } ?>
                       <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
                           <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
                       <?php } ?>
@@ -146,10 +143,10 @@
             <div class="tab-pane" id="tab_7">
               <form method="POST" action="<?php echo $url_rewrite;?>process/report/SPP">
               <div class="box-body well" style="padding-bottom:0;">
-                <div class="form-group">
+<!--                 <div class="form-group">
                   <label>Tanggal</label>
                   <input type="text" name="tanggal" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tanggal" placeholder="dd/mm/yyyy">
-                </div>
+                </div> -->
                 <div class="form-group">
                   <label>Nomor</label>
                   <input type="text" name="nomor" class="form-control" id="nomor" placeholder="Nomor">
@@ -157,9 +154,6 @@
                  <div class="form-group">
                   <label>Direktorat</label>
                   <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
-                      <?php if($_SESSION['level'] == 0){ ?>
-                          <option value="">Semua Direktorat</option>
-                      <?php } ?>
                       <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
                           <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
                       <?php } ?>
@@ -186,18 +180,18 @@
                 <div class="form-group">
                   <label>Bulan</label>
                     <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
-                      <option value="01">Januari</option>
-                      <option value="02">Februari</option>
-                      <option value="03">Maret</option>
-                      <option value="04">April</option>
-                      <option value="05">Mei</option>
-                      <option value="06">Juni</option>
-                      <option value="07">Juli</option>
-                      <option value="08">Agustus</option>
-                      <option value="09">September</option>
-                      <option value="10">Oktober</option>
-                      <option value="11">November</option>
-                      <option value="12">Desember</option>
+                      <option value="01-Januari">Januari</option>
+                      <option value="02-Februari">Februari</option>
+                      <option value="03-Maret">Maret</option>
+                      <option value="04-April">April</option>
+                      <option value="05-Mei">Mei</option>
+                      <option value="06-Juni">Juni</option>
+                      <option value="07-Juli">Juli</option>
+                      <option value="08-Agustus">Agustus</option>
+                      <option value="09-September">September</option>
+                      <option value="10-Oktober">Oktober</option>
+                      <option value="11-November">November</option>
+                      <option value="12-Desember">Desember</option>
                     </select>
                 </div>               
               </div>
