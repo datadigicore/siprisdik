@@ -603,7 +603,12 @@
       $sql2 = $this->query("SELECT sum(value) as jumlah FROM `rabfull` where  kdgiat='$kdgiat' and kdakun like '$kdmak%' and month(tanggal)='$bulan' ");
       $arr_sql2 = $this->fetch_array($sql2);
       $nilai_spp = $arr_sql2['jumlah'];
-
+      $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$kdgiat' ");
+      $arr_pb = $this->fetch_array($result_pb);
+      $bpp = $arr_pb[bpp];
+      $nip_bpp = $arr_pb[nip_bpp];
+      $ppk = $arr_pb[ppk];
+      $nip_ppk = $arr_pb[nip_ppk];
       ob_start();
       echo '<table cellpadding="1" style="border-collapse:collapse; font-size:0.7em;">
 
@@ -772,18 +777,14 @@
               <td colspan=2>Jumlah pembayaran</td>
               <td>:</td>
               <td>1) dengan angka:</td>
-              <td colspan=3>'.number_format($nilai_spp,2,",",".").'</td>
-              <td ></td>
-              <td ></td>
-              <td ></td>
-              <td ></td>
+              <td colspan="7" style="font-weight:bold; font-size:1.1em">'.number_format($nilai_spp,2,",",".").'</td>
              </tr>
              <tr>
               <td></td>
               <td colspan=2>yang dimintakan</td>
               <td>:</td>
               <td>2) dengan huruf :</td>
-              <td colspan=7 align=left >'.$this->terbilang($nilai_spp).'</td>
+              <td colspan=7 align=left style="font-weight:bold; font-size:1.1em">'.$this->terbilang($nilai_spp).'</td>
              </tr>
              <tr>
               <td>2. </td>
@@ -1068,85 +1069,62 @@
               <td style="border:1px solid;"></td>
              </tr>
              <tr >
-              <td  ></td>
-              <td  ></td>
-              <td  ></td>
-              <td  ></td>
-              <td  ></td>
-              <td  ></td>
-              <td  ></td>
-              <td  ></td>
+              <td colspan="8" style="border-left:1px solid;">
               <td  >Surat bukti untuk</td>
-              <td  ></td>
-              <td ></td>
-              <td  ></td>
+              <td colspan="3" style="border-right:1px solid;">
              </tr>
-             <tr >
-              <td ></td>
-              <td></td>
+             <tr>
+              <td style="border-left:1px solid;" colspan="2">
               <td>LAMPIRAN</td>
-              <td ></td>
+              <td style="border:1px solid; width:10px"></td>
               <td>LEMBAR : B</td>
-              <td></td>
-              <td></td>
-              <td ></td>
-              <td>pengeluaran</td>
-              <td ></td>
-              <td>STS ___ lembar</td>
-              <td ></td>
+              <td colspan="2">
+              <td style="border:1px solid; width:10px"></td>
+              <td >pengeluaran</td>
+              <td style="border:1px solid; width:10px"></td>
+              <td >STS ___ lembar</td>
+              <td style="border-right:1px solid;"></td>
+             </tr>
+             <tr>
+              <td style="border-bottom:1px solid; border-left:1px solid; border-right:1px solid;" colspan="12"><br></br></td>
+             </tr>
+             <tr>
+              <td colspan="12"><br></br></td>
              </tr>
              <tr>
              <td colspan=5 >Diterima
               oleh penguji SPP/Penerbit SPM</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td colspan="4">
               <td colspan=3>Jakarta : 31 Desember 2016 </td>
              </tr>
              <tr >
               <td colspan=5 >Dirjen
               Kelembagaan Iptek dan Dikti (401196)</td>
-              <td></td>
-              <td ></td>
-              <td ></td>
-              <td></td>
+              <td colspan="4">
               <td colspan=3>Pejabat Pembuat Komitmen</td>
              </tr>
              <tr >
               <td colspan=3 >Pada
               tanggal</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td ></td>
-              <td ></td>
-              <td></td>
+              <td colspan="6">
               <td colspan=3>Dirjen Kelembagaan Iptek
               dan Dikti (401196)</td>
+             </tr>
+             <tr>
+              <td colspan="12" ><br></br> <br></br> <br></br></td>
              </tr>
              <tr >
               <td  colspan=3 >Akhmad
               Mahmudin, S.IP, M.Si</td>
-              <td></td>
-              <td ></td>
-              <td></td>
-              <td ></td>
-              <td ></td>
-              <td></td>
-              <td  colspan=2>Sudarsono</td>
+              <td colspan="6">
+              <td  colspan=2>'.$ppk.'</td>
               <td></td>
              </tr>
              <tr >
               <td  colspan=3 >NIP.
               19611214 198403 1 001</td>
-              <td></td>
-              <td ></td>
-              <td></td>
-              <td></td>
-              <td ></td>
-              <td></td>
-              <td  colspan=3>NIP. 19640920 198403 1 001</td>
+              <td colspan="6">
+              <td colspan=3>NIP. '.$nip_ppk.'</td>
              </tr>
              </table>';
             $html = ob_get_contents();
@@ -1154,7 +1132,7 @@
 
     }
     // DAFTAR RINCIAN PERMINTAAN PENGELUARAN
-    public function Rincian_Permintaan_Pengeluaran($data, $direktorat, $bulan){
+    public function Rincian_Permintaan_Pengeluaran($data, $direktorat, $bulan, $bulan_kata){
       $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
       $arr_pb = $this->fetch_array($result_pb);
       $bpp = $arr_pb[bpp];
@@ -1209,7 +1187,7 @@
                 <td style="border-left: 1px solid;">5. Alamat<br></td>
                 <td  colspan="2">: Komplek Kemdikbud Gedung D Lt. 6</td>
                 <td>10. Bulan</td>
-                <td style="border-right: 1px solid;">:</td>
+                <td style="border-right: 1px solid;">: '.$bulan_kata.'</td>
               </tr>
               <tr>
                 <td style="border-left: 1px solid; border-bottom: 1px solid"></td>
@@ -2601,48 +2579,49 @@ public function daftar_peng_riil($result,$det){
                 </tr>
                 <tr>
                   <td colspan="2">Nama Satker</td>
-                  <td>:</td>
-                  <td colspan="12" align="left" >Direktorat Jenderal Kelembagaan Iptek dan Dikti</td>
+                  <td align="left" width="2%">:</td>
+                  <td align="left" > Direktorat Jenderal Kelembagaan Iptek dan Dikti</td>
+                  
                 </tr>
                 <tr>
                   <td colspan="2">Kode Kegiatan</td>
                   <td>:</td>
-                  <td colspan="12" align="left">401196</td>
+                  <td align="left">401196</td>
                 </tr>
                 <tr>
                   <td colspan="2">Nomor Tanggal DIPA</td>
                   <td>:</td>
-                  <td colspan="12" align="left">DIPA-042-03.1.401196/2016, tgl. 7 Desember 2016</td>
+                  <td  align="left">DIPA-042-03.1.401196/2016, tgl. 7 Desember 2016</td>
                 </tr>
                 <tr>
                   <td colspan="2">Propinsi DKI</td>
                   <td>:</td>
-                  <td colspan="12" align="left">DKI</td> 
+                  <td align="left">DKI</td> 
                 <tr>
                   <td colspan="2">Departemen</td>
                   <td>:</td>
-                  <td colspan="12" align="left">Kementerian Ristek dan Dikti</td>
+                  <td align="left">Kementerian Ristek dan Dikti</td>
                 </tr>
                 </tr>
                 <tr>
                   <td colspan="2">Program</td>
                   <td>:</td>
-                  <td colspan="12" align="left">Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</td>
+                  <td align="left">Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</td>
                 </tr>
                 <tr>
                   <td colspan="2">Jumlah Anggaran</td>
                   <td>:</td>
-                  <td colspan="12" align="left">-</td>
+                  <td  align="left">-</td>
                 </tr>
                 <tr>
                   <td colspan="2">Kemajuan Fisik (%)</td>
                   <td>:</td>
-                  <td colspan="12" align="left">-</td>
+                  <td align="left">-</td>
                 </tr>
                 <tr>
                   <td colspan="2">Kemajuan Keu. (%)</td>
                   <td>:</td>
-                  <td colspan="12" align="left">-</td>
+                  <td align="left">-</td>
                 </tr>
                 
                 </table>';
@@ -2869,48 +2848,49 @@ public function rekap_realisasi_daya_serap($dir, $tanggal ) {
                 </tr>
                 <tr>
                   <td colspan="2">Nama Satker</td>
-                  <td>:</td>
-                  <td colspan="12" align="left" >Direktorat Jenderal Kelembagaan Iptek dan Dikti</td>
+                  <td align="left" width="2%">:</td>
+                  <td align="left" > Direktorat Jenderal Kelembagaan Iptek dan Dikti</td>
+                  
                 </tr>
                 <tr>
                   <td colspan="2">Kode Kegiatan</td>
                   <td>:</td>
-                  <td colspan="12" align="left">401196</td>
+                  <td align="left">401196</td>
                 </tr>
                 <tr>
                   <td colspan="2">Nomor Tanggal DIPA</td>
                   <td>:</td>
-                  <td colspan="12" align="left">DIPA-042-03.1.401196/2016, tgl. 7 Desember 2016</td>
+                  <td  align="left">DIPA-042-03.1.401196/2016, tgl. 7 Desember 2016</td>
                 </tr>
                 <tr>
                   <td colspan="2">Propinsi DKI</td>
                   <td>:</td>
-                  <td colspan="12" align="left">DKI</td> 
+                  <td align="left">DKI</td> 
                 <tr>
                   <td colspan="2">Departemen</td>
                   <td>:</td>
-                  <td colspan="12" align="left">Kementerian Ristek dan Dikti</td>
+                  <td align="left">Kementerian Ristek dan Dikti</td>
                 </tr>
                 </tr>
                 <tr>
                   <td colspan="2">Program</td>
                   <td>:</td>
-                  <td colspan="12" align="left">Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</td>
+                  <td align="left">Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</td>
                 </tr>
                 <tr>
                   <td colspan="2">Jumlah Anggaran</td>
                   <td>:</td>
-                  <td colspan="12" align="left">-</td>
+                  <td  align="left">-</td>
                 </tr>
                 <tr>
                   <td colspan="2">Kemajuan Fisik (%)</td>
                   <td>:</td>
-                  <td colspan="12" align="left">-</td>
+                  <td align="left">-</td>
                 </tr>
                 <tr>
                   <td colspan="2">Kemajuan Keu. (%)</td>
                   <td>:</td>
-                  <td colspan="12" align="left">-</td>
+                  <td align="left">-</td>
                 </tr>
                 
                 </table>';
@@ -2967,8 +2947,8 @@ public function rekap_realisasi_daya_serap($dir, $tanggal ) {
                   <td style="border-left:1px solid; font-weight:bold;" align="left" >'.$value['kdgiat'].'</td>
                   <td style="border-left:1px solid; font-weight:bold; " colspan="2">'.$nmdir['kdgiat'].'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nmdir['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
@@ -2990,8 +2970,8 @@ public function rekap_realisasi_daya_serap($dir, $tanggal ) {
                   <td style="border-left:1px solid; font-weight:bold;" align="center">'.$value['kdoutput'].'</td>
                   <td style="border-left:1px solid; font-weight:bold;" colspan="2">'.$nmdir['kdout'].'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nmdir['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
@@ -3020,8 +3000,8 @@ public function rekap_realisasi_daya_serap($dir, $tanggal ) {
                   <td style="border-left:1px solid" align="center">'.''.'</td>
                   <td style="border-left:1px solid"  colspan="2">'.$value['kdakun']." ".$value['NMAKUN'].'</td>
                   <td style="border-left:1px solid;">'.''.'</td>
-                  <td style="border-left:1px solid;">'.''.'</td>
                   <td style="border-left:1px solid; text-align:right;">'.number_format($value['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.'-'.'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
                   <td style="border-left:1px solid; text-align:right; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
@@ -3038,8 +3018,8 @@ public function rekap_realisasi_daya_serap($dir, $tanggal ) {
           echo '<tr>
                   
                   <td style="border:1px solid; text-align:center;" colspan="4">'.'TOTAL'.'</td>
-                  <td style="border:1px solid; text-align:right;">'.'-'.'</td>
                   <td style="border:1px solid; text-align:right; font-weight:bold;">'.number_format($acc_alokasi,2,",",".").'</td>
+                  <td style="border:1px solid; text-align:right; ">'.'-'.'</td>
                   <td style="border:1px solid; text-align:right; ">'.'-'.'</td>
                   <td style="border:1px solid; text-align:right; font-weight:bold;">'.number_format($acc_sp2d_lalu,2,",",".").'</td>
                   <td style="border:1px solid;">'.'-'.'</td>

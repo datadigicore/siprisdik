@@ -88,8 +88,11 @@ switch ($data[2]) {
   case 'Rincian_Permintaan_Pengeluaran':
     $kode_mak = $purifier->purify($_POST['kode-mak']);
     $direktorat = $purifier->purify($_POST['direktorat']);
-    $bulan = $purifier->purify($_POST['bulan']);
-    $report->Rincian_Permintaan_Pengeluaran($kode_mak, $direktorat, $bulan);
+    $month = explode("-", $_POST['bulan']);
+    $bulan = $month[0];
+    $bulan_kata = $month[1];
+    // print_r($bulan);
+    $report->Rincian_Permintaan_Pengeluaran($kode_mak, $direktorat, $bulan, $bulan_kata);
   break;
   case 'Daya_Serap':
     $direktorat = $purifier->purify($_POST['direktorat']);
