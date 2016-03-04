@@ -3770,7 +3770,7 @@ $objPHPExcel->getDefaultStyle()
           $grandtotalnilai += $jml_nilai;
 
 
-          $cell->setCellValue('A'.$row,$value['kdgiat']);
+          $cell->setCellValue('A'.$row,$value['kdgiat'],PHPExcel_Cell_DataType::TYPE_STRING);
           $cell->setCellValue('B'.$row,$nmdir['kdgiat']);
           $cell->setCellValue('C'.$row,'-');
           $cell->setCellValue('D'.$row,'-');
@@ -3836,7 +3836,8 @@ $objPHPExcel->getDefaultStyle()
           $sisa=$jml_dipa-$jml_nilai;
           $persen_keu = ($jml_nilai / $jml_dipa) *100;
 
-          $cell->setCellValue('A'.$row,"'".$value['kdoutput']);
+          $cell->setCellValue('A'.$row,$value['kdoutput'],PHPExcel_Cell_DataType::TYPE_STRING);
+          $cell->getStyle('A'.$row)->getNumberFormat()->setFormatCode('000');
           $cell->setCellValue('B'.$row,$nmdir['kdout']);
           $cell->setCellValue('C'.$row,'-');
           $cell->setCellValue('D'.$row,'-');
