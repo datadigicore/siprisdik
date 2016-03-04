@@ -7,19 +7,17 @@
 
   class modelReport extends mysql_db {
 
-    public function getRkaklFull(){
+    public function getChartRKAKL(){
       $result = $this->query("SELECT KDGIAT, sum(jumlah), sum(realisasi) from rkakl_full group by KDGIAT");
       while($res=$this->fetch_array($result)){
           $results[] = $res;
       }
       $prev_value = array('value' => null, 'amount' => null);
       sort($results);
-      // print_r('<pre>');
-      // print_r($results);
       foreach ($results as $data) {
         if ($prev_value['value'] != $data['KDGIAT'] && $data['KDGIAT'] != null) {
             unset($prev_value);
-            $prev_value = array('value' => $data['KDGIAT'], 'amount' => $data['sum(jumlah)']);
+            $prev_value = array('value' => 'Kode Kegiatan '.$data['KDGIAT'], 'amount' => $data['sum(jumlah)']);
             $newResults[] =& $prev_value;
         }
         $prev_value['amount']++;
@@ -28,11 +26,6 @@
         $newresult[$i][] =& $newResults[$i]['value'];
         $newresult[$i][] =& $newResults[$i]['amount'];
       }
-      $resultJumlah = $this->query("SELECT sum(jumlah) as totjum from rkakl_full");
-      $newJumlah = $this->fetch_object($resultJumlah);
-      $arrayName = array('0' => 'TOTAL SISA ANGGARAN', '1' => floatval($newJumlah->totjum));
-      array_push($newresult, $arrayName);
-      // print_r($newresult);
       echo json_encode($newresult);
     }
 
