@@ -1367,13 +1367,17 @@
              $penerima = $value[penerima];
              $npwp = $value[npwp];
           }
+          $tanggal_akhir = $value[tanggal_akhir];
+          $lokasi = $value[lokasi];
         }
       }
       else{
         foreach ($data as $value) {
-           $penerima = $value[penerima];
-           $jabatan = $value[jabatan];
-           break;
+          $penerima = $value[penerima];
+          $jabatan = $value[jabatan];
+          $tanggal_akhir = $value[tanggal_akhir];
+          $lokasi = $value[lokasi];
+          break;
         }
         $total=$val;
       }
@@ -1439,7 +1443,7 @@
               <tr>
                 <td> Mengetahui/Setuju dibayar  </td>
                 <td>Lunas Dibayar</td>
-                <td>........................ 2016</td>
+                <td>'.$lokasi.', '.$this->konversi_tanggal($tanggal_akhir,"").'</td>
               </tr>              
               <tr>
                 <td>Pejabat Pembuat Komitmen,</td>
@@ -1468,6 +1472,7 @@
               </tr>
               <tr>
                 <td style="border-bottom:2px dashed;" colspan="3"><br></br></td>
+              </tr>
               </table>';
 
       if($item=="Transport Lokal"){
@@ -1534,7 +1539,7 @@
       echo '<table  style="width: 100%; text-align:left; border-collapse:collapse; font-size:80%;">
         <tr>
           <td width="60%">Mengetahui</td>
-          <td>Jakarta, ..................................................</td>
+          <td>'.$lokasi.', '.$this->konversi_tanggal($tanggal_akhir,"").'</td>
         </tr>
         <tr>
           <td>Pejabat Pembuat Komitmen</td>

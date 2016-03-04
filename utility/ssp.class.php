@@ -385,7 +385,7 @@ class SSP {
              FROM `$table`
              $where
              $group
-             $order"
+             ORDER BY id DESC"
         );
 
         // Data set length after filtering
