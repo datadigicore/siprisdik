@@ -1719,7 +1719,7 @@
               <tr>
                 <td width="60%"></td>
                 <td>Pada Tanggal</td>
-                <td> : '.$tgl_mulai.'</td>
+                <td> : '.$tgl_akhir.'</td>
               </tr>
 
               </table>';
@@ -1771,7 +1771,7 @@
         <tr>
             <td align="left">Tanggal</td>
             <td align="left">:</td>
-            <td align="left">'.$tgl_mulai.'</td>
+            <td align="left"></td>
         </tr> 
                
 
@@ -2293,30 +2293,13 @@ public function daftar_peng_riil($result,$det){
 
       echo '<table cellpadding="2" style="width: 100%; text-align:left; border-collapse:collapse; font-size:0.9em;">
               <tr>
-                <td width="24%" rowspan="5"><img src="'.$url_rewrite.'static/dist/img/risetdikti.png" height="15%" /></td>
-                <td>KEMENTERIAN RISET, TEKNOLOGI, DAN PENDIDIKAN TINGGI</td>
+                <td width="2%"></td>
+                <td width="4%" style="border:1px solid; font-weight:bold; text-align:center;">No</td>
+                <td style="border:1px solid; font-weight:bold; text-align:center;">Uraian</td>
+                <td  style="border:1px solid; font-weight:bold; text-align:center;" colspan="2">Jumlah</td>
               </tr>
-              <tr>
-                <td style="font-weight:bold">DIREKTORAT JENDERAL KELEMBAGAAN ILMU </td>
-              </tr>
-              <tr>
-                <td style="font-weight:bold">PENGETAHUAN, TEKNOLOGI, DAN PENDIDIKAN TINGGI</td>
-              </tr>
-              <tr>
-                <td style="font-size:0.8em">Jalan Jend. Sudirman Pintu I Senayan - Jakarta Pusat 10270 </td>
-              </tr>
-              <tr>
-                <td style="font-size:0.8em">Telepon : (021) 57946063, Fax : (021) 57946062</td>
-              </tr>
-              <tr>
-                <td style="border-bottom:3px solid; font-size:0.8em;"></td>
-                <td style="border-bottom:3px solid; font-size:0.8em;">Laman : www.dikti.go.id</td>
-              </tr>
-              <tr>
-                <td colspan ="2" style="text-decoration: underline; font-weight:bold;">DAFTAR PENGELUARAN RIIL</td>
-              </tr>
-            </table>';
 
+              ';
         $no=0;
         $total_rincian=0;
         if($tiket>0){    
@@ -2326,7 +2309,8 @@ public function daftar_peng_riil($result,$det){
                   <td></td>
                   <td style="border-left:1px solid; border-right:1px solid;">'.$no.'</td>
                   <td style="border-left:1px solid; border-right:1px solid;">Biaya '.$jenis_transport.'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;">Rp. '.number_format($tiket,0,",",".").'</td>
+                  <td width="4">Rp. </td>
+                  <td style="border-left:1px solid; border-right:1px solid; text-align:right;">'.number_format($tiket,0,",",".").'</td>
                 </tr>';
           $total_rincian +=$tiket;
           } 
@@ -2337,7 +2321,8 @@ public function daftar_peng_riil($result,$det){
                   <td></td>
                   <td style="border-left:1px solid; border-right:1px solid;">'.$no.'</td>
                   <td style="border-left:1px solid; border-right:1px solid;">Airport Tax</td>
-                  <td style="border-left:1px solid; border-right:1px solid;">Rp. '.number_format($airport_tax,0,",",".").'</td>
+                  <td width="4">Rp. </td>
+                  <td style="border-left:1px solid; border-right:1px solid; text-align:right;">Rp. '.number_format($airport_tax,0,",",".").'</td>
                 </tr>';
           $total_rincian +=$airport_tax; 
           
@@ -2348,7 +2333,8 @@ public function daftar_peng_riil($result,$det){
                   <td></td>
                   <td style="border-left:1px solid; border-right:1px solid;">'.$no.'</td>
                   <td style="border-left:1px solid; border-right:1px solid;">Biaya Taksi '.$asal.'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;">Rp. '.number_format($taxi_asal,0,",",".").'</td>
+                  <td width="4">Rp. </td>
+                  <td style=" border-right:1px solid; text-align:right;">'.number_format($taxi_asal,0,",",".").'</td>
                 </tr>';
           $total_rincian +=$taxi_asal; 
 
@@ -2359,90 +2345,29 @@ public function daftar_peng_riil($result,$det){
                   <td></td>
                   <td style="border-left:1px solid; border-right:1px solid;">'.$no.'</td>
                   <td style="border-left:1px solid; border-right:1px solid;">Biaya Taxi '.$tujuan.'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;">Rp. '.number_format($taxi_tujuan,0,",",".").'</td>
+                  <td width="4">Rp. </td>
+                  <td style="border-bottom:1px solid; border-right:1px solid; text-align:right;">'.number_format($taxi_tujuan,0,",",".").'</td>
                 </tr>';
           $total_rincian +=$taxi_tujuan; 
         }
         echo '<tr>
                   <td></td>
                   <td style="border:1px solid;" colspan="2">Jumlah</td>
-                  <td style="border:1px solid;">Rp. '.number_format($total_rincian,0,",",".").'</td>
+                  <td width="4" style="border-bottom:1px solid; border-top:1px solid;">Rp. </td>
+                  <td style="border-top:1px solid; border-bottom:1px solid; border-right:1px solid; text-align:right;">'.number_format($total_rincian,0,",",".").'</td>
                 </tr>';
+          
+      echo '<tr>
+              <td> <br></br><br></br> </td>
+              <td style="border-top:1px solid;" colspan="3"> <br></br><br></br> </td>
+            </tr>
+            <tr>
+              <td>2.</td>
+              <td colspan="3">Jumlah uang tersebut pada angka 1 di atas benar-benar dikeluarkan untuk pelaksanaan Perjalanan Dinas dimaksud dan apabila di kemudian hari terdapat kelebihan atas pembayaran, saya bersedia untuk menyetorkan kelebihan tersebut ke Kas Negara.</td>
+            </tr>
+            ';
 
-      echo '<table style="width: 100%; text-align:left; border-collapse:collapse; font-size:0.9em;">
-            <tr>
-              <td style="" colspan="4"><br>Yang bertanda tangan dibawah ini :</br></td>
-            </tr>
-            <tr>
-              <td width="2%"></td>
-              <td width="20%">Nama</td>
-              <td width="2%">:</td>
-              <td>'.$penerima.'</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Jabatan</td>
-              <td>:</td>
-              <td>'.$jabatan.'</td>
-            </tr>
-            <tr>
-              <td colspan="4"> <br></br><br></br> </td>
-            </tr>
-            <tr>
-              <td colspan="4">Berdasarkan Surat Perjalanan Dinas (SPD) Tanggal '.date("d F Y").' Nomor: ___________________________, dengan ini saya menyatakan dengan sesungguhnya bahwa:</td>
-            </tr>
-            <tr>
-              <td colspan="4"><br></br><br></br></td>
-            </tr>
-            <tr>
-              <td>1.</td>
-              <td colspan="3">Biaya Transport dan pengeluaran yang tidak dapat diperoleh bukti-bukti pengeluarannya, meliputi : </td>
-            </tr>
-            <tr>
-              <td colspan="4"><br></br><br></br></td>
-            </tr>
-          </table>';
 
-          echo '<table cellpadding="2" style="width: 100%; text-align:left; border-collapse:collapse; font-size:0.9em;">
-                  <tr>
-                    <td width="2%"></td>
-                    <td width="4%" style="border:1px solid;">No</td>
-                    <td style="border:1px solid;">Uraian</td>
-                    <td  width="22%" style="border:1px solid;">Jumlah</td>
-                  </tr>
-                  ';
-            $no=0;
-            $total_rincian=0;
-            if($tiket>0){    
-              $no+=1; 
-              echo '<tr>
-                      <td></td>
-                      <td style="border-left:1px solid; border-right:1px solid;">'.$no.'</td>
-                      <td style="border-left:1px solid; border-right:1px solid;">Biaya '.$jenis_transport.'</td>
-                      <td style="border-left:1px solid; border-right:1px solid;">Rp. '.number_format($tiket,0,",",".").'</td>
-                    </tr>';
-              $total_rincian +=$tiket; 
-            }
-            if($airport_tax>0){    
-              $no+=1; 
-              echo '<tr>
-                      <td></td>
-                      <td style="border-left:1px solid; border-right:1px solid;">'.$no.'</td>
-                      <td style="border-left:1px solid; border-right:1px solid;">Airport Tax</td>
-                      <td style="border-left:1px solid; border-right:1px solid;">Rp. '.number_format($airport_tax,0,",",".").'</td>
-                    </tr>';
-              $total_rincian +=$airport_tax; 
-              
-            }
-            if($taxi_asal>0){
-              $no+=1;
-              echo '<tr>
-                      <td></td>
-                      <td style="border-left:1px solid; border-right:1px solid;">'.$no.'</td>
-                      <td style="border-left:1px solid; border-right:1px solid;">Biaya Taksi '.$asal.'</td>
-                      <td style="border-left:1px solid; border-right:1px solid;">Rp. '.number_format($taxi_asal,0,",",".").'</td>
-                    </tr>';
-              $total_rincian +=$taxi_asal; 
   echo  '</table>';
 // $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
 //       $arr_pb = $this->fetch_array($result_pb);
@@ -2453,6 +2378,9 @@ public function daftar_peng_riil($result,$det){
       $date = getdate();
       echo '<table  style="width: 100%; text-align:left; border-collapse:collapse; font-size:80%;">
         <tr>
+          <td colspan="2"><br></br></td>
+        </tr>
+        <tr>
           <td width="60%">Mengetahui</td>
           <td>Jakarta, '.$date['mday']." / ".$date['mon']." / ".$date['year'].'</td>
         </tr>
@@ -2461,8 +2389,8 @@ public function daftar_peng_riil($result,$det){
           <td>Yang Melaksanakan</td>
         </tr>
         <tr>
-          <td><br></br><br></br></td>
-          <td><br></br><br></br></td>
+          <td><br></br><br></br><br></br></td>
+          <td><br></br><br></br><br></br></td>
         </tr>
         <tr>
           <td style="font-weight:bold">'.$ppk.'</td>
@@ -2475,67 +2403,7 @@ public function daftar_peng_riil($result,$det){
         </tr>
       </table>';
 
-            }
-            if($taxi_tujuan>0){
-              $no+=1;
-              echo '<tr>
-                      <td></td>
-                      <td style="border-left:1px solid; border-right:1px solid;">'.$no.'</td>
-                      <td style="border-left:1px solid; border-right:1px solid;">Biaya Taxi '.$tujuan.'</td>
-                      <td style="border-left:1px solid; border-right:1px solid;">Rp. '.number_format($taxi_tujuan,0,",",".").'</td>
-                    </tr>';
-              $total_rincian +=$taxi_tujuan; 
-            }
-            echo '<tr>
-                      <td></td>
-                      <td style="border:1px solid;" colspan="2">Jumlah</td>
-                      <td style="border:1px solid;">Rp. '.number_format($total_rincian,0,",",".").'</td>
-                    </tr>';
-              
-          echo '<tr>
-                  <td style="border-right:1px solid;"> <br></br><br></br> </td>
-                  <td style="border-top:1px solid;" colspan="3"> <br></br><br></br> </td>
-                </tr>
-                <tr>
-                  <td>2.</td>
-                  <td colspan="3">Jumlah uang tersebut pada angka 1 di atas benar-benar dikeluarkan untuk pelaksanaan Perjalanan Dinas dimaksud dan apabila di kemudian hari terdapat kelebihan atas pembayaran, saya bersedia untuk menyetorkan kelebihan tersebut ke Kas Negara.</td>
-                </tr>
-                ';
-
-
-      echo  '</table>';
-      $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
-          $arr_pb = $this->fetch_array($result_pb);
-          $bpp = $arr_pb[bpp];
-          $nip_bpp = $arr_pb[nip_bpp];
-          $ppk = $arr_pb[ppk];
-          $nip_ppk = $arr_pb[nip_ppk];
-          $date = getdate();
-          echo '<table  style="width: 100%; text-align:left; border-collapse:collapse; font-size:80%;">
-            <tr>
-              <td width="60%">Mengetahui</td>
-              <td>Jakarta, '.$date['mday']." / ".$date['mon']." / ".$date['year'].'</td>
-            </tr>
-            <tr>
-              <td>Pejabat Pembuat Komitmen</td>
-              <td>Yang Melaksanakan</td>
-            </tr>
-            <tr>
-              <td><br></br><br></br></td>
-              <td><br></br><br></br></td>
-            </tr>
-            <tr>
-              <td style="font-weight:bold">'.$ppk.'</td>
-              <td>'.$penerima.'</td>
-            </tr>
-            
-            <tr>
-              <td>NIP. '.$nip_ppk.'</td>
-              <td></td>
-            </tr>
-          </table>';
-
-    }
+}
     public function pengajuan_UMK($data) {
       $uang_harian_saku=0;
       $honorarium=0;
