@@ -406,7 +406,7 @@
         
       }
       if($dinas==1){
-        $query = "SELECT golongan, npwp, lokasi,  jabatan, kota_asal, tgl_mulai, tgl_akhir, kota_tujuan, rute, harga_tiket, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima, value FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
+        $query = "SELECT golongan, npwp, lokasi,  jabatan, kota_asal, tgl_mulai,tanggal_akhir as tgl_akhir, kota_tujuan, rute, harga_tiket, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima, value FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
         // print_r($query);
         $nmr_kuitansi = $this->log_kwitansi($det_giat,"524119");
         $result = $this->query($query);
@@ -1363,17 +1363,13 @@
              $penerima = $value[penerima];
              $npwp = $value[npwp];
           }
-          $tanggal_akhir = $value[tanggal_akhir];
-          $lokasi = $value[lokasi];
         }
       }
       else{
         foreach ($data as $value) {
-          $penerima = $value[penerima];
-          $jabatan = $value[jabatan];
-          $tanggal_akhir = $value[tanggal_akhir];
-          $lokasi = $value[lokasi];
-          break;
+           $penerima = $value[penerima];
+           $jabatan = $value[jabatan];
+           break;
         }
         $total=$val;
       }
@@ -1439,7 +1435,7 @@
               <tr>
                 <td> Mengetahui/Setuju dibayar  </td>
                 <td>Lunas Dibayar</td>
-                <td>'.$lokasi.', '.$this->konversi_tanggal($tanggal_akhir,"").'</td>
+                <td>........................ 2016</td>
               </tr>              
               <tr>
                 <td>Pejabat Pembuat Komitmen,</td>
@@ -1468,7 +1464,6 @@
               </tr>
               <tr>
                 <td style="border-bottom:2px dashed;" colspan="3"><br></br></td>
-              </tr>
               </table>';
 
       if($item=="Transport Lokal"){
@@ -1535,7 +1530,7 @@
       echo '<table  style="width: 100%; text-align:left; border-collapse:collapse; font-size:80%;">
         <tr>
           <td width="60%">Mengetahui</td>
-          <td>'.$lokasi.', '.$this->konversi_tanggal($tanggal_akhir,"").'</td>
+          <td>Jakarta, ..................................................</td>
         </tr>
         <tr>
           <td>Pejabat Pembuat Komitmen</td>
@@ -1872,7 +1867,7 @@
 
             <td></td>
             <td width="23%"></td>
-            <td>'.$lokasi.','.$date['mday']." / ".$date['mon']." / ".$date['year'].'</td>
+            <td>'.$lokasi.','.$this->konversi_tanggal($tgl_akhir).'</td>
           </tr>
 
           <tr>
@@ -2380,7 +2375,7 @@ public function daftar_peng_riil($result,$det){
         </tr>
         <tr>
           <td width="60%">Mengetahui</td>
-          <td>Jakarta, '.$date['mday']." / ".$date['mon']." / ".$date['year'].'</td>
+          <td>Jakarta, '.$this->konversi_tanggal($tgl_akhir).'</td>
         </tr>
         <tr>
           <td>Pejabat Pembuat Komitmen</td>
@@ -3841,7 +3836,7 @@ $objPHPExcel->getDefaultStyle()
           $sisa=$jml_dipa-$jml_nilai;
           $persen_keu = ($jml_nilai / $jml_dipa) *100;
 
-          $cell->setCellValue('A'.$row,$value['kdoutput']);
+          $cell->setCellValue('A'.$row,"'".$value['kdoutput']);
           $cell->setCellValue('B'.$row,$nmdir['kdout']);
           $cell->setCellValue('C'.$row,'-');
           $cell->setCellValue('D'.$row,'-');
