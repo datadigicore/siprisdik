@@ -73,8 +73,8 @@
                   <th>Status</th>
                   <th></th>
                   <th>Pelaporan</th>
-                  <?php if($_SESSION['level'] == 0){?>
-                  <th></th>
+                  <?php if($_SESSION['level'] == 0 || $_SESSION['level'] == 2){?>
+                  <th>Aksi</th>
                   <?php }?>
                 </tr>
               </thead>
@@ -103,6 +103,31 @@
           <input type="hidden" id="status" name="status" value="" />
           <div class="form-group">
             <label>Apakah Anda Yakin Ingin Melakukan Pengesahan ?</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" data-dismiss="modal" class="btn btn-flat btn-warning">Tidak</button>
+          <button type="submit" class="btn btn-flat btn-success">Ya</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="batal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="<?php echo $url_rewrite;?>process/rab_rinci/batalAkun" method="POST">
+        <div class="modal-header" style="background-color:#111F3F !important; color:white;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" style="color:white">×</span></button>
+          <h4 class="modal-title">Dialog Box</h4>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="id_rabfull_batal" name="id_rabfull" value="" />
+          <input type="hidden" id="id_rab_view_batal" name="id_rab_view" value="<?php echo $id_rab_view ?>" />
+          <input type="hidden" id="status_batal" name="status" value="" />
+          <div class="form-group">
+            <label>Apakah Anda Yakin Ingin Membatalkan Rincian ini ?</label>
           </div>
         </div>
         <div class="modal-footer">
@@ -183,6 +208,18 @@
       tabrow = table.row(tr);
       $("#id_rabfull").val(tabrow.data()[0]);
       $("#status").val('6');
+    });
+    $(document).on("click", "#btn-batal", function (){
+      var tr = $(this).closest('tr');
+      tabrow = table.row(tr);
+      $("#id_rabfull_batal").val(tabrow.data()[0]);
+      $("#status_batal").val('8');
+    });
+    $(document).on("click", "#btn-batal-adn", function (){
+      var tr = $(this).closest('tr');
+      tabrow = table.row(tr);
+      $("#id_rabfull_batal").val(tabrow.data()[0]);
+      $("#status_batal").val('9');
     });
   });
 

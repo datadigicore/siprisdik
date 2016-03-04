@@ -612,20 +612,6 @@
       return $result;
     }
 
-    public function getKwitansi($id_rab_view){
-      $query  = "SELECT * FROM kwitansi as k
-                  where k.rabview_id='$id_rab_view'
-                  group by k.no_kwitansi";
-      $result = $this->query($query);
-      $i=0;
-      while($fetch  = $this->fetch_object($result)) {
-        $data['KDKMPNEN'][$i] = $fetch->KDKMPNEN;
-        $data['NMKMPNEN'][$i] = $fetch->NMKMPNEN;
-        $i++;
-      }
-      return $data;
-    }
-
     public function tambahAkun($data){
       $id_rabfull = $data['id_rabfull'];
       $cek  = "SELECT * FROM rabfull where id='$id_rabfull'";
@@ -1080,8 +1066,31 @@
       return $result;
     }
 
+    public function delrabakun($id_rabfull){
+
+      $query = "UPDATE rabfull SET kdakun = null, 
+                                    noitem = null, 
+                                    ppn= null,  
+                                    value= null,  
+                                    no_kuitansi= null,  
+                                    tgl_mulai   = null,
+                                    tgl_akhir   = null,
+                                    alat_trans  = null,
+                                    kota_asal   = null,
+                                    kota_tujuan = null,
+                                    taxi_asal   = null,
+                                    taxi_tujuan = null,
+                                    rute        = null,
+                                    harga_tiket = null,
+                                    uang_harian = null,
+                                    lama_hari   = null
+                              WHERE id = '$id_rabfull'";
+      $result = $this->query($query);
+      return $result;
+    }
+
     public function getminrabid($data){
-      $query = "SELECT MIN(id) as id FROM rabfull where rabview_id    = '$data->rabview_id'
+      $query = "SELECT MIN(id) as id, count(id) as banyak FROM rabfull where rabview_id    = '$data->rabview_id'
                                                     AND penerima      = '$data->penerima'
                                                     AND npwp          = '$data->npwp'
                                                     AND jenis         = '$data->jenis'

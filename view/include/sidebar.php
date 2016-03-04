@@ -24,7 +24,7 @@
             <li><a href="<?php echo $url_rewrite;?>content/rab51/5696"><i class="fa fa-table"></i> <span>Dukungan Manajemen untuk <br>Program Peningkatan Kualitas <br>Kelembagaan Iptek dan Dikti</span></a></li>
           </ul>
         </li>     
-        <li><a href="<?php echo $url_rewrite;?>content/report"><i class="fa fa-file-text"></i> <span>Cetak Surat</span></a></li>
+        <li><a href="<?php echo $url_rewrite;?>content/report"><i class="fa fa-file-text"></i> <span>Cetak Laporan</span></a></li>
         <!-- <li><a href="<?php echo $url_rewrite;?>content/report"><i class="fa fa-file-text"></i> <span>Cetak SPJB</span></a></li> -->
         <li><a href="<?php echo $url_rewrite;?>content/user"><i class="fa fa-group"></i> <span>Data Pengguna</span></a></li>
         
@@ -52,7 +52,7 @@
           </ul>
         </li>  
         <?php }?> 
-        <li><a href="<?php echo $url_rewrite;?>content/report"><i class="fa fa-file-text"></i> <span>Cetak Surat</span></a></li>
+        <li><a href="<?php echo $url_rewrite;?>content/report"><i class="fa fa-file-text"></i> <span>Cetak Laporan</span></a></li>
       <?php endif ?>
     </ul>
   </section>

@@ -91,22 +91,25 @@ switch ($process) {
 	        elseif($d==8){
 	          return '<i>Dibatalkan</i>';
 	        }
+	        elseif($d==9){
+	          return '<i>Dibatalkan (Adendum)</i>';
+	        }
 	      }),
 	      array( 'db' => 'status',  'dt' => 6, 'formatter' => function($d,$row, $dataArray){ 
 	      	$button =  '<div class="text-center btn-group-vertical">';
 	      	if ($_SESSION['level'] == 0) {
 	      		$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; Lihat Akun</a>';
-	      		if ($d == 2 || $d == 5 || $d == 4) {
-	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."pdf".'" class="btn btn-flat btn-danger btn-sm"><i class="fa fa-file"></i>&nbsp; Kuitansi (PDF)</a>';
-	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."word".'" class="btn btn-flat btn-info btn-sm"><i class="fa fa-file"></i>&nbsp; Kuitansi (Word)</a>';
-	      		}
+	      		// if ($d == 2 || $d == 5 || $d == 4) {
+	      		// 	$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."pdf".'" class="btn btn-flat btn-danger btn-sm"><i class="fa fa-file"></i>&nbsp; Kuitansi (PDF)</a>';
+	      		// 	$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."word".'" class="btn btn-flat btn-info btn-sm"><i class="fa fa-file"></i>&nbsp; Kuitansi (Word)</a>';
+	      		// }
 	      	}else{
 	      		if ($d == 0 || $d == 3 || $d == 5) {
 	      			$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Tambah Akun</a>';
 	      		}else{
 	      			$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Lihat Akun</a>';
 	      		}
-	      		if ($d == 2 || $d == 5 || $d == 4) {
+	      		if ($d == 2 || ($d == 5 && $row[3] != "") || $d == 4 || $d == 6 || $d == 8 || $d == 9) {
 	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."pdf".'" class="btn btn-flat btn-danger btn-sm"><i class="fa fa-file"></i>&nbsp; Kuitansi (PDF)</a>';
 	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."word".'" class="btn btn-flat btn-info btn-sm"><i class="fa fa-file"></i>&nbsp; Kuitansi (Word)</a>';
 		        }
@@ -130,17 +133,17 @@ switch ($process) {
 		  						'</div>';
 		  		}elseif ($row[7] != "" && $d == 6 ) {
 		  			$button =  '<div class="text-center btn-group-vertical">'.
-		  						'<a style="margin:0 2px;" id="btn-btl-adn" href="#batal-adn" class="btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-close"></i> Batal</a>'.
+		  						'<a style="margin:0 2px;" id="btn-batal-adn" href="#batal" class="btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-close"></i> Batal</a>'.
 		  						'</div>';
 		  		}else{
 		  			$button = '<center>-</center>';
 		  		}
 		  	}elseif ($_SESSION['level'] == 2) {
-		  		if ($row[7] != "" && ($d == 2 || $d == 5)) {
+		  		if ($row[7] != "" && ($d == 2 || $d == 8)) {
 		  			$button =  '<div class="text-center btn-group-vertical">'.
 		  						'<a style="margin:0 2px;" id="btn-sah" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
 		  						'</div>';
-		  		}elseif ($row[7] != "" && ($d == 2 || $d == 5)) {
+		  		}elseif ($row[7] != "" && ($d == 5 || $d == 9)) {
 		  			$button =  '<div class="text-center btn-group-vertical">'.
 		  						'<a style="margin:0 2px;" id="btn-sah-adn" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
 		  						'</div>';
@@ -186,6 +189,20 @@ switch ($process) {
 			$mdl_rab->chStatusFullOrang($getrab,$status);
 			$mdl_rab->updateView($id_rab_view);
 	    	$utility->load("content/rabdetail/".$id_rab_view."/detail","success","Data telah disahkan");
+		}else{
+			$utility->location_goto(".");
+		}
+		break;
+	case 'batalAkun':
+		if (isset($_POST)) {
+			$status = $_POST['status'];
+			$id_rabfull = $_POST['id_rabfull'];
+			$id_rab_view = $_POST['id_rab_view'];
+			$getrab = $mdl_rab->getrabfull($id_rabfull);
+
+			$mdl_rab->chStatusFullOrang($getrab,$status);
+
+	    	$utility->load("content/rabdetail/".$id_rab_view."/detail","success","Data telah dibatalkan");
 		}else{
 			$utility->location_goto(".");
 		}
@@ -240,11 +257,16 @@ switch ($process) {
 	      	return number_format($d,2);
 	      }),
 	      array( 'db' => 'rabfull.status',  'dt' => 4, 'formatter' => function($d,$row,$dataArray){ 
-	        if(($d==0 || $d==3) && $_SESSION['level'] != 0){
+	        if(($d==0 || $d==3 || $d==5) && $_SESSION['level'] != 0){
 	          return  '<div class="text-center">'.
 	                    '<a style="margin:0 2px;" id="btn-detail" href="'.$dataArray['url_rewrite'].'content/rabakun/detail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Detail</a>'.
 	                    '<a style="margin:0 2px;" id="btn-edit" href="'.$dataArray['url_rewrite'].'content/rabakun/edit/'.$row[0].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i>&nbsp; Edit</a>'.
 	                    '<a style="margin:0 2px;" id="btn-del" href="#delrab" data-toggle="modal" class="btn btn-flat btn-danger btn-sm" ><i class="fa fa-close"></i>&nbsp; Delete</a>'.
+	                  '</div>';
+	        }elseif($d==2 && $_SESSION['level'] != 0){
+	          return  '<div class="text-center">'.
+	                    '<a style="margin:0 2px;" id="btn-detail" href="'.$dataArray['url_rewrite'].'content/rabakun/detail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Detail</a>'.
+	                    '<a style="margin:0 2px;" id="btn-edit" href="'.$dataArray['url_rewrite'].'content/rabakun/edit/'.$row[0].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i>&nbsp; Edit</a>'.
 	                  '</div>';
 	        }else{
 	        	return  '<div class="text-center">'.
@@ -309,8 +331,12 @@ switch ($process) {
 	case 'delrab':
 		$id_rabfull = $_POST['id_rab_del'];
 		$getrabfull = $mdl_rab->getrabfull($id_rabfull);
-		$mdl_rab->delrabdetail($id_rabfull);
 		$getidrab = $mdl_rab->getminrabid($getrabfull);
+		if ($getidrab->banyak > 1) {
+			$mdl_rab->delrabdetail($id_rabfull);
+		}else{
+			$mdl_rab->delrabakun($id_rabfull);
+		}
     	$utility->load("content/rabakun/".$getidrab->id,"success","Data berhasil dihapus");
 		break;
 	default:
