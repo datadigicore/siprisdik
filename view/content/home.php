@@ -74,7 +74,7 @@
     $(document).ready(function () {
       $.ajax({
         type: "post",
-        url : "<?php echo $url_rewrite.'process/report/laporan_bulanan_TA'; ?>",
+        url : "<?php echo $url_rewrite.'process/report/chart_pie'; ?>",
         dataType: "json",
         success: function(result)
         {

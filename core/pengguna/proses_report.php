@@ -20,27 +20,8 @@ switch ($data[2]) {
   case 'cetak_dok':
     $report->cetak_dok($id,$param[1],$format);
   break;
-  case 'laporan_bulanan_TA':
-    $report->getRkaklFull();
-    $objectExcel->setActiveSheetIndex(0); 
-    $rowCount = 1; 
-    $objectExcel->getActiveSheet()->SetCellValue('A'.$rowCount,'Firstname');
-    $objectExcel->getActiveSheet()->SetCellValue('B'.$rowCount,'Lastname');
-    $objectExcel->getActiveSheet()->SetCellValue('C'.$rowCount,'Branch');
-    $objectExcel->getActiveSheet()->SetCellValue('D'.$rowCount,'Gender');
-    $objectExcel->getActiveSheet()->SetCellValue('E'.$rowCount,'Mobileno');
-    $objectExcel->getActiveSheet()->SetCellValue('F'.$rowCount,'Email');
-    while($row = mysql_fetch_array($result)){ 
-    $rowCount++;
-    $objectExcel->getActiveSheet()->SetCellValue('A'.$rowCount, $row['0']);
-    $objectExcel->getActiveSheet()->SetCellValue('B'.$rowCount, $row['1']);
-    $objectExcel->getActiveSheet()->SetCellValue('C'.$rowCount, $row['2']);
-    $objectExcel->getActiveSheet()->SetCellValue('D'.$rowCount, $row['3']);
-    $objectExcel->getActiveSheet()->SetCellValue('E'.$rowCount, $row['4']);
-    $objectExcel->getActiveSheet()->SetCellValue('F'.$rowCount, $row['5']);
-    } 
-    $objWriter = new PHPExcel_Writer_Excel2007($objectExcel); 
-    $objWriter->save('some_excel_file.xlsx');
+  case 'chart_pie':
+    $report->getChartRKAKL();
   break;
   case 'Rincian_Biaya_PD':
 
@@ -66,8 +47,10 @@ switch ($data[2]) {
   case 'SPP':
     $kode_mak = $purifier->purify($_POST['kode-mak']);
     $direktorat = $purifier->purify($_POST['direktorat']);
-    $bulan = $purifier->purify($_POST['bulan']);
-    $report->SPP($direktorat, $bulan, $_POST,$kode_mak);
+    $month = explode("-", $_POST['bulan']);
+    $bulan = $month[0];
+    $bulan_kata = $month[1];
+    $report->SPP($direktorat, $bulan, $_POST,$kode_mak, $bulan_kata);
   break;
   case 'SPTB':
     $kode_akun = $purifier->purify($_POST['kode-akun']);
