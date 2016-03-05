@@ -2405,7 +2405,7 @@ public function daftar_peng_riil($result,$det){
       $tiket=0;
       $lain2=0;
       $tot=0;
-      $sql = "SELECT rab.tanggal, rab.deskripsi, rab.lokasi, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rab.taxi_asal, rab.taxi_tujuan, rkkl.NMGIAT, rab.value, rab.uang_muka, rab.uang_harian, rab.uang_saku, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ";
+      $sql = "SELECT rab.tanggal, rab.lama_hari, rab.deskripsi, rab.lokasi, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rab.taxi_asal, rab.taxi_tujuan, rab.harga_tiket, rkkl.NMGIAT, rab.value, rab.uang_muka, rab.uang_harian, rab.uang_saku, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ";
       // print_r($sql);
       $result = $this->query($sql);
       $res2 = $this->fetch_array($result);
@@ -2414,38 +2414,31 @@ public function daftar_peng_riil($result,$det){
       foreach($result as $rs) {
 
               if(substr($rs[NMITEM],1,8)=="ransport" or $rs[taxi_tujuan]>0 or $rs[taxi_asal]>0){
-                // echo "Masuk Transport : ".$res[NMITEM]."<br>";
                 $taxi_lokal += $rs[taxi_asal]+$rs[taxi_tujuan];
-                $tot        += $rs[taxi_asal]+$rs[taxi_tujuan];
-                unset($rs[value]);
-                // echo "NIlai taxt :  dan".$taxi_lokal." total  ".$tot;
               }
+
               if(substr($rs[NMITEM],1,3)=="ang" or $rs[uang_harian]>0 or $rs[uang_saku]>0){
-                // echo "Uang Harian: ".$rs[NMITEM]."-".$rs[uang_harian]."<br>";
-                $uang_harian_saku += $rs[uang_harian]+$rs[uang_saku];
-                $tot              += $rs[uang_harian]+$rs[uang_saku];
-                // echo "NIlai Uang ".$uang_harian_saku." total  ".$tot;
-                unset($rs[value]);
+                $uang_harian_saku += ($rs[uang_harian]*$rs[lama_hari])+$rs[uang_saku];
               }
-              if(substr($rs[NMITEM],1,9)=="onorarium"){
-                // echo "Honrarium: ".$rs[NMITEM]."<br>";
+              if(substr($rs[NMITEM],1,4)=="onor")
+              {
                 $honorarium += $rs[value];
-                $tot        += $rs[value];
-                // echo "NIlai Honor ".$honorarium." total  ".$tot;
-                unset($rs[value]);
               }
-              if(substr($rs[NMITEM],1,4)=="iket"){
+              if(substr($rs[NMITEM],1,4)=="iket" or $rs[harga_tiket]>0 ){
                 $tiket += $rs[harga_tiket];
-                $tot   += $rs[harga_tiket];
-                unset($rs[value]);
               }
               
-                $lain2 += $rs[value];
-                $tot   += $rs[value];
-                // echo "Lainnya";
-              
-                             
+              if((substr($rs[NMITEM],1,8)!="ransport" and $rs[taxi_tujuan]==0 and $rs[taxi_asal]==0) and (substr($rs[NMITEM],1,3)!="ang" and $rs[uang_harian]==0.00 and $rs[uang_saku]==0.00) and (substr($rs[NMITEM],1,4)!="onor") and (substr($rs[NMITEM],1,4)!="iket" and $rs[harga_tiket]==0.00 ) ){
+                // $taxi_lokal += $rs[taxi_asal]+$rs[taxi_tujuan];
+                $lain2+= $rs[value];
+              }
+             
+             
+               
+
         }
+         $tot   += $taxi_lokal+$uang_harian_saku+$honorarium+$tiket+$lain2;
+
       $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
       $arr_pb = $this->fetch_array($result_pb);
       $bpp = $arr_pb[bpp];
