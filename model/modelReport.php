@@ -94,6 +94,14 @@
         $condition="and rabview_id='$rabv_id' and npwp like '$npwp%' and nip like '$nip%' and kdakun='$kode_akun'";
       }
 
+      // $sql_org = "SELECT no_kuitansi from kuitansi 
+      //             where kdgiat = '$kdgiat' 
+      //               and kdprogram='$kdprogram' 
+      //               and kdoutput = '$kdoutput'
+      //               and kdsoutput = '$kdsoutput'
+      //               and kdkmpnen = '$kdkmpnen'
+      //               and kdskmpnen = '$kdskmpnen'
+      //               and npwp like '$npwp%' and nip like '$nip%' and kdakun='$kode_akun' ";
       $sql_org = "SELECT no_kuitansi from kuitansi 
                   where kdgiat = '$kdgiat' 
                     and kdprogram='$kdprogram' 
@@ -113,14 +121,17 @@
 
       $hsl_org = $this->query($sql_org);
 
+      // $sql_nomor = "SELECT no_kuitansi, no_kuitansi_update from kuitansi 
+      //               where kdgiat = '$kdgiat' 
+      //               and kdprogram='$kdprogram' 
+      //               and kdoutput = '$kdoutput'
+      //               and kdsoutput = '$kdsoutput'
+      //               and kdkmpnen = '$kdkmpnen'
+      //               and kdskmpnen = '$kdskmpnen' 
+      //               and npwp like '$npwp%' and nip like '$nip%' and kdakun='$kode_akun' order by no_kuitansi DESC, no_kuitansi_update DESC limit 1 ";
       $sql_nomor = "SELECT no_kuitansi, no_kuitansi_update from kuitansi 
                     where kdgiat = '$kdgiat' 
-                    and kdprogram='$kdprogram' 
-                    and kdoutput = '$kdoutput'
-                    and kdsoutput = '$kdsoutput'
-                    and kdkmpnen = '$kdkmpnen'
-                    and kdskmpnen = '$kdskmpnen' 
-                    and npwp like '$npwp%' and nip like '$nip%' and kdakun='$kode_akun' order by no_kuitansi DESC, no_kuitansi_update DESC limit 1 ";
+                    order by no_kuitansi DESC, no_kuitansi_update DESC limit 1 ";
       $hsl_nomor = $this->query($sql_nomor);
 
       $arr_kw = $this->fetch_array($hsl_nomor);
