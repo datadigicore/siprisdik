@@ -83,7 +83,7 @@
             </div>
 
             <div id="tbl_save" class="col-xs-12 hidden">
-              <button type="submit" onclick="simpan()" class="btn btn-flat btn-success btn-lg"><i class="fa fa-save"></i> Simpan Akun</a></button>
+              <button type="submit" class="btn btn-flat btn-success btn-lg"><i class="fa fa-save"></i> Simpan Akun</a></button>
             </div>
         </div>
       </div>
@@ -263,7 +263,7 @@
 
   function kodeAkun(idSelector){
     var id_rabfull = $('#id_rabfull').val();
-    var isi ="<option>-- Pilih Kode Akun --</option>";
+    var isi ="<option value=''>-- Pilih Kode Akun --</option>";
     $.ajax({
       method: "GET",
       url: "<?=$url_rewrite?>ajax/show_opsi_akun.php",
@@ -333,7 +333,7 @@
             $('#bahan').empty();
             $('#nilai').empty();
           } else if(kdAkun == "521211"){
-            $('#bahan').append('  <label>PPN</label>'
+            $('#bahan').append('  <label>PPN (%)</label>'
               +'  <input style="margin:5px auto" type="text" class="form-control nomor" name="ppn" id="ppn" value="" placeholder="PPN" required />'
               );
             $('#nilai').empty();

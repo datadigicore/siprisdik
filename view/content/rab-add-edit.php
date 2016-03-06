@@ -40,7 +40,7 @@
 
               <div id="bahan">
               <?php if($datarkakl[0]->KDAKUN == '521211') {?>
-                <label>PPN</label>
+                <label>PPN (%)</label>
                 <input style="margin:5px auto" type="text" class="form-control nomor" name="ppn" id="ppn" value="<?php echo $getrab->ppn?>" placeholder="PPN" />
               <?php }?>
               </div>
@@ -260,7 +260,7 @@
         $('#nilai').empty();
       } else if(kdAkun == "521211"){
         if (isEmpty($('#bahan'))) {
-            $('#bahan').append('  <label>PPN</label>'
+            $('#bahan').append('  <label>PPN (%)</label>'
           +'  <input style="margin:5px auto" type="text" class="form-control nomor" name="ppn" id="ppn" value="" placeholder="PPN" required />'
           );
         }

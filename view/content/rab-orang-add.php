@@ -91,13 +91,13 @@
          </div>        
       </div>
     </div>
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-md-12 col-xs-12">
         <div class="form-group">
           <button id="tambahorang" class="btn btn-primary"><i class="fa fa-plus"></i> Tambah</button>
         </div>
       </div>
-    </div>
+    </div> -->
   </section>
 </div>
 
