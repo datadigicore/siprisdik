@@ -3534,13 +3534,22 @@ public function daftar_peng_riil($result,$det){
     }
     function rincian_kebutuhan_dana($data){
       $sql = "SELECT  rab.lama_hari,  rab.golongan, rab.penerima, rab.kdakun, rab.taxi_asal, rab.taxi_tujuan, rab.harga_tiket, rab.value, rab.uang_muka, rab.uang_harian, rab.uang_saku, rab.pajak, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ";
-      $sql2 = "SELECT rab.deskripsi, rab.tanggal, rab.lokasi, rab.tempat, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdskmpnen, rkkl.NMGIAT, rkkl.NMOUTPUT, rkkl.NMSOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN  where rabview_id='$data' LIMIT 1";
+      $sql2 = "SELECT rab.deskripsi, rab.tanggal, rab.lokasi, rab.tempat, rab.tempat, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdskmpnen, rkkl.NMGIAT, rkkl.NMOUTPUT, rkkl.NMSOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN  where rabview_id='$data' LIMIT 1";
       
       $res = $this->query($sql);
       $arr = $this->fetch_array($res);
 
       $res2 = $this->query($sql2);
       $id_giat = $this->fetch_array($res2);
+      $direktorat = $id_giat[kdgiat];
+      $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
+      $arr_pb = $this->fetch_array($result_pb);
+      $bpp = $arr_pb[bpp];
+      $nip_bpp = $arr_pb[nip_bpp];
+      $ppk = $arr_pb[ppk];
+      $nip_ppk = $arr_pb[nip_ppk];
+
+      $tanggal = $this->konversi_tanggal($id_giat[tanggal]);
 
       $objPHPExcel = new PHPExcel();
       // Set properties
@@ -3568,14 +3577,18 @@ public function daftar_peng_riil($result,$det){
               'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
           )
       );
+      $objPHPExcel->getActiveSheet()->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
+      $objPHPExcel->getActiveSheet()->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
       $objPHPExcel->getDefaultStyle()->getBorders()->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
       $objPHPExcel->getDefaultStyle()->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-      // $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(4);
-      // $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(4);
       $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(3);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(10);
       $objPHPExcel->getActiveSheet()->getStyle('E')->getAlignment()->setWrapText(true); 
+      $objPHPExcel->getActiveSheet()->getStyle('H')->getAlignment()->setWrapText(true); 
       for($col = 'A'; $col !== 'N'; $col++) {
-        if($col!='E'){
+        if($col!='E'and $col!='H' and $col!='A' and $col!='L'){
           $objPHPExcel->getActiveSheet()
           ->getColumnDimension($col)
           ->setAutoSize(true);
@@ -3595,15 +3608,15 @@ public function daftar_peng_riil($result,$det){
 
       $objPHPExcel->setActiveSheetIndex(0)
               ->setCellValue('A1', 'RINCIAN KEBUTUHAN DANA')
-              ->setCellValue('A2', '1')->setCellValue('B2', 'Satker')->setCellValue('C2', ':')->setCellValue('D2', '')
+              ->setCellValue('A2', '1')->setCellValue('B2', 'Satker')->setCellValue('C2', ':')->setCellValue('D2', '(401196) Direktorat Jenderal Kelembagaan Iptek dan Dikti')
               ->setCellValue('A3', '2')->setCellValue('B3', 'Kegiatan')->setCellValue('C3', ':')->setCellValue('D3', '('.$id_giat[kdprogram].') '.$id_giat[NMGIAT])
               ->setCellValue('A4', '3')->setCellValue('B4', 'Output')->setCellValue('C4', ':')->setCellValue('D4', '('.$id_giat[kdoutput].') '.$id_giat[NMOUTPUT])
               ->setCellValue('A5', '4')->setCellValue('B5', 'Sub Output')->setCellValue('C5', ':')->setCellValue('D5', '('.$id_giat[kdsoutput].') '.$id_giat[NMSOUTPUT])
               ->setCellValue('A6', '5')->setCellValue('B6', 'Komponen Input')->setCellValue('C6', ':')->setCellValue('D6', '('.$id_giat[kdkmpnen].') '.$id_giat[NMKMPNEN])
               ->setCellValue('A7', '6')->setCellValue('B7', 'Sub Komponen')->setCellValue('C7', ':')->setCellValue('D7', '('.$id_giat[kdskmpnen].') '.$id_giat[NMSKMPNEN])
-              ->setCellValue('A8', '7')->setCellValue('B8', 'Tujuan Pelaksanaan')->setCellValue('C8', ':')->setCellValue('D8', '')
-              ->setCellValue('A9', '8')->setCellValue('B9', 'Waktu Pelaksanaan')->setCellValue('C9', ':')->setCellValue('D9', '')
-              ->setCellValue('A10', '9')->setCellValue('B10', 'Tempat Pelaksanaan')->setCellValue('C10', ':')->setCellValue('D10', '')
+              ->setCellValue('A8', '7')->setCellValue('B8', 'Tujuan Pelaksanaan')->setCellValue('C8', ':')->setCellValue('D8', $id_giat[deskripsi])
+              ->setCellValue('A9', '8')->setCellValue('B9', 'Waktu Pelaksanaan')->setCellValue('C9', ':')->setCellValue('D9', $tanggal)
+              ->setCellValue('A10', '9')->setCellValue('B10', 'Tempat Pelaksanaan')->setCellValue('C10', ':')->setCellValue('D10', $id_giat[tempat])
               ->setCellValue('A12', 'No')
               ->setCellValue('B12', 'Nama')
               ->setCellValue('C12', 'Gol')
@@ -3622,7 +3635,8 @@ public function daftar_peng_riil($result,$det){
       $row=12; 
       $sheet->getStyle("A12:M12")->applyFromArray($horizontal);    
       $sheet->getStyle("A12:M12")->applyFromArray($vertical);    
-      $sheet->getStyle("A12:M12")->applyFromArray($border);    
+      $sheet->getStyle("A12:M12")->applyFromArray($border);
+      $sheet->getStyle('A12:M12')->getFont()->setBold(true);    
       $cell = $objPHPExcel->setActiveSheetIndex(0);
       $subtot_honor = 0;   
       $subtot_uangHarian = 0;   
@@ -3728,10 +3742,34 @@ public function daftar_peng_riil($result,$det){
       $cell->setCellValue('L'.$row,'-');
       $cell->setCellValue('M'.$row,$subtot_jml);
       $cell->getStyle('A'.$row.':M'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+      $row+=2;
+      $sheet->mergeCells('L'.$row.':M'.$row);
+      $sheet->getStyle('A'.$row.':M'.$row)->getFont()->setBold(true); 
+      $cell->setCellValue('L'.$row,$id_giat[lokasi].', '.$tanggal);
+      $row+=2;
+      $sheet->mergeCells('L'.$row.':M'.$row);
+      $sheet->mergeCells('A'.$row.':'.'D'.$row);
+      $sheet->getStyle('A'.$row.':M'.$row)->getFont()->setBold(true); 
+      $cell->setCellValue('L'.$row,'BPP,');
+      $cell->setCellValue('A'.$row,'Pejabat Pembuat Komitmen');
+      $row+=4;
+      $cell->setCellValue('L'.$row,$bpp);
+      $sheet->getStyle('A'.$row.':M'.$row)->getFont()->setBold(true); 
+      $cell->setCellValue('A'.$row,$ppk);
+      $row+=1;
+      $sheet->mergeCells('L'.$row.':M'.$row);
+      $sheet->mergeCells('A'.$row.':D'.$row);
+      $sheet->getStyle('A'.$row.':M'.$row)->getFont()->setBold(true); 
+      $cell->setCellValueExplicit('A'.$row,$nip_ppk);
+      $cell->setCellValueExplicit('L'.$row, $nip_bpp, PHPExcel_Cell_DataType::TYPE_STRING);
+
+
+
 
       header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       header('Content-Disposition: attachment;filename="Rincian Kebutuhan Dana.xlsx"');
       header('Cache-Control: max-age=0');
+
 
       $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
       // If you want to output e.g. a PDF file, simply do:
