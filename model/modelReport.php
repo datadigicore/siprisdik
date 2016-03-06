@@ -3532,8 +3532,19 @@ public function daftar_peng_riil($result,$det){
       $hasil .= " RUPIAH";
       return $hasil;
     }
-    function rincian_kebutuhan_dana($data){
-      $sql = "SELECT  rab.lama_hari,  rab.golongan, rab.penerima, rab.kdakun, rab.taxi_asal, rab.taxi_tujuan, rab.harga_tiket, rab.value, rab.uang_muka, rab.uang_harian, rab.uang_saku, rab.pajak, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ";
+    function rincian_kebutuhan_dana($data,$jns){
+      $cond_query;
+      $title;
+      if($jns=="1"){
+        $title = "DAFTAR PERTANGGUNG JAWABAN UMK";
+        $cond_query = " and status in(2,4,6,7) ";
+      }
+      else{
+        $title= "RINCIAN KEBUTUHAN DANA";
+        $cond_query = " ";
+      }
+
+      $sql = "SELECT  rab.lama_hari,  rab.golongan, rab.penerima, rab.kdakun, rab.taxi_asal, rab.taxi_tujuan, rab.harga_tiket, rab.value, rab.uang_muka, rab.uang_harian, rab.uang_saku, rab.pajak, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ".$cond_query;
       $sql2 = "SELECT rab.deskripsi, rab.tanggal, rab.lokasi, rab.tempat, rab.tempat, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdskmpnen, rkkl.NMGIAT, rkkl.NMOUTPUT, rkkl.NMSOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN  where rabview_id='$data' LIMIT 1";
       
       $res = $this->query($sql);
@@ -3594,7 +3605,8 @@ public function daftar_peng_riil($result,$det){
           ->setAutoSize(true);
         }
       }
-      $sheet = $objPHPExcel->getActiveSheet()->setTitle('RINCIAN KEBUTUHAN DANA');
+      
+      $sheet = $objPHPExcel->getActiveSheet()->setTitle($title);
       $sheet->mergeCells('A1:M1');
       $sheet->mergeCells('D2:M2');
       $sheet->mergeCells('D3:M3');
@@ -3607,7 +3619,7 @@ public function daftar_peng_riil($result,$det){
       $sheet->mergeCells('D10:M10');
 
       $objPHPExcel->setActiveSheetIndex(0)
-              ->setCellValue('A1', 'RINCIAN KEBUTUHAN DANA')
+              ->setCellValue('A1', $title)
               ->setCellValue('A2', '1')->setCellValue('B2', 'Satker')->setCellValue('C2', ':')->setCellValue('D2', '(401196) Direktorat Jenderal Kelembagaan Iptek dan Dikti')
               ->setCellValue('A3', '2')->setCellValue('B3', 'Kegiatan')->setCellValue('C3', ':')->setCellValue('D3', '('.$id_giat[kdprogram].') '.$id_giat[NMGIAT])
               ->setCellValue('A4', '3')->setCellValue('B4', 'Output')->setCellValue('C4', ':')->setCellValue('D4', '('.$id_giat[kdoutput].') '.$id_giat[NMOUTPUT])
@@ -3633,6 +3645,10 @@ public function daftar_peng_riil($result,$det){
 
       $no=0;
       $row=12; 
+      $sheet->getStyle("A1")->applyFromArray($horizontal);    
+      $sheet->getStyle("A1")->applyFromArray($vertical);
+      $sheet->getStyle('A1')->getFont()->setBold(true);
+      $objPHPExcel->getActiveSheet()->getRowDimension('A')->setRowHeight(10);      
       $sheet->getStyle("A12:M12")->applyFromArray($horizontal);    
       $sheet->getStyle("A12:M12")->applyFromArray($vertical);    
       $sheet->getStyle("A12:M12")->applyFromArray($border);

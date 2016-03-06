@@ -32,7 +32,7 @@ switch ($data[2]) {
   break;
 
   case 'rincian_kebutuhan_dana':
-    $report->rincian_kebutuhan_dana($data[3]);
+    $report->rincian_kebutuhan_dana($data[3],$data[4]);
   break;
 
   case '522151':
