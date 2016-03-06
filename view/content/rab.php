@@ -64,11 +64,12 @@
               <thead style="background-color:#11245B;color:white;">
                 <tr>
                   <th>No</th>
-                  <th width="15%">Kode RKAKL</th>
+                  <th width="12%">Kode RKAKL</th>
                   <th width="20%">Direktorat</th>
-                  <th width="10%">Uraian Acara</th>
-                  <th width="10%">Tanggal</th>
-                  <th width="15%">Lokasi</th>
+                  <th width="15%">Uraian Acara</th>
+                  <th width="18%">Tanggal</th>
+                  <th width="10%">Lokasi</th>
+                  <th width="10%">Jumlah</th>
                   <th width="10%">Status</th>
                   <th width="15%">Action</th>
                 </tr>

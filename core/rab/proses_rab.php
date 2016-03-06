@@ -13,21 +13,43 @@ switch ($process) {
       array( 'db' => 'id',      'dt' => 0 ),
       array( 'db' => 'kdprogram',  'dt' => 1, 'formatter' => function($d,$row, $dataArray){ 
           return '<table><tr><td>Program</td><td> :&nbsp;</td><td>'.$d.'</td></tr>'.
-                 '<tr><td>Output</td><td> :&nbsp;</td><td>'.$row[8].'</td></tr>'.
-                 '<tr><td>Sub Output</td><td> :&nbsp;</td><td>'.$row[9].'</td></tr>'.
-                 '<tr><td>Komponen</td><td> :&nbsp;</td><td>'.$row[10].'</td></tr>'.
-                 '<tr><td>Sub Komponen</td><td> :&nbsp;</td><td>'.$row[11].'</td></tr></table>';
+                 '<tr><td>Output</td><td> :&nbsp;</td><td>'.$row[9].'</td></tr>'.
+                 '<tr><td>Sub Output</td><td> :&nbsp;</td><td>'.$row[10].'</td></tr>'.
+                 '<tr><td>Komponen</td><td> :&nbsp;</td><td>'.$row[11].'</td></tr>'.
+                 '<tr><td>Sub Komponen</td><td> :&nbsp;</td><td>'.$row[12].'</td></tr></table>';
       }),
       array( 'db' => 'kdgiat',  'dt' => 2, 'formatter' => function($d, $row, $dataArray){
         return $dataArray['direktorat'][$d];
       }),
       array( 'db' => 'deskripsi',  'dt' => 3),
       array( 'db' => 'tanggal',  'dt' => 4, 'formatter' => function( $d, $row ) {
-            return date( 'j M Y', strtotime($d));
-          }
-      ),
-      array( 'db' => 'lokasi',  'dt' => 5 ),
-      array( 'db' => 'status', 'dt' => 6, 'formatter' => function($d,$row){ 
+        $arrbulan = array(
+                '01'=>"Januari",
+                '02'=>"Februari",
+                '03'=>"Maret",
+                '04'=>"April",
+                '05'=>"Mei",
+                '06'=>"Juni",
+                '07'=>"Juli",
+                '08'=>"Agustus",
+                '09'=>"September",
+                '10'=>"Oktober",
+                '11'=>"November",
+                '12'=>"Desember",
+        );
+        $pecahtgl1 = explode("-", $d);
+        $tglawal = $pecahtgl1[2].' '.$arrbulan[$pecahtgl1[1]].' '.$pecahtgl1[0];
+        $pecahtgl2 = explode("-", $row[15]);
+        $tglakhir = $pecahtgl2[2].' '.$arrbulan[$pecahtgl2[1]].' '.$pecahtgl2[0];
+        return $tglawal.' - '.$tglakhir;
+      }),
+      array( 'db' => 'lokasi',  'dt' => 5, 'formatter' => function($d,$row){
+        return $row[14].', '.$d;
+      }),
+      array( 'db' => '(SELECT SUM(rabfull.value) from rabfull where rabfull.rabview_id = rabview.id group by rabfull.rabview_id)','dt' => 6, 'formatter' => function($d,$row){
+        return 'Rp '.number_format($d,2,',','.');
+      }),
+      array( 'db' => 'status', 'dt' => 7, 'formatter' => function($d,$row){ 
         if($d==0){
           return '<i>Belum Diajukan</i>';
         }
@@ -53,7 +75,7 @@ switch ($process) {
           return '<i>Penutupan Anggaran</i>';
         }
       }),
-      array( 'db' => 'status',  'dt' => 7, 'formatter' => function($d,$row, $dataArray){ 
+      array( 'db' => 'status',  'dt' => 8, 'formatter' => function($d,$row, $dataArray){ 
         $button = '<div class="text-center btn-group-vertical">';
         if($d==0 && $_SESSION['level'] != 0){
           $button .= '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list pull-left"></i> Rincian</a>';
@@ -102,17 +124,19 @@ switch ($process) {
           $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file-text-o pull-left"></i> Cetak Pengajuan UMK</a>';
           $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'/1'.'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file-text-o pull-left"></i> Cetak Daftar PJ UMK</a>';
         }
-        if ($row[12] != "") {
+        if ($row[13] != "") {
           $button .= '<a style="margin:0 2px;" id="btn-pesan" href="#pesanrevisi" class="btn btn-flat btn-info btn-sm" data-toggle="modal"><i class="fa fa-envelope pull-left"></i> Pesan</a>';
         }
         $button .= '</div>';
         return $button;
       }),
-      array( 'db' => 'kdoutput',  'dt' => 8),
-      array( 'db' => 'kdsoutput',  'dt' => 9),
-      array( 'db' => 'kdkmpnen',  'dt' => 10),
-      array( 'db' => 'kdskmpnen',  'dt' => 11),
-      array( 'db' => 'pesan',  'dt' => 12),
+      array( 'db' => 'kdoutput',  'dt' => 9),
+      array( 'db' => 'kdsoutput',  'dt' => 10),
+      array( 'db' => 'kdkmpnen',  'dt' => 11),
+      array( 'db' => 'kdskmpnen',  'dt' => 12),
+      array( 'db' => 'pesan',  'dt' => 13),
+      array( 'db' => 'tempat',  'dt' => 14),
+      array( 'db' => 'tanggal_akhir',  'dt' => 15),
     );
     $where="";
     if ($tahun != "") {
@@ -125,7 +149,8 @@ switch ($process) {
         $where .= 'AND kdgiat = "'.$direktorat.'"';
       }
     }
-    $datatable->get_table($table, $key, $column,$where,$dataArray);
+    $group='';
+    $datatable->get_table_group($table, $key, $column,$where,$group,$dataArray);
     break;
   case 'getnpwp':
     $jenis = $data[3];

@@ -776,27 +776,27 @@
         $rabview_id = $cekfetch->rabview_id;
         $pph        = ($pajak/100) * $value; 
 
-        // $query      = "INSERT INTO rabfull SET
-        //   rabview_id  = '$rabview_id',
-        //   thang       = '$thang',
-        //   kdprogram   = '$kdprogram',
-        //   kdgiat      = '$kdgiat',
-        //   kdoutput    = '$kdoutput',
-        //   kdsoutput   = '$kdsoutput',
-        //   kdkmpnen    = '$kdkmpnen',
-        //   kdskmpnen   = '$kdskmpnen',
-        //   kdakun      = '$kdakun',
-        //   noitem      = '$noitem',
+        $query      = "INSERT INTO rabfull SET
+          rabview_id  = '$rabview_id',
+          thang       = '$thang',
+          kdprogram   = '$kdprogram',
+          kdgiat      = '$kdgiat',
+          kdoutput    = '$kdoutput',
+          kdsoutput   = '$kdsoutput',
+          kdkmpnen    = '$kdkmpnen',
+          kdskmpnen   = '$kdskmpnen',
+          kdakun      = '$kdakun',
+          noitem      = '$noitem',
 
-        //   jenis       = '$jenis',
-        //   penerima    = '$penerima',
-        //   npwp        = '$npwp',
-        //   golongan    = '$golongan',
-        //   jabatan     = '$jabatan',
-        //   pns         = '$pns',
-        //   pajak       = '$pajak'
-        // ";
-        // $result = $this->query($query);
+          jenis       = '$jenis',
+          penerima    = '$penerima',
+          npwp        = '$npwp',
+          golongan    = '$golongan',
+          jabatan     = '$jabatan',
+          pns         = '$pns',
+          pajak       = '$pajak'
+        ";
+        $result = $this->query($query);
 
         $id_rabfull = $this->insert_id($result); 
         $sub_query = "";

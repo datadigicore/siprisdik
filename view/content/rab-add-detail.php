@@ -40,8 +40,8 @@
 
               <?php if($datarkakl[0]->KDAKUN == '521211'){?>
               <div id="bahan">
-                <label>PPN</label>
-                <input style="margin:5px auto" type="number" class="form-control" name="ppn" id="ppn" value="<?php echo $getrab->ppn?>" placeholder="PPN" readonly />
+                <label>PPN (%)</label>
+                <input style="margin:5px auto" type="text" class="form-control persen" name="ppn" id="ppn" value="<?php echo $getrab->ppn?> %" placeholder="PPN" readonly />
               </div>
               <?php } ?>
 

@@ -61,7 +61,7 @@ switch ($process) {
 	      }),
 	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 3),
 	      array( 'db' => 'SUM(value)', 'dt' => 4, 'formatter' => function($d,$row){ 
-	      	return number_format($d,2);
+	      	return 'Rp '.number_format($d,2,',','.');
 	      }),
 	      array( 'db' => 'status',  'dt' => 5, 'formatter' => function($d,$row, $dataArray){ 
 	        if($d==0){
@@ -254,7 +254,7 @@ switch ($process) {
 	      }),
 	      array( 'db' => 'rkakl_full.NMAKUN',  'dt' => 2),
 	      array( 'db' => 'rabfull.value', 'dt' => 3, 'formatter' => function($d,$row,$dataArray){
-	      	return number_format($d,2);
+	      	return 'Rp '.number_format($d,2);
 	      }),
 	      array( 'db' => 'rabfull.status',  'dt' => 4, 'formatter' => function($d,$row,$dataArray){ 
 	        if(($d==0 || $d==3 || $d==5) && $_SESSION['level'] != 0){
@@ -276,7 +276,8 @@ switch ($process) {
 	      }),
 	      array( 'db' => 'rabfull.noitem', 'dt' => 5),
 	    );
-		$where = 'rabfull.thang 		= "'.$getdata->thang.'"
+		$where = 'rabfull.rabview_id 	= "'.$getdata->rabview_id.'"
+				AND rabfull.thang 		= "'.$getdata->thang.'"
 				AND rabfull.kdprogram 	= "'.$getdata->kdprogram.'"
 				AND rabfull.kdgiat 		= "'.trim($getdata->kdgiat,"\x0D\x0A").'"
 				AND rabfull.kdoutput 	= "'.trim($getdata->kdoutput,"\x0D\x0A").'"
