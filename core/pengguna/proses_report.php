@@ -30,6 +30,11 @@ switch ($data[2]) {
   case 'pengajuan_UMK':
     $report->pengajuan_UMK($data[3]);
   break;
+
+  case 'rincian_kebutuhan_dana':
+    $report->rincian_kebutuhan_dana($data[3]);
+  break;
+
   case '522151':
     $report->Kuitansi_Honor_Uang_Saku($data_pengguna);
   break;
@@ -76,6 +81,7 @@ switch ($data[2]) {
     $bulan_kata = $month[1];
     // print_r($bulan);
     $report->Rincian_Permintaan_Pengeluaran($kode_mak, $direktorat, $bulan, $bulan_kata);
+    // $report->rincian_kebutuhan_dana($direktorat);
   break;
   case 'Daya_Serap':
     $direktorat = $purifier->purify($_POST['direktorat']);
