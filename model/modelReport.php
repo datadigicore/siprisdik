@@ -2429,8 +2429,12 @@ public function daftar_peng_riil($result,$det){
       $direktorat=$res2['kdgiat'];
       foreach($result as $rs) {
 
-              if(substr($rs[NMITEM],1,8)=="ransport" or $rs[taxi_tujuan]>0 or $rs[taxi_asal]>0){
+              if($rs[taxi_tujuan]>0 or $rs[taxi_asal]>0){
                 $taxi_lokal += $rs[taxi_asal]+$rs[taxi_tujuan];
+              }
+
+              if(substr($rs[NMITEM],1,8)=="ransport"){
+                $taxi_lokal += $rs[value];
               }
 
               if(substr($rs[NMITEM],1,3)=="ang" or $rs[uang_harian]>0 or $rs[uang_saku]>0){
@@ -2447,17 +2451,20 @@ public function daftar_peng_riil($result,$det){
               if(substr($rs[NMITEM],1,4)=="iket" or $rs[harga_tiket]>0 ){
                 $tiket += $rs[harga_tiket];
               }
-              
-              if((substr($rs[NMITEM],1,8)!="ransport" and $rs[taxi_tujuan]==0 and $rs[taxi_asal]==0) and (substr($rs[NMITEM],1,3)!="ang" and $rs[uang_harian]==0.00 and $rs[uang_saku]==0.00) and (substr($rs[NMITEM],1,4)!="onor") and (substr($rs[NMITEM],1,4)!="iket" and $rs[harga_tiket]==0.00 ) and $rs[NMAKUN]!="Belanja Jasa Profesi"){
+              if($rs[kdakun]=="524119" or (substr($rs[NMITEM],1,4)=="aket" or substr($rs[NMITEM],1,4)=="iaya" or substr($rs[NMITEM],1,9)=="enginapan") ){
+                $Akomodasi+=$rs[value];
+              }
+              if((substr($rs[NMITEM],1,8)!="ransport" and $rs[taxi_tujuan]==0.00 and $rs[taxi_asal]==0.00) and (substr($rs[NMITEM],1,3)!="ang" and $rs[uang_harian]==0.00 and $rs[uang_saku]==0.00) and (substr($rs[NMITEM],1,4)!="onor") and (substr($rs[NMITEM],1,4)!="iket" and $rs[harga_tiket]==0.00 ) and $rs[NMAKUN]!="Belanja Jasa Profesi" and (substr($rs[NMITEM],1,4)!="aket" and substr($rs[NMITEM],1,4)!="iaya" and substr($rs[NMITEM],1,9)!="enginapan")){
                 // $taxi_lokal += $rs[taxi_asal]+$rs[taxi_tujuan];
                 $lain2+= $rs[value];
               }
+              
              
              
                
 
         }
-         $tot   += $taxi_lokal+$uang_harian_saku+$honorarium+$tiket+$lain2;
+         $tot   += $taxi_lokal+$uang_harian_saku+$honorarium+$tiket+$Akomodasi+$lain2;
 
       $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
       $arr_pb = $this->fetch_array($result_pb);
@@ -3673,8 +3680,16 @@ public function daftar_peng_riil($result,$det){
         $cell->setCellValue('D'.$row,'');
         
         
-        if(substr($val[NMITEM],1,8)=="ransport" or $val[taxi_tujuan]>0 or $val[taxi_asal]>0){
-            $transport = $val[taxi_asal]+$val[taxi_tujuan]+$val[value];
+        if( $val[taxi_tujuan]>0 or $val[taxi_asal]>0){
+            $transport = $val[taxi_asal]+$val[taxi_tujuan];
+            $subtot_transport += number_format($transport,2,",",".");
+            $acc+=$transport;
+            $cell->setCellValue('H'.$row,$transport);
+            $cell->getStyle('H'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+        }
+
+        if(substr($val[NMITEM],1,8)=="ransport"){
+            $transport =+$val[value];
             $subtot_transport += number_format($transport,2,",",".");
             $acc+=$transport;
             $cell->setCellValue('H'.$row,$transport);
@@ -3690,7 +3705,7 @@ public function daftar_peng_riil($result,$det){
         }
 
         if($val[kdakun]=="524119" and $val[uang_harian]>0){
-          $uang_harian += $val[uang_harian];
+          $uang_harian += $val[lama_hari]*$val[uang_harian];
           $acc+=$uang_harian;
           $subtot_uangHarian += $uang_harian;
           $cell->setCellValue('F'.$row,$uang_harian);
@@ -3731,8 +3746,14 @@ public function daftar_peng_riil($result,$det){
           $cell->setCellValue('I'.$row,$tiket);
           $cell->getStyle('I'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
         }
-        $cell->setCellValue('J'.$row,'-');
-        if((substr($val[NMITEM],1,8)!="ransport" and $val[taxi_tujuan]==0.00 and $val[taxi_asal]==0.00) and (substr($val[NMITEM],1,3)!="ang" and $val[uang_harian]==0.00 and $val[uang_saku]==0.00) and (substr($val[NMITEM],1,4)!="onor") and (substr($val[NMITEM],1,4)!="iket" and $val[harga_tiket]==0.00 ) and $val[NMAKUN]!="Belanja Jasa Profesi"){        // $taxi_lokal += $rs[taxi_asal]+$rs[taxi_tujuan];
+        if($val[kdakun]=="524119" and (substr($val[NMITEM],1,4)=="aket" or substr($val[NMITEM],1,4)=="iaya" or substr($val[NMITEM],1,9)=="enginapan") ){
+          $akomodasi = $val[value];
+          $subtot_akomodasi += $akomodasi;
+          $acc+= $akomodasi;
+          $cell->setCellValue('J'.$row,$akomodasi);
+          $cell->getStyle('J'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+        }
+        if((substr($val[NMITEM],1,8)!="ransport" and $val[taxi_tujuan]==0.00 and $val[taxi_asal]==0.00) and (substr($val[NMITEM],1,3)!="ang" and $val[uang_harian]==0.00 and $val[uang_saku]==0.00) and (substr($val[NMITEM],1,4)!="onor") and (substr($val[NMITEM],1,4)!="iket" and $val[harga_tiket]==0.00 ) and $val[NMAKUN]!="Belanja Jasa Profesi" and (substr($val[NMITEM],1,4)!="aket" and substr($val[NMITEM],1,4)!="iaya" and substr($val[NMITEM],1,9)!="enginapan")){        // $taxi_lokal += $rs[taxi_asal]+$rs[taxi_tujuan];
           $lain2 = $val[value];
           $subtot_lain += $lain2;
           $acc+=$lain2;
@@ -3753,7 +3774,7 @@ public function daftar_peng_riil($result,$det){
       $cell->setCellValue('G'.$row,$uang_saku);
       $cell->setCellValue('H'.$row,$subtot_transport);
       $cell->setCellValue('I'.$row,$subtot_tiket);
-      $cell->setCellValue('J'.$row,'-');
+      $cell->setCellValue('J'.$row,$subtot_akomodasi);
       $cell->setCellValue('K'.$row,$subtot_lain);
       $cell->setCellValue('L'.$row,'-');
       $cell->setCellValue('M'.$row,$subtot_jml);
