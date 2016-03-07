@@ -3308,7 +3308,7 @@ public function daftar_peng_riil($result,$det){
         <td style="border:1px solid; text-align:right; ">'.number_format($tot_dipa_51,2,",",".").'</td>
         <td style="border:1px solid; text-align:right; ">'.number_format($tot_nilai_51,2,",",".").'</td>
         <td style="border:1px solid; text-align:right;  ">'.number_format($tot_dipa_52,2,",",".").'</td>
-        <td style="border:1px solid; text-align:right;  ">'.number_format($tot_nilai_52['jumlah'],2,",",".").'</td>
+        <td style="border:1px solid; text-align:right;  ">'.number_format($tot_nilai_52,2,",",".").'</td>
         <td style="border:1px solid; text-align:right;  ">'.number_format($tot_dipa_53,2,",",".").'</td>
         <td style="border:1px solid; text-align:right;  ">'.number_format($tot_nilai_53,2,",",".").'</td>
         <td style="border:1px solid; text-align:right;  ">'.number_format($tot_dipa_57,2,",",".").'</td>
@@ -3431,7 +3431,7 @@ public function daftar_peng_riil($result,$det){
         
       }
       // echo "akuns : ".$kdakun;
-      $query = " SELECT SUM(case when month(tanggal)<'$tanggal' then value else 0 end) as jml_lalu, SUM(case when month(tanggal)='$tanggal' then value else 0 end) as jumlah FROM rabfull WHERE kdgiat LIKE '%$kdgiat%' ".$q_out.$q_sout.$q_kmp.$q_skmp.$q_akun;
+      $query = " SELECT SUM(case when month(tanggal)<'$tanggal' then value else 0 end) as jml_lalu, SUM(case when month(tanggal)='$tanggal' then value else 0 end) as jumlah FROM rabfull WHERE kdgiat LIKE '%$kdgiat%' ".$q_out.$q_sout.$q_kmp.$q_skmp.$q_akun.' and status in (2,4,6,7)';
       // print_r($query);
       
       $res = $this->query($query);
@@ -3682,7 +3682,7 @@ public function daftar_peng_riil($result,$det){
         
         if( $val[taxi_tujuan]>0 or $val[taxi_asal]>0){
             $transport = $val[taxi_asal]+$val[taxi_tujuan];
-            $subtot_transport += number_format($transport,2,",",".");
+            $subtot_transport += $transport;
             $acc+=$transport;
             $cell->setCellValue('H'.$row,$transport);
             $cell->getStyle('H'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
@@ -3690,13 +3690,13 @@ public function daftar_peng_riil($result,$det){
 
         if(substr($val[NMITEM],1,8)=="ransport"){
             $transport =+$val[value];
-            $subtot_transport += number_format($transport,2,",",".");
+            $subtot_transport += $transport;
             $acc+=$transport;
             $cell->setCellValue('H'.$row,$transport);
             $cell->getStyle('H'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
         }
         
-        if(substr($val[NMITEM],1,10)=="ang harian") {
+        if(strcasecmp(substr($val[NMITEM],1,10),"ang harian")==0) {
             $uang_harian = $val[value];
             $acc+=$uang_harian;
             $subtot_uangHarian = $uang_harian;
@@ -3713,7 +3713,7 @@ public function daftar_peng_riil($result,$det){
 
         }
 
-        if(substr($val[NMITEM],1,8)=="ang saku") {
+        if(strcasecmp(substr($val[NMITEM],1,8), "ang saku")==0) {
           $uang_saku = $val[value];
           $acc+=$uang_saku;
           $subtot_uangSaku+=$uang_saku;
@@ -3746,7 +3746,7 @@ public function daftar_peng_riil($result,$det){
           $cell->setCellValue('I'.$row,$tiket);
           $cell->getStyle('I'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
         }
-        if($val[kdakun]=="524119" and (substr($val[NMITEM],1,4)=="aket" or substr($val[NMITEM],1,4)=="iaya" or substr($val[NMITEM],1,9)=="enginapan") ){
+        if($val[kdakun]=="524119" or (substr($val[NMITEM],1,4)=="aket" or substr($val[NMITEM],1,4)=="iaya" or substr($val[NMITEM],1,9)=="enginapan") ){
           $akomodasi = $val[value];
           $subtot_akomodasi += $akomodasi;
           $acc+= $akomodasi;

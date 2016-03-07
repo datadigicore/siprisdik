@@ -104,7 +104,8 @@ switch ($data[2]) {
     $direktorat = $purifier->purify($_POST['direktorat']);
     $bulan = $purifier->purify($_POST['bulan']);
     // echo $direktorat." ".$bulan;
-    $report->serapan($direktorat, $bulan);
+    // $report->serapan($direktorat, $bulan);
+    $report->rekap_total($direktorat, $bulan);
    break;
   default:
     
