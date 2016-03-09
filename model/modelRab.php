@@ -467,6 +467,14 @@
       $result = $this->query($query);
       $result2 = $this->query($query2);
 
+      if ($status == 1) {
+        $query3 = "UPDATE rabview SET submit_at='".date("Y-m-d H:i:s")."', submit_by = '".$_SESSION['id']."' WHERE id = '$id_rabview'";
+        $result3 = $this->query($query3);
+      }elseif ($status == 2) {
+        $query3 = "UPDATE rabview SET approve_at='".date("Y-m-d H:i:s")."', approve_by = '".$_SESSION['id']."' WHERE id = '$id_rabview'";
+        $result3 = $this->query($query3);
+      }
+
       return array('result' => $result,
                     'result2' => $result2
                   );

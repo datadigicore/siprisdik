@@ -340,6 +340,9 @@ switch ($process) {
 		}
     	$utility->load("content/rabakun/".$getidrab->id,"success","Data berhasil dihapus");
 		break;
+	case 'importrab':
+		# code...
+		break;
 	default:
 		$utility->location_goto(".");
 		break;

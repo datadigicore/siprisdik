@@ -22,7 +22,8 @@
             <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya</h3>
             <input type="hidden" id="id_rab_view" name="id_rab_view" value="<?php echo $id_rab_view ?>" />
             <?php if ($_SESSION['level'] != 0) {
-              echo '<a id="tblAdd" data-toggle="modal" class="btn btn-flat btn-success btn-md pull-right"><i class="fa fa-user"></i>&nbsp;Tambah Orang / Badan</a>';
+              echo '<a id="tblAdd" data-toggle="modal" class="btn btn-flat btn-primary btn-md pull-right"><i class="fa fa-user"></i>&nbsp;Tambah Orang / Badan</a>';
+              echo '<a href="#import" data-toggle="modal" class="btn btn-flat btn-success btn-md pull-right"><i class="fa fa-file-excel-o"></i> Import Excel</a>';
             }?>
           </div>
           <div class="box-body">
@@ -64,10 +65,6 @@
                   <th>No</th>
                   <th>Penerima</th>
                   <th>Keterangan</th>
-                  <!-- <th>NPWP</th>
-                  <th>Golongan </th>
-                  <th>PNS</th>
-                  <th>Jabatan</th> -->
                   <th>Kode Akun</th>
                   <th>Total Dana RAB</th>
                   <th>Status</th>
@@ -138,6 +135,34 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="import">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="<?php echo $url_rewrite;?>process/rab/importrab" method="POST" enctype="multipart/form-data">
+        <div class="modal-header" style="background-color:#111F3F !important; color:white;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" style="color:white">×</span></button>
+          <h4 class="modal-title">Import Data RAB</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Download Template <a href="<?php echo $url_rewrite;?>process/rab/download">Here</a>.</label>
+          </div>
+          <div class="form-group">
+            <!-- <label>Select File</label> -->
+            <input type="file" id="fileimport" name="fileimport" style="display:none;">
+            <a id="selectbtn" class="btn btn-flat btn-primary" style="position:absolute;right:16px;">Select File</a>
+            <input type="text" id="filename" class="form-control" placeholder="Pilih File .xls / .xlsx" readonly>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-flat btn-success">Import Data</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <script>
   $(function () {
     var tahun = $('#tahun').val();
@@ -163,6 +188,10 @@
         {"targets" : 5},
       ],
       "order": [[ 0, "desc" ]]
+    });
+
+    $('#selectbtn').click(function () {
+      $("#fileimport").trigger('click');
     });
 
     $.ajax({
