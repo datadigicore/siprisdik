@@ -2429,35 +2429,53 @@ public function daftar_peng_riil($result,$det){
       $direktorat=$res2['kdgiat'];
       foreach($result as $rs) {
 
-              if(substr($rs[NMITEM],1,8)=="ransport" or $rs[taxi_tujuan]>0 or $rs[taxi_asal]>0){
+              if($rs[kdakun]=="524119"){
                 $taxi_lokal += $rs[taxi_asal]+$rs[taxi_tujuan];
-              }
-
-              if(substr($rs[NMITEM],1,3)=="ang" or $rs[uang_harian]>0 or $rs[uang_saku]>0){
                 $uang_harian_saku += ($rs[uang_harian]*$rs[lama_hari])+$rs[uang_saku];
+                $tiket += $rs[harga_tiket];
               }
-
-              if(substr($rs[NMITEM],1,3)=="ang" and ($rs[uang_harian]==0.0 or $rs[uang_saku]==0.0)){
+              if((substr($rs[NMITEM],1,4)=="aket" or substr($rs[NMITEM],1,4)=="iaya" or substr($rs[NMITEM],1,9)=="enginapan") and strcasecmp(substr($rs[NMITEM],0,16),"Biaya Perjalanan")!=0  ){
+                $Akomodasi+=$rs[value];
+              }
+              if(substr($rs[NMITEM],1,3)=="ang"){
                 $uang_harian_saku += $rs[value];
               }
+              // if($rs[taxi_tujuan]>0 or $rs[taxi_asal]>0){
+              //   $taxi_lokal += $rs[taxi_asal]+$rs[taxi_tujuan];
+              // }
+
+              if(substr($rs[NMITEM],1,8)=="ransport"){
+                $taxi_lokal += $rs[value];
+              }
+
+              // if(substr($rs[NMITEM],1,3)=="ang" or $rs[uang_harian]>0 or $rs[uang_saku]>0){
+              //   $uang_harian_saku += ($rs[uang_harian]*$rs[lama_hari])+$rs[uang_saku];
+              // }
+
+              // if(substr($rs[NMITEM],1,3)=="ang" and ($rs[uang_harian]==0.0 or $rs[uang_saku]==0.0)){
+              //   $uang_harian_saku += $rs[value];
+              // }
               if(substr($rs[NMITEM],1,4)=="onor" or $rs[NMAKUN]=="Belanja Jasa Profesi")
               {
                 $honorarium += $rs[value];
               }
-              if(substr($rs[NMITEM],1,4)=="iket" or $rs[harga_tiket]>0 ){
-                $tiket += $rs[harga_tiket];
-              }
-              
-              if((substr($rs[NMITEM],1,8)!="ransport" and $rs[taxi_tujuan]==0 and $rs[taxi_asal]==0) and (substr($rs[NMITEM],1,3)!="ang" and $rs[uang_harian]==0.00 and $rs[uang_saku]==0.00) and (substr($rs[NMITEM],1,4)!="onor") and (substr($rs[NMITEM],1,4)!="iket" and $rs[harga_tiket]==0.00 ) and $rs[NMAKUN]!="Belanja Jasa Profesi"){
+              // if(substr($rs[NMITEM],1,4)=="iket" or $rs[harga_tiket]>0 ){
+              //   $tiket += $rs[harga_tiket];
+              // }
+              // if($rs[kdakun]=="524119" or (substr($rs[NMITEM],1,4)=="aket" or substr($rs[NMITEM],1,4)=="iaya" or substr($rs[NMITEM],1,9)=="enginapan") ){
+              //   $Akomodasi+=$rs[value];
+              // }
+              if((substr($rs[NMITEM],1,8)!="ransport") and (substr($rs[NMITEM],1,3)!="ang") and  (substr($rs[NMITEM],1,4)!="onor") and $rs[kdakun]!="524119" and substr($rs[NMITEM],1,4)!="iket"  and $rs[kdakun]!="521213" and substr($rs[NMITEM],1,4)!="aket" and substr($rs[NMITEM],1,4)!="iaya" and substr($rs[NMITEM],1,9)!="enginapan"){
                 // $taxi_lokal += $rs[taxi_asal]+$rs[taxi_tujuan];
                 $lain2+= $rs[value];
               }
+              
              
              
                
 
         }
-         $tot   += $taxi_lokal+$uang_harian_saku+$honorarium+$tiket+$lain2;
+         $tot   += $taxi_lokal+$uang_harian_saku+$honorarium+$tiket+$Akomodasi+$lain2;
 
       $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
       $arr_pb = $this->fetch_array($result_pb);
@@ -3301,7 +3319,7 @@ public function daftar_peng_riil($result,$det){
         <td style="border:1px solid; text-align:right; ">'.number_format($tot_dipa_51,2,",",".").'</td>
         <td style="border:1px solid; text-align:right; ">'.number_format($tot_nilai_51,2,",",".").'</td>
         <td style="border:1px solid; text-align:right;  ">'.number_format($tot_dipa_52,2,",",".").'</td>
-        <td style="border:1px solid; text-align:right;  ">'.number_format($tot_nilai_52['jumlah'],2,",",".").'</td>
+        <td style="border:1px solid; text-align:right;  ">'.number_format($tot_nilai_52,2,",",".").'</td>
         <td style="border:1px solid; text-align:right;  ">'.number_format($tot_dipa_53,2,",",".").'</td>
         <td style="border:1px solid; text-align:right;  ">'.number_format($tot_nilai_53,2,",",".").'</td>
         <td style="border:1px solid; text-align:right;  ">'.number_format($tot_dipa_57,2,",",".").'</td>
@@ -3424,7 +3442,7 @@ public function daftar_peng_riil($result,$det){
         
       }
       // echo "akuns : ".$kdakun;
-      $query = " SELECT SUM(case when month(tanggal)<'$tanggal' then value else 0 end) as jml_lalu, SUM(case when month(tanggal)='$tanggal' then value else 0 end) as jumlah FROM rabfull WHERE kdgiat LIKE '%$kdgiat%' ".$q_out.$q_sout.$q_kmp.$q_skmp.$q_akun;
+      $query = " SELECT SUM(case when month(tanggal)<'$tanggal' then value else 0 end) as jml_lalu, SUM(case when month(tanggal)='$tanggal' then value else 0 end) as jumlah FROM rabfull WHERE kdgiat LIKE '%$kdgiat%' ".$q_out.$q_sout.$q_kmp.$q_skmp.$q_akun.' and status in (2,4,6,7)';
       // print_r($query);
       
       $res = $this->query($query);
@@ -3532,8 +3550,19 @@ public function daftar_peng_riil($result,$det){
       $hasil .= " RUPIAH";
       return $hasil;
     }
-    function rincian_kebutuhan_dana($data){
-      $sql = "SELECT  rab.lama_hari,  rab.golongan, rab.penerima, rab.kdakun, rab.taxi_asal, rab.taxi_tujuan, rab.harga_tiket, rab.value, rab.uang_muka, rab.uang_harian, rab.uang_saku, rab.pajak, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ";
+    function rincian_kebutuhan_dana($data,$jns){
+      $cond_query;
+      $title;
+      if($jns=="1"){
+        $title = "DAFTAR PERTANGGUNG JAWABAN UMK";
+        $cond_query = " and status in(2,4,6,7) ";
+      }
+      else{
+        $title= "RINCIAN KEBUTUHAN DANA";
+        $cond_query = " ";
+      }
+
+      $sql = "SELECT  rab.lama_hari,  rab.golongan, rab.penerima, rab.kdakun, rab.taxi_asal,rab.taxi_tujuan, rab.harga_tiket, rab.value, rab.uang_muka, rab.uang_harian, rab.uang_saku, rab.pajak, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ".$cond_query." order by rab.penerima asc ";
       $sql2 = "SELECT rab.deskripsi, rab.tanggal, rab.lokasi, rab.tempat, rab.tempat, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdskmpnen, rkkl.NMGIAT, rkkl.NMOUTPUT, rkkl.NMSOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN  where rabview_id='$data' LIMIT 1";
       
       $res = $this->query($sql);
@@ -3594,7 +3623,8 @@ public function daftar_peng_riil($result,$det){
           ->setAutoSize(true);
         }
       }
-      $sheet = $objPHPExcel->getActiveSheet()->setTitle('RINCIAN KEBUTUHAN DANA');
+      
+      $sheet = $objPHPExcel->getActiveSheet()->setTitle($title);
       $sheet->mergeCells('A1:M1');
       $sheet->mergeCells('D2:M2');
       $sheet->mergeCells('D3:M3');
@@ -3607,7 +3637,7 @@ public function daftar_peng_riil($result,$det){
       $sheet->mergeCells('D10:M10');
 
       $objPHPExcel->setActiveSheetIndex(0)
-              ->setCellValue('A1', 'RINCIAN KEBUTUHAN DANA')
+              ->setCellValue('A1', $title)
               ->setCellValue('A2', '1')->setCellValue('B2', 'Satker')->setCellValue('C2', ':')->setCellValue('D2', '(401196) Direktorat Jenderal Kelembagaan Iptek dan Dikti')
               ->setCellValue('A3', '2')->setCellValue('B3', 'Kegiatan')->setCellValue('C3', ':')->setCellValue('D3', '('.$id_giat[kdprogram].') '.$id_giat[NMGIAT])
               ->setCellValue('A4', '3')->setCellValue('B4', 'Output')->setCellValue('C4', ':')->setCellValue('D4', '('.$id_giat[kdoutput].') '.$id_giat[NMOUTPUT])
@@ -3633,11 +3663,23 @@ public function daftar_peng_riil($result,$det){
 
       $no=0;
       $row=12; 
+      $sheet->getStyle("A1")->applyFromArray($horizontal);    
+      $sheet->getStyle("A1")->applyFromArray($vertical);
+      $sheet->getStyle('A1')->getFont()->setBold(true);
+      $objPHPExcel->getActiveSheet()->getRowDimension('A')->setRowHeight(10);      
       $sheet->getStyle("A12:M12")->applyFromArray($horizontal);    
       $sheet->getStyle("A12:M12")->applyFromArray($vertical);    
       $sheet->getStyle("A12:M12")->applyFromArray($border);
       $sheet->getStyle('A12:M12')->getFont()->setBold(true);    
       $cell = $objPHPExcel->setActiveSheetIndex(0);
+      // $transport = 0;
+      // $honor = 0;
+      // $uang_harian = 0;
+      // $uang_saku = 0;
+      // $tiket = 0;
+      // $akomodasi = 0;
+      // $lain2 = 0;
+
       $subtot_honor = 0;   
       $subtot_uangHarian = 0;   
       $subtot_uangSaku = 0;   
@@ -3647,7 +3689,15 @@ public function daftar_peng_riil($result,$det){
       $subtot_lain = 0;   
       $subtot_jml = 0;   
       foreach ($res as $val) {
+        $transport = 0;
+      $honor = 0;
+      $uang_harian = 0;
+      $uang_saku = 0;
+      $tiket = 0;
+      $akomodasi = 0;
+      $lain2 = 0;
         $acc=0;
+        $lama_hari = 1;
         $row+=1;
         $no++;
         $sheet->getStyle("A".$row.":M".$row)->applyFromArray($border);   
@@ -3655,89 +3705,88 @@ public function daftar_peng_riil($result,$det){
         $cell->setCellValue('B'.$row,$val[penerima]);
         $cell->setCellValue('C'.$row,$val[golongan]);
         $cell->setCellValue('D'.$row,'');
-        
-        
-        if(substr($val[NMITEM],1,8)=="ransport" or $val[taxi_tujuan]>0 or $val[taxi_asal]>0){
-            $transport = $val[taxi_asal]+$val[taxi_tujuan]+$val[value];
-            $subtot_transport += number_format($transport,2,",",".");
-            $acc+=$transport;
-            $cell->setCellValue('H'.$row,$transport);
-            $cell->getStyle('H'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+        if($val[lama_hari]>1) $lama_hari = $val[lama_hari];
+        if($val[kdakun]=="524119"){
+                $transport = $val[taxi_asal]+$val[taxi_tujuan];
+                $uang_harian = $val[uang_harian]*$lama_hari;
+                $uang_saku = $val[uang_saku]; 
+                $tiket = $val[harga_tiket];
+                $subtot_uangHarian += $uang_harian;
+                $subtot_uangSaku += $uang_saku;
+                $subtot_tiket += $tiket;
+                $subtot_transport += $transport;
+                $acc += $transport+$uang_harian+$uang_saku+$tiket;
+                $cell->setCellValue('I'.$row,$tiket);  
+                $cell->getStyle('I'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
         }
-        
-        if(substr($val[NMITEM],1,10)=="ang harian") {
-            $uang_harian = $val[value];
-            $acc+=$uang_harian;
-            $subtot_uangHarian = $uang_harian;
-            $cell->setCellValue('F'.$row,$uang_harian);
-            $cell->getStyle('F'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
-        }
-
-        if($val[kdakun]=="524119" and $val[uang_harian]>0){
-          $uang_harian += $val[uang_harian];
-          $acc+=$uang_harian;
+        if(strcasecmp(substr($val[NMITEM],1,10), "ang harian")==0){
+          $uang_harian+=$val[value];
           $subtot_uangHarian += $uang_harian;
-          $cell->setCellValue('F'.$row,$uang_harian);
-          $cell->getStyle('F'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
-
+          $acc+= $uang_harian;
+          
         }
-
-        if(substr($val[NMITEM],1,8)=="ang saku") {
-          $uang_saku = $val[value];
+        if(strcasecmp(substr($val[NMITEM],1,8), "ang saku")==0){
+          $uang_saku+=$val[value];
+          $subtot_uangSaku += $uang_saku;
           $acc+=$uang_saku;
-          $subtot_uangSaku+=$uang_saku;
-          $cell->setCellValue('G'.$row,$uang_saku);
-          $cell->getStyle('G'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+          
+        }
+        if((substr($val[NMITEM],1,4)=="aket" or substr($val[NMITEM],1,4)=="iaya" or substr($val[NMITEM],1,9)=="enginapan") and strcasecmp(substr($val[NMITEM],0,16),"Biaya Perjalanan")!=0  ){
+                $akomodasi=$val[value];
+                $subtot_akomodasi += $akomodasi;
+                $acc+=$akomodasi;
+                $cell->setCellValue('J'.$row,$akomodasi);
+                $cell->getStyle('J'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+        }
+        if(substr($val[NMITEM],1,8)=="ransport"){
+                $transport+= $val[value];
+                $acc += $transport;
+                $subtot_transport += $transport; 
         }
 
-        if($val[kdakun]=="524119" and $val[uang_saku]>0){
-          $uang_saku += $val[uang_saku];
-          $acc+=$uang_saku;
-          $subtot_uangSaku+=$uang_saku;
-          $cell->setCellValue('G'.$row,$uang_saku);
-          $cell->getStyle('G'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
-        }
-
-
-        if(substr($val[NMITEM],1,4)=="onor" or $val[NMAKUN]=="Belanja Jasa Profesi")
+        if(substr($val[NMITEM],1,4)=="onor")
         {
-          $honor = $val[value];
-          $subtot_honor+=$honor;
-          $acc+=$honor;
-          $cell->setCellValue('E'.$row,$honor);
-          $cell->getStyle('E'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+                $honor = $val[value];
+                $acc += $honor;
+                $cell->setCellValue('E'.$row,$honor);
+                $subtot_honor += $honor; 
+                $cell->getStyle('E'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
         }
-              
-        if(substr($val[NMITEM],1,4)=="iket" or $val[harga_tiket]>0 ){
-          $tiket = $val[harga_tiket];
-          $subtot_tiket+=$tiket;
-          $acc+=$tiket;
-          $cell->setCellValue('I'.$row,$tiket);
-          $cell->getStyle('I'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+        if((substr($val[NMITEM],1,8)!="ransport") and (substr($val[NMITEM],1,3)!="ang") and  (substr($val[NMITEM],1,4)!="onor") and $val[kdakun]!="524119" and substr($val[NMITEM],1,4)!="iket"  and $val[NMAKUN]!="521213" and substr($val[NMITEM],1,4)!="aket" and substr($val[NMITEM],1,4)!="iaya" and substr($val[NMITEM],1,9)!="enginapan"){
+                // $taxi_lokal += $rs[taxi_asal]+$rs[taxi_tujuan];
+                $lain2 = $val[value];
+                $acc += $lain2;
+                $subtot_lain += $lain2;
+                $cell->setCellValue('K'.$row,$lain2);
+                $cell->getStyle('K'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
         }
-        $cell->setCellValue('J'.$row,'-');
-        if((substr($val[NMITEM],1,8)!="ransport" and $val[taxi_tujuan]==0.00 and $val[taxi_asal]==0.00) and (substr($val[NMITEM],1,3)!="ang" and $val[uang_harian]==0.00 and $val[uang_saku]==0.00) and (substr($val[NMITEM],1,4)!="onor") and (substr($val[NMITEM],1,4)!="iket" and $val[harga_tiket]==0.00 ) and $val[NMAKUN]!="Belanja Jasa Profesi"){        // $taxi_lokal += $rs[taxi_asal]+$rs[taxi_tujuan];
-          $lain2 = $val[value];
-          $subtot_lain += $lain2;
-          $acc+=$lain2;
-          $cell->setCellValue('K'.$row,$lain2);
-          $cell->getStyle('K'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
-        }
-        $subtot_jml+=$acc;
+        
+        
+          
+           
+        $cell->setCellValue('F'.$row,$uang_harian);
+        $cell->getStyle('F'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+        $cell->setCellValue('G'.$row,$uang_saku);
+        $cell->getStyle('G'.$row)->getNumberFormat()->setFormatCode('#,##0.00');  
+            
+        $subtot_jml += $acc;
+        // $acc+= ($transport+$uang_harian+$uang_saku+$tiket+$honor+$akomodasi+$lain2);
+        $cell->setCellValue('H'.$row,$transport);
+        $cell->getStyle('H'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+
         $cell->setCellValue('L'.$row,$val[pajak]." %");
         $cell->setCellValue('M'.$row,$acc);
         $cell->getStyle('M'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
-
       }
       $row+=1;
       $sheet->getStyle("A".$row.":M".$row)->applyFromArray($border); 
       $sheet->mergeCells('A'.$row.':'.'D'.$row);
       $cell->setCellValue('E'.$row,$subtot_honor);
-      $cell->setCellValue('F'.$row,$uang_harian);
-      $cell->setCellValue('G'.$row,$uang_saku);
+      $cell->setCellValue('F'.$row,$subtot_uangHarian);
+      $cell->setCellValue('G'.$row,$subtot_uangSaku);
       $cell->setCellValue('H'.$row,$subtot_transport);
       $cell->setCellValue('I'.$row,$subtot_tiket);
-      $cell->setCellValue('J'.$row,'-');
+      $cell->setCellValue('J'.$row,$subtot_akomodasi);
       $cell->setCellValue('K'.$row,$subtot_lain);
       $cell->setCellValue('L'.$row,'-');
       $cell->setCellValue('M'.$row,$subtot_jml);

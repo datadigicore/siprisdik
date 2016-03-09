@@ -32,7 +32,7 @@ switch ($data[2]) {
   break;
 
   case 'rincian_kebutuhan_dana':
-    $report->rincian_kebutuhan_dana($data[3]);
+    $report->rincian_kebutuhan_dana($data[3],$data[4]);
   break;
 
   case '522151':
@@ -104,7 +104,8 @@ switch ($data[2]) {
     $direktorat = $purifier->purify($_POST['direktorat']);
     $bulan = $purifier->purify($_POST['bulan']);
     // echo $direktorat." ".$bulan;
-    $report->serapan($direktorat, $bulan);
+    // $report->serapan($direktorat, $bulan);
+    $report->rekap_total($direktorat, $bulan);
    break;
   default:
     

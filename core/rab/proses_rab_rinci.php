@@ -292,6 +292,14 @@ switch ($process) {
 
 	    $datatable->get_table_join($get_table,$get_table2, $key, $column, $on, $where, $group, $dataArray);
 		break;
+	
+	case 'hitung_pagu':
+		$getrab = $mdl_rab->getrabfull($_POST['id_rabfull']);
+		$mdl_rab->hitung_dipa($getrab,$_POST['kdAkun']);
+		// echo json_encode($hasil);
+		// echo $_POST['id_rabfull']."-".$_POST['kdAkun'];
+	break;
+
 	case 'cekDinas':
 		$id_rabfull = $_POST['id_rabfull'];
 		$kdakun = $_POST['kdAkun'];
