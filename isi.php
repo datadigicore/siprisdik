@@ -143,7 +143,12 @@ else {
             $id_rab_view = $data[2];
             $status = $data[4];
             include ('view/content/rab-orang-add.php');
-          }else{
+          }elseif ($data[3]=='edit') {
+            $id_rab_full = $data[2];
+            $getrab = $mdl_rab->getrabfull($id_rab_full);
+            $id_rab_view = $getrab->rabview_id;
+            include ('view/content/rab-orang-edit.php');
+          } else{
             $id_rab_view = $data[2];
             $view = $mdl_rab->getview($id_rab_view);
             $datarkakl = $mdl_rab->getrkaklfull($view);

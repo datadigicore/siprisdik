@@ -9,6 +9,15 @@ switch ($process) {
 		$mdl_rab->save_penerima($id_rab_view, $getview, $_POST);
     	$utility->load("content/rabdetail/".$id_rab_view,"success","Data berhasil dimasukkan ke dalam database");
 		break;
+	case 'save_edit_penerima':
+		$id_rab_view = $_POST['id_rab_view'];
+		$getview = $mdl_rab->getview($id_rab_view);
+		$id_rab_full = $_POST['id_rab_full'];
+        $getrab = $mdl_rab->getrabfull($id_rab_full);
+		// print_r($getview);die;
+		$mdl_rab->save_edit_penerima($id_rab_view, $getview, $_POST, $getrab);
+    	$utility->load("content/rabdetail/".$id_rab_view,"success","Data berhasil dimasukkan ke dalam database");
+		break;
 	case 'table':
 		$rabview_id = $data[3];
 		$dataArray['url_rewrite'] = $url_rewrite;
@@ -48,8 +57,8 @@ switch ($process) {
 	      	return '<table><tr><td>Penerima</td><td> :&nbsp;</td><td>'.$d.'</td></tr>'.
                  '<tr><td>NPWP</td><td> :&nbsp;</td><td>'.$row[9].'</td></tr>'.
                  '<tr><td>NIP</td><td> :&nbsp;</td><td>'.$nip.'</td></tr>'.
-                 '<tr><td>Golongan</td><td> :&nbsp;</td><td>'.$gol.'</td></tr>'.
                  '<tr><td>Status PNS</td><td> :&nbsp;</td><td>'.$pns.'</td></tr>'.
+                 '<tr><td>Golongan</td><td> :&nbsp;</td><td>'.$gol.'</td></tr>'.
                  '<tr><td>Jabatan</td><td> :&nbsp;</td><td>'.$jab.'</td></tr></table>';
 	      }),
 	      array( 'db' => 'jenis',  'dt' => 2, 'formatter' => function($d, $row){
@@ -113,6 +122,9 @@ switch ($process) {
 	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."pdf".'" class="btn btn-flat btn-danger btn-sm"><i class="fa fa-file"></i>&nbsp; Kuitansi (PDF)</a>';
 	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."word".'" class="btn btn-flat btn-info btn-sm"><i class="fa fa-file"></i>&nbsp; Kuitansi (Word)</a>';
 		        }
+		        if ($d == 0 || $d == 2 || $d == 3 || $d == 5) {
+	      			$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'/edit" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i>&nbsp; Edit Orang/Badan</a>';
+		        }
 	      	}
 	        $button .='</div>';
 	        return $button;
@@ -167,7 +179,7 @@ switch ($process) {
 	      array( 'db' => 'jabatan', 'dt' => 13),
 	    );
 		$where = 'rabview_id = "'.$rabview_id.'"';
-		$group = 'npwp';
+		$group = 'npwp, penerima, pns, golongan';
 
 	    $datatable->get_table_group($get_table, $key, $column,$where, $group, $dataArray);
 	    break;

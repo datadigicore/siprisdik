@@ -1,7 +1,7 @@
 <div class="content-wrapper">
   <section class="content-header">
     <h1>
-      Data RAB
+     Data RAB
     </h1>
     <ol class="breadcrumb">
       <li><i class="fa fa-table"></i> 
@@ -10,7 +10,7 @@
         > 
         <a href="<?php echo $url_rewrite?>content/rabdetail/<?php echo $id_rab_view;?>"> Orang/Badan </a>
         >
-        Tambah Orang / Badan 
+        Edit Orang / Badan 
         </b>
       </li>
     </ol>
@@ -20,12 +20,12 @@
       <div class="col-md-6 col-xs-12">
         <div class="box">
           <div class="box-header with-border">
-            <h3 class="box-title" style="margin-top:6px;">Tambah Orang / Badan</h3>
+            <h3 class="box-title" style="margin-top:6px;">Edit Orang / Badan</h3>
           </div>
-          <form enctype="multipart/form-data" method="post" action="<?php echo $url_rewrite;?>process/rab_rinci/save_penerima">
+          <form enctype="multipart/form-data" method="post" action="<?php echo $url_rewrite;?>process/rab_rinci/save_edit_penerima">
             <div class="box-body">
               <input type="hidden" name="id_rab_view" value="<?php echo $id_rab_view ?>" />
-              <input type="hidden" id="adendum" name="adendum" value="<?php echo $status;?>" />
+              <input type="hidden" name="id_rab_full" value="<?php echo $id_rab_full ?>" />
               <div class="form-group">
                 <label>Jenis</label>
                 <select onchange="cekJenis();" class="form-control" required id="jenis-akun" name="jenis-akun" onchange="cnpwp()">
@@ -33,10 +33,6 @@
                   <option value="0">Badan</option>
                   <option value="1">Orang</option>
                 </select>
-              </div>
-              <div class="form-group btn-pilih">
-                <a id="manual" onclick="pilih()" class="btn btn-flat btn-info"><i class="fa fa-plus"></i> Manual</a>
-                <a href="#import" data-toggle="modal" class="btn btn-flat btn-success"><i class="fa fa-file-excel-o"></i> Import Excel</a>
               </div>
               <div class="form-group form-rab">
                   <label>Nama Penerima</label>
@@ -109,42 +105,40 @@
     </div> -->
   </section>
 </div>
-<div class="modal fade" id="import">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form action="<?php echo $url_rewrite;?>process/rab/importrab" method="POST" enctype="multipart/form-data">
-        <div class="modal-header" style="background-color:#111F3F !important; color:white;">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true" style="color:white">×</span></button>
-          <h4 class="modal-title">Import Data RAB</h4>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <label>Download Template <a href="<?php echo $url_rewrite;?>process/rab/download">Here</a>.</label>
-          </div>
-          <div class="form-group">
-            <!-- <label>Select File</label> -->
-            <input type="file" id="fileimport" name="fileimport" style="display:none;">
-            <a id="selectbtn" class="btn btn-flat btn-primary" style="position:absolute;right:16px;">Select File</a>
-            <input type="text" id="filename" class="form-control" placeholder="Pilih File .xls / .xlsx" readonly>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-flat btn-success">Import Data</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+
 <script>
   $(function () {
+    $('#jenis-akun').val('<?= $getrab->jenis ?>');
     cekJenis();
+    $('#penerima').val('<?= $getrab->penerima ?>');
+    $('#npwp').val('<?= $getrab->npwp ?>');
+    $('#nip').val('<?= $getrab->nip ?>');
+    $('#pns').val('<?= $getrab->pns ?>');
+    $('#golongan').val('<?= $getrab->golongan ?>');
+    $('#jabatan').val('<?= $getrab->jabatan ?>');
+    $('#pajak').val('<?= $getrab->pajak ?>');
+
+    var jenis = $('#jenis-akun').val();
+    var pns = $('#pns').val();
+    var jabatan = '<?= $getrab->jabatan ?>';
+    if (jenis == 1) {
+      pilihpns();
+      if (pns==0) {
+        if (jabatan != "Tim" && jabatan != "Narasumber") {
+          $('#jabatan').val("Lain");
+          pilihJabatan();
+          $('#jabatan-lain').val(jabatan);
+        }else{
+          $('#jabatan').val(jabatan);
+        };
+      }else{
+        $('#jabatan').val(jabatan);
+      };
+      hitungpajak();
+    };
     getnpwp();
     $(document).on("click", "#tambahorang", function (){
       tambahorang();
-    });
-    $('#selectbtn').click(function () {
-      $("#fileimport").trigger('click');
     });
   });
 
@@ -249,9 +243,12 @@
 
   function cekJenis(){
     var val = $("#jenis-akun").val();
-    if(val==0 || val==1){
-      hideAll();
-      $(".btn-pilih").show();
+    if(val==0){
+      showBadan();
+      getnpwp();
+    } else if(val==1) {
+      showOrang();
+      getnpwp();
     } else{
       hideAll();
     }
