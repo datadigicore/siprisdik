@@ -1059,6 +1059,68 @@
       return $all;
     }
 
+    public function hitung_dipa($data,$kdakun){
+      $q_out = $q_sout = $q_kmp = $q_skmp = $q_akun  = "";
+
+      $thang      = $data->thang;
+      $kdprogram  = $data->kdprogram;
+      $kdgiat     = $data->kdgiat;
+      $kdout   = $data->kdoutput;
+      $kdsout  = $data->kdsoutput;
+      $kdkmp   = $data->kdkmpnen;
+      $kdskmp  = $data->kdskmpnen;
+     
+
+      // if($kdout!=""){ 
+        $q_out = " and kdoutput='$kdout' "; 
+        $k_out = " ,kdoutput "; 
+      // }
+      // if($kdsout!=""){ 
+        $q_sout = " and kdsoutput='$kdsout' "; 
+        $k_sout = " ,kdsoutput"; 
+      // }
+      // if($kdkmp!=""){ 
+        $q_kmp = " and kdkmpnen='$kdkmp' ";  
+        $k_kmp = " ,kdkmpnen "; 
+      // }
+      // if($kdskmp!=""){ 
+        $q_skmp = " and kdskmpnen='$kdskmp' "; 
+        $k_skmp = " ,kdskmpnen "; 
+      // }
+      if($kdakun!=""){ 
+        $q_akun = " and kdakun='$kdakun' "; 
+        $k_skmp = " ,kdakun ";
+        }  
+      // }
+      $query = " SELECT SUM(JUMLAH) as jumlah FROM rkakl_full WHERE kdgiat ='$kdgiat' ".$q_out.$q_sout.$q_kmp.$q_skmp.$q_akun;
+      // print($query);
+      
+      $res_pagu = $this->query($query);
+      $data_pagu = $this->fetch_array($res_pagu);
+
+      // $query = " SELECT SUM(case when month(tanggal)<'$tanggal' then value else 0 end) as jml_lalu, SUM(case when month(tanggal)='$tanggal' then value else 0 end) as jumlah FROM rabfull WHERE kdgiat = '$kdgiat' ".$q_out.$q_sout.$q_kmp.$q_skmp.$q_akun.' and status in (2,4,6,7)';
+      $query = " SELECT SUM(value) as realisasi, SUM(case when status in(0,1,3,5) then value else 0 end) as usulan FROM rabfull WHERE kdgiat = '$kdgiat' ".$q_out.$q_sout.$q_kmp.$q_skmp.$q_akun;
+      // print($query);
+      $res = $this->query($query);
+      $data_rab = $this->fetch_array($res);
+
+      $sisa = $data_pagu['jumlah'] - $data_rab['realisasi'];
+   
+   
+      
+     $arr_data = array(
+              "pagu" => number_format($data_pagu['jumlah'],"2",",","."),
+              "kdakun" => $kdakun,
+              "realisasi" => number_format($data_rab['realisasi'],"2",",","."),
+              "sisa" => number_format($sisa,"2",",","."),
+              "usulan" => number_format($data_rab['usulan'],"2",",",".")
+              );
+      echo json_encode($arr_data);
+      return $arr_data;
+    
+
+    }
+
     public function delrabdetail($id_rabfull){
 
       $query = "DELETE FROM rabfull WHERE id = '$id_rabfull'";
