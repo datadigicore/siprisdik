@@ -467,6 +467,14 @@
       $result = $this->query($query);
       $result2 = $this->query($query2);
 
+      if ($status == 1) {
+        $query3 = "UPDATE rabview SET submit_at='".date("Y-m-d H:i:s")."', submit_by = '".$_SESSION['id']."' WHERE id = '$id_rabview'";
+        $result3 = $this->query($query3);
+      }elseif ($status == 2) {
+        $query3 = "UPDATE rabview SET approve_at='".date("Y-m-d H:i:s")."', approve_by = '".$_SESSION['id']."' WHERE id = '$id_rabview'";
+        $result3 = $this->query($query3);
+      }
+
       return array('result' => $result,
                     'result2' => $result2
                   );
@@ -535,7 +543,7 @@
     }
 
     public function save_penerima($id_rab_view,$getview, $post){
-      // print_r($getview);die;
+      // print_r($post);die;
       $thang      = $getview['thang'];
       $kdprogram  = $getview['kdprogram'];
       $kdgiat     = trim($getview['kdgiat'],"\x0D\x0A");
@@ -554,6 +562,9 @@
       $npwp = $post['npwp'];
       $nip = $post['nip'];
       $jabatan = $post['jabatan'];
+      if ($jabatan == "Lain") {
+        $jabatan = $post['jabatan_lain'];
+      }
       $golongan = $post['golongan'];
       $pns = $post['pns'];
       $pajak_input = $post['pajak'];
@@ -561,22 +572,26 @@
       $status = $post['adendum'];
 
       if($jenis==1){
-        if ($golongan == 4) {
-          $pajak = '15';
-        }elseif ($golongan == 3) {
-          $pajak = '5';
-        }elseif ($golongan == 2) {
-          if ($pns == 1) {
-            $pajak = '0';
-          }else{
-            if ($npwp != "") {
-              $pajak = '5';
+        if ($pns == 1) {
+          if ($golongan == 4) {
+            $pajak = '15';
+          }elseif ($golongan == 3) {
+            $pajak = '5';
+          }elseif ($golongan == 2) {
+            if ($pns == 1) {
+              $pajak = '0';
             }else{
-              $pajak = '6';
+              if ($npwp != "") {
+                $pajak = '5';
+              }else{
+                $pajak = '6';
+              }
             }
+          }else{
+            $pajak = '0';
           }
         }else{
-          $pajak = '0';
+         $pajak = '6';
         }
       } else if($jenis == 0){
         $pajak = $pajak_input;
@@ -612,6 +627,83 @@
       return $result;
     }
 
+    public function save_edit_penerima($id_rab_view,$getview, $post, $getrab){
+      // print_r($post);die;
+      $thang      = $getview['thang'];
+      $kdprogram  = $getview['kdprogram'];
+      $kdgiat     = trim($getview['kdgiat'],"\x0D\x0A");
+      $kdoutput   = trim($getview['kdoutput'],"\x0D\x0A");
+      $kdsoutput  = trim($getview['kdsoutput'],"\x0D\x0A");
+      $kdkmpnen   = trim($getview['kdkmpnen'],"\x0D\x0A");
+      $kdskmpnen  = $getview['kdskmpnen'];
+
+      $jenis = $post['jenis-akun'];
+      $penerima = $post['penerima'];
+      $npwp = $post['npwp'];
+      $nip = $post['nip'];
+      $jabatan = $post['jabatan'];
+      if ($jabatan == "Lain") {
+        $jabatan = $post['jabatan_lain'];
+      }
+      $golongan = $post['golongan'];
+      $pns = $post['pns'];
+      $pajak_input = $post['pajak'];
+
+      if($jenis==1){
+        if ($pns == 1) {
+          if ($golongan == 4) {
+            $pajak = '15';
+          }elseif ($golongan == 3) {
+            $pajak = '5';
+          }elseif ($golongan == 2) {
+            if ($pns == 1) {
+              $pajak = '0';
+            }else{
+              if ($npwp != "") {
+                $pajak = '5';
+              }else{
+                $pajak = '6';
+              }
+            }
+          }else{
+            $pajak = '0';
+          }
+        }else{
+         $pajak = '6';
+        }
+      } else if($jenis == 0){
+        $pajak = $pajak_input;
+      }
+
+      $query      = "UPDATE rabfull SET
+        jenis       = '$jenis',
+        penerima    = '$penerima',
+        npwp        = '$npwp',
+        nip         = '$nip',
+        jabatan     = '$jabatan',
+        golongan    = '$golongan',
+        pns         = '$pns',
+        pajak       = '$pajak'
+
+        WHERE
+        rabview_id  = '$id_rab_view' AND
+        thang       = '$thang' AND
+        kdprogram   = '$kdprogram' AND
+        kdgiat      = '$kdgiat' AND
+        kdoutput    = '$kdoutput' AND
+        kdsoutput   = '$kdsoutput' AND
+        kdkmpnen    = '$kdkmpnen' AND
+        kdskmpnen   = '$kdskmpnen' AND
+
+        penerima    = '$getrab->penerima' AND
+        npwp        = '$getrab->npwp' AND
+        jenis       = '$getrab->jenis' AND
+        golongan    = '$getrab->golongan'
+      ";
+      $result = $this->query($query);
+      return $result;
+    }
+
     public function tambahAkun($data){
       $id_rabfull = $data['id_rabfull'];
       $cek  = "SELECT * FROM rabfull where id='$id_rabfull'";
@@ -640,6 +732,7 @@
         $jenis      = $cekfetch->jenis;
         $penerima   = $cekfetch->penerima;
         $npwp       = $cekfetch->npwp;
+        $nip       = $cekfetch->nip;
         $pajak      = $cekfetch->pajak;
         $golongan   = $cekfetch->golongan;
         $jabatan    = $cekfetch->jabatan;
@@ -676,6 +769,7 @@
           jenis       = '$jenis',
           penerima    = '$penerima',
           npwp        = '$npwp',
+          nip        = '$nip',
           golongan    = '$golongan',
           jabatan     = '$jabatan',
           pns         = '$pns',
