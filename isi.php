@@ -78,7 +78,7 @@ else {
             $id_rabfull = $data[2];
             $getrab = $mdl_rab->getrabfull($id_rabfull);
             $datarkakl = $mdl_rab->getrkaklfull2($getrab);
-            $eval_nilai = $mdl_rab->hitung_dipa($getrab);
+            // $eval_nilai = $mdl_rab->hitung_dipa($getrab,"");
             // print_r($eval_nilai);
             include ('view/content/rab-add.php');
           }
@@ -164,7 +164,7 @@ else {
           } else{
             $id_rabfull = $data[2];
             $getrab = $mdl_rab->getrabfull($id_rabfull);
-            $eval_nilai = $mdl_rab->hitung_dipa($getrab);
+            // $eval_nilai = $mdl_rab->hitung_dipa($getrab,"");
             $datarkakl = $mdl_rab->getrkaklfull2($getrab);
             include ('view/content/rab-add.php');
           }
