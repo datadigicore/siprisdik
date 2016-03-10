@@ -36,7 +36,7 @@
               </div>
               <div class="form-group btn-pilih">
                 <a id="manual" onclick="pilih()" class="btn btn-flat btn-info"><i class="fa fa-plus"></i> Manual</a>
-                <a href="#import" data-toggle="modal" class="btn btn-flat btn-success"><i class="fa fa-file-excel-o"></i> Import Excel</a>
+                <a id="tombol-import" href="#import" data-toggle="modal" class="btn btn-flat btn-success"><i class="fa fa-file-excel-o"></i> Import Excel</a>
               </div>
               <div class="form-group form-rab">
                   <label>Nama Penerima</label>
@@ -112,13 +112,16 @@
 <div class="modal fade" id="import">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="<?php echo $url_rewrite;?>process/rab/importrab" method="POST" enctype="multipart/form-data">
+      <form action="<?php echo $url_rewrite;?>process/rab_rinci/importrab" method="POST" enctype="multipart/form-data">
         <div class="modal-header" style="background-color:#111F3F !important; color:white;">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true" style="color:white">×</span></button>
           <h4 class="modal-title">Import Data RAB</h4>
         </div>
         <div class="modal-body">
+          <input type="hidden" name="id_rab_view" value="<?php echo $id_rab_view ?>" />
+          <input type="hidden" id="adendum" name="adendum" value="<?php echo $status;?>" /><?php echo $status;?>
+          <input type="hidden" id="jenisimport" name="jenisimport" value="" />
           <div class="form-group">
             <label>Download Template <a href="<?php echo $url_rewrite;?>process/rab/download">Here</a>.</label>
           </div>
@@ -140,11 +143,18 @@
   $(function () {
     cekJenis();
     getnpwp();
-    $(document).on("click", "#tambahorang", function (){
-      tambahorang();
-    });
     $('#selectbtn').click(function () {
       $("#fileimport").trigger('click');
+    });
+    $("#fileimport").change(function(){
+      $("#filename").attr('value', $(this).val().replace(/C:\\fakepath\\/i, ''));
+    });
+    $('#tombol-import').click(function () {
+      var jenis = $('#jenis-akun').val();
+      $('#jenisimport').val(jenis);
+    });
+    $(document).on("click", "#tambahorang", function (){
+      tambahorang();
     });
   });
 

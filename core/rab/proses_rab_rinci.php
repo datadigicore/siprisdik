@@ -361,8 +361,48 @@ switch ($process) {
     	$utility->load("content/rabakun/".$getidrab->id,"success","Data berhasil dihapus");
 		break;
 	case 'importrab':
-		# code...
-		break;
+		$id_rab_view = $purifier->purify($_POST['id_rab_view']);
+	    $adendum = $purifier->purify($_POST['adendum']);
+	    $jenisimport = $purifier->purify($_POST['jenisimport']);
+	    print_r($_FILES);
+	    echo "1";
+	      if(isset($_POST) && !empty($_FILES['fileimport']['name'])) {
+	      	echo "2";
+	        $path = $_FILES['fileimport']['name'];
+	        $ext = pathinfo($path, PATHINFO_EXTENSION);
+	        if($ext != 'xls' && $ext != 'xlsx') {
+	        	echo "3";
+	          $utility->load("content/rkakl","danger","Jenis file yang di upload tidak sesuai");
+	        }
+	        else {
+	        	echo "4";
+	          $time = time();
+	          $target_dir = $path_upload;
+	          $target_name = basename(date("Ymd-His-\R\A\B.",$time).$ext);
+	          $target_file = $target_dir . $target_name;
+	          print_r($target_file);
+	          $response = move_uploaded_file($_FILES['fileimport']['tmp_name'],$target_file);
+	          print_r($response);
+	          if($response) {
+	            try {
+	              $objPHPExcel = PHPExcel_IOFactory::load($target_file);
+	            }
+	            catch(Exception $e) {
+	              die('Kesalahan! Gagal dalam mengupload file : "'.pathinfo($_FILES['excelupload']['name'],PATHINFO_BASENAME).'": '.$e->getMessage());
+	            }
+	            echo "5";
+	            $allDataInSheet = $objPHPExcel->getActiveSheet()->toArray(NULL,TRUE,FALSE,TRUE);
+	            echo "<pre>";print_r($allDataInSheet);die;
+	            // $rkakl->importRkakl($allDataInSheet);
+	            $utility->load("content/rkakl","success","Data RKAKL berhasil di import ke dalam database");
+	          }
+	        }
+	      }
+	      else {
+	        $utility->load("content/rkakl","warning","Belum ada file Excel yang di lampirkan");
+	      }
+	    die();
+    break;
 	default:
 		$utility->location_goto(".");
 		break;
