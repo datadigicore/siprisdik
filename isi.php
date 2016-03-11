@@ -148,6 +148,13 @@ else {
             $getrab = $mdl_rab->getrabfull($id_rab_full);
             $id_rab_view = $getrab->rabview_id;
             include ('view/content/rab-orang-edit.php');
+          }elseif ($data[3] == 'upload') {
+            $id_rab_view = $data[2];
+            $view = $mdl_rab->getview($id_rab_view);
+            $datarkakl = $mdl_rab->getrkaklfull($view);
+            $insert = $mdl_rab->gettemprab($id_rab_view);
+            // print_r($insert);die;
+            include ('view/content/rab-upload.php');
           } else{
             $id_rab_view = $data[2];
             $view = $mdl_rab->getview($id_rab_view);

@@ -304,14 +304,12 @@ switch ($process) {
 
 	    $datatable->get_table_join($get_table,$get_table2, $key, $column, $on, $where, $group, $dataArray);
 		break;
-	
 	case 'hitung_pagu':
 		$getrab = $mdl_rab->getrabfull($_POST['id_rabfull']);
 		$mdl_rab->hitung_dipa($getrab,$_POST['kdAkun']);
 		// echo json_encode($hasil);
 		// echo $_POST['id_rabfull']."-".$_POST['kdAkun'];
-	break;
-
+		break;
 	case 'cekDinas':
 		$id_rabfull = $_POST['id_rabfull'];
 		$kdakun = $_POST['kdAkun'];
@@ -362,27 +360,20 @@ switch ($process) {
 		break;
 	case 'importrab':
 		$id_rab_view = $purifier->purify($_POST['id_rab_view']);
-	    $adendum = $purifier->purify($_POST['adendum']);
+	    $status = $purifier->purify($_POST['adendum']);
 	    $jenisimport = $purifier->purify($_POST['jenisimport']);
-	    print_r($_FILES);
-	    echo "1";
-	      if(isset($_POST) && !empty($_FILES['fileimport']['name'])) {
-	      	echo "2";
+	    if(isset($_POST) && !empty($_FILES['fileimport']['name'])) {
 	        $path = $_FILES['fileimport']['name'];
 	        $ext = pathinfo($path, PATHINFO_EXTENSION);
 	        if($ext != 'xls' && $ext != 'xlsx') {
-	        	echo "3";
 	          $utility->load("content/rkakl","danger","Jenis file yang di upload tidak sesuai");
 	        }
 	        else {
-	        	echo "4";
 	          $time = time();
 	          $target_dir = $path_upload;
 	          $target_name = basename(date("Ymd-His-\R\A\B.",$time).$ext);
 	          $target_file = $target_dir . $target_name;
-	          print_r($target_file);
 	          $response = move_uploaded_file($_FILES['fileimport']['tmp_name'],$target_file);
-	          print_r($response);
 	          if($response) {
 	            try {
 	              $objPHPExcel = PHPExcel_IOFactory::load($target_file);
@@ -390,11 +381,16 @@ switch ($process) {
 	            catch(Exception $e) {
 	              die('Kesalahan! Gagal dalam mengupload file : "'.pathinfo($_FILES['excelupload']['name'],PATHINFO_BASENAME).'": '.$e->getMessage());
 	            }
-	            echo "5";
+	            $array = array('id_rab_view' => $id_rab_view,
+	            				'status' 	 => $status,
+	            				'jenis'		 => $jenisimport
+	            				);
 	            $allDataInSheet = $objPHPExcel->getActiveSheet()->toArray(NULL,TRUE,FALSE,TRUE);
-	            echo "<pre>";print_r($allDataInSheet);die;
-	            // $rkakl->importRkakl($allDataInSheet);
-	            $utility->load("content/rkakl","success","Data RKAKL berhasil di import ke dalam database");
+	            // echo "<pre>";
+	            // print_r($allDataInSheet);die;
+	            $data = $mdl_rab->importRab($array,$allDataInSheet);
+	            // echo "<pre>"; print_r($data);die;
+	            $utility->load("content/rabdetail/".$id_rab_view."/upload",'success','Telah Berhasil Diupload');
 	          }
 	        }
 	      }
@@ -402,7 +398,7 @@ switch ($process) {
 	        $utility->load("content/rkakl","warning","Belum ada file Excel yang di lampirkan");
 	      }
 	    die();
-    break;
+    	break;
 	default:
 		$utility->location_goto(".");
 		break;
