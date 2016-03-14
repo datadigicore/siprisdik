@@ -243,7 +243,7 @@ class SSP {
      *  @param  array $columns Column information array
      *  @return array          Server-side processing response array
      */
-    static function simple ( $request, $conn, $table, $primaryKey, $columns )
+    static function simple ( $request, $conn, $table, $primaryKey, $columns, $dataArray )
     {
         $bindings = array();
         $db = self::db( $conn );
@@ -283,7 +283,7 @@ class SSP {
             "draw"            => intval( $request['draw'] ),
             "recordsTotal"    => intval( $recordsTotal ),
             "recordsFiltered" => intval( $recordsFiltered ),
-            "data"            => self::data_output( $columns, $data )
+            "data"            => self::data_output( $columns, $data, $dataArray )
         );
     }
 

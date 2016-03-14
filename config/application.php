@@ -1,6 +1,6 @@
 <?php
 error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
-ob_clean();
+ob_end_clean();
 date_default_timezone_set('Asia/Jakarta');
 // ======== TAMBAHKAN UTILITY & LIBRARY DISINI ========
 require_once __DIR__ .'/config.php';
@@ -36,19 +36,17 @@ $config_security = HTMLPurifier_Config::createDefault();
 $config_security->set('URI.HostBlacklist', array('google.com'));
 $purifier = new HTMLPurifier($config_security);
 
-$cek  = $_SERVER['SCRIPT_NAME'];
-$temp = explode('/', $cek);
-$file = end($temp);
-// if ($_SESSION["user_name"]=="") {
-//   if( isset($_COOKIE[$cookie_name])) { 
-//     include 'autologin.php';
-//   }
-//   else {
-//     if($file!="index.php") {
-//       session_destroy();
-//       $UTILITY->popup_message("Maaf anda harus login terlebih dahulu");
-//       $UTILITY->location_goto(".");
-//     }
-//   }
-// }
+// ================ CEK SESSION EXPIRE ================
+if (isset($_SESSION['expire'])) {
+  $sessiontime_now = time();
+  if ($sessiontime_now > $_SESSION['expire']) {
+    $utility->destroy_session();
+    $flash  = array(
+      'category' => "warning",
+      'messages' => "Sesi Anda Telah Berakhir, Silahkan Login Kembali"
+    );
+    $utility->load("login", $flash['category'],$flash['messages']);
+  }
+}
+// ====================================================
 ?>
