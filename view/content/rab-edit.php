@@ -74,11 +74,11 @@
               </div>
               <div class="form-group">
                 <label>Tanggal Awal</label>
-                <input class="form-control tanggal" type="text" id="tanggal" name="tanggal" value="<?php echo date('d/m/Y',strtotime($getview['tanggal']));?>" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" />
+                <input class="form-control tanggal" onchange="cektanggal()" type="text" id="tanggal" name="tanggal" value="<?php echo date('d/m/Y',strtotime($getview['tanggal']));?>" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" />
               </div>
               <div class="form-group">
                 <label>Tanggal Akhir</label>
-                <input class="form-control tanggal" type="text" id="tanggal_akhir" name="tanggal_akhir" value="<?php echo date('d/m/Y',strtotime($getview['tanggal_akhir']));?>" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" />
+                <input class="form-control tanggal" onchange="cektanggal()" type="text" id="tanggal_akhir" name="tanggal_akhir" value="<?php echo date('d/m/Y',strtotime($getview['tanggal_akhir']));?>" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" />
               </div>
               <div class="form-group">
                 <label>Tempat Kegiatan</label>
@@ -101,6 +101,7 @@
 </div>
 
 <script>
+
 $(function() {
     $('#tahun').val('<?php echo $getview["thang"]; ?>');
     $(".tanggal").datepicker({ 
@@ -109,7 +110,21 @@ $(function() {
       format: 'dd/mm/yyyy' 
     });
     chprog();
+    cektanggal();
 });
+
+function cektanggal(){
+  var tanggal = $('#tanggal').val();
+  var tanggal_akhir = $('#tanggal_akhir').val();
+  var pecah_awal = tanggal.split("/"); 
+  var pecah_akhir = tanggal_akhir.split("/"); 
+  var parsed_awal = new Date(pecah_awal[2],pecah_awal[1],pecah_awal[0]); 
+  var parsed_akhir = new Date(pecah_akhir[2],pecah_akhir[1],pecah_akhir[0]); 
+  if (parsed_akhir < parsed_awal) {
+    $('#tanggal_akhir').val("");
+    alert("Tanggal Akhir Kurang Dari Tanggal Awal");
+  };
+}
 
 function chprog(){
     $("#output option").remove();   

@@ -32,31 +32,25 @@
                 <i class="icon fa fa-warning"></i><?php echo $_POST['message']; ?>
               </div>
             <?php endif ?>
-            <table class="display table table-bordered table-striped" style="width:750px">
+            <table class="display table table-bordered table-striped" >
               <tr>
-                <td class="col-md-1"><label>Tahun</label></td>
-                <td class="col-md-2"><label><?php echo $datarkakl[0]->THANG?></label></td>
+                <th class="col-md-1"><label>Info</label></th>
               </tr>
               <tr>
-                <td><label>Kegiatan</label></td>
-                <td class="col-md-2"><label><?php echo $datarkakl[0]->NMGIAT?></label></td>
-              </tr>
-              <tr>
-                <td><label>Output</label></td>
-                <td class="col-md-2"><label><?php echo $datarkakl[0]->NMOUTPUT?></label></td>
-              </tr>
-              <tr>
-                <td><label>Sub Output</label></td>
-                <td class="col-md-2"><label><?php echo $datarkakl[0]->NMSOUTPUT?></label></td>
-              </tr>
-              <tr>
-                <td><label>Komponen</label></td>
-                <td class="col-md-2"><label><?php echo $datarkakl[0]->NMKMPNEN?></label></td>
-              </tr>
-              <tr>
-                <td><label>Sub Komponen</label></td>
-                <td class="col-md-2"><label><?php echo $datarkakl[0]->NmSkmpnen?></label></td>
-              </tr>
+                <td>
+                  <table>
+                      <tr><td valign="top">Tahun</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->THANG?></td></tr>
+                      <tr><td valign="top">Kegiatan</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMGIAT?></td></tr>
+                      <tr><td valign="top">Output</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMOUTPUT?></td></tr>
+                      <tr><td valign="top">Sub Output</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMSOUTPUT?></td></tr>
+                      <tr><td valign="top">Komponen</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMKMPNEN?></td></tr>
+                      <tr><td valign="top">Sub Komponen</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NmSkmpnen?></td></tr>
+                      <tr><td valign="top">Uraian Acara</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $view['deskripsi']; ?></td></tr>
+                      <tr><td valign="top">Tanggal</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo date("d M Y",strtotime($view['tanggal'])).' - '.date("d M Y",strtotime($view['tanggal_akhir'])); ?></td></tr>
+                      <tr><td valign="top">Lokasi</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $view['lokasi'].', '.$view['kota']; ?></td></tr>
+                      <tr><td valign="top">Jumlah Dana Usulan</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo 'Rp '.number_format($jumkegiatan->jumlah,2,',','.'); ?></td></tr>
+                  </table>
+                </td>
             </table>
             <table id="table" class="display nowrap table table-bordered table-striped" cellspacing="0" width="100%">
               <thead style="background-color:#11245B;color:white;">

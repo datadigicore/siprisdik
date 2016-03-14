@@ -73,11 +73,11 @@
               </div>
               <div class="form-group">
                 <label>Tanggal Awal</label>
-                <input class="form-control tanggal" type="text" id="tanggal" name="tanggal" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" required />
+                <input class="form-control tanggal" onchange="cektanggal()" type="text" id="tanggal" name="tanggal" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" required />
               </div>
               <div class="form-group">
                 <label>Tanggal Akhir</label>
-                <input class="form-control tanggal" type="text" id="tanggal_akhir" name="tanggal_akhir" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" required />
+                <input class="form-control tanggal" onchange="cektanggal()" type="text" id="tanggal_akhir" name="tanggal_akhir" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" required />
               </div>
               <div class="form-group">
                 <label>Tempat Kegiatan</label>
@@ -101,13 +101,31 @@
 
 <script>
 $(function() {
-    $(".tanggal").datepicker({ 
+    $("#tanggal").datepicker({ 
       changeMonth: true,
       changeYear: true,
-      format: 'dd/mm/yyyy' 
+      format: 'dd/mm/yyyy'
+    });
+    $("#tanggal_akhir").datepicker({ 
+      changeMonth: true,
+      changeYear: true,
+      format: 'dd/mm/yyyy'
     });
     chprog();
 });
+
+function cektanggal(){
+  var tanggal = $('#tanggal').val();
+  var tanggal_akhir = $('#tanggal_akhir').val();
+  var pecah_awal = tanggal.split("/"); 
+  var pecah_akhir = tanggal_akhir.split("/"); 
+  var parsed_awal = new Date(pecah_awal[2],pecah_awal[1],pecah_awal[0]); 
+  var parsed_akhir = new Date(pecah_akhir[2],pecah_akhir[1],pecah_akhir[0]); 
+  if (parsed_akhir < parsed_awal) {
+    $('#tanggal_akhir').val('');
+    alert("Tanggal Akhir Kurang Dari Tanggal Awal");
+  };
+}
 
 function chprog(){
     $("#output option").remove();   

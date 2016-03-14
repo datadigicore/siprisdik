@@ -1689,6 +1689,13 @@
       return $insert;
     }
 
+    public function getjumlahgiat($id_rab_view){
+      $query = "SELECT sum(value) as jumlah from rabfull where rabview_id='$id_rab_view'";
+      $result = $this->query($query);
+      $data  = $this->fetch_object($result);
+      return $data;
+    }
+
   }
 
 ?>

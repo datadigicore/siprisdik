@@ -38,37 +38,37 @@
               </tr>
               <tr>
                 <td>
-                <table>
-                <tr><td valign="top">Tahun</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->THANG?></td></tr>
-                <tr><td valign="top">Kegiatan</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMGIAT?></td></tr>
-                <tr><td valign="top">Output</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMOUTPUT?></td></tr>
-                <tr><td valign="top">Sub Output</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMSOUTPUT?></td></tr>
-                <tr><td valign="top">Komponen</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMKMPNEN?></td></tr>
-                <tr><td valign="top">Sub Komponen</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NmSkmpnen?></td></tr>
-<!--                 <tr><td valign="top">Alokasi</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo "Rp. ".$eval_nilai['pagu']; ?></td></tr>
-                <tr><td valign="top">Realisasi</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo "Rp. ".$eval_nilai['realisasi']; ?></td></tr>
-                <tr><td valign="top">Sisa</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo "Rp. ".$eval_nilai['sisa']; ?></td></tr>
-                <tr><td valign="top">Usulan</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo "Rp. ".$eval_nilai['usulan']; ?></td></tr>
-       -->      </table>
+                  <table>
+                      <tr><td valign="top">Tahun</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->THANG?></td></tr>
+                      <tr><td valign="top">Kegiatan</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMGIAT?></td></tr>
+                      <tr><td valign="top">Output</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMOUTPUT?></td></tr>
+                      <tr><td valign="top">Sub Output</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMSOUTPUT?></td></tr>
+                      <tr><td valign="top">Komponen</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMKMPNEN?></td></tr>
+                      <tr><td valign="top">Sub Komponen</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NmSkmpnen?></td></tr>
+                 </table>
                 </td>
                 <td>
-                <table>
-                <tr><td valign="top">NPWP</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $getrab->npwp;?></td></tr>
-                <tr><td valign="top">Nama</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $getrab->penerima;?></td></tr>
-                <tr><td valign="top" id="title_dipa"></td><td valign="top">:&nbsp;</td><td valign="top" id="nilai_dipa"></td></tr>
-                <tr><td valign="top" id="title_realisasi"></td><td valign="top">:&nbsp;</td><td valign="top" id="nilai_realisasi" ></td></tr>
-                <tr><td valign="top" id="title_sisa"></td><td valign="top">:&nbsp;</td><td valign="top" id="nilai_sisa"></td></tr>
-                </table>
+                  <table>
+                    <tr><td valign="top">NPWP</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $getrab->npwp;?></td></tr>
+                    <tr><td valign="top">Nama</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $getrab->penerima;?></td></tr>
+                    <tr><td valign="top">NIP</td><td valign="top">:&nbsp;</td><td valign="top"><div id="info-nip"></div></td></tr>
+                    <tr><td valign="top">Status PNS</td><td valign="top">:&nbsp;</td><td valign="top"><div id="info-pns"></div></td></tr>
+                    <tr><td valign="top">Golongan</td><td valign="top">:&nbsp;</td><td valign="top"><div id="info-gol"></div></td></tr>
+                    <tr><td valign="top">Jabatan</td><td valign="top">:&nbsp;</td><td valign="top"><div id="info-jbt"></div></td></tr>
+                    <tr><td valign="top">Besar Pajak</td><td valign="top">:&nbsp;</td><td valign="top"><div id="info-pajak"></div></td></tr>
+                  </table>
                 </td>
             </table>
             <br>
             <input type="hidden" id="id_rabfull" name="id_rabfull" value="<?php echo $id_rabfull?>" />
             <?php if($_SESSION['level'] != 0){ ?>
             <?php if($getrab->status == 0 || $getrab->status == 3 || $getrab->status == 5){ ?>
-            <a style="" id="add-more-akun" href="#" class="btn btn-flat btn-success btn-lg"><i class="fa fa-plus"></i> Tambah Transaksi</a>
+            <div class="col-md-12">
+              <a style="" id="add-more-akun" href="#" class="btn btn-flat btn-success btn-lg"><i class="fa fa-plus"></i> Tambah Transaksi</a>
+            </div>
             <?php }?>
             <?php }?>
-            <div class="well" id="div-tambah-akun" style="display:none"> 
+            <div class="well col-md-6" id="div-tambah-akun" style="display:none"> 
               <label>Kode Akun</label>
               <select style="margin:5px auto" class="form-control" id="kode-akun" name="kdakun" onchange="chakun()" required />
               </select>
@@ -85,6 +85,16 @@
 
               <div id="nilai">
               </div>
+            </div>
+            <div class="col-md-6" id="div-info" style="display:none">
+              <table class="display table table-bordered table-striped" >
+                <tr>
+                  <th class="col-md-1"><label>Info</label></th>
+                </tr>
+                <tr>
+                  <td id="info-pagu">
+                  </td>
+              </table>
             </div>
             <div id="perjalanan">
             </div>
@@ -201,6 +211,7 @@
     $("#add-more-akun").click(function(){
       kodeAkun("kode-akun");
       $("#div-tambah-akun").show();
+      $("#div-info").show();
       $("#tbl_save").removeClass('hidden');
     });
     $("#buat-akun").click(function(){
@@ -318,13 +329,34 @@
     })
     .done(function( r ) {
         // alert(r.sisa);
-        document.getElementById('title_dipa').innerHTML = "Alokasi Kode "+r.kdakun;
-        document.getElementById('title_realisasi').innerHTML = "Realisasi Kode "+r.kdakun;
-        document.getElementById('title_sisa').innerHTML = "Sisa Alokasi Kode "+r.kdakun;
-        document.getElementById('nilai_dipa').innerHTML = "Rp. "+r.pagu;
-        document.getElementById('nilai_realisasi').innerHTML = "Rp. "+r.realisasi;
-        document.getElementById('nilai_sisa').innerHTML = "Rp. "+r.sisa;
-        document.getElementById("value").setAttribute("max",r.sisa);
+        // document.getElementById('title_dipa').innerHTML = "<b>Alokasi Kode "+r.kdakun+"<b>";
+        // document.getElementById('title_realisasi').innerHTML = "<b>Realisasi Kode "+r.kdakun+"<b>";
+        // document.getElementById('title_sisa').innerHTML = "<b>Sisa Alokasi Kode "+r.kdakun+"<b>";
+        // document.getElementById('nilai_dipa').innerHTML = "<b>Rp. "+r.pagu+"<b>";
+        // document.getElementById('nilai_realisasi').innerHTML = "<b>Rp. "+r.realisasi+"<b>";
+        // document.getElementById('nilai_sisa').innerHTML = "<b>Rp. "+r.sisa+"<b>";
+        // document.getElementById("value").setAttribute("max",r.sisa)+"<b>";
+        // $('.titikdua').innerHTML = ": ";
+        $('#info-pagu').empty();
+        $('#info-pagu').append(''
+                    +'<table>'
+                    +'  <tr>'
+                    +'      <td valign="top"><h4>Alokasi Kode '+r.kdakun+'</h4></td>'
+                    +'      <td valign="top"><h4>&nbsp;:&nbsp;</h4></td>'
+                    +'      <td valign="top"><h4>Rp. '+r.pagu+'</h4></td>'
+                    +'    </tr>'
+                    +'  <tr>'
+                    +'      <td valign="top"><h4>Realisasi Kode '+r.kdakun+'</h4></td>'
+                    +'      <td valign="top"><h4>&nbsp;:&nbsp;</h4></td>'
+                    +'      <td valign="top"><h4>Rp. '+r.realisasi+'</h4></td>'
+                    +'    </tr>'
+                    +'  <tr>'
+                    +'      <td valign="top"><h4>Sisa Alokasi Kode '+r.kdakun+'</h4></td>'
+                    +'      <td valign="top"><h4>&nbsp;:&nbsp;</h4></td>'
+                    +'      <td valign="top"><h4>Rp. '+r.sisa+'<h4></td>'
+                    +'    </tr>'
+                    +'</table>'
+                    );
     });  
 
     $.ajax({
@@ -393,25 +425,12 @@
           +'        </td>'
           +'        <td>&nbsp;:&nbsp;</td>'
           +'        <td>'
-          +'        <input style="margin:5px auto" type="text" class="form-control" id="alat_trans[]" name="alat_trans[]" placeholder="Alat Transportasi">'
-          +'        </td>'
-          +'        </tr>'
-
-          +'        <tr>'
-          +'        <td>'
-          +'        <label>Rute</label>'
-          +'        </td>'
-          +'        <td>&nbsp;:&nbsp;</td>'
-          +'        <td>'
-          +'        <input style="margin:5px auto" type="text" class="form-control" id="rute[]" name="rute[]" placeholder="Rute">'
-          +'        </td>'
-          +'        <td>&nbsp;</td>'
-          +'        <td>'
-          +'        <label>Tiket</label>'
-          +'        </td>'
-          +'        <td>&nbsp;:&nbsp;</td>'
-          +'        <td>'
-          +'        <input style="margin:5px auto" type="text" class="form-control uang" id="harga_tiket[]" name="harga_tiket[]" placeholder="Harga Tiket">'
+          +'        <select style="margin:5px auto" class="form-control" id="alat_trans[]" name="alat_trans[]">'
+          +'        <option value="">-- Pilih Alat Transportasi--</option>'
+          +'        <option value="Udara">Udara</option>'
+          +'        <option value="Laut">Laut</option>'
+          +'        <option value="Darat">Darat</option>'
+          +'        </select>'
           +'        </td>'
           +'        </tr>'
 
@@ -421,7 +440,7 @@
           +'        </td>'
           +'        <td>&nbsp;:&nbsp;</td>'
           +'        <td>'
-          +'        <input style="margin:5px auto" type="text" class="form-control" id="kota_asal[]" name="kota_asal[]" placeholder="Kota Asal">'
+          +'        <input style="margin:5px auto" onchange="inputrute(this.id,this.value)" type="text" class="form-control" id="kota_asal[]" name="kota_asal[]" placeholder="Kota Asal">'
           +'        </td>'
           +'        <td>&nbsp;</td>'
           +'        <td>'
@@ -429,7 +448,25 @@
           +'        </td>'
           +'        <td>&nbsp;:&nbsp;</td>'
           +'        <td>'
-          +'        <input style="margin:5px auto" type="text" class="form-control" id="kota_tujuan[]" name="kota_tujuan[]" placeholder="Kota Tujuan">'
+          +'        <input style="margin:5px auto" onchange="inputrute(this.id,this.value)" type="text" class="form-control" id="kota_tujuan[]" name="kota_tujuan[]" placeholder="Kota Tujuan">'
+          +'        </td>'
+          +'        </tr>'
+
+          +'        <tr>'
+          +'        <td>'
+          +'        <label>Rute</label>'
+          +'        </td>'
+          +'        <td>&nbsp;:&nbsp;</td>'
+          +'        <td>'
+          +'        <input readonly style="margin:5px auto" type="text" class="form-control" id="rute" name="rute[]" placeholder="Rute">'
+          +'        </td>'
+          +'        <td>&nbsp;</td>'
+          +'        <td>'
+          +'        <label>Tiket</label>'
+          +'        </td>'
+          +'        <td>&nbsp;:&nbsp;</td>'
+          +'        <td>'
+          +'        <input style="margin:5px auto" type="text" class="form-control uang" id="harga_tiket[]" name="harga_tiket[]" placeholder="Harga Tiket">'
           +'        </td>'
           +'        </tr>'
 
@@ -458,7 +495,7 @@
           +'        <td>&nbsp;:&nbsp;</td>'
           +'        <td>'
           +'        <div style="margin:5px auto" class="input-group">'
-          +'            <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_mulai[]" name="tgl_mulai[]" placeholder="dd/mm/yyyy">'
+          +'            <input type="text" class="form-control tanggal" onchange="cektanggal()" data-date-format="dd/mm/yyyy" id="tgl_mulai" name="tgl_mulai[]" placeholder="dd/mm/yyyy">'
           +'             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>'
           +'        </div>'
           +'        </td>'
@@ -471,7 +508,7 @@
           +'        <td>&nbsp;:&nbsp;</td>'
           +'        <td>'
           +'        <div class="input-group">'
-          +'             <input type="text" class="form-control tanggal" data-date-format="dd/mm/yyyy" id="tgl_akhir[]" name="tgl_akhir[]" placeholder="dd/mm/yyyy">'
+          +'             <input type="text" class="form-control tanggal" onchange="cektanggal()" data-date-format="dd/mm/yyyy" id="tgl_akhir" name="tgl_akhir[]" placeholder="dd/mm/yyyy">'
           +'             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>'
           +'        </div>'
           +'        </td>'
@@ -500,9 +537,41 @@
     getdatepicker();
   }
 
+  function inputrute(id,val){
+    if (id == "kota_asal[]") {
+      $('#rute').val(val);
+    }else{
+      var asal = $('#rute').val();
+      $('#rute').val(asal+' - '+val);
+    };
+  }
+
+
+  function cektanggal(){
+    var tanggal = $('#tgl_mulai').val();
+    var tanggal_akhir = $('#tgl_akhir').val();
+    var pecah_awal = tanggal.split("/"); 
+    var pecah_akhir = tanggal_akhir.split("/"); 
+    var parsed_awal = new Date(pecah_awal[2],pecah_awal[1],pecah_awal[0]); 
+    var parsed_akhir = new Date(pecah_akhir[2],pecah_akhir[1],pecah_akhir[0]); 
+    if (parsed_akhir < parsed_awal) {
+      $('#tgl_akhir').val('');
+      alert("Tanggal Kembali Kurang Dari Tanggal Berangkat");
+    };
+  }
+
     
   function simpan(){
     $( "#formAkun" ).submit();
+  }
+
+  function ceknama(){
+    var nip = "<?php echo $getrab->nip;?>";
+    var pns = "<?php echo $getrab->pns;?>";
+    var gol = "<?php echo $getrab->golongan;?>";
+    var jbt = "<?php echo $getrab->jabatan;?>";
+    var pajak = "<?php echo $getrab->pajak;?>";
+    var jenis = "<?php echo $getrab->jenis;?>";
   }
 
 </script>
