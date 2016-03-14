@@ -25,12 +25,7 @@
             <input type="hidden" id="id_rab_view" name="id_rab_view" value="<?php echo $id_rab_view ?>" />
           </div>
           <div class="box-body">
-            <?php if (isset($_POST['message'])): ?>
-              <div class="alert alert-<?php echo $_POST['alert']; ?> alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <i class="icon fa fa-warning"></i><?php echo $_POST['message']; ?>
-              </div>
-            <?php endif ?>
+            <?php include "view/include/alert.php" ?>
             <table class="display table table-bordered table-striped" style="width:750px">
               <tr>
                 <td class="col-md-1"><label>Tahun</label></td>

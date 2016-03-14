@@ -255,7 +255,7 @@ switch ($process) {
       if ($error == 1) {
         $utility->load("content/rab","warning","Proses tidak dilanjutkan. Kode Akun ".$kodeError." melebihi Pagu");
       }else{
-        $utility->load("content/rab","danger","Proses tidak dilanjutkan. Terdapat kode akun yang kosong");
+        $utility->load("content/rab","error","Proses tidak dilanjutkan. Terdapat kode akun yang kosong");
       }
     }
     break;
