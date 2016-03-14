@@ -22,7 +22,7 @@
             <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya</h3>
             <input type="hidden" id="id_rab_view" name="id_rab_view" value="<?php echo $id_rab_view ?>" />
             <?php if ($_SESSION['level'] != 0) {
-              echo '<a id="tblAdd" data-toggle="modal" class="btn btn-flat btn-success btn-md pull-right"><i class="fa fa-user"></i>&nbsp;Tambah Orang / Badan</a>';
+              echo '<a id="tblAdd" data-toggle="modal" class="btn btn-flat btn-primary btn-md pull-right"><i class="fa fa-user"></i>&nbsp;Tambah Orang / Badan</a>';
             }?>
           </div>
           <div class="box-body">
@@ -64,10 +64,6 @@
                   <th>No</th>
                   <th>Penerima</th>
                   <th>Keterangan</th>
-                  <!-- <th>NPWP</th>
-                  <th>Golongan </th>
-                  <th>PNS</th>
-                  <th>Jabatan</th> -->
                   <th>Kode Akun</th>
                   <th>Total Dana RAB</th>
                   <th>Status</th>
@@ -164,6 +160,8 @@
       ],
       "order": [[ 0, "desc" ]]
     });
+
+    
 
     $.ajax({
       type: "POST",

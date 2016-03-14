@@ -78,6 +78,8 @@ else {
             $id_rabfull = $data[2];
             $getrab = $mdl_rab->getrabfull($id_rabfull);
             $datarkakl = $mdl_rab->getrkaklfull2($getrab);
+            // $eval_nilai = $mdl_rab->hitung_dipa($getrab,"");
+            // print_r($eval_nilai);
             include ('view/content/rab-add.php');
           }
           break;
@@ -141,7 +143,19 @@ else {
             $id_rab_view = $data[2];
             $status = $data[4];
             include ('view/content/rab-orang-add.php');
-          }else{
+          }elseif ($data[3]=='edit') {
+            $id_rab_full = $data[2];
+            $getrab = $mdl_rab->getrabfull($id_rab_full);
+            $id_rab_view = $getrab->rabview_id;
+            include ('view/content/rab-orang-edit.php');
+          }elseif ($data[3] == 'upload') {
+            $id_rab_view = $data[2];
+            $view = $mdl_rab->getview($id_rab_view);
+            $datarkakl = $mdl_rab->getrkaklfull($view);
+            $insert = $mdl_rab->gettemprab($id_rab_view);
+            // print_r($insert);die;
+            include ('view/content/rab-upload.php');
+          } else{
             $id_rab_view = $data[2];
             $view = $mdl_rab->getview($id_rab_view);
             $datarkakl = $mdl_rab->getrkaklfull($view);
@@ -162,6 +176,7 @@ else {
           } else{
             $id_rabfull = $data[2];
             $getrab = $mdl_rab->getrabfull($id_rabfull);
+            // $eval_nilai = $mdl_rab->hitung_dipa($getrab,"");
             $datarkakl = $mdl_rab->getrkaklfull2($getrab);
             include ('view/content/rab-add.php');
           }

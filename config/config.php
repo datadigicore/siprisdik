@@ -18,11 +18,11 @@
   $PROSES_REQUEST = "siprisdik/process";
   $path           = "/var/www/html/siprisdik/";
   $path_upload    = "/var/www/html/siprisdik/static/uploads/";
-  
+
   class config {
     public $db_host              = "localhost";
     public $db_user              = "root";
-    public $db_pass              = "root";
+    public $db_pass              = "";
     public $database             = "rkakl";
     public $url_rewrite_class    = "http://localhost/siprisdik/";
     public $hashing_number       = "d1kt1w4rr10r5";

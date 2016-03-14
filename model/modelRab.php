@@ -380,6 +380,29 @@
       return $jumrkakl;
     }
 
+    public function getJumRkakl2($data, $akun){
+      $rab = $data;
+      // print_r($rab);
+      $whereitem = "GROUP BY KDAKUN";
+      $qry_rkakl = "SELECT sum(jumlah) as `jumlah`, sum(realisasi) as `realisasi`, sum(usulan) as `usulan`
+                     FROM rkakl_full 
+                      WHERE THANG='$rab->thang'
+                      AND KDPROGRAM='$rab->kdprogram'
+                      AND KDGIAT='$rab->kdgiat'
+                      AND KDOUTPUT='$rab->kdoutput'
+                      AND KDSOUTPUT='$rab->kdsoutput'
+                      AND KDKMPNEN='$rab->kdkmpnen'
+                      AND KDSKMPNEN='$rab->kdskmpnen'
+                      AND KDAKUN='$akun'
+                      ".$whereitem."
+                      ";
+      $res_rkakl = $this->query($qry_rkakl);
+      while ($jumlah = $this->fetch_object($res_rkakl)) {
+        $jumrkakl = $jumlah;
+      }
+      return $jumrkakl;
+    }
+
     public function insertUsulan($dataAkun, $item, $total){
       $rab = $dataAkun;
       if ($total == 0) {
@@ -467,6 +490,14 @@
       $result = $this->query($query);
       $result2 = $this->query($query2);
 
+      if ($status == 1) {
+        $query3 = "UPDATE rabview SET submit_at='".date("Y-m-d H:i:s")."', submit_by = '".$_SESSION['id']."' WHERE id = '$id_rabview'";
+        $result3 = $this->query($query3);
+      }elseif ($status == 2) {
+        $query3 = "UPDATE rabview SET approve_at='".date("Y-m-d H:i:s")."', approve_by = '".$_SESSION['id']."' WHERE id = '$id_rabview'";
+        $result3 = $this->query($query3);
+      }
+
       return array('result' => $result,
                     'result2' => $result2
                   );
@@ -526,6 +557,14 @@
       return $data;
     }
 
+    public function getview2($id){
+      $query  = "SELECT *
+                 FROM rabview as r where id = '$id'";
+      $result = $this->query($query);
+      $data  = $this->fetch_object($result);
+      return $data;
+    }
+
     public function getrabfull($id){
       $query  = "SELECT *
                  FROM rabfull as r where id = '$id'";
@@ -534,8 +573,20 @@
       return $data;
     }
 
+    public function gettemprab($id){
+      $query  = "SELECT *
+                 FROM temprabfull as r where rabview_id = '$id'";
+      $result = $this->query($query);
+      $x=0;
+      while ($fetch = $this->fetch_object($result)) {
+        $data[$x] = $fetch;
+        $x++;
+      }
+      return $data;
+    }
+
     public function save_penerima($id_rab_view,$getview, $post){
-      // print_r($getview);die;
+      // print_r($post);die;
       $thang      = $getview['thang'];
       $kdprogram  = $getview['kdprogram'];
       $kdgiat     = trim($getview['kdgiat'],"\x0D\x0A");
@@ -554,6 +605,9 @@
       $npwp = $post['npwp'];
       $nip = $post['nip'];
       $jabatan = $post['jabatan'];
+      if ($jabatan == "Lain") {
+        $jabatan = $post['jabatan_lain'];
+      }
       $golongan = $post['golongan'];
       $pns = $post['pns'];
       $pajak_input = $post['pajak'];
@@ -561,22 +615,26 @@
       $status = $post['adendum'];
 
       if($jenis==1){
-        if ($golongan == 4) {
-          $pajak = '15';
-        }elseif ($golongan == 3) {
-          $pajak = '5';
-        }elseif ($golongan == 2) {
-          if ($pns == 1) {
-            $pajak = '0';
-          }else{
-            if ($npwp != "") {
-              $pajak = '5';
+        if ($pns == 1) {
+          if ($golongan == 4) {
+            $pajak = '15';
+          }elseif ($golongan == 3) {
+            $pajak = '5';
+          }elseif ($golongan == 2) {
+            if ($pns == 1) {
+              $pajak = '0';
             }else{
-              $pajak = '6';
+              if ($npwp != "") {
+                $pajak = '5';
+              }else{
+                $pajak = '6';
+              }
             }
+          }else{
+            $pajak = '0';
           }
         }else{
-          $pajak = '0';
+         $pajak = '6';
         }
       } else if($jenis == 0){
         $pajak = $pajak_input;
@@ -612,6 +670,83 @@
       return $result;
     }
 
+    public function save_edit_penerima($id_rab_view,$getview, $post, $getrab){
+      // print_r($post);die;
+      $thang      = $getview['thang'];
+      $kdprogram  = $getview['kdprogram'];
+      $kdgiat     = trim($getview['kdgiat'],"\x0D\x0A");
+      $kdoutput   = trim($getview['kdoutput'],"\x0D\x0A");
+      $kdsoutput  = trim($getview['kdsoutput'],"\x0D\x0A");
+      $kdkmpnen   = trim($getview['kdkmpnen'],"\x0D\x0A");
+      $kdskmpnen  = $getview['kdskmpnen'];
+
+      $jenis = $post['jenis-akun'];
+      $penerima = $post['penerima'];
+      $npwp = $post['npwp'];
+      $nip = $post['nip'];
+      $jabatan = $post['jabatan'];
+      if ($jabatan == "Lain") {
+        $jabatan = $post['jabatan_lain'];
+      }
+      $golongan = $post['golongan'];
+      $pns = $post['pns'];
+      $pajak_input = $post['pajak'];
+
+      if($jenis==1){
+        if ($pns == 1) {
+          if ($golongan == 4) {
+            $pajak = '15';
+          }elseif ($golongan == 3) {
+            $pajak = '5';
+          }elseif ($golongan == 2) {
+            if ($pns == 1) {
+              $pajak = '0';
+            }else{
+              if ($npwp != "") {
+                $pajak = '5';
+              }else{
+                $pajak = '6';
+              }
+            }
+          }else{
+            $pajak = '0';
+          }
+        }else{
+         $pajak = '6';
+        }
+      } else if($jenis == 0){
+        $pajak = $pajak_input;
+      }
+
+      $query      = "UPDATE rabfull SET
+        jenis       = '$jenis',
+        penerima    = '$penerima',
+        npwp        = '$npwp',
+        nip         = '$nip',
+        jabatan     = '$jabatan',
+        golongan    = '$golongan',
+        pns         = '$pns',
+        pajak       = '$pajak'
+
+        WHERE
+        rabview_id  = '$id_rab_view' AND
+        thang       = '$thang' AND
+        kdprogram   = '$kdprogram' AND
+        kdgiat      = '$kdgiat' AND
+        kdoutput    = '$kdoutput' AND
+        kdsoutput   = '$kdsoutput' AND
+        kdkmpnen    = '$kdkmpnen' AND
+        kdskmpnen   = '$kdskmpnen' AND
+
+        penerima    = '$getrab->penerima' AND
+        npwp        = '$getrab->npwp' AND
+        jenis       = '$getrab->jenis' AND
+        golongan    = '$getrab->golongan'
+      ";
+      $result = $this->query($query);
+      return $result;
+    }
+
     public function tambahAkun($data){
       $id_rabfull = $data['id_rabfull'];
       $cek  = "SELECT * FROM rabfull where id='$id_rabfull'";
@@ -640,6 +775,7 @@
         $jenis      = $cekfetch->jenis;
         $penerima   = $cekfetch->penerima;
         $npwp       = $cekfetch->npwp;
+        $nip       = $cekfetch->nip;
         $pajak      = $cekfetch->pajak;
         $golongan   = $cekfetch->golongan;
         $jabatan    = $cekfetch->jabatan;
@@ -676,6 +812,7 @@
           jenis       = '$jenis',
           penerima    = '$penerima',
           npwp        = '$npwp',
+          nip        = '$nip',
           golongan    = '$golongan',
           jabatan     = '$jabatan',
           pns         = '$pns',
@@ -1059,6 +1196,68 @@
       return $all;
     }
 
+    public function hitung_dipa($data,$kdakun){
+      $q_out = $q_sout = $q_kmp = $q_skmp = $q_akun  = "";
+
+      $thang      = $data->thang;
+      $kdprogram  = $data->kdprogram;
+      $kdgiat     = $data->kdgiat;
+      $kdout   = $data->kdoutput;
+      $kdsout  = $data->kdsoutput;
+      $kdkmp   = $data->kdkmpnen;
+      $kdskmp  = $data->kdskmpnen;
+     
+
+      // if($kdout!=""){ 
+        $q_out = " and kdoutput='$kdout' "; 
+        $k_out = " ,kdoutput "; 
+      // }
+      // if($kdsout!=""){ 
+        $q_sout = " and kdsoutput='$kdsout' "; 
+        $k_sout = " ,kdsoutput"; 
+      // }
+      // if($kdkmp!=""){ 
+        $q_kmp = " and kdkmpnen='$kdkmp' ";  
+        $k_kmp = " ,kdkmpnen "; 
+      // }
+      // if($kdskmp!=""){ 
+        $q_skmp = " and kdskmpnen='$kdskmp' "; 
+        $k_skmp = " ,kdskmpnen "; 
+      // }
+      if($kdakun!=""){ 
+        $q_akun = " and kdakun='$kdakun' "; 
+        $k_skmp = " ,kdakun ";
+        }  
+      // }
+      $query = " SELECT SUM(JUMLAH) as jumlah FROM rkakl_full WHERE kdgiat ='$kdgiat' ".$q_out.$q_sout.$q_kmp.$q_skmp.$q_akun;
+      // print($query);
+      
+      $res_pagu = $this->query($query);
+      $data_pagu = $this->fetch_array($res_pagu);
+
+      // $query = " SELECT SUM(case when month(tanggal)<'$tanggal' then value else 0 end) as jml_lalu, SUM(case when month(tanggal)='$tanggal' then value else 0 end) as jumlah FROM rabfull WHERE kdgiat = '$kdgiat' ".$q_out.$q_sout.$q_kmp.$q_skmp.$q_akun.' and status in (2,4,6,7)';
+      $query = " SELECT SUM(value) as realisasi, SUM(case when status in(0,1,3,5) then value else 0 end) as usulan FROM rabfull WHERE kdgiat = '$kdgiat' ".$q_out.$q_sout.$q_kmp.$q_skmp.$q_akun;
+      // print($query);
+      $res = $this->query($query);
+      $data_rab = $this->fetch_array($res);
+
+      $sisa = $data_pagu['jumlah'] - $data_rab['realisasi'];
+   
+   
+      
+     $arr_data = array(
+              "pagu" => number_format($data_pagu['jumlah'],"2",",","."),
+              "kdakun" => $kdakun,
+              "realisasi" => number_format($data_rab['realisasi'],"2",",","."),
+              "sisa" => number_format($sisa,"2",",","."),
+              "usulan" => number_format($data_rab['usulan'],"2",",",".")
+              );
+      echo json_encode($arr_data);
+      return $arr_data;
+    
+
+    }
+
     public function delrabdetail($id_rabfull){
 
       $query = "DELETE FROM rabfull WHERE id = '$id_rabfull'";
@@ -1104,6 +1303,390 @@
       $query = "UPDATE rabview set pesan = '$pesan' where id ='$id' ";
       $result = $this->query($query);
       return $result;
+    }
+
+    public function importRab($array, $data){
+      $timestamp = date("Y-m-d H:i:s");
+      $getview = $this->getview2($array['id_rab_view']);
+      $arrayCount = count($data);
+      $x = 0;$error = 'false';
+      $jumhonor = 0;$jumprofesi = 0;$jumsaku = 0;$jumperjalanan=0;$jumharian=0;
+      for ($i=20; $i < $arrayCount; $i++) { 
+        if ($data[$i]["B"] == "") {
+          break;
+        }
+        $penerima       = trim($data[$i]["B"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $npwp           = trim($data[$i]["C"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $pajak          = trim($data[$i]["D"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $golongan       = trim($data[$i]["E"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $jabatan        = trim($data[$i]["F"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $belanja        = trim($data[$i]["G"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $honor_output   = trim($data[$i]["H"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $honor_profesi  = trim($data[$i]["I"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $uang_saku      = trim($data[$i]["J"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $trans_lokal    = trim($data[$i]["K"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $uang_harian    = trim($data[$i]["L"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $tiket          = trim($data[$i]["M"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $tgl_mulai      = trim($data[$i]["N"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $tgl_akhir      = trim($data[$i]["O"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $tingkat        = trim($data[$i]["P"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $alat_trans     = trim($data[$i]["Q"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $kota_asal      = trim($data[$i]["R"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $kota_tujuan    = trim($data[$i]["S"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $taxi_asal      = trim($data[$i]["T"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $taxi_tujuan    = trim($data[$i]["U"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $airport_tax    = trim($data[$i]["V"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $rute1          = trim($data[$i]["W"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $rute2          = trim($data[$i]["X"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $rute3          = trim($data[$i]["Y"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $rute4          = trim($data[$i]["Z"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $harga_tiket    = trim($data[$i]["AA"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $lama_hari      = trim($data[$i]["AB"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $klmpk_hr       = trim($data[$i]["AC"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $pns            = trim($data[$i]["AD"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $malam          = trim($data[$i]["AE"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $akom           = trim($data[$i]["AF"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        
+        if ($pns == 'PNS') {
+          $pns = '1';
+        }else{
+          $pns = '0';
+        }
+        if ($golongan == 'I') {
+          $golongan = '1';
+        }elseif ($golongan == 'II') {
+          $golongan = '2';
+        }elseif ($golongan == 'III') {
+          $golongan = '3';
+        }elseif ($golongan == 'IV') {
+          $golongan = '4';
+        }
+
+        if($jenis==1){
+          if ($pns == 1) {
+            if ($golongan == "4") {
+              $pajak = '15';
+            }elseif ($golongan == "3") {
+              $pajak = '5';
+            }elseif ($golongan == "2") {
+              if ($pns == 1) {
+                $pajak = '0';
+              }else{
+                if ($npwp != "") {
+                  $pajak = '5';
+                }else{
+                  $pajak = '6';
+                }
+              }
+            }else{
+              $pajak = '0';
+            }
+          }else{
+           $pajak = '6';
+          }
+        } 
+
+        if($array['status'] == ""){
+          $stat = 0;
+        }else{
+          $stat = $array['status'];
+        }
+
+        $dataorang = array('rabview_id'   => $array['id_rab_view'],
+                            'thang'       => $getview->thang,
+                            'kdprogram'   => $getview->kdprogram,
+                            'kdgiat'      => $getview->kdgiat,
+                            'kdoutput'    => $getview->kdoutput,
+                            'kdsoutput'   => $getview->kdsoutput,
+                            'kdkmpnen'    => $getview->kdkmpnen,
+                            'kdskmpnen'   => $getview->kdskmpnen,
+                            'noitem'      => '1',
+                            'deskripsi'   => $getview->deskripsi,
+                            'tanggal'     => $getview->tanggal,
+                            'lokasi'      => $getview->lokasi,
+
+                            'jenis'       => $array['jenis'],
+                            'penerima'    => $penerima, 
+                            'npwp'        => $npwp,
+                            'pajak'       => $pajak,
+                            'golongan'    => $golongan,
+                            'jabatan'     => $jabatan,
+                            'pns'         => $pns,
+                            'status'      => $stat,
+                            'created_by'  => $_SESSION['id'],
+                            'created_at'  => $timestamp
+                            );
+        
+        if ($honor_output  != "") {
+          $x++;
+          $insert[$x] = $dataorang;
+          $insert[$x]['kdakun'] = '521213';
+          $insert[$x]['value'] = $honor_output;
+          $jumrkakl = $this->getJumRkakl2($getview, '521213');
+          if (!empty($jumrkakl)) {
+            $pagu = $jumrkakl->jumlah + $jumrkakl->realisasi + $jumrkakl->usulan + $jumhonor;
+            if ($pagu >= $honor_output) {
+              $insert[$x]['error'] = '0';
+            }else{
+              $insert[$x]['error'] = '1';
+              $error = 'true';
+            }
+            $jumhonor += $honor_output;
+          }else{
+            $insert[$x]['error'] = '2';
+            $error = 'true';
+          }
+          echo "1";
+          $query      = "INSERT INTO temprabfull SET
+              rabview_id  = '".$insert[$x]['rabview_id']."',
+              thang       = '".$insert[$x]['thang']."',
+              kdprogram   = '".$insert[$x]['kdprogram']."',
+              kdgiat      = '".$insert[$x]['kdgiat']."',
+              kdoutput    = '".$insert[$x]['kdoutput']."',
+              kdsoutput   = '".$insert[$x]['kdsoutput']."',
+              kdkmpnen    = '".$insert[$x]['kdkmpnen']."',
+              kdskmpnen   = '".$insert[$x]['kdskmpnen']."',
+              kdakun      = '".$insert[$x]['kdakun']."',
+              noitem      = '".$insert[$x]['noitem']."',
+              value       = '".$insert[$x]['value']."',
+              status       = '".$insert[$x]['status']."',
+
+              deskripsi   = '".$insert[$x]['deskripsi']."',
+              tanggal     = '".$insert[$x]['tanggal']."',
+              lokasi      = '".$insert[$x]['lokasi']."',
+
+              jenis       = '".$insert[$x]['jenis']."',
+              penerima    = '".$insert[$x]['penerima']."',
+              npwp        = '".$insert[$x]['npwp']."',
+              golongan    = '".$insert[$x]['golongan']."',
+              jabatan     = '".$insert[$x]['jabatan']."',
+              pns         = '".$insert[$x]['pns']."',
+
+              pajak       = '".$insert[$x]['pajak']."'
+          ";
+          $result = $this->query($query);
+        }
+
+        if ($honor_profesi != "") {
+          $x++;
+          $insert[$x] = $dataorang;
+          $insert[$x]['kdakun'] = '522151';
+          $insert[$x]['value'] = $honor_profesi;
+          $jumrkakl = $this->getJumRkakl2($getview, '522151');
+          if (!empty($jumrkakl)) {
+            $pagu = $jumrkakl->jumlah + $jumrkakl->realisasi + $jumrkakl->usulan + $jumprofesi;
+            if ($pagu >= $honor_profesi) {
+              $insert[$x]['error'] = '0';
+            }else{
+              $insert[$x]['error'] = '1';
+              $error = 'true';
+            }
+            $jumprofesi += $honor_profesi;
+          }else{
+            $insert[$x]['error'] = '2';
+            $error = 'true';
+          }
+          $query      = "INSERT INTO temprabfull SET
+              rabview_id  = '".$insert[$x]['rabview_id']."',
+              thang       = '".$insert[$x]['thang']."',
+              kdprogram   = '".$insert[$x]['kdprogram']."',
+              kdgiat      = '".$insert[$x]['kdgiat']."',
+              kdoutput    = '".$insert[$x]['kdoutput']."',
+              kdsoutput   = '".$insert[$x]['kdsoutput']."',
+              kdkmpnen    = '".$insert[$x]['kdkmpnen']."',
+              kdskmpnen   = '".$insert[$x]['kdskmpnen']."',
+              kdakun      = '".$insert[$x]['kdakun']."',
+              noitem      = '".$insert[$x]['noitem']."',
+              value       = '".$insert[$x]['value']."',
+              status       = '".$insert[$x]['status']."',
+
+              deskripsi   = '".$insert[$x]['deskripsi']."',
+              tanggal     = '".$insert[$x]['tanggal']."',
+              lokasi      = '".$insert[$x]['lokasi']."',
+
+              jenis       = '".$insert[$x]['jenis']."',
+              penerima    = '".$insert[$x]['penerima']."',
+              npwp        = '".$insert[$x]['npwp']."',
+              golongan    = '".$insert[$x]['golongan']."',
+              jabatan     = '".$insert[$x]['jabatan']."',
+              pns         = '".$insert[$x]['pns']."',
+
+              pajak       = '".$insert[$x]['pajak']."'
+          ";
+          $result = $this->query($query);
+        }
+
+        if ($uang_saku != "") {
+          $x++;
+          $insert[$x] = $dataorang;
+          $insert[$x]['kdakun'] = '524114';
+          $insert[$x]['value'] = $uang_saku;
+          $jumrkakl = $this->getJumRkakl2($getview, '524114');
+          if (!empty($jumrkakl)) {
+            $pagu = $jumrkakl->jumlah + $jumrkakl->realisasi + $jumrkakl->usulan + $jumsaku;
+            if ($pagu >= $uang_saku) {
+              $insert[$x]['error'] = '0';
+            }else{
+              $insert[$x]['error'] = '1';
+              $error = 'true';
+            }
+            $jumsaku += $uang_saku;
+          }else{
+            $insert[$x]['error'] = '2';
+            $error = 'true';
+          }
+          $query      = "INSERT INTO temprabfull SET
+              rabview_id  = '".$insert[$x]['rabview_id']."',
+              thang       = '".$insert[$x]['thang']."',
+              kdprogram   = '".$insert[$x]['kdprogram']."',
+              kdgiat      = '".$insert[$x]['kdgiat']."',
+              kdoutput    = '".$insert[$x]['kdoutput']."',
+              kdsoutput   = '".$insert[$x]['kdsoutput']."',
+              kdkmpnen    = '".$insert[$x]['kdkmpnen']."',
+              kdskmpnen   = '".$insert[$x]['kdskmpnen']."',
+              kdakun      = '".$insert[$x]['kdakun']."',
+              noitem      = '".$insert[$x]['noitem']."',
+              value       = '".$insert[$x]['value']."',
+              status       = '".$insert[$x]['status']."',
+
+              deskripsi   = '".$insert[$x]['deskripsi']."',
+              tanggal     = '".$insert[$x]['tanggal']."',
+              lokasi      = '".$insert[$x]['lokasi']."',
+
+              jenis       = '".$insert[$x]['jenis']."',
+              penerima    = '".$insert[$x]['penerima']."',
+              npwp        = '".$insert[$x]['npwp']."',
+              golongan    = '".$insert[$x]['golongan']."',
+              jabatan     = '".$insert[$x]['jabatan']."',
+              pns         = '".$insert[$x]['pns']."',
+
+              pajak       = '".$insert[$x]['pajak']."'
+          ";
+          $result = $this->query($query);
+        }
+
+        if ($rute1 == "") {  #524119
+          $x++;
+          $insert[$x] = $dataorang;
+          $insert[$x]['kdakun'] = $kdakun;
+
+          $insert[$x]['uang_harian'] = $uang_harian;
+          $insert[$x]['lama_hari'] = $lama_hari;
+          $insert[$x]['tiket'] = $tiket;
+          $insert[$x]['taxi_asal'] = $taxi_asal;
+          $insert[$x]['taxi_tujuan'] = $taxi_tujuan;
+          $insert[$x]['kota_asal'] = $kota_asal;
+          $insert[$x]['kota_tujuan'] = $kota_tujuan;
+          $insert[$x]['tgl_mulai'] = $tgl_mulai;
+          $insert[$x]['tgl_akhir'] = $tgl_akhir;
+          $jumrab = $tiket + $taxi_asal + $taxi_tujuan + ($uang_harian * $lama_hari);
+          $insert[$x]['value'] = $jumrab;
+
+          $jumrkakl = $this->getJumRkakl2($getview, $kdakun);
+          if (!empty($jumrkakl)) {
+            $pagu = $jumrkakl->jumlah + $jumrkakl->realisasi + $jumrkakl->usulan + $jumperjalanan;
+            if ($pagu >= $jumrab) {
+              $insert[$x]['error'] = '0';
+            }else{
+              $insert[$x]['error'] = '1';
+              $error = 'true';
+            }
+            $jumperjalanan += $jumrab;
+          }else{
+            $insert[$x]['error'] = '2';
+            $error = 'true';
+          }
+          $sub_query = "tgl_mulai   = ''".$insert[$x]['tgl_mulai']."',
+                      tgl_akhir   = ''".$insert[$x]['tgl_akhir']."',
+                      alat_trans  = ''".$insert[$x]['alat_trans']."',
+                      kota_asal   = ''".$insert[$x]['kota_asal']."',
+                      kota_tujuan = ''".$insert[$x]['kota_tujuan']."'
+                      taxi_asal   = ''".$insert[$x]['taxi_asal']."',
+                      taxi_tujuan = ''".$insert[$x]['taxi_tujuan']."',
+                      rute        = ''".$insert[$x]['rute']."',
+                      harga_tiket = ''".$insert[$x]['harga_tiket']."',
+                      uang_harian = ''".$insert[$x]['uang_harian']."',
+                      lama_hari   = ''".$insert[$x]['lama_hari']."'
+                      ";
+          $query      = "INSERT INTO temprabfull SET
+              rabview_id  = '".$insert[$x]['rabview_id']."',
+              thang       = '".$insert[$x]['thang']."',
+              kdprogram   = '".$insert[$x]['kdprogram']."',
+              kdgiat      = '".$insert[$x]['kdgiat']."',
+              kdoutput    = '".$insert[$x]['kdoutput']."',
+              kdsoutput   = '".$insert[$x]['kdsoutput']."',
+              kdkmpnen    = '".$insert[$x]['kdkmpnen']."',
+              kdskmpnen   = '".$insert[$x]['kdskmpnen']."',
+              kdakun      = '".$insert[$x]['kdakun']."',
+              noitem      = '".$insert[$x]['noitem']."',
+              value       = '".$insert[$x]['value']."',
+              status       = '".$insert[$x]['status']."',
+
+              deskripsi   = '".$insert[$x]['deskripsi']."',
+              tanggal     = '".$insert[$x]['tanggal']."',
+              lokasi      = '".$insert[$x]['lokasi']."',
+
+              jenis       = '".$insert[$x]['jenis']."',
+              penerima    = '".$insert[$x]['penerima']."',
+              npwp        = '".$insert[$x]['npwp']."',
+              golongan    = '".$insert[$x]['golongan']."',
+              jabatan     = '".$insert[$x]['jabatan']."',
+              pns         = '".$insert[$x]['pns']."',
+
+              pajak       = '".$insert[$x]['pajak']."',
+              ".$sub_query."
+          ";
+          $result = $this->query($query);
+        }else{
+          $x++;
+          $insert[$x] = $dataorang;
+          $insert[$x]['kdakun'] = '524114';
+          $insert[$x]['value'] = $uang_saku;
+          $jumrkakl = $this->getJumRkakl2($getview, '524114');
+          if (!empty($jumrkakl)) {
+            $pagu = $jumrkakl->jumlah + $jumrkakl->realisasi + $jumrkakl->usulan + $jumsaku;
+            if ($pagu >= $uang_saku) {
+              $insert[$x]['error'] = '0';
+            }else{
+              $insert[$x]['error'] = '1';
+              $error = 'true';
+            }
+            $jumsaku += $uang_saku;
+          }else{
+            $insert[$x]['error'] = '2';
+            $error = 'true';
+          }
+          $query      = "INSERT INTO temprabfull SET
+              rabview_id  = '".$insert[$x]['rabview_id']."',
+              thang       = '".$insert[$x]['thang']."',
+              kdprogram   = '".$insert[$x]['kdprogram']."',
+              kdgiat      = '".$insert[$x]['kdgiat']."',
+              kdoutput    = '".$insert[$x]['kdoutput']."',
+              kdsoutput   = '".$insert[$x]['kdsoutput']."',
+              kdkmpnen    = '".$insert[$x]['kdkmpnen']."',
+              kdskmpnen   = '".$insert[$x]['kdskmpnen']."',
+              kdakun      = '".$insert[$x]['kdakun']."',
+              noitem      = '".$insert[$x]['noitem']."',
+              value       = '".$insert[$x]['value']."',
+              status       = '".$insert[$x]['status']."',
+
+              deskripsi   = '".$insert[$x]['deskripsi']."',
+              tanggal     = '".$insert[$x]['tanggal']."',
+              lokasi      = '".$insert[$x]['lokasi']."',
+
+              jenis       = '".$insert[$x]['jenis']."',
+              penerima    = '".$insert[$x]['penerima']."',
+              npwp        = '".$insert[$x]['npwp']."',
+              golongan    = '".$insert[$x]['golongan']."',
+              jabatan     = '".$insert[$x]['jabatan']."',
+              pns         = '".$insert[$x]['pns']."',
+
+              pajak       = '".$insert[$x]['pajak']."'
+          ";
+          $result = $this->query($query);
+        }
+      }
+      return $insert;
     }
 
   }

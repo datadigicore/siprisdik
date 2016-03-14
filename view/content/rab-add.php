@@ -45,12 +45,19 @@
                 <tr><td valign="top">Sub Output</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMSOUTPUT?></td></tr>
                 <tr><td valign="top">Komponen</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMKMPNEN?></td></tr>
                 <tr><td valign="top">Sub Komponen</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NmSkmpnen?></td></tr>
-                </table>
+<!--                 <tr><td valign="top">Alokasi</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo "Rp. ".$eval_nilai['pagu']; ?></td></tr>
+                <tr><td valign="top">Realisasi</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo "Rp. ".$eval_nilai['realisasi']; ?></td></tr>
+                <tr><td valign="top">Sisa</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo "Rp. ".$eval_nilai['sisa']; ?></td></tr>
+                <tr><td valign="top">Usulan</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo "Rp. ".$eval_nilai['usulan']; ?></td></tr>
+       -->      </table>
                 </td>
                 <td>
                 <table>
                 <tr><td valign="top">NPWP</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $getrab->npwp;?></td></tr>
                 <tr><td valign="top">Nama</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $getrab->penerima;?></td></tr>
+                <tr><td valign="top" id="title_dipa"></td><td valign="top">:&nbsp;</td><td valign="top" id="nilai_dipa"></td></tr>
+                <tr><td valign="top" id="title_realisasi"></td><td valign="top">:&nbsp;</td><td valign="top" id="nilai_realisasi" ></td></tr>
+                <tr><td valign="top" id="title_sisa"></td><td valign="top">:&nbsp;</td><td valign="top" id="nilai_sisa"></td></tr>
                 </table>
                 </td>
             </table>
@@ -301,7 +308,24 @@
         } else {
           alert("Tidak terdapat item pada kode akun yang anda pilih");
         }
-      });  
+      });
+    $.ajax({
+      method: "POST",
+      url: "<?=$url_rewrite?>process/rab_rinci/hitung_pagu",
+      data: { 'id_rabfull': id_rabfull,
+              'kdAkun'    : kdAkun, },
+      dataType: "json"
+    })
+    .done(function( r ) {
+        // alert(r.sisa);
+        document.getElementById('title_dipa').innerHTML = "Alokasi Kode "+r.kdakun;
+        document.getElementById('title_realisasi').innerHTML = "Realisasi Kode "+r.kdakun;
+        document.getElementById('title_sisa').innerHTML = "Sisa Alokasi Kode "+r.kdakun;
+        document.getElementById('nilai_dipa').innerHTML = "Rp. "+r.pagu;
+        document.getElementById('nilai_realisasi').innerHTML = "Rp. "+r.realisasi;
+        document.getElementById('nilai_sisa').innerHTML = "Rp. "+r.sisa;
+        document.getElementById("value").setAttribute("max",r.sisa);
+    });  
 
     $.ajax({
       method: "POST",
