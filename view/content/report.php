@@ -453,26 +453,16 @@
                   </div>
                   <div class="col-sm-5"></div>
                 </div> -->
-<!--                 <div class="form-group">
-                  <label class="col-sm-3 control-label">Bulan</label>
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Penerima </label>
                   <div class="col-sm-4">
-                    <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
-                      <option value="01">Januari</option>
-                      <option value="02">Februari</option>
-                      <option value="03">Maret</option>
-                      <option value="04">April</option>
-                      <option value="05">Mei</option>
-                      <option value="06">Juni</option>
-                      <option value="07">Juli</option>
-                      <option value="08">Agustus</option>
-                      <option value="09">September</option>
-                      <option value="10">Oktober</option>
-                      <option value="11">November</option>
-                      <option value="12">Desember</option>
-                    </select>
-                  </div>
-                  <div class="col-sm-5"></div>
-                </div>   -->             
+                  <select style="margin:5px auto" class="form-control" id="penerima" name="penerima" onchange="" >
+                                          
+                  </select>
+                </div>
+                <div class="col-sm-5">
+                </div>
+                </div>             
               </div>
               <div class="box-footer">
                 <button type="submit" class="btn btn-flat btn-success pull-left"><i class="fa fa-print"></i>Cetak</button>
@@ -488,6 +478,7 @@
 <script>
   $(document).ready(function() {
     kodeAkun("kode-akun");
+    penerima("a");
     $("#add-more-akun").click(function(){
       $("#div-tambah-akun").show();
     });
@@ -584,6 +575,25 @@
             isi = isi+ '<option value="'+key+'">'+key+' - '+value+'</option>';
           });
           $("#kode-akun").append(isi);
+        }
+      });
+    }  
+
+    function penerima(idSelector){
+      var id_rabfull = $('#id_rabfull').val();
+      var isi ="<option>-- Pilih Penerima --</option>";
+      $.ajax({
+        method: "GET",
+        url: "<?=$url_rewrite?>ajax/list_orang.php",
+        data: { 'id_rabfull': id_rabfull, }
+      })
+      .done(function(data){
+        obj=JSON.parse(data);
+        if(obj!=null){
+          $.each( obj, function( key, value ) {
+            isi = isi+ '<option value="'+key+'">'+value+'</option>';
+          });
+          $("#penerima").append(isi);
         }
       });
     }
