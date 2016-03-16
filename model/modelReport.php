@@ -468,6 +468,11 @@
       $nip_bpp = $arr_pb[nip_bpp];
       $ppk = $arr_pb[ppk];
       $nip_ppk = $arr_pb[nip_ppk];
+
+      $res_sql = $this->query("SELECT * from rkakl_view where status=1 ");
+      $rkl_view = $this->fetch_array($res_sql);
+
+
       $sql = "SELECT view.deskripsi as deskripsi, r.NMITEM as nmitem, r.NMGIAT as nmgiat, r.NMAKUN as nmakun, f.kdgiat as kdgiat, f.kdprogram as kdprogram, f.kdoutput as kdoutput, f.kdakun as kdakun, f.penerima as penerima, f.tanggal as tanggal, f.value  as value, f.pajak as pajak, f.ppn as ppn, f.pph as pph FROM rabfull as f LEFT JOIN rkakl_full as r on f.kdgiat = r.KDGIAT and f.kdoutput = r.KDOUTPUT and f.kdsoutput = r.KDSOUTPUT and f.kdkmpnen = r.KDKMPNEN and f.kdskmpnen = r.KDSKMPNEN  and f.kdakun = r.KDAKUN and f.noitem = r.NOITEM  
                 LEFT JOIN rabview as view on f.rabview_id = view.id
                 where f.kdakun ='$data' and f.kdgiat='$direktorat' ";
@@ -504,7 +509,7 @@
                 <td align="left" width="1%">3.</td>
                 <td align="left" width="30%">Tanggal/No.DIPA</td>
                 <td align="left" width="2%">:</td>
-                <td align="left" > ................................  Nomor : DIPA-042.03.1.401196/2016 dan Revisi ke __, Tgl. _______________________ 2016</td>
+                <td align="left" > '.$this->konversi_tanggal($rkl_view[tanggal]).' / Nomor : DIPA-'.$rkl_view[no_dipa].'.401196/'.$rkl_view[tahun].' dan Revisi ke '.$rkl_view[versi].', Tgl. '.$this->konversi_tanggal($rkl_view[tanggal]).'</td>
               </tr>
               <tr>
                 <td align="left" width="1%">4.</td>
@@ -2684,6 +2689,8 @@ public function daftar_peng_riil($result,$det){
       $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, NMAKUN,  sum(jumlah) as jumlah  FROM rkakl_full where kdgiat like '%$dir%' group by kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun order by kdgiat asc, kdoutput asc, kdsoutput asc, kdkmpnen asc, kdskmpnen asc, kdakun asc ";
       $res = $this->query($sql);
       ob_start();
+      $res_sql = $this->query("SELECT * from rkakl_view where status=1 ");
+      $rkl_view = $this->fetch_array($res_sql);
       echo '<table style="width: 100%;  text-align:left; border-collapse:collapse; font-size:0.95em;">
                 <tr>
                   <td colspan="15" style="text-align:center; font-weight:bold">LAPORAN REALISASI DAYA SERAP PER KEGIATAN</td>
@@ -2702,7 +2709,7 @@ public function daftar_peng_riil($result,$det){
                 <tr>
                   <td colspan="2">Nomor Tanggal DIPA</td>
                   <td>:</td>
-                  <td  align="left">DIPA-042-03.1.401196/2016, tgl. 7 Desember 2016</td>
+                  <td  align="left">DIPA-'.$rkl_view[no_dipa].'.401196/'.$rkl_view[tahun].', tgl. '.$this->konversi_tanggal($rkl_view[tanggal]).'</td>
                 </tr>
                 <tr>
                   <td colspan="2">Propinsi DKI</td>
@@ -2952,6 +2959,9 @@ public function daftar_peng_riil($result,$det){
       // $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, value  FROM rabfull group by kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun order by kdgiat asc, kdoutput asc, kdsoutput asc, kdkmpnen asc, kdskmpnen asc, kdakun asc ";
       $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, NMAKUN,  jumlah  FROM rkakl_full where kdgiat like '%$dir%' group by kdgiat, kdoutput, kdakun order by kdgiat asc, kdoutput asc, kdakun asc ";
       $res = $this->query($sql);
+      $res_sql = $this->query("SELECT * from rkakl_view where status=1 ");
+      $rkl_view = $this->fetch_array($res_sql);
+
       ob_start();
       echo '<table style="width: 100%;  text-align:left; border-collapse:collapse; font-size:0.95em;">
                 <tr>
@@ -2971,7 +2981,7 @@ public function daftar_peng_riil($result,$det){
                 <tr>
                   <td colspan="2">Nomor Tanggal DIPA</td>
                   <td>:</td>
-                  <td  align="left">DIPA-042-03.1.401196/2016, tgl. 7 Desember 2016</td>
+                  <td  align="left">DIPA-'.$rkl_view[no_dipa].'.401196/'.$rkl_view[tahun].', tgl. '.$this->konversi_tanggal($rkl_view[tanggal]).'</td>
                 </tr>
                 <tr>
                   <td colspan="2">Propinsi DKI</td>
@@ -3154,6 +3164,9 @@ public function daftar_peng_riil($result,$det){
       // $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, value  FROM rabfull group by kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun order by kdgiat asc, kdoutput asc, kdsoutput asc, kdkmpnen asc, kdskmpnen asc, kdakun asc ";
       $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, NMAKUN,  jumlah  FROM rkakl_full where kdgiat like '%$dir%' group by kdgiat, kdoutput order by kdgiat asc, kdoutput asc";
       $res = $this->query($sql);
+      // $res_sql = $this->query("SELECT * from rkakl_view where status=1 ");
+      // $rkl_view = $this->fetch_array($res_sql);
+
       ob_start();
        
   
