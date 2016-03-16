@@ -21,6 +21,7 @@
             <li ><a href="#tab_8" data-toggle="tab" aria-expanded="true"><b>Realisasi Daya Serap Per kegiatan</b></a></li>
             <li ><a href="#tab_9" data-toggle="tab" aria-expanded="true"><b>Rekap Realisasi Daya Serap Per kegiatan</b></a></li>
             <li ><a href="#tab_10" data-toggle="tab" aria-expanded="true"><b>Rekap Total Realisasi Daya Serap</b></a></li>
+            <li ><a href="#tab_11" data-toggle="tab" aria-expanded="true"><b>Rekapitulasi Pajak Per Orang</b></a></li>
             
             
           </ul>
@@ -420,6 +421,61 @@
               </div>
               <div class="box-footer">
                 <button type="submit" class="btn btn-flat btn-success pull-left"><i class="fa fa-print"></i> Cetak</button>
+              </div>        
+              </form>
+            </div>
+            <div class="tab-pane" id="tab_11">
+              <form class="form-horizontal" method="POST" action="<?php echo $url_rewrite;?>process/report/pajak_orang">
+              <div class="box-body well" style="padding-bottom:0;">
+<!--                  <div class="form-group">
+                  <label class="col-sm-3 control-label">Direktorat</label>
+                  <div class="col-sm-4">
+                  <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
+                      <?php if($_SESSION['level'] == 0){ ?>
+                          <option value="">Semua Direktorat</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                          <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                          <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                          <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                            <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
+                      <?php } ?>
+                      <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                            <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
+                      <?php } ?>
+                  </select>
+                  </div>
+                  <div class="col-sm-5"></div>
+                </div> -->
+<!--                 <div class="form-group">
+                  <label class="col-sm-3 control-label">Bulan</label>
+                  <div class="col-sm-4">
+                    <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
+                      <option value="01">Januari</option>
+                      <option value="02">Februari</option>
+                      <option value="03">Maret</option>
+                      <option value="04">April</option>
+                      <option value="05">Mei</option>
+                      <option value="06">Juni</option>
+                      <option value="07">Juli</option>
+                      <option value="08">Agustus</option>
+                      <option value="09">September</option>
+                      <option value="10">Oktober</option>
+                      <option value="11">November</option>
+                      <option value="12">Desember</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-5"></div>
+                </div>   -->             
+              </div>
+              <div class="box-footer">
+                <button type="submit" class="btn btn-flat btn-success pull-left"><i class="fa fa-print"></i>Cetak</button>
               </div>        
               </form>
             </div>
