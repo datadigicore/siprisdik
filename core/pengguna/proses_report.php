@@ -22,7 +22,7 @@ switch ($data[2]) {
   break;
 
   case 'pajak_orang':
-    $report->pajak_orang($data);
+    $report->pajak_orang($_POST['penerima']);
   break;
 
   case 'chart_pie':
