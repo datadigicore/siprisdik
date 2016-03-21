@@ -394,7 +394,11 @@
           +'        </td>'
           +'        <td>&nbsp;:&nbsp;</td>'
           +'        <td>'
-          +'        <input style="margin:5px auto" type="text" class="form-control" id="alat_trans[]" name="alat_trans[]" placeholder="Alat Transportasi">'
+          +'        <select style="margin:5px auto" class="form-control" id="alat_trans[]" name="alat_trans[]">'
+          +'        <option value="darat">Darat</option>'
+          +'        <option value="udara">Udara</option>'
+          +'        <option value="laut">Laut</option>'
+          +'        </select>'
           +'        </td>'
           +'        </tr>'
 
