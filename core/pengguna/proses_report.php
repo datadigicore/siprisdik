@@ -20,6 +20,11 @@ switch ($data[2]) {
   case 'cetak_dok':
     $report->cetak_dok($id,$param[1],$format);
   break;
+
+  case 'pajak_orang':
+    $report->pajak_orang($_POST['penerima']);
+  break;
+
   case 'chart_pie':
     $report->getChartRKAKL();
   break;

@@ -221,6 +221,7 @@
       $("#div-info").show();
       $("#tbl_save").removeClass('hidden');
     });
+
     $("#buat-akun").click(function(){
       var val = $("#kode-akun").val();
       generateForm(val);
@@ -301,7 +302,7 @@
         $.each( obj, function( key, value ) {
           isi = isi+ '<option value="'+key+'">'+key+' - '+value+'</option>';
         });
-        $("#kode-akun").append(isi);
+        $("#kode-akun").html(isi);
       }
     });
   }

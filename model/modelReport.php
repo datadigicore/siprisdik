@@ -468,6 +468,11 @@
       $nip_bpp = $arr_pb[nip_bpp];
       $ppk = $arr_pb[ppk];
       $nip_ppk = $arr_pb[nip_ppk];
+
+      $res_sql = $this->query("SELECT * from rkakl_view where status=1 ");
+      $rkl_view = $this->fetch_array($res_sql);
+
+
       $sql = "SELECT view.deskripsi as deskripsi, r.NMITEM as nmitem, r.NMGIAT as nmgiat, r.NMAKUN as nmakun, f.kdgiat as kdgiat, f.kdprogram as kdprogram, f.kdoutput as kdoutput, f.kdakun as kdakun, f.penerima as penerima, f.tanggal as tanggal, f.value  as value, f.pajak as pajak, f.ppn as ppn, f.pph as pph FROM rabfull as f LEFT JOIN rkakl_full as r on f.kdgiat = r.KDGIAT and f.kdoutput = r.KDOUTPUT and f.kdsoutput = r.KDSOUTPUT and f.kdkmpnen = r.KDKMPNEN and f.kdskmpnen = r.KDSKMPNEN  and f.kdakun = r.KDAKUN and f.noitem = r.NOITEM  
                 LEFT JOIN rabview as view on f.rabview_id = view.id
                 where f.kdakun ='$data' and f.kdgiat='$direktorat' ";
@@ -504,7 +509,7 @@
                 <td align="left" width="1%">3.</td>
                 <td align="left" width="30%">Tanggal/No.DIPA</td>
                 <td align="left" width="2%">:</td>
-                <td align="left" > ................................  Nomor : DIPA-042.03.1.401196/2016 dan Revisi ke __, Tgl. _______________________ 2016</td>
+                <td align="left" > '.$this->konversi_tanggal($rkl_view[tanggal]).' / Nomor : DIPA-'.$rkl_view[no_dipa].'.401196/'.$rkl_view[tahun].' dan Revisi ke '.$rkl_view[versi].', Tgl. '.$this->konversi_tanggal($rkl_view[tanggal]).'</td>
               </tr>
               <tr>
                 <td align="left" width="1%">4.</td>
@@ -2684,6 +2689,8 @@ public function daftar_peng_riil($result,$det){
       $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, NMAKUN,  sum(jumlah) as jumlah  FROM rkakl_full where kdgiat like '%$dir%' group by kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun order by kdgiat asc, kdoutput asc, kdsoutput asc, kdkmpnen asc, kdskmpnen asc, kdakun asc ";
       $res = $this->query($sql);
       ob_start();
+      $res_sql = $this->query("SELECT * from rkakl_view where status=1 ");
+      $rkl_view = $this->fetch_array($res_sql);
       echo '<table style="width: 100%;  text-align:left; border-collapse:collapse; font-size:0.95em;">
                 <tr>
                   <td colspan="15" style="text-align:center; font-weight:bold">LAPORAN REALISASI DAYA SERAP PER KEGIATAN</td>
@@ -2702,7 +2709,7 @@ public function daftar_peng_riil($result,$det){
                 <tr>
                   <td colspan="2">Nomor Tanggal DIPA</td>
                   <td>:</td>
-                  <td  align="left">DIPA-042-03.1.401196/2016, tgl. 7 Desember 2016</td>
+                  <td  align="left">DIPA-'.$rkl_view[no_dipa].'.401196/'.$rkl_view[tahun].', tgl. '.$this->konversi_tanggal($rkl_view[tanggal]).'</td>
                 </tr>
                 <tr>
                   <td colspan="2">Propinsi DKI</td>
@@ -2952,6 +2959,9 @@ public function daftar_peng_riil($result,$det){
       // $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, value  FROM rabfull group by kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun order by kdgiat asc, kdoutput asc, kdsoutput asc, kdkmpnen asc, kdskmpnen asc, kdakun asc ";
       $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, NMAKUN,  jumlah  FROM rkakl_full where kdgiat like '%$dir%' group by kdgiat, kdoutput, kdakun order by kdgiat asc, kdoutput asc, kdakun asc ";
       $res = $this->query($sql);
+      $res_sql = $this->query("SELECT * from rkakl_view where status=1 ");
+      $rkl_view = $this->fetch_array($res_sql);
+
       ob_start();
       echo '<table style="width: 100%;  text-align:left; border-collapse:collapse; font-size:0.95em;">
                 <tr>
@@ -2971,7 +2981,7 @@ public function daftar_peng_riil($result,$det){
                 <tr>
                   <td colspan="2">Nomor Tanggal DIPA</td>
                   <td>:</td>
-                  <td  align="left">DIPA-042-03.1.401196/2016, tgl. 7 Desember 2016</td>
+                  <td  align="left">DIPA-'.$rkl_view[no_dipa].'.401196/'.$rkl_view[tahun].', tgl. '.$this->konversi_tanggal($rkl_view[tanggal]).'</td>
                 </tr>
                 <tr>
                   <td colspan="2">Propinsi DKI</td>
@@ -3154,6 +3164,9 @@ public function daftar_peng_riil($result,$det){
       // $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, value  FROM rabfull group by kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun order by kdgiat asc, kdoutput asc, kdsoutput asc, kdkmpnen asc, kdskmpnen asc, kdakun asc ";
       $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, NMAKUN,  jumlah  FROM rkakl_full where kdgiat like '%$dir%' group by kdgiat, kdoutput order by kdgiat asc, kdoutput asc";
       $res = $this->query($sql);
+      // $res_sql = $this->query("SELECT * from rkakl_view where status=1 ");
+      // $rkl_view = $this->fetch_array($res_sql);
+
       ob_start();
        
   
@@ -3339,6 +3352,143 @@ public function daftar_peng_riil($result,$det){
       $html = ob_get_contents();
       // ob_clean();
       $this->create_pdf("Pengajuan UMK","A4-L",$html);
+    }
+
+    public function pajak_orang($data){
+      $nama="";
+      $sql = "SELECT thang, tanggal, penerima, no_kuitansi, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdakun, value, pph from rabfull where concat(nip,'-',npwp)='$data' ";
+      $hsl_pjk = $this->query($sql);
+
+       $objPHPExcel = new PHPExcel();
+      // Set properties
+      $objPHPExcel->getProperties()->setCreator("Sistem Keuangan Dikti")
+              ->setLastModifiedBy("Sistem Keuangan Dikti")
+              ->setTitle("REKAPITULASI PAJAK PER ORANG")
+              ->setSubject("Office 2007 XLSX Document")
+              ->setDescription("")
+              ->setKeywords("office 2007 openxml php")
+              ->setCategory("REKAPITULASI PAJAK PER ORANG");
+      $border = array(
+          'borders' => array(
+              'allborders' => array(
+                  'style' => PHPExcel_Style_Border::BORDER_THIN
+              )
+          )
+      );
+        $horizontal = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+            )
+        );
+        $vertical = array(
+            'alignment' => array(
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
+        $objPHPExcel->getActiveSheet()->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
+        $objPHPExcel->getDefaultStyle()->getBorders()->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+        $objPHPExcel->getDefaultStyle()->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(30);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A')->getAlignment()->setWrapText(true); 
+        $objPHPExcel->getActiveSheet()->getStyle('C')->getAlignment()->setWrapText(true); 
+        for($col = 'A'; $col !== 'F'; $col++) {
+          if($col!='A' and $col!='C'){
+            $objPHPExcel->getActiveSheet()
+            ->getColumnDimension($col)
+            ->setAutoSize(true);
+          }
+        }
+        
+        $sheet = $objPHPExcel->getActiveSheet()->setTitle("Rekap Pajak Orang");
+        $sheet->mergeCells('A1:F1');
+        $sheet->mergeCells('A2:F2');
+        $sheet->mergeCells('A3:F3');
+        
+        $sheet->getStyle('A5:F5')->getFont()->setBold(true);
+        $sheet->getStyle('A1:A3')->getFont()->setBold(true);
+        $sheet->getStyle('A1:A3')->applyFromArray($horizontal);    
+        $sheet->getStyle('A1:A3')->applyFromArray($vertical);
+        $sheet->getStyle("A5:F5")->applyFromArray($border);
+        $objPHPExcel->getActiveSheet()->getStyle("A1:A3")->getFont()->setSize(14); 
+        $objPHPExcel->getActiveSheet()->getStyle("A5:F5")->getFont()->setSize(12);
+        $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A1',"REKAPTULASI PAJAK PER-ORANG TA 2016" )
+                ->setCellValue('A2',"DIREKTORAT JENDERAL KELEMBAGAAN IPTEK DAN DIKTI" )
+                ->setCellValue('A3',"KEMENTERIAN RISET, TEKNOLOGI, DAN PENDIDIKAN TINGGI" )
+                ->setCellValue('A5',"Nama Pegawai" )
+                ->setCellValue('B5',"No_Kuitansi" )
+                ->setCellValue('C5',"Kode_MAK-Bukti Kuitansi" )
+                ->setCellValue('D5',"Tanggal" )
+                ->setCellValue('E5',"Jmlh Pendapatan" )
+                ->setCellValue('F5',"Jmlh of PPH 21" );
+
+      $row=5;
+      $cell = $objPHPExcel->setActiveSheetIndex(0);
+      $tot_pendapatan = 0;
+      $tot_pjk_pendapatan = 0;
+      foreach ($hsl_pjk as $nilai) {
+        $row+=1;
+        $tot_pendapatan+=$nilai[value];
+        $tot_pjk_pendapatan+=$nilai[pph];
+        $no_kuitansi = $nilai[kdgiat]."/".$nilai[kdoutput]."/".$nilai[kdsoutput]."/".$nilai[kdkmpnen]."/".$nilai[kdakun];
+        if($nama!=$nilai[penerima]){
+          $cell->setCellValue('A'.$row, $nilai[penerima]);
+          $nama = $nilai[penerima];
+        }
+        $cell->setCellValue('B'.$row, $nilai[no_kuitansi]);
+        $cell->setCellValue('C'.$row, $no_kuitansi);
+        $cell->setCellValue('D'.$row, $this->konversi_tanggal($nilai[tanggal]));
+        $cell->setCellValue('E'.$row, $nilai[value]);
+        $cell->setCellValue('F'.$row, $nilai[pph]);
+        $sheet->getStyle("A".$row.":F".$row)->applyFromArray($border);
+         $objPHPExcel->getActiveSheet()->getStyle("A".$row.":F".$row)->getFont()->setSize(12);
+      }
+      $row+=1;
+      $sheet->mergeCells('A'.$row.':D'.$row);
+      $cell->setCellValue('A'.$row, $nilai[penerima]." Total");
+      $sheet->getStyle("A".$row.":F".$row)->getFont()->setBold(true);
+      $cell->setCellValue('E'.$row, $tot_pendapatan);
+      $cell->setCellValue('F'.$row, $tot_pjk_pendapatan);
+      $sheet->getStyle("A".$row.":F".$row)->applyFromArray($border);
+      $objPHPExcel->getActiveSheet()->getStyle("A".$row.":F".$row)->getFont()->setSize(14);
+      $row+=1;
+      $sheet->mergeCells('A'.$row.':D'.$row);
+      $cell->setCellValue('A'.$row, "GRAND Total");
+      $sheet->getStyle("A".$row.":F".$row)->getFont()->setBold(true);
+      $cell->setCellValue('E'.$row, $tot_pendapatan);
+      $cell->setCellValue('F'.$row, $tot_pjk_pendapatan);
+      $sheet->getStyle("A".$row.":F".$row)->applyFromArray($border);
+      $objPHPExcel->getActiveSheet()->getStyle("A".$row.":F".$row)->getFont()->setSize(14);
+      $row+=2;
+      $sheet->mergeCells('D'.$row.':F'.$row);
+      $cell->setCellValue('D'.$row, "Jakarta,");
+      $row+=1;
+      $sheet->mergeCells('D'.$row.':F'.$row);
+      $cell->setCellValue('D'.$row, "Direktorat Jenderal Kelembagaan Iptek dan Dikti");
+      $row+=1;
+      $sheet->mergeCells('D'.$row.':F'.$row);
+      $cell->setCellValue('D'.$row, "Bendahara Pengeluaran,");
+      $row+=4;
+      $sheet->mergeCells('D'.$row.':F'.$row);
+      $cell->setCellValue('D'.$row, "Josephine Margaretta S.Kom");
+
+      $row+=1;
+      $sheet->mergeCells('D'.$row.':F'.$row);
+      $cell->setCellValue('D'.$row, "NIP. 19870613 201012 2 009");
+
+        Header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="Rekap_Pajak_nama.xlsx"');
+        header('Cache-Control: max-age=0');
+
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        // If you want to output e.g. a PDF file, simply do:
+        //$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'PDF');
+        $objWriter->save('php://output');
     }
 
     function kekata($x) {
