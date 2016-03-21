@@ -101,12 +101,42 @@
 
 <script>
 $(function() {
-    $(".tanggal").datepicker({ 
+  $("#tanggal").datepicker({
+    autoclose: true,
+    monthNames: [ "Januari", "Pebruari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" ],
+
+    // yearRange: '-70:+30',
+           changeMonth: true,
+
+           // numberOfMonths: 3,
+           format: 'dd/mm/yyyy',
+           onClose: function(selectedDate) {
+            // alert("tes");
+           $("#tanggal_akhir").datepicker("option", "minDate", selectedDate);
+                   // var lama=(bulan_studi($('#lamaijin').val())+1)*31;
+                   // var nyd = new Date(selectedDate);
+                   // nyd.setDate(nyd.getDate() + lama);
+                    //alert(nyd);
+                // $("#tanggal_akhir").datepicker("option", "maxDate", nyd);
+             //$("#periode_belajar_end").datepicker("option", "maxDate", " '+ "+lama+"M'");
+           }
+    });
+
+    $("#tanggal_akhir").datepicker({ 
+      autoclose: true,
+    monthNames: [ "Januari", "Pebruari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" ],
       changeMonth: true,
       changeYear: true,
       format: 'dd/mm/yyyy' 
     });
     chprog();
+    // $(".tanggal").datepicker({ 
+    //   monthNames: [ "Januari", "Pebruari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" ],
+    //   changeMonth: true,
+    //   changeYear: true,
+    //   format: 'dd/mm/yyyy' 
+    // });
+    // chprog();
 });
 
 function chprog(){
