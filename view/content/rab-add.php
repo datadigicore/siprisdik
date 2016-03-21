@@ -1,5 +1,6 @@
 <div class="content-wrapper">
   <section class="content-header">
+    <a href="<?php echo $url_rewrite?>content/rabdetail/<?php echo $getrab['rabview_id'];?>" class="btn btn-app bg-navy"><i class="fa fa-arrow-left"></i>Kembali</a>
     <h1>
       Data RAB
       <small>Menu</small>
@@ -9,7 +10,7 @@
         <b>
         <a href="<?php echo $url_rewrite?>content/rab"> Data RAB</a> 
         > 
-        <a href="<?php echo $url_rewrite?>content/rabdetail/<?php echo $getrab->rabview_id;?>"> Orang/Badan </a>
+        <a href="<?php echo $url_rewrite?>content/rabdetail/<?php echo $getrab['rabview_id'];?>"> Orang/Badan </a>
         >
          Transaksi </a>
         </b>
@@ -25,44 +26,49 @@
           <h3 class="box-title" style="margin-top:6px;">Transaksi</h3>
         </div>
         <div class="box-body" >
-          <?php if (isset($_POST['message'])): ?>
-            <div class="alert alert-<?php echo $_POST['alert']; ?> alert-dismissible">
-              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-              <i class="icon fa fa-warning"></i><?php echo $_POST['message']; ?>
-            </div>
-          <?php endif ?>
+          <?php include "view/include/alert.php"; ?>
             <table class="display table table-bordered table-striped" >
               <tr>
-                <th class="col-md-1"><label>RKAKL</label></th>
-                <th class="col-md-1"><label>Penerima</label></th>
+                <th colspan='3'><label>Info Kegiatan</label></th>
               </tr>
               <tr>
-                <td>
-                  <table>
+                <td valign="top" class="col-md-1">
+                  <table class="table-striped col-md-12">
                       <tr><td valign="top">Tahun</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->THANG?></td></tr>
                       <tr><td valign="top">Kegiatan</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMGIAT?></td></tr>
                       <tr><td valign="top">Output</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMOUTPUT?></td></tr>
                       <tr><td valign="top">Sub Output</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMSOUTPUT?></td></tr>
                       <tr><td valign="top">Komponen</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMKMPNEN?></td></tr>
                       <tr><td valign="top">Sub Komponen</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NmSkmpnen?></td></tr>
-                 </table>
+                  </table>
                 </td>
-                <td>
-                  <table>
-                    <tr><td valign="top">NPWP</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $getrab->npwp;?></td></tr>
-                    <tr><td valign="top">Nama</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $getrab->penerima;?></td></tr>
+                <td class="col-md-1">
+                  <table class="table-striped col-md-12">
+                      <tr><td valign="top">Uraian Acara</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $view['deskripsi']; ?></td></tr>
+                      <tr><td valign="top">Tanggal</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo date("d M Y",strtotime($view['tanggal'])).' - '.date("d M Y",strtotime($view['tanggal_akhir'])); ?></td></tr>
+                      <tr><td valign="top">Lokasi</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $view['tempat'].', '.$view['lokasi']; ?></td></tr>
+                      <tr><td valign="top">Alokasi Anggaran</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo 'Rp '.number_format($jumlah['jumlah'],2,',','.'); ?></td></tr>
+                      <tr><td valign="top">Jumlah Realisasi</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo 'Rp '.number_format($jumlah['realisasi'],2,',','.'); ?></td></tr>
+                      <tr><td valign="top">Jumlah Usulan</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo 'Rp '.number_format($jumlah['usulan'],2,',','.'); ?></td></tr>
+                      <tr><td valign="top">Sisa</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo 'Rp '.number_format(($jumlah['jumlah'] - ($jumlah['realisasi'] + $jumlah['usulan'])),2,',','.'); ?></td></tr>
+                  </table>
+                </td>
+                <td valign="top" class="col-md-1">
+                  <table class="table-striped col-md-12">
+                    <tr><td valign="top">NPWP</td><td valign="top">:&nbsp;</td><td valign="top"><div id="info-npwp"></div></td></tr>
+                    <tr><td valign="top">Nama</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $getrab['penerima'];?></td></tr>
                     <tr><td valign="top">NIP</td><td valign="top">:&nbsp;</td><td valign="top"><div id="info-nip"></div></td></tr>
                     <tr><td valign="top">Status PNS</td><td valign="top">:&nbsp;</td><td valign="top"><div id="info-pns"></div></td></tr>
                     <tr><td valign="top">Golongan</td><td valign="top">:&nbsp;</td><td valign="top"><div id="info-gol"></div></td></tr>
                     <tr><td valign="top">Jabatan</td><td valign="top">:&nbsp;</td><td valign="top"><div id="info-jbt"></div></td></tr>
-                    <tr><td valign="top">Besar Pajak</td><td valign="top">:&nbsp;</td><td valign="top"><div id="info-pajak"></div></td></tr>
+                    <tr><td valign="top">Besar Pajak (PPh)</td><td valign="top">:&nbsp;</td><td valign="top"><div id="info-pajak"></div></td></tr>
                   </table>
                 </td>
             </table>
             <br>
             <input type="hidden" id="id_rabfull" name="id_rabfull" value="<?php echo $id_rabfull?>" />
             <?php if($_SESSION['level'] != 0){ ?>
-            <?php if($getrab->status == 0 || $getrab->status == 3 || $getrab->status == 5){ ?>
+            <?php if($getrab['status'] == 0 || $getrab['status'] == 3 || $getrab['status'] == 5){ ?>
             <div class="col-md-12">
               <a style="" id="add-more-akun" href="#" class="btn btn-flat btn-success btn-lg"><i class="fa fa-plus"></i> Tambah Transaksi</a>
             </div>
@@ -74,7 +80,7 @@
               </select>
 
               <label>No Item</label>
-              <select style="margin:5px auto" class="form-control" id="noitem" name="noitem" required />
+              <select style="margin:5px auto" class="form-control" id="noitem" name="noitem" onchange="tambahinfopagu()" required />
               </select>
 
               <div id="bahan">
@@ -89,7 +95,7 @@
             <div class="col-md-6" id="div-info" style="display:none">
               <table class="display table table-bordered table-striped" >
                 <tr>
-                  <th class="col-md-1"><label>Info</label></th>
+                  <th class="col-md-1"><label>Info Akun</label></th>
                 </tr>
                 <tr>
                   <td id="info-pagu">
@@ -125,6 +131,7 @@
                 <th>Kode Akun</th>
                 <th>Nama Akun</th>
                 <th>Nilai (Rupiah)</th>
+                <th>Keterangan</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -190,7 +197,7 @@
       $("#id_rab_del").val(tabrow.data()[0]);
     });
 
-    
+    ceknama();
   });
 
   function getdatepicker(){
@@ -280,6 +287,7 @@
   }
 
   function kodeAkun(idSelector){
+    $("#kode-akun").empty();
     var id_rabfull = $('#id_rabfull').val();
     var isi ="<option value=''>-- Pilih Kode Akun --</option>";
     $.ajax({
@@ -320,44 +328,14 @@
           alert("Tidak terdapat item pada kode akun yang anda pilih");
         }
       });
-    $.ajax({
-      method: "POST",
-      url: "<?=$url_rewrite?>process/rab_rinci/hitung_pagu",
-      data: { 'id_rabfull': id_rabfull,
-              'kdAkun'    : kdAkun, },
-      dataType: "json"
-    })
-    .done(function( r ) {
-        // alert(r.sisa);
-        // document.getElementById('title_dipa').innerHTML = "<b>Alokasi Kode "+r.kdakun+"<b>";
-        // document.getElementById('title_realisasi').innerHTML = "<b>Realisasi Kode "+r.kdakun+"<b>";
-        // document.getElementById('title_sisa').innerHTML = "<b>Sisa Alokasi Kode "+r.kdakun+"<b>";
-        // document.getElementById('nilai_dipa').innerHTML = "<b>Rp. "+r.pagu+"<b>";
-        // document.getElementById('nilai_realisasi').innerHTML = "<b>Rp. "+r.realisasi+"<b>";
-        // document.getElementById('nilai_sisa').innerHTML = "<b>Rp. "+r.sisa+"<b>";
-        // document.getElementById("value").setAttribute("max",r.sisa)+"<b>";
-        // $('.titikdua').innerHTML = ": ";
-        $('#info-pagu').empty();
-        $('#info-pagu').append(''
-                    +'<table>'
-                    +'  <tr>'
-                    +'      <td valign="top"><h4>Alokasi Kode '+r.kdakun+'</h4></td>'
-                    +'      <td valign="top"><h4>&nbsp;:&nbsp;</h4></td>'
-                    +'      <td valign="top"><h4>Rp. '+r.pagu+'</h4></td>'
-                    +'    </tr>'
-                    +'  <tr>'
-                    +'      <td valign="top"><h4>Realisasi Kode '+r.kdakun+'</h4></td>'
-                    +'      <td valign="top"><h4>&nbsp;:&nbsp;</h4></td>'
-                    +'      <td valign="top"><h4>Rp. '+r.realisasi+'</h4></td>'
-                    +'    </tr>'
-                    +'  <tr>'
-                    +'      <td valign="top"><h4>Sisa Alokasi Kode '+r.kdakun+'</h4></td>'
-                    +'      <td valign="top"><h4>&nbsp;:&nbsp;</h4></td>'
-                    +'      <td valign="top"><h4>Rp. '+r.sisa+'<h4></td>'
-                    +'    </tr>'
-                    +'</table>'
-                    );
-    });  
+
+    var noitem = $('#noitem').val();
+    if (kdAkun == '521211' && noitem == null) {
+      $('#info-pagu').empty();
+      $('#info-pagu').append('<h4>Pilih No Item Terlebih Dahulu</h4>');
+    }else{
+      tambahinfopagu();
+    };  
 
     $.ajax({
       method: "POST",
@@ -382,9 +360,6 @@
          };
         } else {
           if(kdAkun=="524119"){
-            // $('#tbl_rute').append('<br>'
-            //       +'  <a class="form-control btn btn-primary btn-sm" onclick="tambahRute()"><i class="fa fa-plus"></i> Tambah Perincian</a>'
-            //       );
             tambahRute();
             $('#bahan').empty();
             $('#nilai').empty();
@@ -411,6 +386,48 @@
         }
       },
     });
+  }
+
+  function tambahinfopagu(){
+    var id_rabfull = $('#id_rabfull').val();
+    var kdAkun = $('#kode-akun').val();
+    var noitem = $('#noitem').val();
+    $.ajax({
+        method: "POST",
+        url: "<?=$url_rewrite?>process/rab_rinci/hitung_pagu",
+        data: { 'id_rabfull': id_rabfull,
+                'kdAkun'    : kdAkun,
+                'noitem'    : noitem },
+        dataType: "json"
+      })
+      .done(function( r ) {
+          $('#info-pagu').empty();
+          $('#info-pagu').append(''
+                      +'<table>'
+                      +'  <tr>'
+                      +'      <td valign="top"><h4>Alokasi</h4></td>'
+                      +'      <td valign="top"><h4>&nbsp;:&nbsp;</h4></td>'
+                      +'      <td valign="top"><h4>Rp. '+r.pagu+'</h4></td>'
+                      +'    </tr>'
+                      +'  <tr>'
+                      +'      <td valign="top"><h4>Realisasi</h4></td>'
+                      +'      <td valign="top"><h4>&nbsp;:&nbsp;</h4></td>'
+                      +'      <td valign="top"><h4>Rp. '+r.realisasi+'</h4></td>'
+                      +'    </tr>'
+                      +'  <tr>'
+                      +'  <tr>'
+                      +'      <td valign="top"><h4>Usulan</h4></td>'
+                      +'      <td valign="top"><h4>&nbsp;:&nbsp;</h4></td>'
+                      +'      <td valign="top"><h4>Rp. '+r.usulan+'</h4></td>'
+                      +'    </tr>'
+                      +'  <tr>'
+                      +'      <td valign="top"><h4>Sisa Alokasi</h4></td>'
+                      +'      <td valign="top"><h4>&nbsp;:&nbsp;</h4></td>'
+                      +'      <td valign="top"><h4>Rp. '+r.sisa+'<h4></td>'
+                      +'    </tr>'
+                      +'</table>'
+                      );
+      });
   }
 
   function tambahRute(){
@@ -499,9 +516,7 @@
           +'             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>'
           +'        </div>'
           +'        </td>'
-          +'        </tr>'
-
-          +'        <tr>'
+          +'        <td>&nbsp;</td>'
           +'        <td>'
           +'        <label> Tanggal Kembali</label>'
           +'        </td>'
@@ -529,6 +544,16 @@
           +'        <td>&nbsp;:&nbsp;</td>'
           +'        <td>'
           +'        <input style="margin:5px auto" type="text" class="form-control uang" id="uang_harian[]" name="uang_harian[]" placeholder="Jumlah Uang per Hari">'
+          +'        </td>'
+          +'        </tr>'
+
+          +'        <tr>'
+          +'        <td>'
+          +'        <label>Biaya Akomodasi</label>'
+          +'        </td>'
+          +'        <td>&nbsp;:&nbsp;</td>'
+          +'        <td>'
+          +'        <input style="margin:5px auto" type="text" class="form-control uang" id="biaya_akom[]" name="biaya_akom[]" placeholder="0">'
           +'        </td>'
           +'        </tr>'
 
@@ -566,12 +591,46 @@
   }
 
   function ceknama(){
-    var nip = "<?php echo $getrab->nip;?>";
-    var pns = "<?php echo $getrab->pns;?>";
-    var gol = "<?php echo $getrab->golongan;?>";
-    var jbt = "<?php echo $getrab->jabatan;?>";
-    var pajak = "<?php echo $getrab->pajak;?>";
-    var jenis = "<?php echo $getrab->jenis;?>";
+    $('#info-npwp').empty();
+    $('#info-nip').empty();
+    $('#info-pns').empty();
+    $('#info-gol').empty();
+    $('#info-jbt').empty();
+    $('#info-pajak').empty();
+
+    var npwp = "<?php echo $getrab['npwp'];?>";
+    var nip = "<?php echo $getrab['nip'];?>";
+    var pns = "<?php echo $getrab['pns'];?>";
+    var gol = "<?php echo $getrab['golongan'];?>";
+    var jbt = "<?php echo $getrab['jabatan'];?>";
+    var pajak = "<?php echo $getrab['pajak'];?>";
+    var jenis = "<?php echo $getrab['jenis'];?>";
+
+    if(npwp!=""){
+      $('#info-npwp').append(npwp);
+    }else {
+      $('#info-npwp').append('N/A');
+    };
+    $('#info-nip').append(nip);
+    if (pns==1) {
+      $('#info-pns').append('PNS');
+    }else{
+      $('#info-pns').append('Non PNS');
+    };
+    if (gol==1) {
+      $('#info-gol').append('I');
+    }else if (gol==2) {
+      $('#info-gol').append('II');
+    }else if (gol==3) {
+      $('#info-gol').append('III');
+    }else if (gol==4) {
+      $('#info-gol').append('IV');
+    }else {
+      $('#info-gol').append('N/A');
+    };
+    $('#info-jbt').append(jbt);
+    $('#info-pajak').append(pajak+' %');
+    
   }
 
 </script>

@@ -18,12 +18,7 @@
           </div>
           <form method="POST" action="<?php echo $url_rewrite;?>process/user/add">
             <div class="box-body">
-              <?php if (isset($_POST['message'])): ?>
-                <div class="alert alert-success alert-dismissible">
-                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                  <i class="icon fa fa-check"></i><?php echo $_POST['message']; ?>
-                </div>
-              <?php endif ?>
+              <?php include "view/include/alert.php" ?>
               <div class="form-group">
                 <input type="text" class="form-control" name="name" placeholder="Nama Lengkap" required>
               </div>

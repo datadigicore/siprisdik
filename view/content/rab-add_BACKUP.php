@@ -17,12 +17,7 @@
             <!-- <a href="<?php echo $url_rewrite;?>content/rab/add" class="btn btn-flat btn-success btn-sm pull-right">Tambah RAB</a> -->
           </div>
           <div class="box-body" >
-            <?php if (isset($_POST['message'])): ?>
-              <div class="alert alert-<?php echo $_POST['alert']; ?> alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <i class="icon fa fa-warning"></i><?php echo $_POST['message']; ?>
-              </div>
-            <?php endif ?>
+            <?php include "view/include/alert.php" ?>
             <form class="form-horizontal" role="form" id="formAkun" enctype="multipart/form-data" method="post" action="<?= $url_rewrite ?>process/rab_rinci/tambahAkun">
               <input type="hidden" id="id_rabfull" name="id_rabfull" value="<?php echo $id_rabfull?>" />
               <a style="" id="add-more-akun" href="#" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i> Tambah Akun</a>

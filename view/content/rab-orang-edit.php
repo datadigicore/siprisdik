@@ -1,5 +1,6 @@
 <div class="content-wrapper">
   <section class="content-header">
+    <a href="<?php echo $url_rewrite?>content/rabdetail/<?php echo $id_rab_view;?>" class="btn btn-app bg-navy"><i class="fa fa-arrow-left"></i>Kembali</a>
     <h1>
      Data RAB
     </h1>
@@ -96,31 +97,24 @@
          </div>        
       </div>
     </div>
-    <!-- <div class="row">
-      <div class="col-md-12 col-xs-12">
-        <div class="form-group">
-          <button id="tambahorang" class="btn btn-primary"><i class="fa fa-plus"></i> Tambah</button>
-        </div>
-      </div>
-    </div> -->
   </section>
 </div>
 
 <script>
   $(function () {
-    $('#jenis-akun').val('<?= $getrab->jenis ?>');
+    $('#jenis-akun').val('<?= $getrab["jenis"] ?>');
     cekJenis();
-    $('#penerima').val('<?= $getrab->penerima ?>');
-    $('#npwp').val('<?= $getrab->npwp ?>');
-    $('#nip').val('<?= $getrab->nip ?>');
-    $('#pns').val('<?= $getrab->pns ?>');
-    $('#golongan').val('<?= $getrab->golongan ?>');
-    $('#jabatan').val('<?= $getrab->jabatan ?>');
-    $('#pajak').val('<?= $getrab->pajak ?>');
+    $('#penerima').val('<?= $getrab["penerima"] ?>');
+    $('#npwp').val('<?= $getrab["npwp"] ?>');
+    $('#nip').val('<?= $getrab["nip"] ?>');
+    $('#pns').val('<?= $getrab["pns"] ?>');
+    $('#golongan').val('<?= $getrab["golongan"] ?>');
+    $('#jabatan').val('<?= $getrab["jabatan"] ?>');
+    $('#pajak').val('<?= $getrab["pajak"] ?>');
 
     var jenis = $('#jenis-akun').val();
     var pns = $('#pns').val();
-    var jabatan = '<?= $getrab->jabatan ?>';
+    var jabatan = '<?= $getrab["jabatan"] ?>';
     if (jenis == 1) {
       pilihpns();
       if (pns==0) {

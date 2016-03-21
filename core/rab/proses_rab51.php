@@ -175,7 +175,7 @@ switch ($process) {
       if ($error == 1) {
         $utility->load("content/rab51/".$_SESSION['direktorat'],"warning","Proses tidak dilanjutkan. Kode Akun ".$kodeError." melebihi Pagu");
       }else{
-        $utility->load("content/rab51/".$_SESSION['direktorat'],"danger","Proses tidak dilanjutkan. Terdapat kode akun yang kosong");
+        $utility->load("content/rab51/".$_SESSION['direktorat'],"error","Proses tidak dilanjutkan. Terdapat kode akun yang kosong");
       }
     }
     break;

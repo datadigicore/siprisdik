@@ -16,8 +16,10 @@
   $url_rewrite    = "http://localhost/siprisdik/";
   $REQUEST        = "siprisdik/content";
   $PROSES_REQUEST = "siprisdik/process";
-  $path           = "/var/www/html/siprisdik/";
-  $path_upload    = "/var/www/html/siprisdik/static/uploads/";
+  // $path           = "/var/www/html/siprisdik/";
+  $path           = "/Applications/XAMPP/xamppfiles/htdocs/siprisdik/";
+  // $path_upload    = "/var/www/html/siprisdik/static/uploads/";
+  $path_upload    = "/Applications/XAMPP/xamppfiles/htdocs/siprisdik/static/uploads/";
 
   class config {
     public $db_host              = "localhost";

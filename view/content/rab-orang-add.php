@@ -1,5 +1,6 @@
 <div class="content-wrapper">
   <section class="content-header">
+    <a href="<?php echo $url_rewrite?>content/rabdetail/<?php echo $id_rab_view;?>" class="btn btn-app bg-navy"><i class="fa fa-arrow-left"></i>Kembali</a>
     <h1>
       Data RAB
     </h1>
@@ -120,7 +121,7 @@
         </div>
         <div class="modal-body">
           <input type="hidden" name="id_rab_view" value="<?php echo $id_rab_view ?>" />
-          <input type="hidden" id="adendum" name="adendum" value="<?php echo $status;?>" /><?php echo $status;?>
+          <input type="hidden" id="adendum" name="adendum" value="<?php echo $status;?>" />
           <input type="hidden" id="jenisimport" name="jenisimport" value="" />
           <div class="form-group">
             <label>Download Template <a href="<?php echo $url_rewrite;?>process/rab/download">Here</a>.</label>

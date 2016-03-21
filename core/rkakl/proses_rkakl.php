@@ -20,7 +20,7 @@ switch ($process) {
         $path = $_FILES['fileimport']['name'];
         $ext  = pathinfo($path, PATHINFO_EXTENSION);
         if($ext != 'xls' && $ext != 'xlsx') {
-          $utility->load("content/rkakl","danger","Jenis file RKAKL yang di upload tidak sesuai");
+          $utility->load("content/rkakl","error","Jenis file RKAKL yang di upload tidak sesuai");
         }
         else {
           $time        = time();

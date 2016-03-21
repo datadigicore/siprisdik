@@ -14,12 +14,7 @@
         <div class="box">
 
           <div class="box-body">
-            <?php if (isset($_POST['message'])): ?>
-              <div class="alert alert-<?php echo $_POST['alert']; ?> alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <i class="icon fa fa-warning"></i><?php echo $_POST['message']; ?>
-              </div>
-            <?php endif ?>
+            <?php include "view/include/alert.php" ?>
             <form class="form-horizontal" role="form" id="frmMode1" enctype="multipart/form-data" method="post" action="<?= $url_rewrite ?>process/user/edt-pass">
               
               <div class="form-group ">
