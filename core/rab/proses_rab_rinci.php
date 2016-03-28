@@ -528,6 +528,7 @@ switch ($process) {
 		$getrab = $mdl_rab->getrabfull($id_rabfull);
 		$getakun = $mdl_rab->getakungroup($getrab);
 		// print_r($getakun);die;
+		$data['kodeakun'] = count($getakun);
 		$data['error'] = false;
 		if (count($getakun) > 2) {
 			$data['error'] = '1';
