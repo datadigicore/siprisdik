@@ -76,59 +76,64 @@ switch ($process) {
         }
       }),
       array( 'db' => 'status',  'dt' => 8, 'formatter' => function($d,$row, $dataArray){ 
-        $button = '<div class="text-center btn-group-vertical">';
+        $button = '<div class="btn-group">';
         if($d==0 && $_SESSION['level'] != 0){
-          $button .= '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list pull-left"></i> Rincian</a>';
+          $button .= '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a>';
           if ($_SESSION['level'] == 2) {
-            $button .= '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="btn btn-flat btn-success btn-sm col-sm" data-toggle="modal"><i class="fa fa-check pull-left"></i> Ajukan</a>';
+            $button .= '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="btn btn-flat btn-success btn-sm col-sm" data-toggle="modal"><i class="fa fa-check"></i>&nbsp; Ajukan</a>';
           }
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rab/edit/'.$row[0].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil pull-left"></i> Edit</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file-text-o pull-left"></i> Cetak Pengajuan UMK</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file-text-o pull-left"></i> Cetak Rincian Keb. Dana</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rab/edit/'.$row[0].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i>&nbsp; Edit</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-del" href="#delete" class="btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-close"></i>&nbsp; Delete</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Pengajuan UMK</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Rincian Keb. Dana</a>';
         }
         elseif ($d==0 && $_SESSION['level'] == 0) {
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list pull-left"></i> Rincian</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file-text-o pull-left"></i> Cetak Pengajuan UMK</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file-text-o pull-left"></i> Cetak Rincian Keb. Dana</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; Rincian</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Pengajuan UMK</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Rincian Keb. Dana</a>';
         }
         elseif($d==1  && $_SESSION['level'] != 0){
-          $button .= '<a style="margin:0 2px;" class="btn btn-flat btn-primary btn-sm" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" ><i class="fa fa-list pull-left"></i> Rincian</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file-text-o pull-left"></i> Cetak Pengajuan UMK</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file-text-o pull-left"></i> Cetak Rincian Keb. Dana</a>';        
+          $button .= '<a style="margin:0 2px;" class="btn btn-flat btn-primary btn-sm" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" ><i class="fa fa-list"></i>&nbsp; Rincian</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Pengajuan UMK</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Rincian Keb. Dana</a>';        
         }
 
         elseif ($d==1  && $_SESSION['level'] == 0) {
-          $button .= '<a style="margin:0 2px;" id="btn-sah" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check pull-left"></i> Sahkan</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-rev" href="#revisi" class="btn btn-flat btn-warning btn-sm" data-toggle="modal"><i class="fa fa-edit pull-left"></i> Revisi</a>';
-          $button .= '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list pull-left"></i> Rincian</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file-text-o pull-left"></i> Cetak pengajuan_UMK</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file-text-o pull-left"></i> Cetak Rincian Keb. Dana</a>';
+          $button .= '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; Rincian</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-sah" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i>&nbsp; Sahkan</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-rev" href="#revisi" class="btn btn-flat btn-warning btn-sm" data-toggle="modal"><i class="fa fa-edit"></i>&nbsp; Revisi</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Pengajuan UMK</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Rincian Keb. Dana</a>';
         }
         elseif($d==3 && $_SESSION['level'] != 0){
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a>';
           if ($_SESSION['level'] == 2) {
-            $button .= '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check pull-left"></i> Ajukan Revisi</a>';
+            $button .= '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i>&nbsp; Ajukan Revisi</a>';
           }
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rab/edit/'.$row[0].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil pull-left"></i> Edit</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list pull-left"></i> Rincian</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rab/edit/'.$row[0].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i>&nbsp; Edit</a>';
+          if ($row[13] != "") {
+            $button .= '<a style="margin:0 2px;" id="btn-pesan" href="#pesanrevisi" class="btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-envelope"></i>&nbsp; Pesan </a>';
+          }
         }
         elseif ($d==3 && $_SESSION['level'] == 0) {
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list pull-left"></i> Rincian</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; Rincian</a>';
+          if ($row[13] != "") {
+            $button .= '<a style="margin:0 2px;" id="btn-pesan" href="#pesanrevisi" class="btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-envelope"></i>&nbsp; Pesan </a>';
+          }
         }
         elseif($d==6 && $_SESSION['level'] != 0){
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list pull-left"></i> Rincian</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a>';
         }
         elseif ($d==6 && $_SESSION['level'] == 0) {
-          $button .= '<a style="margin:0 2px;" id="btn-aju" href="#tutup" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check pull-left"></i> Penutupan Anggaran</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list pull-left"></i> Rincian</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-aju" href="#tutup" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i>&nbsp; Penutupan Anggaran</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; Rincian</a>';
         }
         else{
-          $button .= '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list pull-left"></i> Rincian</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file-text-o pull-left"></i> Cetak Pengajuan UMK</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'/1'.'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-file-text-o pull-left"></i> Cetak Daftar PJ UMK</a>';
+          $button .= '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Pengajuan UMK</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'/1'.'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Daftar PJ UMK</a>';
         }
-        if ($row[13] != "") {
-          $button .= '<a style="margin:0 2px;" id="btn-pesan" href="#pesanrevisi" class="btn btn-flat btn-info btn-sm" data-toggle="modal"><i class="fa fa-envelope pull-left"></i> Pesan</a>';
-        }
+        
         $button .= '</div>';
         return $button;
       }),
@@ -188,65 +193,13 @@ switch ($process) {
     $id_rabview = $_POST['id_rab_aju'];
     $akun = $mdl_rab->getakun($id_rabview);
     $error = false;
-    // echo "<pre>";
     for ($i=0; $i < count($akun); $i++) { 
-      if ($akun[$i]->kdakun == 521211) {  //belanja bahan
-        $rab = $mdl_rab->getRabItem($akun[$i]);
-        for ($j=0; $j < count($rab); $j++) { 
-          $jum_rkakl = $mdl_rab->getJumRkakl($akun[$i], $rab[$j]);
-          if ($jum_rkakl->jumlah < ($rab[$j]->jumlahrab + $jum_rkakl->realisasi + $jum_rkakl->usulan)) {
-            $error = '1';
-            $kderror[$i] = $akun[$i]->kdakun;
-          }
-        }
-      }elseif($akun[$i]->kdakun != ""){  // bukan belanja bahan
-        $rab = $mdl_rab->getRabAkun($akun[$i]);
-        $jum_rkakl = $mdl_rab->getJumRkakl($akun[$i]);
-        if ($jum_rkakl->jumlah < ($rab->jumlahrab + $jum_rkakl->realisasi + $jum_rkakl->usulan)) {
-          $error = '1';
-          $kderror[$i] = $akun[$i]->kdakun;
-        }
-      }else{  //kode akun kosong
+      if ($akun[$i]->kdakun == "") {  //kode akun kosong
         $error = '2';
         $kderror[$i] = $akun[$i]->kdakun;
       }
     }
-
     if (!$error) {
-      for ($i=0; $i < count($akun); $i++) { 
-        if ($akun[$i]->kdakun == 521211) {  //belanja bahan
-          $rab = $mdl_rab->getRabItem($akun[$i]);
-          for ($j=0; $j < count($rab); $j++) { 
-            $jum_rkakl = $mdl_rab->getJumRkakl($akun[$i], $rab[$j]);
-            $total = $jum_rkakl->usulan + $rab[$j]->jumlahrab;
-            $item = $rab[$j]->noitem;
-            $mdl_rab->insertUsulan($akun[$i], $item, $total);
-          }
-        }elseif($akun[$i]->kdakun != ""){  // bukan belanja bahan
-          $jum_rkakl = $mdl_rab->getJumRkakl($akun[$i]);
-          $rab = $mdl_rab->getRabAkun($akun[$i]);
-          $totalusul = $rab[0]->jumlahrab + $jum_rkakl->usulan;
-          $item = $jum_rkakl->noitem;
-          $pecah_item = explode(",", $item);
-          $banyakitem = count($pecah_item);
-
-          $totalperitem = floor($totalusul/$banyakitem);
-          $sisaitem = $totalusul % $banyakitem;
-
-          for ($x=0; $x < $banyakitem; $x++) { 
-            if ($sisaitem == 0) {
-              $mdl_rab->insertUsulan($akun[$i], $pecah_item[$x], $totalperitem);
-            }else{
-              if ($x == ($banyakitem-1)) {
-                $totalperitem = $totalperitem + $sisaitem;
-                $mdl_rab->insertUsulan($akun[$i], $pecah_item[$x], $totalperitem);
-              }else{
-                $mdl_rab->insertUsulan($akun[$i], $pecah_item[$x], $totalperitem);
-              }
-            }
-          }
-        }
-      }
       $status = '1';
       $mdl_rab->chstatus($id_rabview, $status);
       $utility->load("content/rab","success","Data RAB telah diajukan ke Bendahara Pengeluaran");
@@ -255,7 +208,7 @@ switch ($process) {
       if ($error == 1) {
         $utility->load("content/rab","warning","Proses tidak dilanjutkan. Kode Akun ".$kodeError." melebihi Pagu");
       }else{
-        $utility->load("content/rab","error","Proses tidak dilanjutkan. Terdapat kode akun yang kosong");
+        $utility->load("content/rab","error","Proses tidak dilanjutkan. Terdapat data yang kosong");
       }
     }
     break;
@@ -292,47 +245,17 @@ switch ($process) {
     break;
   case 'revisi':
     $id_rabview = $_POST['id_rab_rev'];
-    $akun = $mdl_rab->getakun($id_rabview);
-    for ($i=0; $i < count($akun); $i++) { 
-      if ($akun[$i]->kdakun == 521211) {  //belanja bahan
-        $rab = $mdl_rab->getRabItem($akun[$i]);
-        for ($j=0; $j < count($rab); $j++) { 
-          $jum_rkakl = $mdl_rab->getJumRkakl($akun[$i], $rab[$j]);
-          $total = $jum_rkakl->usulan - $rab[$j]->jumlahrab;
-          $item = $rab[$j]->noitem;
-          $mdl_rab->insertUsulan($akun[$i], $item, $total);
-        }
-      }elseif($akun[$i]->kdakun != ""){  // bukan belanja bahan
-        $jum_rkakl = $mdl_rab->getJumRkakl($akun[$i]);
-        $rab = $mdl_rab->getRabAkun($akun[$i]);
-
-        $totalusul = $jum_rkakl->usulan - $rab[0]->jumlahrab;
-        $item = $jum_rkakl->noitem;
-        $pecah_item = explode(",", $item);
-        $banyakitem = count($pecah_item);
-
-        $totalperitem = floor($totalusul/$banyakitem);
-        $sisaitem = $totalusul % $banyakitem;
-
-        for ($x=0; $x < $banyakitem; $x++) { 
-          if ($sisaitem == 0) {
-            $mdl_rab->insertUsulan($akun[$i], $pecah_item[$x], $totalperitem);
-          }else{
-            if ($x == ($banyakitem-1)) {
-              $totalperitem = $totalperitem + $sisaitem;
-              $mdl_rab->insertUsulan($akun[$i], $pecah_item[$x], $totalperitem);
-            }else{
-              $mdl_rab->insertUsulan($akun[$i], $pecah_item[$x], $totalperitem);
-            }
-          }
-        }
-      }
-    }
     $status = '3';
     $pesan = $_POST['pesan'];
     $mdl_rab->chstatus($id_rabview, $status);
     $mdl_rab->pesanrevisi($id_rabview, $pesan);
     $utility->load("content/rab","success","Data RAB direvisi");
+    break;
+  case 'delete':
+    $id_rabview = $_POST['id_rab_del'];
+    $akun = $mdl_rab->getakun($id_rabview);
+    $mdl_rab->deleterab($id_rabview);
+    $utility->load("content/rab","success","Data RAB telah dihapus");
     break;
   default:
     $utility->location_goto(".");

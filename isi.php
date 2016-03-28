@@ -64,6 +64,7 @@ else {
             $id_rab_view = $data[2];
             $view = $mdl_rab->getview($id_rab_view);
             $datarkakl = $mdl_rab->getrkaklfull($view);
+            $jumlah = $mdl_rab->getJumlahRkakl($view);
             include ('view/content/rabdetail.php');
           }
           break;
@@ -72,12 +73,12 @@ else {
             $id_rabfull = $data[3];
             $getrab = $mdl_rab->getrabfull($id_rabfull);
             // $getjalan = $mdl_rab->getjalanbyidrab($id_rabfull);
-            $datarkakl = $mdl_rab->getrkaklfull2($getrab);
+            $datarkakl = $mdl_rab->getrkaklfull($getrab);
             include ('view/content/rab-add-detail.php');
           } else{
             $id_rabfull = $data[2];
             $getrab = $mdl_rab->getrabfull($id_rabfull);
-            $datarkakl = $mdl_rab->getrkaklfull2($getrab);
+            $datarkakl = $mdl_rab->getrkaklfull($getrab);
             // $eval_nilai = $mdl_rab->hitung_dipa($getrab,"");
             // print_r($eval_nilai);
             include ('view/content/rab-add.php');
@@ -131,6 +132,12 @@ else {
             $tahun = $mdl_rab->getYear();
             $idview = $data[3];
             $getview = $mdl_rab->getview($idview);
+            $rabfull = $mdl_rab->getjumlahgiat($idview);
+            if ($rabfull->jumlah == "") {
+              $readonly = "";
+            }else{
+              $readonly = "disabled";
+            }
             include ('view/content/rab-edit.php');
           } else {
             $direktorat = $_SESSION['direktorat'];
@@ -146,7 +153,7 @@ else {
           }elseif ($data[3]=='edit') {
             $id_rab_full = $data[2];
             $getrab = $mdl_rab->getrabfull($id_rab_full);
-            $id_rab_view = $getrab->rabview_id;
+            $id_rab_view = $getrab['rabview_id'];
             include ('view/content/rab-orang-edit.php');
           }elseif ($data[3] == 'upload') {
             $id_rab_view = $data[2];
@@ -159,6 +166,7 @@ else {
             $id_rab_view = $data[2];
             $view = $mdl_rab->getview($id_rab_view);
             $datarkakl = $mdl_rab->getrkaklfull($view);
+            $jumlah = $mdl_rab->getJumlahRkakl($view);
             include ('view/content/rabdetail.php');
           }
           break;
@@ -167,17 +175,22 @@ else {
             $id_rabfull = $data[3];
             $getrab = $mdl_rab->getrabfull($id_rabfull);
             $datarkakl = $mdl_rab->getrkaklfull2($getrab);
+            $jumlah = $mdl_rab->getJumlahRkakl($getrab);
+            $view=$getrab;
             include ('view/content/rab-add-detail.php');
           } else if ($data[2] == 'edit') {
             $id_rabfull = $data[3];
             $getrab = $mdl_rab->getrabfull($id_rabfull);
             $datarkakl = $mdl_rab->getrkaklfull2($getrab);
+            $jumlah = $mdl_rab->getJumlahRkakl($getrab);
+            $view=$getrab;
             include ('view/content/rab-add-edit.php');
           } else{
             $id_rabfull = $data[2];
             $getrab = $mdl_rab->getrabfull($id_rabfull);
-            // $eval_nilai = $mdl_rab->hitung_dipa($getrab,"");
             $datarkakl = $mdl_rab->getrkaklfull2($getrab);
+            $jumlah = $mdl_rab->getJumlahRkakl($getrab);
+            $view=$getrab;
             include ('view/content/rab-add.php');
           }
           break;
