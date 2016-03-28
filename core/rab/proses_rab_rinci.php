@@ -341,6 +341,8 @@ switch ($process) {
 				}elseif ($getakun[0]->kdakun == 524119) {
 					if ($kdakun != 521213  && $kdakun != 522151 && $kdakun != 524119) {
 						$data['error'] = '5';
+					} else if ($getakun[0]->banyak >= 4){
+						$data['error'] = '6';
 					}
 				}
 			}
