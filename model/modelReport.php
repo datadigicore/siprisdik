@@ -155,7 +155,7 @@
                           no_kuitansi,nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
                         from rabfull where no_kuitansi='$no_kw' ".$condition." ");
           $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw' and no_kuitansi_update is null ".$condition." ");
-
+          return $no_kw;
       }
       else {
         if($this->num_rows($hsl_org)==0){
@@ -169,13 +169,15 @@
                           no_kuitansi, nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
                         from rabfull where no_kuitansi='$no_kw' ".$condition." ");
           $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw' and no_kuitansi_update is null ".$condition." ");
-
+          return $no_kw;
         }
         else{
           $hsl_tbh = $this->query($sql_org2);
           $hsl_arr = $this->fetch_array($hsl_tbh);
           $no_kw_up = $hsl_arr[no_kuitansi_update];
           $no_kw_up+=1;
+
+
           // echo "Sudah ada orang dengan kwitansi nomor yg lama";
           $this->query("INSERT into kuitansi(no_kuitansi, nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
                         select
@@ -187,7 +189,20 @@
       }
 
       // echo " No Kwitansi ".$no_kw;
+      $query = "SELECT no_kuitansi from rabfull
+                  where kdgiat = '$kdgiat' 
+                    and kdprogram='$kdprogram' 
+                    and kdoutput = '$kdoutput'
+                    and kdsoutput = '$kdsoutput'
+                    and kdkmpnen = '$kdkmpnen'
+                    and kdskmpnen = '$kdskmpnen'
+                    and npwp like '$npwp%' and nip like '$nip%' and kdakun='$kode_akun'
+                    order by no_kuitansi desc limit 1";
+      $exec_get_nmr_kw = $this->query($query);
+      $array_nmr_kw = $this->fetch_array($exec_get_nmr_kw);
+      $no_kw = $array_nmr_kw[no_kuitansi];
       return $no_kw;
+      
     }
 
     public function cetak_dok($id,$pil_akun,$format){
@@ -2426,7 +2441,7 @@ public function daftar_peng_riil($result,$det){
       $tiket=0;
       $lain2=0;
       $tot=0;
-      $sql = "SELECT rab.tanggal, rab.lama_hari, rab.deskripsi, rab.lokasi, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rab.taxi_asal, rab.taxi_tujuan, rab.harga_tiket, rkkl.NMGIAT, rab.value, rab.uang_muka, rab.uang_harian, rab.uang_saku, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ";
+      $sql = "SELECT rab.tanggal, rab.lama_hari, rab.deskripsi, rab.lokasi, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rab.taxi_asal, rab.taxi_tujuan, rab.harga_tiket, rkkl.NMGIAT, rab.value, rab.uang_muka, rab.uang_harian, rab.uang_saku, rab.biaya_akom, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ";
       // print_r($sql);
       $result = $this->query($sql);
       $res2 = $this->fetch_array($result);
@@ -2439,9 +2454,12 @@ public function daftar_peng_riil($result,$det){
                 $uang_harian_saku += ($rs[uang_harian]*$rs[lama_hari])+$rs[uang_saku];
                 $tiket += $rs[harga_tiket];
               }
-              if((substr($rs[NMITEM],1,4)=="aket" or substr($rs[NMITEM],1,4)=="iaya" or substr($rs[NMITEM],1,9)=="enginapan") and strcasecmp(substr($rs[NMITEM],0,16),"Biaya Perjalanan")!=0  ){
+              if( ((substr($rs[NMITEM],1,4)=="aket" or substr($rs[NMITEM],1,4)=="iaya" or substr($rs[NMITEM],1,9)=="enginapan") and strcasecmp(substr($rs[NMITEM],0,16),"Biaya Perjalanan")!=0) or ($rs[kdakun]=="524119" and $rs[biaya_akom]>0)  ){
                 $Akomodasi+=$rs[value];
               }
+              // if($rs[biaya_akom]>0){
+              //   $Akomodasi+=$rs[biaya_akom];
+              // }
               if(substr($rs[NMITEM],1,3)=="ang"){
                 $uang_harian_saku += $rs[value];
               }
@@ -3705,18 +3723,18 @@ public function daftar_peng_riil($result,$det){
       $title;
       if($jns=="1"){
         $title = "DAFTAR PERTANGGUNG JAWABAN UMK";
-        $cond_query = " and status in(2,4,6,7) ";
+        $cond_query = " and rab.status in(2,4,6,7) ";
       }
       else{
         $title= "RINCIAN KEBUTUHAN DANA";
         $cond_query = " ";
       }
 
-      $sql = "SELECT  rab.lama_hari,  rab.golongan, rab.penerima, rab.kdakun, rab.taxi_asal,rab.taxi_tujuan, rab.harga_tiket, rab.value, rab.uang_muka, rab.uang_harian, rab.uang_saku, rab.pajak, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ".$cond_query." order by rab.penerima asc ";
-      $sql2 = "SELECT rab.deskripsi, rab.tanggal, rab.lokasi, rab.tempat, rab.tempat, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdskmpnen, rkkl.NMGIAT, rkkl.NMOUTPUT, rkkl.NMSOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN  where rabview_id='$data' LIMIT 1";
+      $sql = "SELECT  rab.lama_hari,  rab.golongan, rab.penerima, rab.kdakun, rab.taxi_asal,rab.taxi_tujuan, rab.harga_tiket, rab.value, rab.uang_muka, rab.uang_harian, rab.uang_saku, rab.pajak, rab.biaya_akom, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ".$cond_query." order by rab.penerima asc ";
+      $sql2 = "SELECT rab.deskripsi, rab.tanggal, rab.lokasi, rab.tempat, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdskmpnen, rkkl.NMGIAT, rkkl.NMOUTPUT, rkkl.NMSOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN  where rabview_id='$data' LIMIT 1";
       
       $res = $this->query($sql);
-      $arr = $this->fetch_array($res);
+      // $arr = $this->fetch_array($res);
 
       $res2 = $this->query($sql2);
       $id_giat = $this->fetch_array($res2);
@@ -3881,12 +3899,18 @@ public function daftar_peng_riil($result,$det){
           $acc+=$uang_saku;
           
         }
-        if((substr($val[NMITEM],1,4)=="aket" or substr($val[NMITEM],1,4)=="iaya" or substr($val[NMITEM],1,9)=="enginapan") and strcasecmp(substr($val[NMITEM],0,16),"Biaya Perjalanan")!=0  ){
-                $akomodasi=$val[value];
-                $subtot_akomodasi += $akomodasi;
-                $acc+=$akomodasi;
-                $cell->setCellValue('J'.$row,$akomodasi);
-                $cell->getStyle('J'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+        if(((substr($val[NMITEM],1,4)=="aket" or substr($val[NMITEM],1,4)=="iaya" or substr($val[NMITEM],1,9)=="enginapan") and strcasecmp(substr($val[NMITEM],0,16),"Biaya Perjalanan")!=0) or ($val[biaya_akom]>0 and $val[kdakun]=="524119")) {
+              if($val[biaya_akom]>0){
+                $akomodasi=$val[biaya_akom];
+              }
+                else{
+                  $akomodasi=$val[value];
+              }
+              
+              $subtot_akomodasi += $akomodasi;
+              $acc+=$akomodasi;
+              $cell->setCellValue('J'.$row,$akomodasi);
+              $cell->getStyle('J'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
         }
         if(substr($val[NMITEM],1,8)=="ransport"){
                 $transport+= $val[value];
