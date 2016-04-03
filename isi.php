@@ -55,6 +55,11 @@ else {
             include ('view/content/rab.php');
           }
         break;
+        case 'rab-rkakl':
+          $direktorat = $_SESSION['direktorat'];
+          $tahun = $mdl_rab->getYear();
+          include ('view/content/rab-rkakl.php');
+          break;
         case 'rabdetail':
           if($data[3]=='add'){
             $id_rab_view = $data[2];
@@ -145,6 +150,11 @@ else {
             include ('view/content/rab.php');
           }
         break;
+         case 'rab-rkakl':
+          $direktorat = $_SESSION['direktorat'];
+          $tahun = $mdl_rab->getYear();
+          include ('view/content/rab-rkakl.php');
+          break;
         case 'rabdetail':
           if($data[3]=='add'){
             $id_rab_view = $data[2];
