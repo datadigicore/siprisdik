@@ -1,30 +1,29 @@
 <?php
 include 'config/application.php';
 
-$sess_id    = $_SESSION['user_id'];
-$id         = $_SESSION['id'];
-$name       = $purifier->purify($_POST[name]);
-$username   = $purifier->purify($_POST[username]);
-$password   = $utility->sha512($_POST[password]);
-$newpassword   = $utility->sha512($_POST[newpass]);
-$newpassword2  = $utility->sha512($_POST[newpass2]);
-// $hash_pass  = $utility->sha512($_POST[hash_pass]);
-$email      = $purifier->purify($_POST[email]);
-$level      = $purifier->purify($_POST[level]);
-$direktorat     = $purifier->purify($_POST[direktorat]);
-$status     = $purifier->purify($_POST[status]);
+$sess_id      = $_SESSION['user_id'];
+$id           = $_SESSION['id'];
+$name         = $purifier->purify($_POST[name]);
+$username     = $purifier->purify($_POST[username]);
+$password     = $utility->sha512($_POST[password]);
+$newpassword  = $utility->sha512($_POST[newpass]);
+$newpassword2 = $utility->sha512($_POST[newpass2]);
+$email        = $purifier->purify($_POST[email]);
+$level        = $purifier->purify($_POST[level]);
+$direktorat   = $purifier->purify($_POST[direktorat]);
+$status       = $purifier->purify($_POST[status]);
 
 $data_pengguna = array(
-  "id"         => $id,
-  "name"       => $name,
-  "username"   => $username,
-  "password"   => $password,
-  "newpassword"   => $newpassword,
-  "newpassword2"   => $newpassword2,
-  "email"      => $email,
-  "level"      => $level,
-  "direktorat" => $direktorat,
-  "status"     => $status
+  "id"           => $id,
+  "name"         => $name,
+  "username"     => $username,
+  "password"     => $password,
+  "newpassword"  => $newpassword,
+  "newpassword2" => $newpassword2,
+  "email"        => $email,
+  "level"        => $level,
+  "direktorat"   => $direktorat,
+  "status"       => $status
 );
 
 switch ($process) {
@@ -97,9 +96,14 @@ switch ($process) {
     $pengguna->updatePengguna2($data_pengguna);
     $utility->load("content/edit_profile","success","Data berhasil diubah");
   break;
-  case 'del':
-    $pengguna->deletePengguna($hapuspengguna);
-    $utility->location_goto("content/setting");
+  case 'edit':
+    $pengguna->editPengguna($purifier->purifyArray($_POST));
+    $utility->load("content/user","success","Data Pengguna berhasil diperbaharui");
+  break;
+  case 'delete':
+    $id = $_POST['id'];
+    $pengguna->deletePengguna($id);
+    $utility->load("content/user","success","Data Pengguna berhasil dihapus");
   break;
   case 'kuitansi':
     $report->kuitansi($data_pengguna);
