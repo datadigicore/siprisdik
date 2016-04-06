@@ -601,7 +601,7 @@ switch ($process) {
 	            // echo "<pre>";
 	            // print_r($allDataInSheet);die;
 	            $data = $mdl_rab->importRab($array,$allDataInSheet);
-	            // echo "<pre>"; print_r($data);die;
+	            echo "<pre>"; print_r($data);die;
 	            $utility->load("content/rabdetail/".$id_rab_view."/upload",'success','Telah Berhasil Diupload');
 	          }
 	        }
