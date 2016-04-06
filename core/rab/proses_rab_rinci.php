@@ -528,6 +528,7 @@ switch ($process) {
 		$getrab = $mdl_rab->getrabfull($id_rabfull);
 		$getakun = $mdl_rab->getakungroup($getrab);
 		// print_r($getakun);die;
+		$data['kodeakun'] = count($getakun);
 		$data['error'] = false;
 		if (count($getakun) > 2) {
 			$data['error'] = '1';
@@ -553,6 +554,8 @@ switch ($process) {
 				}elseif ($getakun[0]->kdakun == 524119) {
 					if ($kdakun != 521213  && $kdakun != 522151 && $kdakun != 524119) {
 						$data['error'] = '5';
+					} else if ($getakun[0]->banyak >= 4){
+						$data['error'] = '6';
 					}
 				}
 			}

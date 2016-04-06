@@ -358,6 +358,8 @@
           alert('Sudah terdapat kode akun 524114. Tidak dapat menambah kode akun selain 521213 / 522151');
          }else if(data.error == 5){
           alert('Sudah terdapat kode akun 524119. Tidak dapat menambah kode akun selain 521213 / 522151');
+         }else if(data.error == 6){
+          alert('Sudah terdapat kode akun 524119 sebanyak 4 akun');
          };
         } else {
           if(kdAkun=="524119"){

@@ -9,6 +9,11 @@ switch ($process) {
     $dataArray['direktorat'] = $direk; 
     $tahun = $_POST['tahun'];
     $direktorat = $_POST['direktorat'];
+
+    $kdoutput = $_POST['kdoutput'];
+    $kdsoutput = $_POST['kdsoutput'];
+    $kdkmpnen = $_POST['kdkmpnen'];
+    $kdskmpnen = $_POST['kdskmpnen'];
     $column = array(
       array( 'db' => 'id',      'dt' => 0 ),
       array( 'db' => 'kdprogram',  'dt' => 1, 'formatter' => function($d,$row, $dataArray){ 
@@ -156,7 +161,104 @@ switch ($process) {
         $where .= 'AND kdgiat = "'.$direktorat.'"';
       }
     }
+    if ($kdoutput != "") {
+      if ($where == "") {
+        $where .= 'kdoutput = "'.$kdoutput.'"';
+      }else{
+        $where .= 'AND kdoutput = "'.$kdoutput.'"';
+      }
+    }
+    if ($kdsoutput != "") {
+      if ($where == "") {
+        $where .= 'kdsoutput = "'.$kdsoutput.'"';
+      }else{
+        $where .= 'AND kdsoutput = "'.$kdsoutput.'"';
+      }
+    }
+    if ($kdkmpnen != "") {
+      if ($where == "") {
+        $where .= 'kdkmpnen = "'.$kdkmpnen.'"';
+      }else{
+        $where .= 'AND kdkmpnen = "'.$kdkmpnen.'"';
+      }
+    }
+    if ($kdskmpnen != "") {
+      if ($where == "") {
+        $where .= 'kdskmpnen = "'.$kdskmpnen.'"';
+      }else{
+        $where .= 'AND kdskmpnen = "'.$kdskmpnen.'"';
+      }
+    }
     $group='';
+    $datatable->get_table_group($table, $key, $column,$where,$group,$dataArray);
+    break;
+    case 'table-rkakl':
+    $table = "rkakl_full";
+    $key   = "KDGIAT";
+    $dataArray['url_rewrite'] = $url_rewrite; 
+    // $dataArray['direktorat'] = $direk; 
+    $tahun = $_POST['tahun'];
+    $direktorat = $_POST['direktorat'];
+    $column = array(
+      array( 'db' => 'KDGIAT',      'dt' => 0 ),
+      array( 'db' => 'NMGIAT',      'dt' => 1),
+      array( 'db' => 'NMOUTPUT',      'dt' => 2, 'formatter' => function($d,$row){
+        return $row[10]." - ".$d;
+      }),
+      array( 'db' => 'NMSOUTPUT',      'dt' => 3, 'formatter' => function($d,$row){
+        return $row[11]." - ".$d;
+      }),
+      array( 'db' => 'NMKMPNEN',      'dt' => 4, 'formatter' => function($d,$row){
+        return $row[12]." - ".$d;
+      }),
+      array( 'db' => 'NMSKMPNEN',      'dt' => 5, 'formatter' => function($d,$row){
+        return $row[13]." - ".$d;
+      }),
+      array( 'db' => 'SUM(JUMLAH)',      'dt' => 6, 'formatter' => function($d,$row){
+        return number_format($d,0,".",".");
+      }),
+      array( 'db' => 'SUM(realisasi)',      'dt' => 7, 'formatter' => function($d,$row){
+        if(is_null($d)){
+          return 0;
+        } else {
+          return number_format($d,0,".",".");
+        }
+        
+      }),
+      array( 'db' => 'SUM(usulan)',      'dt' => 8, 'formatter' => function($d,$row){
+        if(is_null($d)){
+          return 0;
+        } else {
+          return number_format($d,0,".",".");
+        }
+        
+      }),
+      array( 'db' => 'KDSKMPNEN',      'dt' => 9, 'formatter' => function($d,$row){
+        return number_format($row[6]+$row[7],0,".",".");
+      }),
+      array( 'db' => 'KDOUTPUT',      'dt' => 10, 'formatter' => function($d,$row, $dataArray){
+        $button = '<div class="btn-group"><a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rab/?kdoutput='.$d.'&kdsoutput='.$row[11].'&kdkmpnen='.$row[12].'&kdskmpnen='.$row[13].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a><div>';
+        return $button;
+      }),
+
+      //kode
+      array( 'db' => 'KDSOUTPUT',      'dt' => 11),
+      array( 'db' => 'KDKMPNEN',      'dt' => 12),
+      array( 'db' => 'KDSKMPNEN',      'dt' => 13),
+      //kode
+    );
+    $where="";
+    // if ($tahun != "") {
+    //   $where = 'thang = "'.$tahun.'"';
+    // }
+    if ($direktorat != "") {
+      if ($where == "") {
+        $where .= 'KDGIAT = "'.$direktorat.'"';
+      }else{
+        $where .= 'AND KDGIAT = "'.$direktorat.'"';
+      }
+    }
+    $group='NmSkmpnen';
     $datatable->get_table_group($table, $key, $column,$where,$group,$dataArray);
     break;
   case 'getnpwp':

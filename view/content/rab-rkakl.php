@@ -1,21 +1,3 @@
-<?php
-  if(isset($_GET['kdoutput']) && isset($_GET['kdsoutput']) && isset($_GET['kdkmpnen']) && isset($_GET['kdskmpnen']))
-  {
-
-    $kdoutput =$_GET['kdoutput'];
-    $kdsoutput =$_GET['kdsoutput'];
-    $kdkmpnen =$_GET['kdkmpnen'];
-    $kdskmpnen =$_GET['kdskmpnen'];
-  } else {
-    $kdoutput ="";
-    $kdsoutput ="";
-    $kdkmpnen ="";
-    $kdskmpnen ="";
-  }
-  echo $kdoutput." ".$kdsoutput." ".$kdkmpnen." ".$kdskmpnen;
-
-?>
-
 <div class="content-wrapper">
   <section class="content-header">
     <h1>
@@ -33,9 +15,11 @@
           <div class="box-header">
             <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya</h3>
 
-            <?php if ($_SESSION['level'] != '0') {
-              echo '<a href="'.$url_rewrite.'content/rab/tambah" class="btn btn-flat btn-success btn-md pull-right"><i class="fa fa-plus"></i>&nbsp;Tambah RAB</a>';
-            }?>
+            <?php 
+            // if ($_SESSION['level'] != '0') {
+            //   echo '<a href="'.$url_rewrite.'content/rab/tambah" class="btn btn-flat btn-success btn-md pull-right"><i class="fa fa-plus"></i>&nbsp;Tambah RAB</a>';
+            // }
+            ?>
 
           </div>
           <div class="box-body">
@@ -77,14 +61,16 @@
               <thead style="background-color:#11245B;color:white;">
                 <tr>
                   <th>No</th>
-                  <th width="12%">Kode RKAKL</th>
-                  <th width="20%">Direktorat</th>
-                  <th width="15%">Uraian Acara</th>
-                  <th width="18%">Tanggal</th>
-                  <th width="10%">Lokasi</th>
-                  <th width="10%">Jumlah</th>
-                  <th width="10%">Status</th>
-                  <th width="15%">Action</th>
+                  <th width="15%">Direktorat</th>
+                  <th width="10%">Output</th>
+                  <th width="10%">Suboutput</th>
+                  <th width="10%">Komponen</th>
+                  <th width="10%">Subkomponen</th>
+                  <th width="10%">Jumlah Pagu</th>
+                  <th width="10%">Realisasi</th>
+                  <th width="10%">Usulan</th>
+                  <th width="10%">Sisa Anggaran</th>
+                  <th width="5%">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -96,7 +82,7 @@
     </div>
   </section>
 </div>
-<div class="modal fade" id="addrab">
+<!-- <div class="modal fade" id="addrab">
   <div class="modal-dialog">
     <div class="modal-content">
       <form action="<?php echo $url_rewrite;?>process/rab/save" method="POST" enctype="multipart/form-data">
@@ -173,8 +159,8 @@
       </form>
     </div>
   </div>
-</div>
-<div class="modal fade" id="ajuan">
+</div> -->
+<!-- <div class="modal fade" id="ajuan">
   <div class="modal-dialog">
     <div class="modal-content">
       <form action="<?php echo $url_rewrite;?>process/rab/ajukan" method="POST">
@@ -196,8 +182,8 @@
       </form>
     </div>
   </div>
-</div>
-<div class="modal fade" id="sahkan">
+</div> -->
+<!-- <div class="modal fade" id="sahkan">
   <div class="modal-dialog">
     <div class="modal-content">
       <form action="<?php echo $url_rewrite;?>process/rab/sahkan" method="POST">
@@ -219,8 +205,8 @@
       </form>
     </div>
   </div>
-</div>
-<div class="modal fade" id="revisi">
+</div> -->
+<!-- <div class="modal fade" id="revisi">
   <div class="modal-dialog">
     <div class="modal-content">
       <form action="<?php echo $url_rewrite;?>process/rab/revisi" method="POST">
@@ -246,8 +232,8 @@
       </form>
     </div>
   </div>
-</div>
-<div class="modal fade" id="pesanrevisi">
+</div> -->
+<!-- <div class="modal fade" id="pesanrevisi">
   <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header" style="background-color:#111F3F !important; color:white;">
@@ -263,8 +249,8 @@
         </div>
     </div>
   </div>
-</div>
-<div class="modal fade" id="delete">
+</div> -->
+<!-- <div class="modal fade" id="delete">
   <div class="modal-dialog">
     <div class="modal-content">
       <form action="<?php echo $url_rewrite;?>process/rab/delete" method="POST">
@@ -286,7 +272,7 @@
       </form>
     </div>
   </div>
-</div>
+</div> -->
 <script>
 var table;
   $(function () {
@@ -307,15 +293,10 @@ var table;
         "serverSide": true,
         "scrollX": true,
         "ajax": {
-          "url": "<?php echo $url_rewrite;?>process/rab/table",
+          "url": "<?php echo $url_rewrite;?>process/rab/table-rkakl",
           "type": "POST",
           "data": {'tahun':tahun,
-                    'direktorat':direktorat,
-                    'kdoutput':'<?php echo $kdoutput?>',
-                    'kdsoutput':'<?php echo $kdsoutput?>',
-                    'kdkmpnen':'<?php echo $kdkmpnen?>',
-                    'kdskmpnen':'<?php echo $kdskmpnen?>',
-                     }
+                    'direktorat':direktorat }
         },
         <?php if ($_SESSION['direktorat'] == "") { ?>
           "columnDefs" : [
@@ -332,9 +313,9 @@ var table;
           "columnDefs" : [
             {"targets" : 0,
              "visible" : false},
-            {"targets" : 1},
-            {"targets" : 2, 
-              "visible": false},
+            {"targets" : 1,
+              "visible" : false},
+            {"targets" : 2},
             {"targets" : 3},
             {"targets" : 4},
             {"targets" : 5},
@@ -377,6 +358,7 @@ var table;
     var direktorat = $('#direktorat2').val();
     table.destroy();
     table = $("#table").DataTable({
+        "info":false,
         "oLanguage": {
           "sInfoFiltered": ""
         },
@@ -384,7 +366,7 @@ var table;
         "serverSide": true,
         "scrollX": true,
         "ajax": {
-          "url": "<?php echo $url_rewrite;?>process/rab/table",
+          "url": "<?php echo $url_rewrite;?>process/rab/table-rkakl",
           "type": "POST",
           "data": {'tahun':tahun,
                     'direktorat':direktorat }
@@ -404,9 +386,9 @@ var table;
           "columnDefs" : [
             {"targets" : 0,
              "visible" : false},
-            {"targets" : 1},
-            {"targets" : 2, 
-              "visible": false},
+            {"targets" : 1,
+              "visible" : false},
+            {"targets" : 2},
             {"targets" : 3},
             {"targets" : 4},
             {"targets" : 5},

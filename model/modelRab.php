@@ -289,16 +289,16 @@
     }
 
     public function getakungroup($data){
-      $thang      = $data->thang;
-      $kdprogram  = $data->kdprogram;
-      $kdgiat     = $data->kdgiat;
-      $kdoutput   = $data->kdoutput;
-      $kdsoutput  = $data->kdsoutput;
-      $kdkmpnen   = $data->kdkmpnen;
-      $kdskmpnen  = $data->kdskmpnen;
-      $penerima   = $data->penerima;
-      $npwp       = $data->npwp;
-      $jenis      = $data->jenis;
+      $thang      = $data['thang'];
+      $kdprogram  = $data['kdprogram'];
+      $kdgiat     = $data['kdgiat'];
+      $kdoutput   = $data['kdoutput'];
+      $kdsoutput  = $data['kdsoutput'];
+      $kdkmpnen   = $data['kdkmpnen'];
+      $kdskmpnen  = $data['kdskmpnen'];
+      $penerima   = $data['penerima'];
+      $npwp       = $data['npwp'];
+      $jenis      = $data['jenis'];
       // print_r($data);die;
       $query_rab  = "SELECT kdakun, count(0) as banyak FROM rabfull 
                             WHERE thang='$thang'
@@ -312,6 +312,7 @@
                             AND npwp='$npwp'
                             AND jenis='$jenis'
                           GROUP BY kdakun";
+      // echo $query_rab;exit;
       $res_rab    = $this->query($query_rab);
       while ($rab = $this->fetch_object($res_rab)) {
         $akun[] = $rab;
