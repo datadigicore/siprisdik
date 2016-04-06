@@ -9,7 +9,7 @@ switch ($process) {
     $dataArray['direktorat'] = $direk; 
     $tahun = $_POST['tahun'];
     $direktorat = $_POST['direktorat'];
-
+    // print_r($_POST);die;
     $kdoutput = $_POST['kdoutput'];
     $kdsoutput = $_POST['kdsoutput'];
     $kdkmpnen = $_POST['kdkmpnen'];
