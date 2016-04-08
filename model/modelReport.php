@@ -2255,10 +2255,10 @@ public function daftar_peng_riil($result,$det){
                
   }
   if($val[harga_tiket]>0){
-    $jenis_transport="Transportasi Udara";
+    $jenis_transport="Udara";
   }
   else {
-    $jenis_transport="Kendaraan Darat";
+    $jenis_transport="Darat";
   }
   echo '<table style="text-align:center; width: 100%; ">
           <tr>
