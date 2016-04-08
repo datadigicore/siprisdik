@@ -258,7 +258,7 @@ switch ($process) {
         $where .= 'AND KDGIAT = "'.$direktorat.'"';
       }
     }
-    $group='NmSkmpnen';
+    $group='KDOUTPUT, KDSOUTPUT, KDKMPNEN, KDSKMPNEN';
     $datatable->get_table_group($table, $key, $column,$where,$group,$dataArray);
     break;
   case 'getnpwp':
