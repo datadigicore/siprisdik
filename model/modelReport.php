@@ -1853,13 +1853,13 @@
                 </tr>';
           echo '<tr>
                   <td style="border-left:1px solid; border-right:1px solid;"></td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'.$asal." - Rp.".number_format($taxi_asal,0,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.$asal.'</td>
                   <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($taxi_asal,0,",",".").'</td>
                   <td style="border-left:1px solid; border-right:1px solid;"></td>
                 </tr>';
           echo '<tr>
                   <td style="border-left:1px solid; border-right:1px solid;"></td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'.$tujuan." - Rp.".number_format($taxi_tujuan,0,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.$tujuan.'</td>
                   <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($taxi_tujuan,0,",",".").'</td>
                   <td style="border-left:1px solid; border-right:1px solid;"></td>
                 </tr>';
@@ -2467,9 +2467,9 @@ public function daftar_peng_riil($result,$det){
                 $uang_harian_saku += $rs[value];
               }
 
-              // if(substr($rs[NMITEM],1,8)=="ransport"){
-              //   $taxi_lokal += $rs[value];
-              // }
+              elseif(substr($rs[NMITEM],1,8)=="ransport" && $rs[kdakun]!="524119"){
+                $taxi_lokal += $rs[value];
+              }
 
 
               elseif(substr($rs[NMITEM],1,4)=="onor" or $rs[NMAKUN]=="Belanja Jasa Profesi")
