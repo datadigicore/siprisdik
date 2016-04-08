@@ -3715,7 +3715,8 @@ public function daftar_peng_riil($result,$det){
       $title;
       if($jns=="1"){
         $title = "DAFTAR PERTANGGUNG JAWABAN UMK";
-        $cond_query = " and rab.status in(2,4,6,7) ";
+        $cond_query = " ";
+        // $cond_query = " and rab.status in(2,4,6,7) ";
       }
       else{
         $title= "RINCIAN KEBUTUHAN DANA";
