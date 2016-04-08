@@ -1,5 +1,6 @@
 <div class="content-wrapper">
   <section class="content-header">
+    <a href="<?php echo $url_rewrite?>content/rab" class="btn btn-app bg-navy"><i class="fa fa-arrow-left"></i>Kembali</a>
     <h1>
       Data RAB
       <small>Menu</small>
@@ -22,41 +23,37 @@
             <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya</h3>
             <input type="hidden" id="id_rab_view" name="id_rab_view" value="<?php echo $id_rab_view ?>" />
             <?php if ($_SESSION['level'] != 0) {
-              echo '<a id="tblAdd" data-toggle="modal" class="btn btn-flat btn-success btn-md pull-right"><i class="fa fa-user"></i>&nbsp;Tambah Orang / Badan</a>';
+              echo '<a id="tblAdd" data-toggle="modal" class="btn btn-flat btn-primary btn-md pull-right"><i class="fa fa-user"></i>&nbsp;Tambah Orang / Badan</a>';
             }?>
           </div>
           <div class="box-body">
-            <?php if (isset($_POST['message'])): ?>
-              <div class="alert alert-<?php echo $_POST['alert']; ?> alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <i class="icon fa fa-warning"></i><?php echo $_POST['message']; ?>
-              </div>
-            <?php endif ?>
-            <table class="display table table-bordered table-striped" style="width:750px">
+            <?php include "view/include/alert.php"; ?>
+            <table class="display table table-bordered table-striped">
               <tr>
-                <td class="col-md-1"><label>Tahun</label></td>
-                <td class="col-md-2"><label><?php echo $datarkakl[0]->THANG?></label></td>
+                <th colspan='2'><label>Info</label></th>
               </tr>
               <tr>
-                <td><label>Kegiatan</label></td>
-                <td class="col-md-2"><label><?php echo $datarkakl[0]->NMGIAT?></label></td>
-              </tr>
-              <tr>
-                <td><label>Output</label></td>
-                <td class="col-md-2"><label><?php echo $datarkakl[0]->NMOUTPUT?></label></td>
-              </tr>
-              <tr>
-                <td><label>Sub Output</label></td>
-                <td class="col-md-2"><label><?php echo $datarkakl[0]->NMSOUTPUT?></label></td>
-              </tr>
-              <tr>
-                <td><label>Komponen</label></td>
-                <td class="col-md-2"><label><?php echo $datarkakl[0]->NMKMPNEN?></label></td>
-              </tr>
-              <tr>
-                <td><label>Sub Komponen</label></td>
-                <td class="col-md-2"><label><?php echo $datarkakl[0]->NmSkmpnen?></label></td>
-              </tr>
+                <td valign="top" class="col-md-1">
+                  <table class="table-striped col-md-12">
+                      <tr><td valign="top">Tahun</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->THANG?></td></tr>
+                      <tr><td valign="top">Kegiatan</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMGIAT?></td></tr>
+                      <tr><td valign="top">Output</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMOUTPUT?></td></tr>
+                      <tr><td valign="top">Sub Output</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMSOUTPUT?></td></tr>
+                      <tr><td valign="top">Komponen</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMKMPNEN?></td></tr>
+                      <tr><td valign="top">Sub Komponen</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NmSkmpnen?></td></tr>
+                  </table>
+                </td>
+                <td class="col-md-1">
+                  <table class="table-striped col-md-12">
+                      <tr><td valign="top">Uraian Acara</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $view['deskripsi']; ?></td></tr>
+                      <tr><td valign="top">Tanggal</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo date("d M Y",strtotime($view['tanggal'])).' - '.date("d M Y",strtotime($view['tanggal_akhir'])); ?></td></tr>
+                      <tr><td valign="top">Lokasi</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $view['tempat'].', '.$view['lokasi']; ?></td></tr>
+                      <tr><td valign="top">Alokasi Anggaran</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo 'Rp '.number_format($jumlah['jumlah'],2,',','.'); ?></td></tr>
+                      <tr><td valign="top">Jumlah Realisasi</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo 'Rp '.number_format($jumlah['realisasi'],2,',','.'); ?></td></tr>
+                      <tr><td valign="top">Jumlah Usulan</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo 'Rp '.number_format($jumlah['usulan'],2,',','.'); ?></td></tr>
+                      <tr><td valign="top">Sisa</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo 'Rp '.number_format(($jumlah['jumlah'] - ($jumlah['realisasi'] + $jumlah['usulan'])),2,',','.'); ?></td></tr>
+                  </table>
+                </td>
             </table>
             <table id="table" class="display nowrap table table-bordered table-striped" cellspacing="0" width="100%">
               <thead style="background-color:#11245B;color:white;">
@@ -64,10 +61,6 @@
                   <th>No</th>
                   <th>Penerima</th>
                   <th>Keterangan</th>
-                  <!-- <th>NPWP</th>
-                  <th>Golongan </th>
-                  <th>PNS</th>
-                  <th>Jabatan</th> -->
                   <th>Kode Akun</th>
                   <th>Total Dana RAB</th>
                   <th>Status</th>
@@ -164,6 +157,8 @@
       ],
       "order": [[ 0, "desc" ]]
     });
+
+    
 
     $.ajax({
       type: "POST",

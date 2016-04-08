@@ -131,7 +131,7 @@ class mysql_db extends config {
      }
 
      public function clear_var($data) {
-          return $$data = '';
+          return $data = '';
      }
 
 }

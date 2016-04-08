@@ -24,8 +24,8 @@
   <!-- daterangepicker -->
   <script src="<?php echo $url_rewrite;?>static/dist/js/moment.min.js"></script>
   <script src="<?php echo $url_rewrite;?>static/plugins/daterangepicker/daterangepicker.js"></script>
-  <!-- datepicker -->
-  <script src="<?php echo $url_rewrite;?>static/plugins/datepicker/bootstrap-datepicker.js"></script>
+  <!-- datepicker
+  <script src="<?php echo $url_rewrite;?>static/plugins/datepicker/bootstrap-datepicker.js"></script>-->
   <!-- Bootstrap WYSIHTML5 -->
   <script src="<?php echo $url_rewrite;?>static/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
   <!-- Slimscroll -->

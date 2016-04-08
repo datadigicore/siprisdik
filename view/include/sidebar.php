@@ -14,7 +14,7 @@
       <?php if ($_SESSION['level'] == 0): ?>
         <li class="active"><a href="<?php echo $url_rewrite;?>content/"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
         <li><a href="<?php echo $url_rewrite;?>content/rkakl"><i class="fa fa-table"></i> <span>Data RKAKL</span></a></li>
-        <li><a href="<?php echo $url_rewrite;?>content/rab"><i class="fa fa-table"></i> <span>Data RAB</span></a></li>           
+        <li><a href="<?php echo $url_rewrite;?>content/rab-rkakl"><i class="fa fa-table"></i> <span>Data RAB</span></a></li>           
         <li class="treeview">
           <a href="#">
             <i class="fa fa-table"></i> <span><span>Data RAB (51)</span>
@@ -40,7 +40,7 @@
       <?php endif ?>
       <?php if ($_SESSION['level'] != 0 ): ?>
         <li class="active"><a href="<?php echo $url_rewrite;?>content/home"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
-        <li><a href="<?php echo $url_rewrite;?>content/rab"><i class="fa fa-table"></i> <span>Data RAB</span></a></li>   
+        <li><a href="<?php echo $url_rewrite;?>content/rab-rkakl"><i class="fa fa-table"></i> <span>Data RAB</span></a></li>   
         <?php if($_SESSION['direktorat'] == 5696){ ?>
         <li class="treeview">
           <a href="#">

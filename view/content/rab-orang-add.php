@@ -1,5 +1,6 @@
 <div class="content-wrapper">
   <section class="content-header">
+    <a href="<?php echo $url_rewrite?>content/rabdetail/<?php echo $id_rab_view;?>" class="btn btn-app bg-navy"><i class="fa fa-arrow-left"></i>Kembali</a>
     <h1>
       Data RAB
     </h1>
@@ -34,6 +35,10 @@
                   <option value="1">Orang</option>
                 </select>
               </div>
+              <div class="form-group btn-pilih">
+                <a id="manual" onclick="pilih()" class="btn btn-flat btn-info"><i class="fa fa-plus"></i> Manual</a>
+                <a id="tombol-import" href="#import" data-toggle="modal" class="btn btn-flat btn-success"><i class="fa fa-file-excel-o"></i> Import Excel</a>
+              </div>
               <div class="form-group form-rab">
                   <label>Nama Penerima</label>
                   <input type="text" class="form-control" required value="<?= $penerima ?>" id="penerima" name="penerima" placeholder="Nama Penerima">
@@ -47,8 +52,16 @@
                   <input type="text" class="form-control" value="<?= $nip ?>" id="nip" name="nip" placeholder="NIP">
               </div>
               <div class="form-group form-rab orang">
+                  <label>PNS / Non PNS</label>
+                  <select class="form-control" id="pns" name="pns" onchange="pilihpns()">
+                    <option value="">-- Pilih --</option>
+                    <option value="1">PNS</option>
+                    <option value="0">Non PNS</option>
+                  </select>
+              </div>
+              <div class="form-group form-rab orang">
                   <label>Golongan</label>
-                  <select class="form-control" id="golongan" name="golongan">
+                  <select class="form-control" id="golongan" name="golongan" onchange="hitungpajak()">
                     <option value="">-- Pilih --</option>
                     <option value="1">I</option>
                     <option value="2">II</option>
@@ -57,16 +70,13 @@
                   </select>
               </div>
               <div class="form-group form-rab orang">
-                  <label>PNS / Non PNS</label>
-                  <select class="form-control" id="pns" name="pns">
-                    <option>-- Pilih --</option>
-                    <option value="1">PNS</option>
-                    <option value="0">Non PNS</option>
-                  </select>
+                  <label>Jabatan Dalam Tugas</label>
+                  <div id="div-jabatan">
+                  </div>
               </div>
               <div class="form-group form-rab orang">
-                   <label>Jabatan Dalam Tugas</label>
-                   <input type="text"  class="form-control" value="<?= $jabatan ?>" id="jabatan" name="jabatan" placeholder="Jabatan Dalam Tugas">
+                <label>Besar Pajak</label>
+                <input type="text" class="form-control" id="pajak-orang" readonly>
               </div>
               <div class="form-group form-rab badan">
                 <label>Besar Pajak</label>
@@ -91,20 +101,59 @@
          </div>        
       </div>
     </div>
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-md-12 col-xs-12">
         <div class="form-group">
           <button id="tambahorang" class="btn btn-primary"><i class="fa fa-plus"></i> Tambah</button>
         </div>
       </div>
-    </div>
+    </div> -->
   </section>
 </div>
-
+<div class="modal fade" id="import">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="<?php echo $url_rewrite;?>process/rab_rinci/importrab" method="POST" enctype="multipart/form-data">
+        <div class="modal-header" style="background-color:#111F3F !important; color:white;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" style="color:white">×</span></button>
+          <h4 class="modal-title">Import Data RAB</h4>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="id_rab_view" value="<?php echo $id_rab_view ?>" />
+          <input type="hidden" id="adendum" name="adendum" value="<?php echo $status;?>" />
+          <input type="hidden" id="jenisimport" name="jenisimport" value="" />
+          <div class="form-group">
+            <label>Download Template <a href="<?php echo $url_rewrite;?>process/rab/download">Here</a>.</label>
+          </div>
+          <div class="form-group">
+            <!-- <label>Select File</label> -->
+            <input type="file" id="fileimport" name="fileimport" style="display:none;">
+            <a id="selectbtn" class="btn btn-flat btn-primary" style="position:absolute;right:16px;">Select File</a>
+            <input type="text" id="filename" class="form-control" placeholder="Pilih File .xls / .xlsx" readonly>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-flat btn-success">Import Data</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <script>
   $(function () {
     cekJenis();
     getnpwp();
+    $('#selectbtn').click(function () {
+      $("#fileimport").trigger('click');
+    });
+    $("#fileimport").change(function(){
+      $("#filename").attr('value', $(this).val().replace(/C:\\fakepath\\/i, ''));
+    });
+    $('#tombol-import').click(function () {
+      var jenis = $('#jenis-akun').val();
+      $('#jenisimport').val(jenis);
+    });
     $(document).on("click", "#tambahorang", function (){
       tambahorang();
     });
@@ -150,8 +199,20 @@
               $('#golongan').val(golongan);
               var pns = obj.pns;
               $('#pns').val(pns);
+              pilihpns();
               var jabatan = obj.jabatan;
-              $('#jabatan').val(jabatan);
+              if (pns==0) {
+                if (jabatan != "Tim" && jabatan != "Narasumber") {
+                  $('#jabatan').val("Lain");
+                  pilihJabatan();
+                  $('#jabatan-lain').val(jabatan);
+                }else{
+                  $('#jabatan').val(jabatan);
+                };
+              }else{
+                $('#jabatan').val(jabatan);
+              };
+              hitungpajak();
             }else{
               var pajak = obj.pajak;
               $('#pajak').val(pajak);
@@ -191,9 +252,23 @@
 
   function hideAll(){
     $(".form-rab").hide();
+    $(".btn-pilih").hide();
+    $('.lain').hide();
+    $('.pns').hide();
+    $('.nonpns').hide();
   }
 
   function cekJenis(){
+    var val = $("#jenis-akun").val();
+    if(val==0 || val==1){
+      hideAll();
+      $(".btn-pilih").show();
+    } else{
+      hideAll();
+    }
+  }
+
+  function pilih(){
     var val = $("#jenis-akun").val();
     if(val==0){
       showBadan();
@@ -203,6 +278,67 @@
       getnpwp();
     } else{
       hideAll();
+    }
+  }
+
+  function pilihpns(){
+    var val = $("#pns").val();
+    if (val==1) {
+      $('#div-jabatan').empty();
+      $('#div-jabatan').append(''
+        +'<input type="text" class="form-control pns" id="jabatan" name="jabatan" placeholder="Jabatan Dalam Tugas">'
+        );
+    }else if(val==0){
+      $('#div-jabatan').empty();
+      $('#div-jabatan').append(''
+        +'  <select class="form-control nonpns" id="jabatan" name="jabatan" onchange="pilihJabatan()">'
+        +'      <option value="">-- Pilih --</option>'
+        +'      <option value="Tim">Tim</option>'
+        +'      <option value="Narasumber">Narasumber</option>'
+        +'      <option value="Lain">Lainnya</option>'
+        +'    </select>'
+        +'    <input type="text" class="form-control nonpns lain" id="jabatan-lain" name="jabatan_lain" placeholder="Jabatan Dalam Tugas">'
+      );
+      $('.lain').hide();
+      $('#golongan').val('');
+    }else{
+      $('#div-jabatan').empty();
+    };
+    hitungpajak();
+  }
+
+  function pilihJabatan(){
+    var val = $("#jabatan").val();
+    if (val=="Lain") {
+      $('.lain').show();
+    }else{
+      $('.lain').hide();
+    };
+  }
+
+  function hitungpajak(){
+    var pns = $("#pns").val();
+    var golongan = $("#golongan").val();
+    if (pns == 1) {
+      if (golongan == 4) {
+        $('#pajak-orang').val('15 %');
+      }else if (golongan == 3) {
+        $('#pajak-orang').val('5 %');
+      }else if (golongan == 2) {
+        if (pns == 1) {
+          $('#pajak-orang').val('0 %');
+        }else{
+          if ($npwp != "") {
+            $('#pajak-orang').val('5 %');
+          }else{
+            $('#pajak-orang').val('6 %');
+          }
+        }
+      }else{
+        $('#pajak-orang').val('0 %');
+      }
+    }else if (pns == 0){
+      $('#pajak-orang').val('6 %');
     }
   }
 

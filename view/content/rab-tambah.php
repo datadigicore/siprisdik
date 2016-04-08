@@ -1,5 +1,6 @@
 <div class="content-wrapper">
   <section class="content-header">
+    <a href="<?php echo $url_rewrite?>content/rab" class="btn btn-app bg-navy"><i class="fa fa-arrow-left"></i>Kembali</a>
     <h1>
       Data RAB 
     </h1>
@@ -46,25 +47,25 @@
               <div class="form-group">
                 <label>Output</label>
                 <select class="form-control" id="output" name="output" onchange="chout()" required>
-                  <option>-- Pilih Output --</option>
+                  <option value="">-- Pilih Output --</option>
                 </select>
               </div>
               <div class="form-group">
                 <label>Suboutput</label>
                 <select class="form-control" id="soutput" name="soutput" onchange="chsout()" required>
-                  <option>-- Pilih Sub Output --</option>
+                  <option value="">-- Pilih Sub Output --</option>
                 </select>
               </div>
               <div class="form-group">
                 <label>Komponen</label>
                 <select class="form-control" id="komp" name="komp" onchange="chkomp()" required>
-                  <option>-- Pilih Komponen --</option>
+                  <option value="">-- Pilih Komponen --</option>
                 </select>
               </div>
               <div class="form-group">
                 <label>Sub Komponen</label>
                 <select class="form-control" id="skomp" name="skomp" onchange="chskomp()" required>
-                  <option>-- Pilih Sub Komponen --</option>
+                  <option value="">-- Pilih Sub Komponen --</option>
                 </select>
               </div>
               <div class="form-group">
@@ -73,11 +74,11 @@
               </div>
               <div class="form-group">
                 <label>Tanggal Awal</label>
-                <input class="form-control tanggal" type="text" id="tanggal" name="tanggal" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" />
+                <input class="form-control tanggal" onchange="cektanggal()" type="text" id="tanggal" name="tanggal" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" required />
               </div>
               <div class="form-group">
                 <label>Tanggal Akhir</label>
-                <input class="form-control tanggal" type="text" id="tanggal_akhir" name="tanggal_akhir" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" />
+                <input class="form-control tanggal" onchange="cektanggal()" type="text" id="tanggal_akhir" name="tanggal_akhir" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" required />
               </div>
               <div class="form-group">
                 <label>Tempat Kegiatan</label>
@@ -101,13 +102,61 @@
 
 <script>
 $(function() {
-    $(".tanggal").datepicker({ 
+  $("#tanggal").datepicker({
+    autoclose: true,
+    monthNames: [ "Januari", "Pebruari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" ],
+
+    // yearRange: '-70:+30',
+           changeMonth: true,
+
+           // numberOfMonths: 3,
+           format: 'dd/mm/yyyy',
+           onClose: function(selectedDate) {
+            // alert("tes");
+           $("#tanggal_akhir").datepicker("option", "minDate", selectedDate);
+                   // var lama=(bulan_studi($('#lamaijin').val())+1)*31;
+                   // var nyd = new Date(selectedDate);
+                   // nyd.setDate(nyd.getDate() + lama);
+                    //alert(nyd);
+                // $("#tanggal_akhir").datepicker("option", "maxDate", nyd);
+             //$("#periode_belajar_end").datepicker("option", "maxDate", " '+ "+lama+"M'");
+           }
+    });
+
+    $("#tanggal_akhir").datepicker({ 
+      autoclose: true,
+    monthNames: [ "Januari", "Pebruari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" ],
       changeMonth: true,
       changeYear: true,
-      format: 'dd/mm/yyyy' 
+      format: 'dd/mm/yyyy'
+    });
+    $("#tanggal_akhir").datepicker({ 
+      changeMonth: true,
+      changeYear: true,
+      format: 'dd/mm/yyyy'
     });
     chprog();
+    // $(".tanggal").datepicker({ 
+    //   monthNames: [ "Januari", "Pebruari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" ],
+    //   changeMonth: true,
+    //   changeYear: true,
+    //   format: 'dd/mm/yyyy' 
+    // });
+    // chprog();
 });
+
+function cektanggal(){
+  var tanggal = $('#tanggal').val();
+  var tanggal_akhir = $('#tanggal_akhir').val();
+  var pecah_awal = tanggal.split("/"); 
+  var pecah_akhir = tanggal_akhir.split("/"); 
+  var parsed_awal = new Date(pecah_awal[2],pecah_awal[1],pecah_awal[0]); 
+  var parsed_akhir = new Date(pecah_akhir[2],pecah_akhir[1],pecah_akhir[0]); 
+  if (parsed_akhir < parsed_awal) {
+    $('#tanggal_akhir').val('');
+    alert("Tanggal Akhir Kurang Dari Tanggal Awal");
+  };
+}
 
 function chprog(){
     $("#output option").remove();   
@@ -115,11 +164,11 @@ function chprog(){
     $("#komp option").remove();   
     $("#skomp option").remove();   
     $("#akun option").remove();   
-    $('#output').append('<option>-- Pilih Output --</option>');
-    $('#soutput').append('<option>-- Pilih Sub Output --</option>');
-    $('#komp').append('<option>-- Pilih Komponen --</option>');
-    $('#skomp').append('<option>-- Pilih Sub Komponen --</option>');
-    $('#akun').append('<option>-- Pilih Akun --</option>');
+    $('#output').append('<option value="">-- Pilih Output --</option>');
+    $('#soutput').append('<option value="">-- Pilih Sub Output --</option>');
+    $('#komp').append('<option value="">-- Pilih Komponen --</option>');
+    $('#skomp').append('<option value="">-- Pilih Sub Komponen --</option>');
+    $('#akun').append('<option value="">-- Pilih Akun --</option>');
     var tahun = $('#tahun').val();
     var direktorat = $('#direktorat').val();
     var prog = $('#prog').val();
@@ -143,10 +192,10 @@ function chprog(){
     $("#komp option").remove();   
     $("#skomp option").remove();   
     $("#akun option").remove();   
-    $('#soutput').append('<option>-- Pilih Sub Output --</option>');
-    $('#komp').append('<option>-- Pilih Komponen --</option>');
-    $('#skomp').append('<option>-- Pilih Sub Komponen --</option>');
-    $('#akun').append('<option>-- Pilih Akun --</option>');
+    $('#soutput').append('<option value="">-- Pilih Sub Output --</option>');
+    $('#komp').append('<option value="">-- Pilih Komponen --</option>');
+    $('#skomp').append('<option value="">-- Pilih Sub Komponen --</option>');
+    $('#akun').append('<option value="">-- Pilih Akun --</option>');
     var prog = $('#prog').val();
     var output = $('#output').val();
     var tahun = $('#tahun').val();
@@ -171,9 +220,9 @@ function chprog(){
     $("#komp option").remove();   
     $("#skomp option").remove();   
     $("#akun option").remove();   
-    $('#komp').append('<option>-- Pilih Komponen --</option>');
-    $('#skomp').append('<option>-- Pilih Sub Komponen --</option>');
-    $('#akun').append('<option>-- Pilih Akun --</option>');
+    $('#komp').append('<option value="">-- Pilih Komponen --</option>');
+    $('#skomp').append('<option value="">-- Pilih Sub Komponen --</option>');
+    $('#akun').append('<option value="">-- Pilih Akun --</option>');
     var tahun = $('#tahun').val();
     var direktorat = $('#direktorat').val();
     var prog = $('#prog').val();
@@ -199,8 +248,8 @@ function chprog(){
   function chkomp(){
     $("#skomp option").remove();   
     $("#akun option").remove();   
-    $('#skomp').append('<option>-- Pilih Sub Komponen --</option>');
-    $('#akun').append('<option>-- Pilih Akun --</option>');
+    $('#skomp').append('<option value="">-- Pilih Sub Komponen --</option>');
+    $('#akun').append('<option value="">-- Pilih Akun --</option>');
     var tahun = $('#tahun').val();
     var direktorat = $('#direktorat').val();
     var prog = $('#prog').val();
@@ -227,7 +276,7 @@ function chprog(){
   }
   function chskomp(){ 
     $("#akun option").remove();   
-    $('#akun').append('<option>-- Pilih Akun --</option>');
+    $('#akun').append('<option value="">-- Pilih Akun --</option>');
     var tahun = $('#tahun').val();
     var direktorat = $('#direktorat').val();
     var prog = $('#prog').val();

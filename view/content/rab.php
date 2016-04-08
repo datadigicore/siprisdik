@@ -1,3 +1,21 @@
+<?php
+  if(isset($_GET['kdoutput']) && isset($_GET['kdsoutput']) && isset($_GET['kdkmpnen']) && isset($_GET['kdskmpnen']))
+  {
+
+    $kdoutput =$_GET['kdoutput'];
+    $kdsoutput =$_GET['kdsoutput'];
+    $kdkmpnen =$_GET['kdkmpnen'];
+    $kdskmpnen =$_GET['kdskmpnen'];
+  } else {
+    $kdoutput ="";
+    $kdsoutput ="";
+    $kdkmpnen ="";
+    $kdskmpnen ="";
+  }
+  
+
+?>
+
 <div class="content-wrapper">
   <section class="content-header">
     <h1>
@@ -21,12 +39,7 @@
 
           </div>
           <div class="box-body">
-            <?php if (isset($_POST['message'])): ?>
-              <div class="alert alert-<?php echo $_POST['alert']; ?> alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <i class="icon fa fa-warning"></i><?php echo $_POST['message']; ?>
-              </div>
-            <?php endif ?>
+            <?php include "view/include/alert.php" ?>
             <table class="display table table-bordered table-striped" style="width:750px">
               <tr>
                 <td><label>Tahun</label></td>
@@ -64,11 +77,12 @@
               <thead style="background-color:#11245B;color:white;">
                 <tr>
                   <th>No</th>
-                  <th width="15%">Kode RKAKL</th>
+                  <th width="12%">Kode RKAKL</th>
                   <th width="20%">Direktorat</th>
-                  <th width="10%">Uraian Acara</th>
-                  <th width="10%">Tanggal</th>
-                  <th width="15%">Lokasi</th>
+                  <th width="15%">Uraian Acara</th>
+                  <th width="18%">Tanggal</th>
+                  <th width="10%">Lokasi</th>
+                  <th width="10%">Jumlah</th>
                   <th width="10%">Status</th>
                   <th width="15%">Action</th>
                 </tr>
@@ -250,6 +264,29 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="delete">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="<?php echo $url_rewrite;?>process/rab/delete" method="POST">
+        <div class="modal-header" style="background-color:#111F3F !important; color:white;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" style="color:white">×</span></button>
+          <h4 class="modal-title">Dialog Box</h4>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="id_rab_del" name="id_rab_del" value="" />
+          <div class="form-group">
+            <label>Apakah Anda Yakin Ingin Melakukan Penghapusan Data ?</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" data-dismiss="modal" class="btn btn-flat btn-warning">Tidak</button>
+          <button type="submit" class="btn btn-flat btn-success">Ya</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <script>
 var table;
   $(function () {
@@ -273,7 +310,12 @@ var table;
           "url": "<?php echo $url_rewrite;?>process/rab/table",
           "type": "POST",
           "data": {'tahun':tahun,
-                    'direktorat':direktorat }
+                    'direktorat':direktorat,
+                    'kdoutput':'<?php echo $kdoutput?>',
+                    'kdsoutput':'<?php echo $kdsoutput?>',
+                    'kdkmpnen':'<?php echo $kdkmpnen?>',
+                    'kdskmpnen':'<?php echo $kdskmpnen?>',
+                     }
         },
         <?php if ($_SESSION['direktorat'] == "") { ?>
           "columnDefs" : [
@@ -321,6 +363,11 @@ var table;
       var tr = $(this).closest('tr');
       tabrow = table.row(tr);
       $("#vpesan").val(tabrow.data()[12]);
+    });
+    $(document).on("click", "#btn-del", function (){
+      var tr = $(this).closest('tr');
+      tabrow = table.row(tr);
+      $("#id_rab_del").val(tabrow.data()[0]);
     });
     chprog();
   });

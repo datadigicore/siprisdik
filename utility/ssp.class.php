@@ -243,7 +243,7 @@ class SSP {
      *  @param  array $columns Column information array
      *  @return array          Server-side processing response array
      */
-    static function simple ( $request, $conn, $table, $primaryKey, $columns )
+    static function simple ( $request, $conn, $table, $primaryKey, $columns, $dataArray )
     {
         $bindings = array();
         $db = self::db( $conn );
@@ -283,7 +283,7 @@ class SSP {
             "draw"            => intval( $request['draw'] ),
             "recordsTotal"    => intval( $recordsTotal ),
             "recordsFiltered" => intval( $recordsFiltered ),
-            "data"            => self::data_output( $columns, $data )
+            "data"            => self::data_output( $columns, $data, $dataArray )
         );
     }
 
@@ -378,6 +378,12 @@ class SSP {
         if ( $groupby ) {
             $group =' GROUP BY '.$groupby;
         }
+        // $tes="SELECT SQL_CALC_FOUND_ROWS ".implode(", ", self::pluck($columns, 'db'))."
+        //      FROM `$table`
+        //      $where
+        //      $group
+        //      ORDER BY id DESC";
+        // print_r($tes);die;
 
         // Main query to actually get the data
         $data = self::sql_exec( $db, $bindings,
@@ -385,7 +391,8 @@ class SSP {
              FROM `$table`
              $where
              $group
-             ORDER BY id DESC"
+             $order
+             $limit"
         );
 
         // Data set length after filtering

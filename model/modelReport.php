@@ -83,6 +83,7 @@
       $kdkmpnen = $res[kdkmpnen];
       $kdskmpnen = $res[kdskmpnen];
       $npwp= $res[npwp];
+      $nip= $res[nip];
       $condition;
       // echo substr($kode, 0,2);
       // echo $npwp;
@@ -90,9 +91,17 @@
         $condition=" and id='$id' ";
       }
       else{
-        $condition="and rabview_id='$rabv_id' and npwp='$npwp' and kdakun='$kode_akun'";
+        $condition="and rabview_id='$rabv_id' and npwp like '$npwp%' and nip like '$nip%' and kdakun='$kode_akun'";
       }
 
+      // $sql_org = "SELECT no_kuitansi from kuitansi 
+      //             where kdgiat = '$kdgiat' 
+      //               and kdprogram='$kdprogram' 
+      //               and kdoutput = '$kdoutput'
+      //               and kdsoutput = '$kdsoutput'
+      //               and kdkmpnen = '$kdkmpnen'
+      //               and kdskmpnen = '$kdskmpnen'
+      //               and npwp like '$npwp%' and nip like '$nip%' and kdakun='$kode_akun' ";
       $sql_org = "SELECT no_kuitansi from kuitansi 
                   where kdgiat = '$kdgiat' 
                     and kdprogram='$kdprogram' 
@@ -100,7 +109,7 @@
                     and kdsoutput = '$kdsoutput'
                     and kdkmpnen = '$kdkmpnen'
                     and kdskmpnen = '$kdskmpnen'
-                    and npwp = '$npwp' and kdakun='$kode_akun' ";
+                    and npwp like '$npwp%' and nip like '$nip%' and kdakun='$kode_akun' ";
       $sql_org2 = "SELECT no_kuitansi_update from kuitansi
                   where kdgiat = '$kdgiat' 
                     and kdprogram='$kdprogram' 
@@ -112,13 +121,17 @@
 
       $hsl_org = $this->query($sql_org);
 
+      // $sql_nomor = "SELECT no_kuitansi, no_kuitansi_update from kuitansi 
+      //               where kdgiat = '$kdgiat' 
+      //               and kdprogram='$kdprogram' 
+      //               and kdoutput = '$kdoutput'
+      //               and kdsoutput = '$kdsoutput'
+      //               and kdkmpnen = '$kdkmpnen'
+      //               and kdskmpnen = '$kdskmpnen' 
+      //               and npwp like '$npwp%' and nip like '$nip%' and kdakun='$kode_akun' order by no_kuitansi DESC, no_kuitansi_update DESC limit 1 ";
       $sql_nomor = "SELECT no_kuitansi, no_kuitansi_update from kuitansi 
                     where kdgiat = '$kdgiat' 
-                    and kdprogram='$kdprogram' 
-                    and kdoutput = '$kdoutput'
-                    and kdsoutput = '$kdsoutput'
-                    and kdkmpnen = '$kdkmpnen'
-                    and kdskmpnen = '$kdskmpnen' order by no_kuitansi DESC, no_kuitansi_update DESC limit 1 ";
+                    order by no_kuitansi DESC, no_kuitansi_update DESC limit 1 ";
       $hsl_nomor = $this->query($sql_nomor);
 
       $arr_kw = $this->fetch_array($hsl_nomor);
@@ -137,12 +150,12 @@
         $no_kw_up = 501;
           // Masukkin data baru degan no_kuitansi = 1
           $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' and kdakun='$kode_akun' ");
-          $this->query("INSERT into kuitansi(no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
+          $this->query("INSERT into kuitansi(no_kuitansi,nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
                         select
-                          no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
+                          no_kuitansi,nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
                         from rabfull where no_kuitansi='$no_kw' ".$condition." ");
           $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw' and no_kuitansi_update is null ".$condition." ");
-
+          return $no_kw;
       }
       else {
         if($this->num_rows($hsl_org)==0){
@@ -151,22 +164,24 @@
           $no_kw_up+=1;
           // Masukkin data baru degan no_kuitansi = 1++
           $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' and kdakun='$kode_akun' ");
-          $this->query("INSERT into kuitansi(no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
+          $this->query("INSERT into kuitansi(no_kuitansi, nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
                         select
-                          no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
+                          no_kuitansi, nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
                         from rabfull where no_kuitansi='$no_kw' ".$condition." ");
           $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw' and no_kuitansi_update is null ".$condition." ");
-
+          return $no_kw;
         }
         else{
           $hsl_tbh = $this->query($sql_org2);
           $hsl_arr = $this->fetch_array($hsl_tbh);
           $no_kw_up = $hsl_arr[no_kuitansi_update];
           $no_kw_up+=1;
+
+
           // echo "Sudah ada orang dengan kwitansi nomor yg lama";
-          $this->query("INSERT into kuitansi(no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
+          $this->query("INSERT into kuitansi(no_kuitansi, nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom)
                         select
-                          no_kuitansi, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
+                          no_kuitansi, nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, uang_muka, realisasi_spj, realisasi_pajak, sisa, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value, belanja, honor_output, honor_profesi, uang_saku, trans_lokal, uang_harian, tiket, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax, rute1, rute2, rute3, rute4, harga_tiket, lama_hari, klmpk_hr, pns, malam, biaya_akom
                         from rabfull where no_kuitansi='$no_kw_org' ".$condition." ");
           $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw_org' and no_kuitansi_update is null  ".$condition." ");
 
@@ -174,11 +189,24 @@
       }
 
       // echo " No Kwitansi ".$no_kw;
+      $query = "SELECT no_kuitansi from rabfull
+                  where kdgiat = '$kdgiat' 
+                    and kdprogram='$kdprogram' 
+                    and kdoutput = '$kdoutput'
+                    and kdsoutput = '$kdsoutput'
+                    and kdkmpnen = '$kdkmpnen'
+                    and kdskmpnen = '$kdskmpnen'
+                    and npwp like '$npwp%' and nip like '$nip%' and kdakun='$kode_akun'
+                    order by no_kuitansi desc limit 1";
+      $exec_get_nmr_kw = $this->query($query);
+      $array_nmr_kw = $this->fetch_array($exec_get_nmr_kw);
+      $no_kw = $array_nmr_kw[no_kuitansi];
       return $no_kw;
+      
     }
 
     public function cetak_dok($id,$pil_akun,$format){
-      $result = $this->query("SELECT rabview_id, npwp, kdgiat, kdprogram, kdoutput, kdsoutput, kdkmpnen, kdskmpnen from rabfull where id='$id' ");
+      $result = $this->query("SELECT rabview_id, npwp, nip, kdgiat, kdprogram, kdoutput, kdsoutput, kdkmpnen, kdskmpnen from rabfull where id='$id' ");
       $res = $this->fetch_array($result);
       $rabv_id = $res[rabview_id];
       // echo $rabv_id;
@@ -190,6 +218,7 @@
       $kdskmpnen = $res[kdskmpnen];
       $kdakun= $res[kdskmpnen];
       $npwp= $res[npwp];
+      $nip= $res[nip];
 
       $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$kdgiat' ");
       $arr_pb = $this->fetch_array($result_pb);
@@ -239,7 +268,7 @@
         $kondisi_akun = "id='$id' ";
       }
       else{
-        $kondisi_akun = " rab.rabview_id='$rabv_id' and rab.npwp='$npwp' order by rab.kdakun asc ";
+        $kondisi_akun = " rab.rabview_id='$rabv_id' and rab.npwp like '$npwp%' and rab.nip like '$nip%' order by rab.kdakun asc ";
       }
       // $result = $this->query("SELECT rab.alat_trans, rab.kota_asal, rab.kota_tujuan, rab.lama_hari, rab.tgl_mulai, rab.tgl_akhir, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rab.rabview_id='$rabv_id' and rab.npwp='$npwp' order by rab.kdakun asc ");
       $sql = "SELECT rab.penerima, rab.nip, rab.jabatan, rab.pns, rab.golongan, rab.kdakun, rkkl.NMGIAT, rab.value, rab.pajak, rab.ppn, rab.pph, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM, rab.tanggal_akhir, rab.lokasi FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where ".$kondisi_akun." ";
@@ -348,22 +377,24 @@
                           'nip_ppk'   => $nip_ppk,
                           'rabview_id'   => $rabv_id,
                           'pajak'   => $pajak,
+                          'nip'   => $nip,
                           'npwp'      => $npwp );
       ob_start();
       // print_r($dt_akun);
       if($honor_115>0){
           $nmr_kuitansi = $this->log_kwitansi($det_giat,"521115");
-          $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "Honorarium",$honor_115,$id_akun, $nmr_kuitansi);
+          $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "Honorarium",$honor_115,"521115", $nmr_kuitansi);
           echo '<pagebreak />';
       }
       if($honor_151>0){
           $nmr_kuitansi = $this->log_kwitansi($det_giat,"522151");
-          $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "Honorarium",$honor_151,$id_akun, $nmr_kuitansi);
+          $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "Honorarium",$honor_151,"522151", $nmr_kuitansi);
           echo '<pagebreak />';
       }
       if($honor_213>0){
+          // echo "Masuk";
           $nmr_kuitansi = $this->log_kwitansi($det_giat,"521213");
-          $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "Honorarium",$honor_213,$id_akun, $nmr_kuitansi);
+          $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "Honorarium",$honor_213,"521213", $nmr_kuitansi);
           echo '<pagebreak />';
       }
       if($uang_saku_dalam_113>0){
@@ -400,7 +431,7 @@
         $nmr_kuitansi = $this->log_kwitansi($det_giat, $dt_akun[0],$id);
         $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[0], $nmr_kuitansi);
         echo '<pagebreak />';
-        $nmr_kuitansi = $this->log_kwitansi($det_giat, $dt_akun[1]);
+        $nmr_kuitansi = $this->log_kwitansi($det_giat, $dt_akun[1],$id);
         $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[1], $nmr_kuitansi);
         echo '<pagebreak />';
         
@@ -452,6 +483,11 @@
       $nip_bpp = $arr_pb[nip_bpp];
       $ppk = $arr_pb[ppk];
       $nip_ppk = $arr_pb[nip_ppk];
+
+      $res_sql = $this->query("SELECT * from rkakl_view where status=1 ");
+      $rkl_view = $this->fetch_array($res_sql);
+
+
       $sql = "SELECT view.deskripsi as deskripsi, r.NMITEM as nmitem, r.NMGIAT as nmgiat, r.NMAKUN as nmakun, f.kdgiat as kdgiat, f.kdprogram as kdprogram, f.kdoutput as kdoutput, f.kdakun as kdakun, f.penerima as penerima, f.tanggal as tanggal, f.value  as value, f.pajak as pajak, f.ppn as ppn, f.pph as pph FROM rabfull as f LEFT JOIN rkakl_full as r on f.kdgiat = r.KDGIAT and f.kdoutput = r.KDOUTPUT and f.kdsoutput = r.KDSOUTPUT and f.kdkmpnen = r.KDKMPNEN and f.kdskmpnen = r.KDSKMPNEN  and f.kdakun = r.KDAKUN and f.noitem = r.NOITEM  
                 LEFT JOIN rabview as view on f.rabview_id = view.id
                 where f.kdakun ='$data' and f.kdgiat='$direktorat' ";
@@ -488,7 +524,7 @@
                 <td align="left" width="1%">3.</td>
                 <td align="left" width="30%">Tanggal/No.DIPA</td>
                 <td align="left" width="2%">:</td>
-                <td align="left" > ................................  Nomor : DIPA-042.03.1.401196/2016 dan Revisi ke __, Tgl. _______________________ 2016</td>
+                <td align="left" > '.$this->konversi_tanggal($rkl_view[tanggal]).' / Nomor : DIPA-'.$rkl_view[no_dipa].'.401196/'.$rkl_view[tahun].' dan Revisi ke '.$rkl_view[versi].', Tgl. '.$this->konversi_tanggal($rkl_view[tanggal]).'</td>
               </tr>
               <tr>
                 <td align="left" width="1%">4.</td>
@@ -1817,13 +1853,13 @@
                 </tr>';
           echo '<tr>
                   <td style="border-left:1px solid; border-right:1px solid;"></td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'.$asal." - Rp.".number_format($taxi_asal,0,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.$asal.'</td>
                   <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($taxi_asal,0,",",".").'</td>
                   <td style="border-left:1px solid; border-right:1px solid;"></td>
                 </tr>';
           echo '<tr>
                   <td style="border-left:1px solid; border-right:1px solid;"></td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'.$tujuan." - Rp.".number_format($taxi_tujuan,0,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.$tujuan.'</td>
                   <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($taxi_tujuan,0,",",".").'</td>
                   <td style="border-left:1px solid; border-right:1px solid;"></td>
                 </tr>';
@@ -2405,7 +2441,7 @@ public function daftar_peng_riil($result,$det){
       $tiket=0;
       $lain2=0;
       $tot=0;
-      $sql = "SELECT rab.tanggal, rab.deskripsi, rab.lokasi, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rab.taxi_asal, rab.taxi_tujuan, rkkl.NMGIAT, rab.value, rab.uang_muka, rab.uang_harian, rab.uang_saku, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ";
+      $sql = "SELECT rab.tanggal, rab.lama_hari, rab.deskripsi, rab.lokasi, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rab.taxi_asal, rab.taxi_tujuan, rab.harga_tiket, rkkl.NMGIAT, rab.value, rab.uang_muka, rab.uang_harian, rab.uang_saku, rab.biaya_akom, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ";
       // print_r($sql);
       $result = $this->query($sql);
       $res2 = $this->fetch_array($result);
@@ -2413,39 +2449,49 @@ public function daftar_peng_riil($result,$det){
       $direktorat=$res2['kdgiat'];
       foreach($result as $rs) {
 
-              if(substr($rs[NMITEM],1,8)=="ransport" or $rs[taxi_tujuan]>0 or $rs[taxi_asal]>0){
-                // echo "Masuk Transport : ".$res[NMITEM]."<br>";
+              if($rs[kdakun]=="524119"){
                 $taxi_lokal += $rs[taxi_asal]+$rs[taxi_tujuan];
-                $tot        += $rs[taxi_asal]+$rs[taxi_tujuan];
-                unset($rs[value]);
-                // echo "NIlai taxt :  dan".$taxi_lokal." total  ".$tot;
-              }
-              if(substr($rs[NMITEM],1,3)=="ang" or $rs[uang_harian]>0 or $rs[uang_saku]>0){
-                // echo "Uang Harian: ".$rs[NMITEM]."-".$rs[uang_harian]."<br>";
-                $uang_harian_saku += $rs[uang_harian]+$rs[uang_saku];
-                $tot              += $rs[uang_harian]+$rs[uang_saku];
-                // echo "NIlai Uang ".$uang_harian_saku." total  ".$tot;
-                unset($rs[value]);
-              }
-              if(substr($rs[NMITEM],1,9)=="onorarium"){
-                // echo "Honrarium: ".$rs[NMITEM]."<br>";
-                $honorarium += $rs[value];
-                $tot        += $rs[value];
-                // echo "NIlai Honor ".$honorarium." total  ".$tot;
-                unset($rs[value]);
-              }
-              if(substr($rs[NMITEM],1,4)=="iket"){
+                $uang_harian_saku += ($rs[uang_harian]*$rs[lama_hari])+$rs[uang_saku];
                 $tiket += $rs[harga_tiket];
-                $tot   += $rs[harga_tiket];
-                unset($rs[value]);
+                $Akomodasi+=$rs[biaya_akom];
               }
-              
-                $lain2 += $rs[value];
-                $tot   += $rs[value];
-                // echo "Lainnya";
-              
-                             
+              // if( ((substr($rs[NMITEM],1,4)=="aket" or substr($rs[NMITEM],1,4)=="iaya" or substr($rs[NMITEM],1,9)=="enginapan") and strcasecmp(substr($rs[NMITEM],0,16),"Biaya Perjalanan")!=0) or ($rs[kdakun]=="524119" and $rs[biaya_akom]>0)  ){
+              //   $Akomodasi+=$rs[value];
+              // }
+
+              // elseif($rs[biaya_akom]>0){
+              //   $Akomodasi+=$rs[biaya_akom];
+              // }
+
+              elseif(substr($rs[NMITEM],1,3)=="ang" && $rs[kdakun]!="524119"){
+                $uang_harian_saku += $rs[value];
+              }
+
+              elseif(substr($rs[NMITEM],1,8)=="ransport" && $rs[kdakun]!="524119"){
+                $taxi_lokal += $rs[value];
+              }
+
+
+              elseif(substr($rs[NMITEM],1,4)=="onor" or $rs[NMAKUN]=="Belanja Jasa Profesi")
+              {
+                $honorarium += $rs[value];
+              }
+
+              // if((substr($rs[NMITEM],1,8)!="ransport") and (substr($rs[NMITEM],1,3)!="ang") and  (substr($rs[NMITEM],1,4)!="onor") and $rs[kdakun]!="524119" and substr($rs[NMITEM],1,4)!="iket"  and $rs[kdakun]!="521213" and substr($rs[NMITEM],1,4)!="aket" and substr($rs[NMITEM],1,4)!="iaya" and substr($rs[NMITEM],1,9)!="enginapan"){
+                
+              //   $lain2+= $rs[value];
+              // }
+              else{
+                $lain2+= $rs[value];
+              }
+
+             
+             
+               
+
         }
+         $tot   += $taxi_lokal+$uang_harian_saku+$honorarium+$tiket+$Akomodasi+$lain2;
+
       $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
       $arr_pb = $this->fetch_array($result_pb);
       $bpp = $arr_pb[bpp];
@@ -2628,7 +2674,7 @@ public function daftar_peng_riil($result,$det){
               </tr> 
               <tr>
                 <td></td>
-                <td style="border-left: 1px solid black; border-right: 1px solid black;">Agus Indrajo</td>
+                <td style="border-left: 1px solid black; border-right: 1px solid black;">Agus Indarjo</td>
                 <td></td>
                 <td style="border-left: 1px solid black;  border-right: 1px solid black;">Josephine Margaretta</td>
                 <td ></td>
@@ -2653,6 +2699,8 @@ public function daftar_peng_riil($result,$det){
       $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, NMAKUN,  sum(jumlah) as jumlah  FROM rkakl_full where kdgiat like '%$dir%' group by kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun order by kdgiat asc, kdoutput asc, kdsoutput asc, kdkmpnen asc, kdskmpnen asc, kdakun asc ";
       $res = $this->query($sql);
       ob_start();
+      $res_sql = $this->query("SELECT * from rkakl_view where status=1 ");
+      $rkl_view = $this->fetch_array($res_sql);
       echo '<table style="width: 100%;  text-align:left; border-collapse:collapse; font-size:0.95em;">
                 <tr>
                   <td colspan="15" style="text-align:center; font-weight:bold">LAPORAN REALISASI DAYA SERAP PER KEGIATAN</td>
@@ -2671,7 +2719,7 @@ public function daftar_peng_riil($result,$det){
                 <tr>
                   <td colspan="2">Nomor Tanggal DIPA</td>
                   <td>:</td>
-                  <td  align="left">DIPA-042-03.1.401196/2016, tgl. 7 Desember 2016</td>
+                  <td  align="left">DIPA-'.$rkl_view[no_dipa].'.401196/'.$rkl_view[tahun].', tgl. '.$this->konversi_tanggal($rkl_view[tanggal]).'</td>
                 </tr>
                 <tr>
                   <td colspan="2">Propinsi DKI</td>
@@ -2921,6 +2969,9 @@ public function daftar_peng_riil($result,$det){
       // $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, value  FROM rabfull group by kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun order by kdgiat asc, kdoutput asc, kdsoutput asc, kdkmpnen asc, kdskmpnen asc, kdakun asc ";
       $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, NMAKUN,  jumlah  FROM rkakl_full where kdgiat like '%$dir%' group by kdgiat, kdoutput, kdakun order by kdgiat asc, kdoutput asc, kdakun asc ";
       $res = $this->query($sql);
+      $res_sql = $this->query("SELECT * from rkakl_view where status=1 ");
+      $rkl_view = $this->fetch_array($res_sql);
+
       ob_start();
       echo '<table style="width: 100%;  text-align:left; border-collapse:collapse; font-size:0.95em;">
                 <tr>
@@ -2940,7 +2991,7 @@ public function daftar_peng_riil($result,$det){
                 <tr>
                   <td colspan="2">Nomor Tanggal DIPA</td>
                   <td>:</td>
-                  <td  align="left">DIPA-042-03.1.401196/2016, tgl. 7 Desember 2016</td>
+                  <td  align="left">DIPA-'.$rkl_view[no_dipa].'.401196/'.$rkl_view[tahun].', tgl. '.$this->konversi_tanggal($rkl_view[tanggal]).'</td>
                 </tr>
                 <tr>
                   <td colspan="2">Propinsi DKI</td>
@@ -3123,6 +3174,9 @@ public function daftar_peng_riil($result,$det){
       // $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, value  FROM rabfull group by kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun order by kdgiat asc, kdoutput asc, kdsoutput asc, kdkmpnen asc, kdskmpnen asc, kdakun asc ";
       $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, NMAKUN,  jumlah  FROM rkakl_full where kdgiat like '%$dir%' group by kdgiat, kdoutput order by kdgiat asc, kdoutput asc";
       $res = $this->query($sql);
+      // $res_sql = $this->query("SELECT * from rkakl_view where status=1 ");
+      // $rkl_view = $this->fetch_array($res_sql);
+
       ob_start();
        
   
@@ -3288,7 +3342,7 @@ public function daftar_peng_riil($result,$det){
         <td style="border:1px solid; text-align:right; ">'.number_format($tot_dipa_51,2,",",".").'</td>
         <td style="border:1px solid; text-align:right; ">'.number_format($tot_nilai_51,2,",",".").'</td>
         <td style="border:1px solid; text-align:right;  ">'.number_format($tot_dipa_52,2,",",".").'</td>
-        <td style="border:1px solid; text-align:right;  ">'.number_format($tot_nilai_52['jumlah'],2,",",".").'</td>
+        <td style="border:1px solid; text-align:right;  ">'.number_format($tot_nilai_52,2,",",".").'</td>
         <td style="border:1px solid; text-align:right;  ">'.number_format($tot_dipa_53,2,",",".").'</td>
         <td style="border:1px solid; text-align:right;  ">'.number_format($tot_nilai_53,2,",",".").'</td>
         <td style="border:1px solid; text-align:right;  ">'.number_format($tot_dipa_57,2,",",".").'</td>
@@ -3308,6 +3362,143 @@ public function daftar_peng_riil($result,$det){
       $html = ob_get_contents();
       // ob_clean();
       $this->create_pdf("Pengajuan UMK","A4-L",$html);
+    }
+
+    public function pajak_orang($data){
+      $nama="";
+      $sql = "SELECT thang, tanggal, penerima, no_kuitansi, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdakun, value, pph from rabfull where concat(nip,'-',npwp)='$data' ";
+      $hsl_pjk = $this->query($sql);
+
+       $objPHPExcel = new PHPExcel();
+      // Set properties
+      $objPHPExcel->getProperties()->setCreator("Sistem Keuangan Dikti")
+              ->setLastModifiedBy("Sistem Keuangan Dikti")
+              ->setTitle("REKAPITULASI PAJAK PER ORANG")
+              ->setSubject("Office 2007 XLSX Document")
+              ->setDescription("")
+              ->setKeywords("office 2007 openxml php")
+              ->setCategory("REKAPITULASI PAJAK PER ORANG");
+      $border = array(
+          'borders' => array(
+              'allborders' => array(
+                  'style' => PHPExcel_Style_Border::BORDER_THIN
+              )
+          )
+      );
+        $horizontal = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+            )
+        );
+        $vertical = array(
+            'alignment' => array(
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
+        $objPHPExcel->getActiveSheet()->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
+        $objPHPExcel->getDefaultStyle()->getBorders()->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+        $objPHPExcel->getDefaultStyle()->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(30);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A')->getAlignment()->setWrapText(true); 
+        $objPHPExcel->getActiveSheet()->getStyle('C')->getAlignment()->setWrapText(true); 
+        for($col = 'A'; $col !== 'F'; $col++) {
+          if($col!='A' and $col!='C'){
+            $objPHPExcel->getActiveSheet()
+            ->getColumnDimension($col)
+            ->setAutoSize(true);
+          }
+        }
+        
+        $sheet = $objPHPExcel->getActiveSheet()->setTitle("Rekap Pajak Orang");
+        $sheet->mergeCells('A1:F1');
+        $sheet->mergeCells('A2:F2');
+        $sheet->mergeCells('A3:F3');
+        
+        $sheet->getStyle('A5:F5')->getFont()->setBold(true);
+        $sheet->getStyle('A1:A3')->getFont()->setBold(true);
+        $sheet->getStyle('A1:A3')->applyFromArray($horizontal);    
+        $sheet->getStyle('A1:A3')->applyFromArray($vertical);
+        $sheet->getStyle("A5:F5")->applyFromArray($border);
+        $objPHPExcel->getActiveSheet()->getStyle("A1:A3")->getFont()->setSize(14); 
+        $objPHPExcel->getActiveSheet()->getStyle("A5:F5")->getFont()->setSize(12);
+        $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A1',"REKAPTULASI PAJAK PER-ORANG TA 2016" )
+                ->setCellValue('A2',"DIREKTORAT JENDERAL KELEMBAGAAN IPTEK DAN DIKTI" )
+                ->setCellValue('A3',"KEMENTERIAN RISET, TEKNOLOGI, DAN PENDIDIKAN TINGGI" )
+                ->setCellValue('A5',"Nama Pegawai" )
+                ->setCellValue('B5',"No_Kuitansi" )
+                ->setCellValue('C5',"Kode_MAK-Bukti Kuitansi" )
+                ->setCellValue('D5',"Tanggal" )
+                ->setCellValue('E5',"Jmlh Pendapatan" )
+                ->setCellValue('F5',"Jmlh of PPH 21" );
+
+      $row=5;
+      $cell = $objPHPExcel->setActiveSheetIndex(0);
+      $tot_pendapatan = 0;
+      $tot_pjk_pendapatan = 0;
+      foreach ($hsl_pjk as $nilai) {
+        $row+=1;
+        $tot_pendapatan+=$nilai[value];
+        $tot_pjk_pendapatan+=$nilai[pph];
+        $no_kuitansi = $nilai[kdgiat]."/".$nilai[kdoutput]."/".$nilai[kdsoutput]."/".$nilai[kdkmpnen]."/".$nilai[kdakun];
+        if($nama!=$nilai[penerima]){
+          $cell->setCellValue('A'.$row, $nilai[penerima]);
+          $nama = $nilai[penerima];
+        }
+        $cell->setCellValue('B'.$row, $nilai[no_kuitansi]);
+        $cell->setCellValue('C'.$row, $no_kuitansi);
+        $cell->setCellValue('D'.$row, $this->konversi_tanggal($nilai[tanggal]));
+        $cell->setCellValue('E'.$row, $nilai[value]);
+        $cell->setCellValue('F'.$row, $nilai[pph]);
+        $sheet->getStyle("A".$row.":F".$row)->applyFromArray($border);
+         $objPHPExcel->getActiveSheet()->getStyle("A".$row.":F".$row)->getFont()->setSize(12);
+      }
+      $row+=1;
+      $sheet->mergeCells('A'.$row.':D'.$row);
+      $cell->setCellValue('A'.$row, $nilai[penerima]." Total");
+      $sheet->getStyle("A".$row.":F".$row)->getFont()->setBold(true);
+      $cell->setCellValue('E'.$row, $tot_pendapatan);
+      $cell->setCellValue('F'.$row, $tot_pjk_pendapatan);
+      $sheet->getStyle("A".$row.":F".$row)->applyFromArray($border);
+      $objPHPExcel->getActiveSheet()->getStyle("A".$row.":F".$row)->getFont()->setSize(14);
+      $row+=1;
+      $sheet->mergeCells('A'.$row.':D'.$row);
+      $cell->setCellValue('A'.$row, "GRAND Total");
+      $sheet->getStyle("A".$row.":F".$row)->getFont()->setBold(true);
+      $cell->setCellValue('E'.$row, $tot_pendapatan);
+      $cell->setCellValue('F'.$row, $tot_pjk_pendapatan);
+      $sheet->getStyle("A".$row.":F".$row)->applyFromArray($border);
+      $objPHPExcel->getActiveSheet()->getStyle("A".$row.":F".$row)->getFont()->setSize(14);
+      $row+=2;
+      $sheet->mergeCells('D'.$row.':F'.$row);
+      $cell->setCellValue('D'.$row, "Jakarta,");
+      $row+=1;
+      $sheet->mergeCells('D'.$row.':F'.$row);
+      $cell->setCellValue('D'.$row, "Direktorat Jenderal Kelembagaan Iptek dan Dikti");
+      $row+=1;
+      $sheet->mergeCells('D'.$row.':F'.$row);
+      $cell->setCellValue('D'.$row, "Bendahara Pengeluaran,");
+      $row+=4;
+      $sheet->mergeCells('D'.$row.':F'.$row);
+      $cell->setCellValue('D'.$row, "Josephine Margaretta S.Kom");
+
+      $row+=1;
+      $sheet->mergeCells('D'.$row.':F'.$row);
+      $cell->setCellValue('D'.$row, "NIP. 19870613 201012 2 009");
+
+        Header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="Rekap_Pajak_nama.xlsx"');
+        header('Cache-Control: max-age=0');
+
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        // If you want to output e.g. a PDF file, simply do:
+        //$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'PDF');
+        $objWriter->save('php://output');
     }
 
     function kekata($x) {
@@ -3411,7 +3602,7 @@ public function daftar_peng_riil($result,$det){
         
       }
       // echo "akuns : ".$kdakun;
-      $query = " SELECT SUM(case when month(tanggal)<'$tanggal' then value else 0 end) as jml_lalu, SUM(case when month(tanggal)='$tanggal' then value else 0 end) as jumlah FROM rabfull WHERE kdgiat LIKE '%$kdgiat%' ".$q_out.$q_sout.$q_kmp.$q_skmp.$q_akun;
+      $query = " SELECT SUM(case when month(tanggal)<'$tanggal' then value else 0 end) as jml_lalu, SUM(case when month(tanggal)='$tanggal' then value else 0 end) as jumlah FROM rabfull WHERE kdgiat LIKE '%$kdgiat%' ".$q_out.$q_sout.$q_kmp.$q_skmp.$q_akun.' and status in (2,4,6,7)';
       // print_r($query);
       
       $res = $this->query($query);
@@ -3519,7 +3710,296 @@ public function daftar_peng_riil($result,$det){
       $hasil .= " RUPIAH";
       return $hasil;
     }
+    function rincian_kebutuhan_dana($data,$jns){
+      $cond_query;
+      $title;
+      if($jns=="1"){
+        $title = "DAFTAR PERTANGGUNG JAWABAN UMK";
+        $cond_query = " ";
+        // $cond_query = " and rab.status in(2,4,6,7) ";
+      }
+      else{
+        $title= "RINCIAN KEBUTUHAN DANA";
+        $cond_query = " ";
+      }
 
+      $sql = "SELECT  rab.lama_hari,  rab.golongan, rab.penerima, rab.kdakun, rab.taxi_asal,rab.taxi_tujuan, rab.harga_tiket, rab.value, rab.uang_muka, rab.uang_harian, rab.uang_saku, rab.pajak, rab.biaya_akom, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ".$cond_query." order by rab.penerima asc ";
+      $sql2 = "SELECT rab.deskripsi, rab.tanggal, rab.lokasi, rab.tempat, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdskmpnen, rkkl.NMGIAT, rkkl.NMOUTPUT, rkkl.NMSOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN  where rabview_id='$data' LIMIT 1";
+      
+      $res = $this->query($sql);
+      // $arr = $this->fetch_array($res);
+
+      $res2 = $this->query($sql2);
+      $id_giat = $this->fetch_array($res2);
+      $direktorat = $id_giat[kdgiat];
+      $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
+      $arr_pb = $this->fetch_array($result_pb);
+      $bpp = $arr_pb[bpp];
+      $nip_bpp = $arr_pb[nip_bpp];
+      $ppk = $arr_pb[ppk];
+      $nip_ppk = $arr_pb[nip_ppk];
+
+      $tanggal = $this->konversi_tanggal($id_giat[tanggal]);
+
+      $objPHPExcel = new PHPExcel();
+      // Set properties
+      $objPHPExcel->getProperties()->setCreator("Sistem Keuangan Dikti")
+              ->setLastModifiedBy("Sistem Keuangan Dikti")
+              ->setTitle("Office 2007 XLSX Document")
+              ->setSubject("Office 2007 XLSX Document")
+              ->setDescription("Office 2007 XLSX, generated by PHPExcel.")
+              ->setKeywords("office 2007 openxml php")
+              ->setCategory("RINCIAN KEBUTUHAN DANA ");
+      $border = array(
+          'borders' => array(
+              'allborders' => array(
+                  'style' => PHPExcel_Style_Border::BORDER_THIN
+              )
+          )
+      );
+      $horizontal = array(
+          'alignment' => array(
+              'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+          )
+      );
+      $vertical = array(
+          'alignment' => array(
+              'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+          )
+      );
+      $objPHPExcel->getActiveSheet()->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
+      $objPHPExcel->getActiveSheet()->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
+      $objPHPExcel->getDefaultStyle()->getBorders()->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+      $objPHPExcel->getDefaultStyle()->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(3);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(10);
+      $objPHPExcel->getActiveSheet()->getStyle('E')->getAlignment()->setWrapText(true); 
+      $objPHPExcel->getActiveSheet()->getStyle('H')->getAlignment()->setWrapText(true); 
+      for($col = 'A'; $col !== 'N'; $col++) {
+        if($col!='E'and $col!='H' and $col!='A' and $col!='L'){
+          $objPHPExcel->getActiveSheet()
+          ->getColumnDimension($col)
+          ->setAutoSize(true);
+        }
+      }
+      
+      $sheet = $objPHPExcel->getActiveSheet()->setTitle($title);
+      $sheet->mergeCells('A1:M1');
+      $sheet->mergeCells('D2:M2');
+      $sheet->mergeCells('D3:M3');
+      $sheet->mergeCells('D4:M4');
+      $sheet->mergeCells('D5:M5');
+      $sheet->mergeCells('D6:M6');
+      $sheet->mergeCells('D7:M7');
+      $sheet->mergeCells('D8:M8');
+      $sheet->mergeCells('D9:M9');
+      $sheet->mergeCells('D10:M10');
+
+      $objPHPExcel->setActiveSheetIndex(0)
+              ->setCellValue('A1', $title)
+              ->setCellValue('A2', '1')->setCellValue('B2', 'Satker')->setCellValue('C2', ':')->setCellValue('D2', '(401196) Direktorat Jenderal Kelembagaan Iptek dan Dikti')
+              ->setCellValue('A3', '2')->setCellValue('B3', 'Kegiatan')->setCellValue('C3', ':')->setCellValue('D3', '('.$id_giat[kdprogram].') '.$id_giat[NMGIAT])
+              ->setCellValue('A4', '3')->setCellValue('B4', 'Output')->setCellValue('C4', ':')->setCellValue('D4', '('.$id_giat[kdoutput].') '.$id_giat[NMOUTPUT])
+              ->setCellValue('A5', '4')->setCellValue('B5', 'Sub Output')->setCellValue('C5', ':')->setCellValue('D5', '('.$id_giat[kdsoutput].') '.$id_giat[NMSOUTPUT])
+              ->setCellValue('A6', '5')->setCellValue('B6', 'Komponen Input')->setCellValue('C6', ':')->setCellValue('D6', '('.$id_giat[kdkmpnen].') '.$id_giat[NMKMPNEN])
+              ->setCellValue('A7', '6')->setCellValue('B7', 'Sub Komponen')->setCellValue('C7', ':')->setCellValue('D7', '('.$id_giat[kdskmpnen].') '.$id_giat[NMSKMPNEN])
+              ->setCellValue('A8', '7')->setCellValue('B8', 'Tujuan Pelaksanaan')->setCellValue('C8', ':')->setCellValue('D8', $id_giat[deskripsi])
+              ->setCellValue('A9', '8')->setCellValue('B9', 'Waktu Pelaksanaan')->setCellValue('C9', ':')->setCellValue('D9', $tanggal)
+              ->setCellValue('A10', '9')->setCellValue('B10', 'Tempat Pelaksanaan')->setCellValue('C10', ':')->setCellValue('D10', $id_giat[tempat])
+              ->setCellValue('A12', 'No')
+              ->setCellValue('B12', 'Nama')
+              ->setCellValue('C12', 'Gol')
+              ->setCellValue('D12', 'Instansi')
+              ->setCellValue('E12', 'Honorarium / U.Representasi')
+              ->setCellValue('F12', 'Uang Harian')
+              ->setCellValue('G12', 'Uang Saku')
+              ->setCellValue('H12', 'Transport Lokal / Taxi')
+              ->setCellValue('I12', 'Tiket')
+              ->setCellValue('J12', 'Akomodasi')
+              ->setCellValue('K12', 'Lain-Lain')
+              ->setCellValue('L12', 'Pajak')
+              ->setCellValue('M12', 'Jumlah');
+
+      $no=0;
+      $row=12; 
+      $sheet->getStyle("A1")->applyFromArray($horizontal);    
+      $sheet->getStyle("A1")->applyFromArray($vertical);
+      $sheet->getStyle('A1')->getFont()->setBold(true);
+      $objPHPExcel->getActiveSheet()->getRowDimension('A')->setRowHeight(10);      
+      $sheet->getStyle("A12:M12")->applyFromArray($horizontal);    
+      $sheet->getStyle("A12:M12")->applyFromArray($vertical);    
+      $sheet->getStyle("A12:M12")->applyFromArray($border);
+      $sheet->getStyle('A12:M12')->getFont()->setBold(true);    
+      $cell = $objPHPExcel->setActiveSheetIndex(0);
+      // $transport = 0;
+      // $honor = 0;
+      // $uang_harian = 0;
+      // $uang_saku = 0;
+      // $tiket = 0;
+      // $akomodasi = 0;
+      // $lain2 = 0;
+
+      $subtot_honor = 0;   
+      $subtot_uangHarian = 0;   
+      $subtot_uangSaku = 0;   
+      $subtot_transport = 0;   
+      $subtot_tiket = 0;   
+      $subtot_akomodasi = 0;   
+      $subtot_lain = 0;   
+      $subtot_jml = 0;   
+      foreach ($res as $val) {
+        $transport = 0;
+      $honor = 0;
+      $uang_harian = 0;
+      $uang_saku = 0;
+      $tiket = 0;
+      $akomodasi = 0;
+      $lain2 = 0;
+        $acc=0;
+        $lama_hari = 1;
+        $row+=1;
+        $no++;
+        $sheet->getStyle("A".$row.":M".$row)->applyFromArray($border);   
+        $cell->setCellValue('A'.$row,$no);
+        $cell->setCellValue('B'.$row,$val[penerima]);
+        $cell->setCellValue('C'.$row,$val[golongan]);
+        $cell->setCellValue('D'.$row,'');
+        if($val[lama_hari]>1) $lama_hari = $val[lama_hari];
+        if($val[kdakun]=="524119"){
+                $transport = $val[taxi_asal]+$val[taxi_tujuan];
+                $uang_harian = $val[uang_harian]*$lama_hari;
+                $uang_saku = $val[uang_saku]; 
+                $tiket = $val[harga_tiket];
+                $subtot_uangHarian += $uang_harian;
+                $subtot_uangSaku += $uang_saku;
+                $subtot_tiket += $tiket;
+                $subtot_transport += $transport;
+                $acc += $transport+$uang_harian+$uang_saku+$tiket;
+                $cell->setCellValue('I'.$row,$tiket);  
+                $cell->getStyle('I'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+                
+                $akomodasi=$val[biaya_akom];
+              $subtot_akomodasi += $akomodasi;
+              $acc+=$akomodasi;
+              $cell->setCellValue('J'.$row,$akomodasi);
+              $cell->getStyle('J'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+        }
+        elseif(strcasecmp(substr($val[NMITEM],1,10), "ang harian")==0){
+          $uang_harian+=$val[value];
+          $subtot_uangHarian += $uang_harian;
+          $acc+= $uang_harian;
+          
+        }
+        elseif(strcasecmp(substr($val[NMITEM],1,8), "ang saku")==0){
+          $uang_saku+=$val[value];
+          $subtot_uangSaku += $uang_saku;
+          $acc+=$uang_saku;
+          
+        }
+        // if(((substr($val[NMITEM],1,4)=="aket" or substr($val[NMITEM],1,4)=="iaya" or substr($val[NMITEM],1,9)=="enginapan") and strcasecmp(substr($val[NMITEM],0,16),"Biaya Perjalanan")!=0) or ($val[biaya_akom]>0 and $val[kdakun]=="524119")) {
+        //       if($val[biaya_akom]>0){
+        //         $akomodasi=$val[biaya_akom];
+        //       }
+        //         else{
+        //           $akomodasi=$val[value];
+        //       }
+              
+        //       $subtot_akomodasi += $akomodasi;
+        //       $acc+=$akomodasi;
+        //       $cell->setCellValue('J'.$row,$akomodasi);
+        //       $cell->getStyle('J'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+        // }
+        elseif(substr($val[NMITEM],1,8)=="ransport"){
+                $transport+= $val[value];
+                $acc += $transport;
+                $subtot_transport += $transport; 
+        }
+
+        elseif(substr($val[NMITEM],1,4)=="onor")
+        {
+                $honor = $val[value];
+                $acc += $honor;
+                $cell->setCellValue('E'.$row,$honor);
+                $subtot_honor += $honor; 
+                $cell->getStyle('E'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+        }
+        // if((substr($val[NMITEM],1,8)!="ransport") and (substr($val[NMITEM],1,3)!="ang") and  (substr($val[NMITEM],1,4)!="onor") and $val[kdakun]!="524119" and substr($val[NMITEM],1,4)!="iket"  and $val[NMAKUN]!="521213" and substr($val[NMITEM],1,4)!="aket" and substr($val[NMITEM],1,4)!="iaya" and substr($val[NMITEM],1,9)!="enginapan"){
+        else
+        {
+                // $taxi_lokal += $rs[taxi_asal]+$rs[taxi_tujuan];
+                $lain2 = $val[value];
+                $acc += $lain2;
+                $subtot_lain += $lain2;
+                $cell->setCellValue('K'.$row,$lain2);
+                $cell->getStyle('K'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+        }
+        
+        
+          
+           
+        $cell->setCellValue('F'.$row,$uang_harian);
+        $cell->getStyle('F'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+        $cell->setCellValue('G'.$row,$uang_saku);
+        $cell->getStyle('G'.$row)->getNumberFormat()->setFormatCode('#,##0.00');  
+            
+        $subtot_jml += $acc;
+        // $acc+= ($transport+$uang_harian+$uang_saku+$tiket+$honor+$akomodasi+$lain2);
+        $cell->setCellValue('H'.$row,$transport);
+        $cell->getStyle('H'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+
+        $cell->setCellValue('L'.$row,$val[pajak]." %");
+        $cell->setCellValue('M'.$row,$acc);
+        $cell->getStyle('M'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+      }
+      $row+=1;
+      $sheet->getStyle("A".$row.":M".$row)->applyFromArray($border); 
+      $sheet->mergeCells('A'.$row.':'.'D'.$row);
+      $cell->setCellValue('E'.$row,$subtot_honor);
+      $cell->setCellValue('F'.$row,$subtot_uangHarian);
+      $cell->setCellValue('G'.$row,$subtot_uangSaku);
+      $cell->setCellValue('H'.$row,$subtot_transport);
+      $cell->setCellValue('I'.$row,$subtot_tiket);
+      $cell->setCellValue('J'.$row,$subtot_akomodasi);
+      $cell->setCellValue('K'.$row,$subtot_lain);
+      $cell->setCellValue('L'.$row,'-');
+      $cell->setCellValue('M'.$row,$subtot_jml);
+      $cell->getStyle('A'.$row.':M'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+      $row+=2;
+      $sheet->mergeCells('L'.$row.':M'.$row);
+      $sheet->getStyle('A'.$row.':M'.$row)->getFont()->setBold(true); 
+      $cell->setCellValue('L'.$row,$id_giat[lokasi].', '.$tanggal);
+      $row+=2;
+      $sheet->mergeCells('L'.$row.':M'.$row);
+      $sheet->mergeCells('A'.$row.':'.'D'.$row);
+      $sheet->getStyle('A'.$row.':M'.$row)->getFont()->setBold(true); 
+      $cell->setCellValue('L'.$row,'BPP,');
+      $cell->setCellValue('A'.$row,'Pejabat Pembuat Komitmen');
+      $row+=4;
+      $cell->setCellValue('L'.$row,$bpp);
+      $sheet->getStyle('A'.$row.':M'.$row)->getFont()->setBold(true); 
+      $cell->setCellValue('A'.$row,$ppk);
+      $row+=1;
+      $sheet->mergeCells('L'.$row.':M'.$row);
+      $sheet->mergeCells('A'.$row.':D'.$row);
+      $sheet->getStyle('A'.$row.':M'.$row)->getFont()->setBold(true); 
+      $cell->setCellValueExplicit('A'.$row,$nip_ppk);
+      $cell->setCellValueExplicit('L'.$row, $nip_bpp, PHPExcel_Cell_DataType::TYPE_STRING);
+
+
+
+
+      header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      header('Content-Disposition: attachment;filename="Rincian Kebutuhan Dana.xlsx"');
+      header('Cache-Control: max-age=0');
+
+
+      $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+      // If you want to output e.g. a PDF file, simply do:
+      //$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'PDF');
+      $objWriter->save('php://output');
+    }
     function serapan($dir, $bulan, $tahun){
       $arrbulan = array(
                 '01'=>"Januari",

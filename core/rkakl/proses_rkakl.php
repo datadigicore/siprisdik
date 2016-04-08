@@ -4,28 +4,30 @@ require_once __DIR__ . '/../../utility/ExcelReader.php';
 
 switch ($process) {
   case 'import':
-    $thang = $purifier->purify($_POST['thang']);
-    $revisi = $purifier->purify($_POST['revisi']);
-    
-    $tanggal = $purifier->purify($_POST['tanggal']);
+    // $thang['idrkakl'] = '0140119604203065696001001053A521211';
+    // $thang['tahun']   = '2016';
+    // $rkakl->updDelRowHadRealisasi($thang);
+    // die();
+    $thang    = $purifier->purify($_POST['thang']);
+    $revisi   = $purifier->purify($_POST['revisi']);
+    $tanggal  = $purifier->purify($_POST['tanggal']);
     $pecahtgl = explode("/", $tanggal);
-    $tanggal = $pecahtgl[2].'-'.$pecahtgl[1].'-'.$pecahtgl[0];
-
-    $no_dipa = $purifier->purify($_POST['no_dipa']);
-    $result = $rkakl->checkThang($thang);
+    $tanggal  = $pecahtgl[2].'-'.$pecahtgl[1].'-'.$pecahtgl[0];
+    $no_dipa  = $purifier->purify($_POST['no_dipa']);
+    $result   = $rkakl->checkThang($thang);
     if ($result->num_rows == 0 || $revisi == 'true') {
       if(isset($_POST) && !empty($_FILES['fileimport']['name'])) {
         $path = $_FILES['fileimport']['name'];
-        $ext = pathinfo($path, PATHINFO_EXTENSION);
+        $ext  = pathinfo($path, PATHINFO_EXTENSION);
         if($ext != 'xls' && $ext != 'xlsx') {
-          $utility->load("content/rkakl","danger","Jenis file RKAKL yang di upload tidak sesuai");
+          $utility->load("content/rkakl","error","Jenis file RKAKL yang di upload tidak sesuai");
         }
         else {
-          $time = time();
-          $target_dir = $path_upload;
+          $time        = time();
+          $target_dir  = $path_upload;
           $target_name = basename(date("Ymd-His-\R\K\A\K\L.",$time).$ext);
           $target_file = $target_dir . $target_name;
-          $response = move_uploaded_file($_FILES['fileimport']['tmp_name'],$target_file);
+          $response    = move_uploaded_file($_FILES['fileimport']['tmp_name'],$target_file);
           if($response) {
             try {
               $objPHPExcel = PHPExcel_IOFactory::load($target_file);
@@ -36,28 +38,34 @@ switch ($process) {
             $allDataInSheet = $objPHPExcel->getActiveSheet()->toArray(NULL,TRUE,FALSE,TRUE);
             $data_insert = array(
               "tanggal"    => $tanggal,
-              "no_dipa"   => $no_dipa,
+              "no_dipa"    => $no_dipa,
               "filename"   => $path,
               "filesave"   => $target_name,
               "keterangan" => $purifier->purify($_POST['keterangan']),
               "tahun"      => $purifier->purify($_POST['thang'])
             );
-
             if ($thang == date("Y")+1) {
               $data_insert["status"] = 2;
             }
             else {
               $data_insert["status"] = 1;
             }
-
-            //pesan revisi
             if (isset($_POST['pesan'])) {
               $data_insert['pesan'] = $_POST['pesan'];
             }
-            $rkakl->clearRkakl($thang);
-            $rkakl->insertRkakl($data_insert);
-            $rkakl->importRkakl($allDataInSheet);
-            $utility->load("content/rkakl","success","Data RKAKL berhasil di import ke dalam database");
+            if ($data_insert['tahun'] == $allDataInSheet[2]['A']) {
+              $rkakl->insertRkakl($data_insert);
+              $result = $rkakl->importRkakl($allDataInSheet);
+              if ($result) {
+                $utility->load("content/rkakl","success","Data RKAKL berhasil di import ke dalam database");
+              }
+              else {
+                $utility->load("content/rkakl","error","Maaf jumlah anggaran kurang dari realisasi yang ada harap diperiksa kembali");
+              }
+            }
+            else {
+              $utility->load("content/rkakl","error","Data File RKAKL tidak sesuai dengan Tahun Anggaran");
+            }
           }
         }
       }
@@ -81,8 +89,6 @@ switch ($process) {
           }
       ),
       array( 'db' => 'no_dipa',  'dt' => 3),
-      // array( 'db' => 'filename',  'dt' => 4),
-      // array( 'db' => 'keterangan',  'dt' => 4 ),
       array( 'db' => 'status', 'dt' => 4, 'formatter' => function($d,$row){ 
         if($d==1){
           return '<i>Digunakan</i> - Revisi '.$row[7];
@@ -94,15 +100,22 @@ switch ($process) {
           return '<i>Direvisi</i> - Revisi '.$row[7];
         }
       }),
-      array( 'db' => 'status',  'dt' => 5, 'formatter' => function($d,$row){ 
+      array( 'db' => 'status',  'dt' => 5, 'formatter' => function($d,$row,$data){ 
         if($d==1){
           return  '<div class="text-center">'.
                     '<a style="margin:0 2px;" id="btn-viw" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View</a>'.
                     '<a style="margin:0 2px;" id="btn-edt" href="#editModal" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Revisi</a>'.
                   '</div>';
         }
-        if($d==2){
+        else if($d==2 && $row[4]==1){
           return  '<div class="text-center">'.
+                    '<a style="margin:0 2px;" id="btn-viw" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View</a>'.
+                    '<a style="margin:0 2px;" id="btn-edt" href="#editModal" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Revisi</a>'.
+                  '</div>';
+        }
+        else if($d==2 && $data==$row[1]){
+          return  '<div class="text-center">'.
+                    '<a style="margin:0 2px;" id="btn-act" class="btn btn-flat btn-info btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> Aktifkan</a>'.
                     '<a style="margin:0 2px;" id="btn-viw" class="btn btn-flat btn-primary btn-sm" data-toggle="modal"><i class="fa fa-file-text-o"></i> View</a>'.
                     '<a style="margin:0 2px;" id="btn-edt" href="#editModal" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Revisi</a>'.
                   '</div>';

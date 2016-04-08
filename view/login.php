@@ -28,12 +28,7 @@
         Halaman Login
       </div>
       <div class="login-box-body">
-      <?php if (isset($_POST['message'])): ?>
-        <div class="alert alert-<?php echo $_POST['alert']; ?> alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fa fa-exclamation-triangle"></i><?php echo $_POST['message']; ?>
-        </div>
-      <?php endif ?>
+      <?php include "view/include/alert.php" ?>
         <p class="login-box-msg">Masukkan Username dan Password</p>
         <form action="<?php echo $url_rewrite;?>login" method="post">
           <div class="form-group has-feedback">

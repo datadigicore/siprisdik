@@ -67,7 +67,7 @@
     }
     public function updatePass($data) {
       $id         = $data['id'];
-      $newpassword       = $data['newpassword'];
+      $newpassword       = $utility->sha512($data['newpassword']);
       $query       = "UPDATE pengguna SET
         password       = '$newpassword'
         WHERE id   = '$id'
@@ -85,6 +85,15 @@
       return $fetch->password;
     }
 
+    public function editPengguna($data) {
+      foreach ($data as $key => $value) {
+        $setdata .= "$key = '$value', ";
+      }
+      $setdata = rtrim($setdata,', ');
+      $query = "update pengguna set $setdata where id='$data[id]'";
+      $result = $this->query($query);
+      return $result;
+    }
     public function deletePengguna($id) {
       $query = "delete from pengguna where id='$id'";
       $result = $this->query($query);

@@ -14,7 +14,70 @@ require_once __DIR__ . '/../config/config.php';
 
 class utilityCode extends config {
 
-     //put your code here
+    public function testFunction(){
+      echo "Tes berhasil";
+    }
+
+    public function setflash($data, $value = NULL) {
+        $this->set_userdata($data, $value);
+        $this->mark_as_flash(is_array($data) ? array_keys($data) : $data);
+    }
+
+    public function readflash($key = NULL) {
+        if (isset($key)) {
+            return (isset($_SESSION['flash'], $_SESSION['flash'][$key], $_SESSION[$key]) && ! is_int($_SESSION['flash'][$key]))
+            ? $_SESSION[$key]
+            : NULL;
+        }
+        $flashdata = array();
+        if ( ! empty($_SESSION['flash'])) {
+            foreach ($_SESSION['flash'] as $key => &$value) {
+                is_int($value) OR $flashdata[$key] = $_SESSION[$key];
+            }
+        }
+        return $flashdata;
+    } 
+
+    public function set_userdata($data, $value = NULL) {
+        if (is_array($data)) {
+            foreach ($data as $key => &$value) {
+                $_SESSION[$key] = $value;
+            }
+            return;
+        }
+        $_SESSION[$data] = $value;
+    }
+
+    public function unflash($key) {
+        if (is_array($key)) {
+            foreach ($key as $k) {
+                unset($_SESSION[$k]);
+            }
+            return;
+        }
+        unset($_SESSION[$key]);
+        unset($_SESSION['flash']);
+    }
+
+    public function mark_as_flash($key) {
+        if (is_array($key)) {
+            for ($i = 0, $c = count($key); $i < $c; $i++) {
+                if ( ! isset($_SESSION[$key[$i]])) {
+                    return FALSE;
+                }
+            }
+            $new = array_fill_keys($key, 'new');
+            $_SESSION['flash'] = isset($_SESSION['flash'])
+            ? array_merge($_SESSION['flash'], $new)
+            : $new;
+            return TRUE;
+        }
+        if ( ! isset($_SESSION[$key])) {
+            return FALSE;
+        }
+        $_SESSION['flash'][$key] = 'new';
+        return TRUE;
+    }
 
      public function popup_message($pesan) {
           echo "<script>alert('$pesan');</script>";
@@ -31,36 +94,31 @@ class utilityCode extends config {
      public function location_goto($lokasi) {
           $alamat = $this->url_rewrite_class;
           echo("<script language=\"javascript\">
-               window.location.href=\"$alamat/$lokasi\";
+               window.location.href=\"$alamat$lokasi\";
               </script>");
      }
 
-     public function load($lokasi, $alert, $message) {
-          $alamat = $this->url_rewrite_class;
-          if (isset($message)) {
-             echo("<body></body>
-                    <script language='javascript'>
-                    var f = document.createElement('form');
-                    f.setAttribute('method','post');
-                    f.setAttribute('action','".$alamat."/".$lokasi."');
-                    var i = document.createElement('input');
-                    i.setAttribute('type','hidden');
-                    i.setAttribute('name','alert');
-                    i.setAttribute('value','".$alert."');
-                    var j = document.createElement('input');
-                    j.setAttribute('type','hidden');
-                    j.setAttribute('name','message');
-                    j.setAttribute('value','".$message."');
-                    f.appendChild(i);
-                    f.appendChild(j);
-                    document.body.appendChild(f);
-                    f.submit();
-                   </script>");
+     public function load($lokasi, $alert=null, $message=null) {
+          if (isset($alert) && isset($message)) {
+               $this->setflash($alert,$message);
+               $alamat = $this->url_rewrite_class;
+               echo("<script language=\"javascript\">
+               window.location.href=\"$alamat$lokasi\";
+               </script>");
           }
-          else{
-               $this->location_goto($lokasi);
+          else {
+               $alamat = $this->url_rewrite_class;
+               echo("<script language=\"javascript\">
+               window.location.href=\"$alamat$lokasi\";
+               </script>");
           }
      }
+
+    public function destroy_session() {
+        foreach ($_SESSION as $key => $value) {
+            unset($_SESSION[$key]);
+        }
+    }
 
      public function sha512($string) {
           return hash('sha512', $string);
