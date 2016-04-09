@@ -12,7 +12,7 @@
     $kdkmpnen ="";
     $kdskmpnen ="";
   }
-  echo $kdoutput." ".$kdsoutput." ".$kdkmpnen." ".$kdskmpnen;
+  
 
 ?>
 
