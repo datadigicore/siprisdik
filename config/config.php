@@ -20,6 +20,7 @@
   $path           = "/Applications/XAMPP/xamppfiles/htdocs/siprisdik/";
   // $path_upload    = "/var/www/html/siprisdik/static/uploads/";
   $path_upload    = "/Applications/XAMPP/xamppfiles/htdocs/siprisdik/static/uploads/";
+  $path_download   = "/Applications/XAMPP/xamppfiles/htdocs/siprisdik/template/";
 
   class config {
     public $db_host              = "localhost";

@@ -1,5 +1,4 @@
 RewriteEngine on
-
  Rewriterule ^content/?      \/siprisdik/isi.php
  Rewriterule ^process/?      \/siprisdik/aksi.php
  Rewriterule ^login/?      \/siprisdik/core/login_proses.php
