@@ -614,6 +614,23 @@ switch ($process) {
 	      }
 	    die();
     	break;
+    case 'downloadRab':
+		$excel2 = PHPExcel_IOFactory::createReader('Excel5');
+		$excel2 = $excel2->load($path_download.'importRAB.xls'); // Empty Sheet
+		// $excel2->setActiveSheetIndex();
+		// $excel2->getActiveSheet()->setCellValue('C6', '4');
+		// ->setCellValue('C6', '4')
+		//     ->setCellValue('C7', '5')
+		//     ->setCellValue('C8', '6')       
+		//     ->setCellValue('C9', '7');
+		// print_r($excel2);die;
+
+		$objWriter = PHPExcel_IOFactory::createWriter($excel2, 'Excel5');
+		header("Content-type: text/xls");
+		header("Cache-Control: no-store, no-cache");
+		header('Content-Disposition: attachment; filename="importRAB.xls"');
+		$objWriter->save('php://output','w');
+    	break;
 	default:
 		$utility->location_goto(".");
 		break;
