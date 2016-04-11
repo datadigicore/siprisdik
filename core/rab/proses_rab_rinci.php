@@ -604,13 +604,17 @@ switch ($process) {
 	            // echo "<pre>";
 	            // print_r($allDataInSheet);die;
 	            $data = $mdl_rab->importRab($array,$allDataInSheet);
-	            echo "<pre>"; print_r($data);die;
-	            $utility->load("content/rabdetail/".$id_rab_view."/upload",'success','Telah Berhasil Diupload');
+	            // echo "<pre>"; print_r($data);die;
+	            if ($data['error'] == 'true') {
+		            $utility->load("content/rabdetail/".$id_rab_view."/upload",'error','Proses Tidak Dapat Dilanjutkan. Silahkan Validasi dan Unggah Kembali.');
+	            }else{
+		            $utility->load("content/rabdetail/".$id_rab_view."/upload",'success','Telah Berhasil Diupload. Silahkan Melanjutkan Proses.');
+	          	}
 	          }
 	        }
 	      }
 	      else {
-	        $utility->load("content/rkakl","warning","Belum ada file Excel yang di lampirkan");
+	        $utility->load("content/rab-rkakl","warning","Belum ada file Excel yang di lampirkan");
 	      }
 	    die();
     	break;
@@ -631,6 +635,173 @@ switch ($process) {
 		header('Content-Disposition: attachment; filename="importRAB.xls"');
 		$objWriter->save('php://output','w');
     	break;
+    case 'table_upload':
+		$rabview_id = $_POST['id_rab_view'];
+		$dataArray['url_rewrite'] = $url_rewrite;
+	    $get_table = "temprabfull";
+	    $key   = "id";
+	    $column = array(
+	      array( 'db' => 'id',      'dt' => 0 ),
+	      array( 'db' => 'penerima',  'dt' => 1, 'formatter' => function($d, $row){
+	      	if ($row[2]  == 0) {
+	      		$nip = 'N/A';
+	      	}else{
+	      		$nip = $row[10];
+	      	}
+
+	      	if ($row[11] == 1) $gol = 'I';
+	      	elseif($row[11] == 2) $gol =  'II';
+	      	elseif($row[11] == 3) $gol =  'III';
+	      	elseif($row[11] == 4) $gol =  'VI';
+	      	else $gol =  'N/A';
+
+	      	if ($row[12] == 0) {
+	      		if ($row[2] == 0) {
+	      			$pns = 'N/A';
+	      		}else{
+	      			$pns = 'Non PNS';
+	      		}
+	      	}else{
+	      		$pns = 'PNS';
+	      	}
+
+	      	if ($row[2]  == 0) {
+	      		$jab = 'N/A';
+	      	}else{
+	      		$jab = $row[13];
+	      	}
+
+	      	return '<table><tr><td>Penerima</td><td> :&nbsp;</td><td>'.$d.'</td></tr>'.
+                 '<tr><td>NPWP</td><td> :&nbsp;</td><td>'.$row[9].'</td></tr>'.
+                 '<tr><td>NIP</td><td> :&nbsp;</td><td>'.$nip.'</td></tr>'.
+                 '<tr><td>Status PNS</td><td> :&nbsp;</td><td>'.$pns.'</td></tr>'.
+                 '<tr><td>Golongan</td><td> :&nbsp;</td><td>'.$gol.'</td></tr>'.
+                 '<tr><td>Jabatan</td><td> :&nbsp;</td><td>'.$jab.'</td></tr>'.
+                 '<tr><td>Besar Pajak</td><td> :&nbsp;</td><td>'.$row[14].' %</td></tr></table>';
+	      }),
+	      array( 'db' => 'jenis',  'dt' => 2, 'formatter' => function($d, $row){
+	      	if ($d == 0) {
+	      		return 'Badan';
+	      	}else{
+	      		return 'Perorangan';
+	      	}
+	      }),
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 3),
+	      array( 'db' => 'SUM(value)', 'dt' => 4, 'formatter' => function($d,$row){ 
+	      	return 'Rp '.number_format($d,2,',','.');
+	      }),
+	      array( 'db' => 'status',  'dt' => 5, 'formatter' => function($d,$row, $dataArray){ 
+	        if($d==0){
+	          return '<i>Belum Diajukan</i>';
+	        }
+	        elseif($d==1){
+	          return '<i>Telah Diajukan</i>';
+	        }
+	        elseif($d==2){
+	          return '<i>Telah Disahkan</i>';
+	        }
+	        elseif($d==3){
+	          return '<i>Revisi</i>';
+	        }
+	        elseif($d==4){
+	          return '<i>Telah Disahkan / Close</i>';
+	        }
+	        elseif($d==5){
+	          return '<i>Adendum</i>';
+	        }
+	        elseif($d==6){
+	          return '<i>Adendum Telah Disahkan / Close Adendum</i>';
+	        }
+	        elseif($d==7){
+	          return '<i>Penutupan Anggaran</i>';
+	        }
+	        elseif($d==8){
+	          return '<i>Dibatalkan</i>';
+	        }
+	        elseif($d==9){
+	          return '<i>Dibatalkan (Adendum)</i>';
+	        }
+	      }),
+	      array( 'db' => 'status',  'dt' => 6, 'formatter' => function($d,$row, $dataArray){ 
+	      	$button =  '<div class="text-center btn-group-vertical">';
+	      	if ($_SESSION['level'] == 0) {
+	      		$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; Lihat Akun</a>';
+	      		// if ($d == 2 || $d == 5 || $d == 4) {
+	      		// 	$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."pdf".'" class="btn btn-flat btn-danger btn-sm"><i class="fa fa-file"></i>&nbsp; Kuitansi (PDF)</a>';
+	      		// 	$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."word".'" class="btn btn-flat btn-info btn-sm"><i class="fa fa-file"></i>&nbsp; Kuitansi (Word)</a>';
+	      		// }
+	      	}else{
+	      		if ($d == 0 || $d == 3 || $d == 5) {
+	      			$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Tambah Akun</a>';
+	      		}else{
+	      			$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabakun/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Lihat Akun</a>';
+	      		}
+	      		if ($d == 2 || ($d == 5 && $row[3] != "") || $d == 4 || $d == 6 || $d == 8 || $d == 9) {
+	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."pdf".'" class="btn btn-flat btn-danger btn-sm"><i class="fa fa-file"></i>&nbsp; Kuitansi (PDF)</a>';
+	      			$button .=  '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/cetak_dok/'.$row[0]."-".$row[1]."-"."word".'" class="btn btn-flat btn-info btn-sm"><i class="fa fa-file"></i>&nbsp; Kuitansi (Word)</a>';
+		        }
+		        if ($d == 0 || $d == 2 || $d == 3 || $d == 5) {
+	      			$button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'/edit" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i>&nbsp; Edit Orang/Badan</a>';
+		        }
+	      	}
+	        $button .='</div>';
+	        return $button;
+	      }),
+		  array( 'db' => 'no_kuitansi', 'dt' => 7, 'formatter' => function($d,$row){
+		  	if ($d != "") {
+		  		return '<center>'.$d.'</center>';
+		  	}else{
+		  		return '<center>N/A</center>';
+		  	}
+		  }),
+		  array('db' => 'status', 'dt'=>8, 'formatter' => function($d,$row, $dataArray){
+		  	
+		  	if ($_SESSION['level'] == 0) {
+		  		if ($row[7] != "" && $d == 4 ) {
+		  			$button =  '<div class="text-center btn-group-vertical">'.
+		  						'<a style="margin:0 2px;" id="btn-batal" href="#batal" class="btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-close"></i> Batal</a>'.
+		  						'</div>';
+		  		}elseif ($row[7] != "" && $d == 6 ) {
+		  			$button =  '<div class="text-center btn-group-vertical">'.
+		  						'<a style="margin:0 2px;" id="btn-batal-adn" href="#batal" class="btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-close"></i> Batal</a>'.
+		  						'</div>';
+		  		}else{
+		  			$button = '<center>-</center>';
+		  		}
+		  	}elseif ($_SESSION['level'] == 2) {
+		  		if ($row[7] != "" && ($d == 2 || $d == 8)) {
+		  			$button =  '<div class="text-center btn-group-vertical">'.
+		  						'<a style="margin:0 2px;" id="btn-sah" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
+		  						'</div>';
+		  		}elseif ($row[7] != "" && ($d == 5 || $d == 9)) {
+		  			$button =  '<div class="text-center btn-group-vertical">'.
+		  						'<a style="margin:0 2px;" id="btn-sah-adn" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
+		  						'</div>';
+		  		}else{
+		  			$button = '<center>-</center>';
+		  		}
+		  	}else{
+		  		if ($row[7] != "" && ($d == 2 || $d == 5)) {
+		  			$button = '<i>Belum Disahkan</i>';
+		  		}else{
+		  			$button = '<center>-</center>';
+		  		}
+		  	}
+		  	
+		  	return $button;
+		  }),
+	      array( 'db' => 'npwp',  'dt' => 9),
+	      array( 'db' => 'nip',  'dt' => 10),
+	      array( 'db' => 'golongan',  'dt' => 11),
+	      array( 'db' => 'pns',  'dt' => 12),
+	      array( 'db' => 'jabatan', 'dt' => 13),
+	      array( 'db' => 'pajak', 'dt' => 14),
+	    );
+		$where = 'rabview_id = "'.$rabview_id.'"';
+		$group = 'npwp, penerima, pns, golongan';
+
+	    $datatable->get_table_group($get_table, $key, $column,$where, $group, $dataArray);
+	    break;
 	default:
 		$utility->location_goto(".");
 		break;
