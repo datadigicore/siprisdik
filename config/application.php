@@ -7,6 +7,7 @@ require_once __DIR__ .'/config.php';
 require_once __DIR__ .'/../utility/database/mysql_db.php';
 require_once __DIR__ .'/../utility/utilityCode.php';
 require_once __DIR__ .'/../utility/PHPExcel.php';
+require_once __DIR__ .'/../utility/PHPExcel/IOFactory.php';
 require_once __DIR__ .'/../utility/datatable.php';
 require_once __DIR__ .'/../library/security/HTMLPurifier.auto.php';
 // ====================================================
