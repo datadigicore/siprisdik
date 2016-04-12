@@ -1621,7 +1621,7 @@
         if($value[lokasi]!="") $lokasi = $value[lokasi];
         $penerima=$value[penerima];
       
-
+        
       // ob_start();  
       require __DIR__ . "/../utility/report/header_dikti.php";
       echo '  <table style="width: 50%; font-size:80%;"   border="0">               
@@ -1795,6 +1795,7 @@
       
           $jml_uang_harian = $jml_hari * $uang_harian;
           $total = $tiket + $airport_tax + $taxi_asal + $taxi_tujuan +$jml_uang_harian;
+          if($total==0) continue;
           require __DIR__ . "/../utility/report/header_dikti.php";
           echo '<p align="center" style="font-weight:bold; font-size:1.0em">RINCIAN BIAYA PERJALANAN DINAS</p>';
           echo '  <table style="width: 40%; font-size:80%; font-weight:bold;"  border="0">     
@@ -3734,6 +3735,7 @@ public function daftar_peng_riil($result,$det){
       }
 
       $sql = "SELECT  rab.lama_hari,  rab.golongan, rab.penerima, rab.kdakun, rab.taxi_asal,rab.taxi_tujuan, rab.harga_tiket, rab.value, rab.uang_muka, rab.uang_harian, rab.uang_saku, rab.pajak, rab.biaya_akom, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ".$cond_query." order by rab.penerima asc ";
+      
       $sql2 = "SELECT rab.deskripsi, rab.tanggal, rab.lokasi, rab.tempat, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdskmpnen, rkkl.NMGIAT, rkkl.NMOUTPUT, rkkl.NMSOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN  where rabview_id='$data' LIMIT 1";
       
       $res = $this->query($sql);
@@ -4001,8 +4003,15 @@ public function daftar_peng_riil($result,$det){
 
 
       header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      header('Content-Disposition: attachment;filename="Rincian Kebutuhan Dana.xlsx"');
+      
+      if($jns==1){
+        header('Content-Disposition: attachment;filename="Daftar Pertanggung Jawaban UMK.xlsx"');
+      }
+      else{
+        header('Content-Disposition: attachment;filename="Rincian Kebutuhan Dana.xlsx"');
+      }  
       header('Cache-Control: max-age=0');
+      
 
 
       $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
