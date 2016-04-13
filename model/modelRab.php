@@ -1598,6 +1598,7 @@
             $insert[$x]['error'] = '2';
             $error = 'true';
           }
+          $insert[$x]['keterangan'] = "Honor Output";
           $this->insertTempRab($insert[$x]);
         }
 
@@ -1621,6 +1622,7 @@
             $insert[$x]['error'] = '2';
             $error = 'true';
           }
+          $insert[$x]['keterangan'] = "Honor Profesi";
           $this->insertTempRab($insert[$x]);
         }
 
@@ -1649,6 +1651,7 @@
             $insert[$x]['error'] = '2';
             $error = 'true';
           }
+          $insert[$x]['keterangan'] = "Uang Saku";
           $this->insertTempRab($insert[$x]);
         }
 
@@ -1677,6 +1680,7 @@
             $insert[$x]['error'] = '2';
             $error = 'true';
           }
+          $insert[$x]['keterangan'] = "Transport Lokal";
           $this->insertTempRab($insert[$x]);
         }
 
@@ -1707,10 +1711,11 @@
             $insert[$x]['error'] = '2';
             $error = 'true';
           }
+          $insert[$x]['keterangan'] = "Uang Representatif";
           $this->insertTempRab($insert[$x]);
         }
 
-        if ($tiket != "") {  #524119
+        if ($rute1 != "") {  #524119
           $x++;
           if ($asal == "L") {
             # 524119, 524111
@@ -2481,6 +2486,7 @@
         }
 
       }
+      $insert['error'] = $error;
       return $insert;
     }
 
@@ -2510,7 +2516,12 @@
                     jabatan     = '".$data['jabatan']."',
                     pns         = '".$data['pns']."',
                     ".$subquery."
-                    pajak       = '".$data['pajak']."'
+                    pajak       = '".$data['pajak']."',
+
+                    error       = '".$data['error']."',
+                    created_at       = '".$timestamp."',
+                    created_by       = '".$_SESSION['id']."',
+                    keterangan       = '".$data['keterangan']."'
                 ";
       $result = $this->query($query);
     }

@@ -1606,6 +1606,7 @@
       $npwp=null;
       $lokasi=null;
 
+      $jumlah_record = $this->num_rows($data);
       foreach ($data as $value) {
         if($value[golongan]!=""){ $golongan = $value[golongan]; }
         if($value[jabatan]!=""){ $jabatan = $value[jabatan]; }
@@ -1619,8 +1620,8 @@
         if($value[npwp]!="") $npwp = $value[npwp];
         if($value[lokasi]!="") $lokasi = $value[lokasi];
         $penerima=$value[penerima];
-      }
-
+      
+        
       // ob_start();  
       require __DIR__ . "/../utility/report/header_dikti.php";
       echo '  <table style="width: 50%; font-size:80%;"   border="0">               
@@ -1752,8 +1753,11 @@
               </tr>
 
               </table>';
-
-
+        if($jumlah_record>1){ 
+          echo '<pagebreak />';
+          $jumlah_record-=1;
+        }
+      }
 
     }
 
@@ -1771,207 +1775,214 @@
       $jml_uang_harian;
       $tgl_mulai = null;
       $tgl_akhir = null;
-      
+      $jumlah_record = $this->num_rows($result);
       // print_r($result);
       foreach ($result as $val) {
-        if($val[alat_trans]!="") $alat_trans = $val[alat_trans];
-        if($val[kota_asal]!="") $asal = $val[kota_asal];
-        if($val[kota_tujuan]!="") $tujuan = $val[kota_tujuan];
-        if($val[harga_tiket]>0) $tiket = $val[harga_tiket];
-        if($val[airport_tax]>0) $airport_tax = $val[airport_tax];
-        if($val[taxi_asal]>0)   $taxi_asal = $val[taxi_asal];
-        if($val[taxi_tujuan]>0) $taxi_tujuan = $val[taxi_tujuan];
-        if($val[lama_hari]>0)   $jml_hari = $val[lama_hari];
-        if($val[tgl_mulai]!="") $tgl_mulai = $this->konversi_tanggal($val[tgl_mulai],"");
-        if($val[tgl_akhir]!="") $tgl_akhir = $this->konversi_tanggal($val[tgl_akhir],"");
-        if($val[uang_harian]>0) $uang_harian = $val[uang_harian];   
-        if($val[lokasi]!="") $lokasi = $val[lokasi];   
-        $penerima=$val[penerima];
-      }
-      $jml_uang_harian = $jml_hari * $uang_harian;
-      $total = $tiket + $airport_tax + $taxi_asal + $taxi_tujuan +$jml_uang_harian;
-      require __DIR__ . "/../utility/report/header_dikti.php";
-      echo '<p align="center" style="font-weight:bold; font-size:1.0em">RINCIAN BIAYA PERJALANAN DINAS</p>';
-      echo '  <table style="width: 40%; font-size:80%; font-weight:bold;"  border="0">     
-        <tr>
-            <td align="left">Lampiran SPPD Nomor</td>
-            <td align="left">: </td>
-        </tr> 
-        <tr>
-            <td align="left">Tanggal</td>
-            <td align="left">:</td>
-            <td align="left"></td>
-        </tr> 
-               
-
-        </table>';    
-
-      echo '  <table cellpadding="8" style="width: 100%; border-collapse:collapse; font-size:80%;">     
-        <tr>
-            <td width="9%" style="border:1px solid; text-align:center;">NO</td>
-            <td width="40%"  style="border:1px solid; text-align:center;">PERINCIAN BIAYA</td>
-            <td style="border:1px solid; text-align:center;">JUMLAH Rp.</td>
-            <td style="border:1px solid; text-align:center;">KETERANGAN</td>
-        </tr>'; 
-       // $no=1; 
-       //  foreach ($data as $value) {
-          
-          // echo '<tr>
-          //        <td style="border-left:1px solid; border-right:1px solid">'.$no++.'</td>
-          //        <td style="border-left:1px solid; border-right:1px solid" align="left">'.$value[NMITEM].'</td>
-          //        <td style="border-left:1px solid; border-right:1px solid">'.number_format($value[value],0,",",".").'</td>
-          //        <td style="border-left:1px solid; border-right:1px solid"></td>
-          //       </tr>';
-          //       $jml+=$value[value];
-          // }
-          echo '<tr>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                  <td style="border-left:1px solid; border-right:1px solid;">Transport : </td>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                </tr>';
-
-          echo '<tr>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'.$asal." - ".$tujuan.'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($tiket,0,",",".").'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                </tr>';
-          if($airport_tax>0){
-          echo '<tr>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'."Airport tax".'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($airport_tax).'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                </tr>';
-          }
-          echo '<tr>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'."Biaya Taxi dari / ke Bandara :  ".'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                </tr>';
-          echo '<tr>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'.$asal." - Rp.".number_format($taxi_asal,0,",",".").'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($taxi_asal,0,",",".").'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                </tr>';
-          echo '<tr>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'.$tujuan." - Rp.".number_format($taxi_tujuan,0,",",".").'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($taxi_tujuan,0,",",".").'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                </tr>';
-          echo '<tr>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'."Uang Harian :".'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                </tr>';
-
-          //Uang Harian
-          echo '<tr>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'.$jml_hari." Hari X Rp. ".number_format($uang_harian,0,",",".")." = Rp.".$jml_uang_harian.'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($jml_uang_harian,0,",",".").'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                </tr>';
-          echo '<tr>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'."Jumlah".'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;">Rp. '.number_format($total,0,",",".").'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;"></td>
-                </tr>';  
-                echo '<tr>
-                  <td style="border:1px solid; border-right:1px solid;"></td>
-                  <td colspan="2" style="border:1px solid; border-right:1px solid;">'.$this->terbilang($total,1).'</td>
-                  <td style="border:1px solid;"></td>
-                </tr>';                
-
-      echo '</table>';
+        // if($val[kdakun]=="524119"){
+          if($val[alat_trans]!="") $alat_trans = $val[alat_trans];
+          if($val[kota_asal]!="") $asal = $val[kota_asal];
+          if($val[kota_tujuan]!="") $tujuan = $val[kota_tujuan];
+          if($val[harga_tiket]>0) $tiket = $val[harga_tiket];
+          if($val[airport_tax]>0) $airport_tax = $val[airport_tax];
+          if($val[taxi_asal]>0)   $taxi_asal = $val[taxi_asal];
+          if($val[taxi_tujuan]>0) $taxi_tujuan = $val[taxi_tujuan];
+          if($val[lama_hari]>0)   $jml_hari = $val[lama_hari];
+          if($val[tgl_mulai]!="") $tgl_mulai = $this->konversi_tanggal($val[tgl_mulai],"");
+          if($val[tgl_akhir]!="") $tgl_akhir = $this->konversi_tanggal($val[tgl_akhir],"");
+          if($val[uang_harian]>0) $uang_harian = $val[uang_harian];   
+          if($val[lokasi]!="") $lokasi = $val[lokasi];   
+          $penerima=$val[penerima];
       
-      $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
-      $arr_pb = $this->fetch_array($result_pb);
-      $bpp = $arr_pb[bpp];
-      $nip_bpp = $arr_pb[nip_bpp];
-      $ppk = $arr_pb[ppk];
-      $nip_ppk = $arr_pb[nip_ppk];
-      $date = getdate();
-      echo '<table style="text-align: justify; width: 100%; font-size:84%; font-family:serif"  >
+          $jml_uang_harian = $jml_hari * $uang_harian;
+          $total = $tiket + $airport_tax + $taxi_asal + $taxi_tujuan +$jml_uang_harian;
+          if($total==0) continue;
+          require __DIR__ . "/../utility/report/header_dikti.php";
+          echo '<p align="center" style="font-weight:bold; font-size:1.0em">RINCIAN BIAYA PERJALANAN DINAS</p>';
+          echo '  <table style="width: 40%; font-size:80%; font-weight:bold;"  border="0">     
             <tr>
+                <td align="left">Lampiran SPPD Nomor</td>
+                <td align="left">: </td>
+            </tr> 
+            <tr>
+                <td align="left">Tanggal</td>
+                <td align="left">:</td>
+                <td align="left"></td>
+            </tr> 
+                   
 
-            <td></td>
-            <td width="23%"></td>
-            <td>'.$lokasi.','.$this->konversi_tanggal($tgl_akhir).'</td>
-          </tr>
+            </table>';    
 
-          <tr>
-            <td>Telah dibayar sejumlah</td>
-            <td width="23%"></td>
-            <td>Telah menerima sejumlah uang sebesar</td>
-          </tr>
-          <tr>
-            <td>Rp. '.number_format($total,0,",",".").'</td>
-            <td width="23%"></td>
-            <td>Rp. '.number_format($total,0,",",".").'</td>
-          </tr>    
-          <tr>
-            <td>Bendahara Pengeluaran Pembantu</td>
-            <td width="23%"></td>
-            <td>Yang Menerima</td>
-          </tr>
-          <tr>
-            <td><br></br><br></br><br></br><br></br></td>
-            <td width="23%"></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>'.$bpp.'</td>
-            <td width="23%"></td>
-            <td>'.$penerima.'</td>
-          </tr>
-          <tr>
-            <td>NIP '.$nip_bpp.'</td>
-            <td width="23%"></td>
-            <td></td>
-          </tr>  
-          </table>';
-      echo '<p>______________________________________________________________________________________________________</p>';
-      echo '<p align="center" style="font-weight:bold; font-size:1.0em">PERHITUNGAN SPPD RAMPUNG</p>';
-      echo '  <table style="width: 60%; font-size:80%;"  border="0">               
-                    <tr>
-                        <td align="left">Ditetapkan Sejumlah</td>
-                        <td align="left">: Rp. '."..............................................".'</td>
-                    </tr> 
-                    <tr>
-                        <td align="left">Yang telah dibayar semula</td>
-                        <td align="left">: Rp ..............................................</td>
-                    </tr> 
-                    <tr>
-                        <td align="left">Sisa kurang/lebih</td>
-                        <td align="left">: Rp ..............................................</td>
-                    </tr> 
-                    </table>';
-                echo '<table style="text-align: right; width: 100%; font-size:80%;" >
-                  <tr>                
-                    <td colspan="2">Mengetahui Setuju Dibayar</td>
-                  </tr>
-                  <tr>
-                    <td colspan="2">Pejabat Pembuat Komitmen</td>
-                  </tr>    
-                  <tr>
-                    <td colspan="2"><br></br><br></br><br></br><br></br></td>
-                  </tr>
-                  <tr>
-                    <td  colspan="2" style="font-weight:bold">'.$pejabat['ppk'].'</td>
-                  </tr>
-                  <tr>
-                    <td colspan="2" style="font-weight:bold">NIP. '.$pejabat['nip_ppk'].'</td>
-                  </tr>  
-                  </table>';  
-      // $html = ob_get_contents();
-      // $this->create_pdf("RB_Perjalanan_Dinas","A4",$html);
+          echo '  <table cellpadding="8" style="width: 100%; border-collapse:collapse; font-size:80%;">     
+            <tr>
+                <td width="9%" style="border:1px solid; text-align:center;">NO</td>
+                <td width="40%"  style="border:1px solid; text-align:center;">PERINCIAN BIAYA</td>
+                <td style="border:1px solid; text-align:center;">JUMLAH Rp.</td>
+                <td style="border:1px solid; text-align:center;">KETERANGAN</td>
+            </tr>'; 
+           // $no=1; 
+           //  foreach ($data as $value) {
+              
+              // echo '<tr>
+              //        <td style="border-left:1px solid; border-right:1px solid">'.$no++.'</td>
+              //        <td style="border-left:1px solid; border-right:1px solid" align="left">'.$value[NMITEM].'</td>
+              //        <td style="border-left:1px solid; border-right:1px solid">'.number_format($value[value],0,",",".").'</td>
+              //        <td style="border-left:1px solid; border-right:1px solid"></td>
+              //       </tr>';
+              //       $jml+=$value[value];
+              // }
+              echo '<tr>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                      <td style="border-left:1px solid; border-right:1px solid;">Transport : </td>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                    </tr>';
+
+              echo '<tr>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                      <td style="border-left:1px solid; border-right:1px solid;">'.$asal." - ".$tujuan.'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($tiket,0,",",".").'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                    </tr>';
+              if($airport_tax>0){
+              echo '<tr>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                      <td style="border-left:1px solid; border-right:1px solid;">'."Airport tax".'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($airport_tax).'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                    </tr>';
+              }
+              echo '<tr>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                      <td style="border-left:1px solid; border-right:1px solid;">'."Biaya Taxi dari / ke Bandara :  ".'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                    </tr>';
+              echo '<tr>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                      <td style="border-left:1px solid; border-right:1px solid;">'.$asal.'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($taxi_asal,0,",",".").'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                    </tr>';
+              echo '<tr>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                      <td style="border-left:1px solid; border-right:1px solid;">'.$tujuan.'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($taxi_tujuan,0,",",".").'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                    </tr>';
+              echo '<tr>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                      <td style="border-left:1px solid; border-right:1px solid;">'."Uang Harian :".'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                    </tr>';
+
+              //Uang Harian
+              echo '<tr>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                      <td style="border-left:1px solid; border-right:1px solid;">'.$jml_hari." Hari X Rp. ".number_format($uang_harian,0,",",".")." = Rp.".$jml_uang_harian.'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($jml_uang_harian,0,",",".").'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                    </tr>';
+              echo '<tr>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                      <td style="border-left:1px solid; border-right:1px solid;">'."Jumlah".'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;">Rp. '.number_format($total,0,",",".").'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                    </tr>';  
+                    echo '<tr>
+                      <td style="border:1px solid; border-right:1px solid;"></td>
+                      <td colspan="2" style="border:1px solid; border-right:1px solid;">'.$this->terbilang($total,1).'</td>
+                      <td style="border:1px solid;"></td>
+                    </tr>';                
+
+          echo '</table>';
+          
+          $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
+          $arr_pb = $this->fetch_array($result_pb);
+          $bpp = $arr_pb[bpp];
+          $nip_bpp = $arr_pb[nip_bpp];
+          $ppk = $arr_pb[ppk];
+          $nip_ppk = $arr_pb[nip_ppk];
+          $date = getdate();
+          echo '<table style="text-align: justify; width: 100%; font-size:84%; font-family:serif"  >
+                <tr>
+
+                <td></td>
+                <td width="23%"></td>
+                <td>'.$lokasi.','.$this->konversi_tanggal($tgl_akhir).'</td>
+              </tr>
+
+              <tr>
+                <td>Telah dibayar sejumlah</td>
+                <td width="23%"></td>
+                <td>Telah menerima sejumlah uang sebesar</td>
+              </tr>
+              <tr>
+                <td>Rp. '.number_format($total,0,",",".").'</td>
+                <td width="23%"></td>
+                <td>Rp. '.number_format($total,0,",",".").'</td>
+              </tr>    
+              <tr>
+                <td>Bendahara Pengeluaran Pembantu</td>
+                <td width="23%"></td>
+                <td>Yang Menerima</td>
+              </tr>
+              <tr>
+                <td><br></br><br></br><br></br><br></br></td>
+                <td width="23%"></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>'.$bpp.'</td>
+                <td width="23%"></td>
+                <td>'.$penerima.'</td>
+              </tr>
+              <tr>
+                <td>NIP '.$nip_bpp.'</td>
+                <td width="23%"></td>
+                <td></td>
+              </tr>  
+              </table>';
+          echo '<p>______________________________________________________________________________________________________</p>';
+          echo '<p align="center" style="font-weight:bold; font-size:1.0em">PERHITUNGAN SPPD RAMPUNG</p>';
+          echo '  <table style="width: 60%; font-size:80%;"  border="0">               
+                        <tr>
+                            <td align="left">Ditetapkan Sejumlah</td>
+                            <td align="left">: Rp. '."..............................................".'</td>
+                        </tr> 
+                        <tr>
+                            <td align="left">Yang telah dibayar semula</td>
+                            <td align="left">: Rp ..............................................</td>
+                        </tr> 
+                        <tr>
+                            <td align="left">Sisa kurang/lebih</td>
+                            <td align="left">: Rp ..............................................</td>
+                        </tr> 
+                        </table>';
+                    echo '<table style="text-align: right; width: 100%; font-size:80%;" >
+                      <tr>                
+                        <td colspan="2">Mengetahui Setuju Dibayar</td>
+                      </tr>
+                      <tr>
+                        <td colspan="2">Pejabat Pembuat Komitmen</td>
+                      </tr>    
+                      <tr>
+                        <td colspan="2"><br></br><br></br><br></br><br></br></td>
+                      </tr>
+                      <tr>
+                        <td  colspan="2" style="font-weight:bold">'.$pejabat['ppk'].'</td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" style="font-weight:bold">NIP. '.$pejabat['nip_ppk'].'</td>
+                      </tr>  
+                      </table>';
+
+            if($jumlah_record>1){
+              echo '<pagebreak />';
+              $jumlah_record-=1;
+            } 
+          }
+       // }               
     }
 
     //Kuitansi Honor Dan Uang Saku
@@ -2255,10 +2266,10 @@ public function daftar_peng_riil($result,$det){
                
   }
   if($val[harga_tiket]>0){
-    $jenis_transport="Transportasi Udara";
+    $jenis_transport="Udara";
   }
   else {
-    $jenis_transport="Kendaraan Darat";
+    $jenis_transport="Darat";
   }
   echo '<table style="text-align:center; width: 100%; ">
           <tr>
@@ -2467,9 +2478,9 @@ public function daftar_peng_riil($result,$det){
                 $uang_harian_saku += $rs[value];
               }
 
-              // if(substr($rs[NMITEM],1,8)=="ransport"){
-              //   $taxi_lokal += $rs[value];
-              // }
+              elseif(substr($rs[NMITEM],1,8)=="ransport" && $rs[kdakun]!="524119"){
+                $taxi_lokal += $rs[value];
+              }
 
 
               elseif(substr($rs[NMITEM],1,4)=="onor" or $rs[NMAKUN]=="Belanja Jasa Profesi")
@@ -3715,7 +3726,8 @@ public function daftar_peng_riil($result,$det){
       $title;
       if($jns=="1"){
         $title = "DAFTAR PERTANGGUNG JAWABAN UMK";
-        $cond_query = " and rab.status in(2,4,6,7) ";
+        $cond_query = " ";
+        // $cond_query = " and rab.status in(2,4,6,7) ";
       }
       else{
         $title= "RINCIAN KEBUTUHAN DANA";
@@ -3723,6 +3735,7 @@ public function daftar_peng_riil($result,$det){
       }
 
       $sql = "SELECT  rab.lama_hari,  rab.golongan, rab.penerima, rab.kdakun, rab.taxi_asal,rab.taxi_tujuan, rab.harga_tiket, rab.value, rab.uang_muka, rab.uang_harian, rab.uang_saku, rab.pajak, rab.biaya_akom, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ".$cond_query." order by rab.penerima asc ";
+      
       $sql2 = "SELECT rab.deskripsi, rab.tanggal, rab.lokasi, rab.tempat, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdskmpnen, rkkl.NMGIAT, rkkl.NMOUTPUT, rkkl.NMSOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN  where rabview_id='$data' LIMIT 1";
       
       $res = $this->query($sql);
@@ -3990,8 +4003,15 @@ public function daftar_peng_riil($result,$det){
 
 
       header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      header('Content-Disposition: attachment;filename="Rincian Kebutuhan Dana.xlsx"');
+      
+      if($jns==1){
+        header('Content-Disposition: attachment;filename="Daftar Pertanggung Jawaban UMK.xlsx"');
+      }
+      else{
+        header('Content-Disposition: attachment;filename="Rincian Kebutuhan Dana.xlsx"');
+      }  
       header('Cache-Control: max-age=0');
+      
 
 
       $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');

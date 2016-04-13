@@ -118,15 +118,12 @@ else {
           if ($data[2] == 'detail') {
             $id_rabfull = $data[3];
             $getrab = $mdl_rab->getrabfull($id_rabfull);
-            // $getjalan = $mdl_rab->getjalanbyidrab($id_rabfull);
             $datarkakl = $mdl_rab->getrkaklfull($getrab);
             include ('view/content/rab-add-detail.php');
           } else{
             $id_rabfull = $data[2];
             $getrab = $mdl_rab->getrabfull($id_rabfull);
             $datarkakl = $mdl_rab->getrkaklfull($getrab);
-            // $eval_nilai = $mdl_rab->hitung_dipa($getrab,"");
-            // print_r($eval_nilai);
             include ('view/content/rab-add.php');
           }
           break;
@@ -254,8 +251,8 @@ else {
             $id_rab_view = $data[2];
             $view = $mdl_rab->getview($id_rab_view);
             $datarkakl = $mdl_rab->getrkaklfull($view);
+            $jumlah = $mdl_rab->getJumlahRkakl($view);
             $insert = $mdl_rab->gettemprab($id_rab_view);
-            // print_r($insert);die;
             include ('view/content/rab-upload.php');
           } else{
             $id_rab_view = $data[2];
