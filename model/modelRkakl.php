@@ -87,42 +87,51 @@
     }
 
     public function updDelRowHadRealisasi($tahun){
-      $query = "SELECT IDRKAKL, REALISASI FROM rkakl_full WHERE versi = (SELECT pre_versi FROM (SELECT MAX(versi)-1 AS pre_versi FROM rkakl_view) AS tmp) AND THANG = '$tahun'";
+      $query = "SELECT IDRKAKL, REALISASI, USULAN FROM rkakl_full WHERE versi = (SELECT pre_versi FROM (SELECT MAX(versi)-1 AS pre_versi FROM rkakl_view) AS tmp) AND THANG = '$tahun'";
       $result = $this->query($query);
       while ($field = $this->fetch_object($result)) {
         $break            = explode('.', $field->IDRKAKL);
         $row['idrkakl']   = $break[0];
         $row['realisasi'] = floatval($field->REALISASI);
-        $query2 = "SELECT IDRKAKL, JUMLAH, REALISASI FROM rkakl_full WHERE IDRKAKL LIKE '$row[idrkakl]%' AND JUMLAH != REALISASI AND versi = (SELECT pre_versi FROM (SELECT MAX(versi) AS pre_versi FROM rkakl_view) AS tmp2) AND THANG = '$tahun' ORDER BY IDRKAKL";
+        $row['usulan']    = floatval($field->USULAN);
+        $query2 = "SELECT IDRKAKL, JUMLAH, REALISASI, USULAN FROM rkakl_full WHERE IDRKAKL LIKE '$row[idrkakl]%' AND (JUMLAH != REALISASI OR JUMLAH != USULAN) AND versi = (SELECT pre_versi FROM (SELECT MAX(versi) AS pre_versi FROM rkakl_view) AS tmp2) AND THANG = '$tahun' ORDER BY IDRKAKL";
         $result2 = $this->query($query2);
         while ($field2 = $this->fetch_object($result2)) {
           $row2['idrkakl']   = $field2->IDRKAKL;
           $row2['jumlah']    = floatval($field2->JUMLAH);
           $row2['realisasi'] = floatval($field2->REALISASI);
+          $row2['USULAN']    = floatval($field2->USULAN);
           $totalRealisasi    = $row['realisasi']+$row2['realisasi'];
-          $jumlahAnggaran    = $row2['jumlah']-$totalRealisasi;
+          $totalUsulan       = $row['usulan']+$row2['usulan'];
+          $jumlahAnggaran    = $row2['jumlah']-($totalRealisasi+$totalUsulan);
           if ($jumlahAnggaran < 0) {
             while ($jumlahAnggaran < 0) {
-              $newRealisasi = $totalRealisasi+$jumlahAnggaran;
-              $query3 = "UPDATE rkakl_full SET REALISASI = '$newRealisasi' WHERE IDRKAKL = '$row2[idrkakl]' AND versi = (SELECT pre_versi FROM (SELECT MAX(versi) AS pre_versi FROM rkakl_view) AS tmp) AND THANG = '$tahun'";
+              $newRealisasi = $jmlhAnggrnRealis+$totalRealisasi;
+              $newUsulan    = $jmlhAnggrnUsulan+$totalUsulan;
+              $query3 = "UPDATE rkakl_full SET REALISASI = '$newRealisasi', USULAN = '$newUsulan' WHERE IDRKAKL = '$row2[idrkakl]' AND versi = (SELECT pre_versi FROM (SELECT MAX(versi) AS pre_versi FROM rkakl_view) AS tmp) AND THANG = '$tahun'";
               $result3 = $this->query($query3);
-              $query2 = "SELECT IDRKAKL, JUMLAH, REALISASI FROM rkakl_full WHERE IDRKAKL LIKE '$row[idrkakl]%' AND JUMLAH != REALISASI AND versi = (SELECT pre_versi FROM (SELECT MAX(versi) AS pre_versi FROM rkakl_view) AS tmp2) AND THANG = '$tahun' ORDER BY IDRKAKL";
+              $query2 = "SELECT IDRKAKL, JUMLAH, REALISASI, USULAN FROM rkakl_full WHERE IDRKAKL LIKE '$row[idrkakl]%' AND JUMLAH != REALISASI AND versi = (SELECT pre_versi FROM (SELECT MAX(versi) AS pre_versi FROM rkakl_view) AS tmp2) AND THANG = '$tahun' ORDER BY IDRKAKL";
               $result2 = $this->query($query2);
               while ($field2 = $this->fetch_object($result2)) {
                 $row2['idrkakl']   = $field2->IDRKAKL;
                 $row2['jumlah']    = floatval($field2->JUMLAH);
                 $row2['realisasi'] = floatval($field2->REALISASI);
+                $row2['usulan']    = floatval($field2->USULAN);
                 $totalRealisasi    = $row['realisasi']+$row2['realisasi'];
-                $jumlahAnggaran    = $row2['jumlah']-$totalRealisasi;
+                $totalUsulan       = $row['usulan']+$row2['usulan'];
+                $jumlahAnggaran    = $row2['jumlah']-($totalRealisasi+$totalUsulan);
+                $jmlhAnggrnRealis  = $row2['jumlah']-$totalRealisasi;
+                $jmlhAnggrnUsulan  = $row2['jumlah']-$totalUsulan;
               }
             }
-            $newRealisasi = $totalRealisasi+$jumlahAnggaran;
-            $query3 = "UPDATE rkakl_full SET REALISASI = '$newRealisasi' WHERE IDRKAKL = '$row2[idrkakl]' AND versi = (SELECT pre_versi FROM (SELECT MAX(versi) AS pre_versi FROM rkakl_view) AS tmp) AND THANG = '$tahun'";
+            $newRealisasi = $jmlhAnggrnRealis+$totalRealisasi;
+            $newUsulan    = $jmlhAnggrnUsulan+$totalUsulan;
+            $query3 = "UPDATE rkakl_full SET REALISASI = '$newRealisasi', USULAN = '$newUsulan' WHERE IDRKAKL = '$row2[idrkakl]' AND versi = (SELECT pre_versi FROM (SELECT MAX(versi) AS pre_versi FROM rkakl_view) AS tmp) AND THANG = '$tahun'";
             $result3 = $this->query($query3);
             return true;
           }
           else {
-            $query3 = "UPDATE rkakl_full SET REALISASI = '$totalRealisasi' WHERE IDRKAKL = '$row2[idrkakl]' AND versi = (SELECT pre_versi FROM (SELECT MAX(versi) AS pre_versi FROM rkakl_view) AS tmp) AND THANG = '$tahun'";
+            $query3 = "UPDATE rkakl_full SET REALISASI = '$totalRealisasi', USULAN = '$totalUsulan' WHERE IDRKAKL = '$row2[idrkakl]' AND versi = (SELECT pre_versi FROM (SELECT MAX(versi) AS pre_versi FROM rkakl_view) AS tmp) AND THANG = '$tahun'";
             $result3 = $this->query($query3);
             return true;
           }
@@ -130,14 +139,15 @@
       }
     }
 
-    public function cekRealisasi($data){
-      $query = "SELECT * FROM rkakl_full WHERE IDRKAKL = '$data' AND REALISASI IS NOT NULL";
+    public function cekRealisasiUsulan($data){
+      $query = "SELECT * FROM rkakl_full WHERE IDRKAKL = '$data' AND (REALISASI != 0 OR USULAN != 0)";
       $result = $this->query($query);
       $data = array();
       if ($result->num_rows != 0) {
         while ($row = $this->fetch_object($result)) {
           $data['idrkakl']   = $row->IDRKAKL;
           $data['realisasi'] = $row->REALISASI;
+          $data['usulan']    = $row->USULAN;
         }
         return $data;
       }
@@ -146,11 +156,16 @@
       }
     }
 
+    public function cekRevisiStatus($tahun, $versi){
+      $query  = "UPDATE rkakl_full SET STATUS = '0' WHERE THANG = '$tahun' AND VERSI < '$versi'";
+      $result = $this->query($query);
+    }
+
     public function importRkakl($data) {
       $arrayCount = count($data);
-      $string = "REPLACE INTO rkakl_full (IDRKAKL,THANG,KDJENDOK,KDSATKER,KDDEPT,KDUNIT,KDPROGRAM,KDGIAT,NMGIAT,KDOUTPUT,NMOUTPUT,KDSOUTPUT,NMSOUTPUT,KDKMPNEN,NMKMPNEN,KDSKMPNEN,NMSKMPNEN,KDAKUN,NMAKUN,KDKPPN,KDBEBAN,KDJNSBAN,KDCTARIK,REGISTER,CARAHITUNG,HEADER1,HEADER2,KDHEADER,NOITEM,NMITEM,VOL1,SAT1,VOL2,SAT2,VOL3,SAT3,VOL4,SAT4,VOLKEG,SATKEG,HARGASAT,JUMLAH,REALISASI,JUMLAH2,PAGUPHLN,PAGURMP,PAGURKP,KDBLOKIR,BLOKIRPHLN,BLOKIRRMP,BLOKIRRKP,RPHBLOKIR,KDCOPY,KDABT,KDSBU,VOLSBK,VOLRKAKL,BLNKONTRAK,NOKONTRAK,TGKONTRAK,NILKONTRAK,JANUARI,PEBRUARI,MARET,APRIL,MEI,JUNI,JULI,AGUSTUS,SEPTEMBER,OKTOBER,NOPEMBER,DESEMBER,JMLTUNDA,KDLUNCURAN,JMLABT,NOREV,KDUBAH,KURS,INDEXKPJM,KDIB,VERSI) VALUES ";
+      $string = "REPLACE INTO rkakl_full (IDRKAKL,THANG,KDJENDOK,KDSATKER,KDDEPT,KDUNIT,KDPROGRAM,KDGIAT,NMGIAT,KDOUTPUT,NMOUTPUT,KDSOUTPUT,NMSOUTPUT,KDKMPNEN,NMKMPNEN,KDSKMPNEN,NMSKMPNEN,KDAKUN,NMAKUN,KDKPPN,KDBEBAN,KDJNSBAN,KDCTARIK,REGISTER,CARAHITUNG,HEADER1,HEADER2,KDHEADER,NOITEM,NMITEM,VOL1,SAT1,VOL2,SAT2,VOL3,SAT3,VOL4,SAT4,VOLKEG,SATKEG,HARGASAT,JUMLAH,REALISASI,USULAN,JUMLAH2,PAGUPHLN,PAGURMP,PAGURKP,KDBLOKIR,BLOKIRPHLN,BLOKIRRMP,BLOKIRRKP,RPHBLOKIR,KDCOPY,KDABT,KDSBU,VOLSBK,VOLRKAKL,BLNKONTRAK,NOKONTRAK,TGKONTRAK,NILKONTRAK,JANUARI,PEBRUARI,MARET,APRIL,MEI,JUNI,JULI,AGUSTUS,SEPTEMBER,OKTOBER,NOPEMBER,DESEMBER,JMLTUNDA,KDLUNCURAN,JMLABT,NOREV,KDUBAH,KURS,INDEXKPJM,KDIB,STATUS,VERSI) VALUES ";
       $VERSION   = $this->cekVersi($data[2]["A"]);
-      for ($i=2; $i < $arrayCount; $i++) {
+      for ($i=2; $i <= $arrayCount; $i++) {
         if (!empty($data[$i]["A"]) && !empty($data[$i]["Q"])) {
           $THANG       = trim($data[$i]["A"]," \t\n\r\0\x0B\xA0\x0D\x0A\x20");
           $KDJENDOK    = trim($data[$i]["B"]," \t\n\r\0\x0B\xA0\x0D\x0A\x20");
@@ -232,18 +247,27 @@
           $INDEXKPJM   = trim($data[$i]["BZ"]," \t\n\r\0\x0B\xA0\x0D\x0A\x20");
           $KDIB        = trim($data[$i]["CA"]," \t\n\r\0\x0B\xA0\x0D\x0A\x20");   
           $IDRKAKL     = $KDJENDOK.$KDSATKER.$KDDEPT.$KDUNIT.$KDPROGRAM.$KDGIAT.$KDOUTPUT.$KDSOUTPUT.$KDKMPNEN.$KDSKMPNEN.$KDAKUN.'.'.$NOITEM;
-          $CEKREALISASI= $this->cekRealisasi($IDRKAKL);
+          if ($THANG > date("Y")) {
+            $STATUS = 2;
+          }
+          elseif ($THANG < date("Y")) {
+            $STATUS = 0;
+          }
+          else {
+            $STATUS = 1;
+          }
+          $CEKREALISASI= $this->cekRealisasiUsulan($IDRKAKL);
           if ($CEKREALISASI != 0) {
-            if ($CEKREALISASI['realisasi'] > $JUMLAH) {
+            if ($CEKREALISASI['realisasi'] > $JUMLAH || $CEKREALISASI['usulan'] > $JUMLAH) {
               $this->hapusLastInsRkaklView($THANG);
               return false;
             }
             else {
-              $string .= "('".$IDRKAKL."','".$THANG."','".$KDJENDOK."','".$KDSATKER."','".$KDDEPT."','".$KDUNIT."','".$KDPROGRAM."','".$KDGIAT."','".$NMGIAT."','".$KDOUTPUT."','".$NMOUTPUT."','".$KDSOUTPUT."','".$NMSOUTPUT."','".$KDKMPNEN."','".$NMKMPNEN."','".$KDSKMPNEN."','".$NMSKMPNEN."','".$KDAKUN."','".$NMAKUN."','".$KDKPPN."','".$KDBEBAN."','".$KDJNSBAN."','".$KDCTARIK."','".$REGISTER."','".$CARAHITUNG."','".$HEADER1."','".$HEADER2."','".$KDHEADER."','".$NOITEM."','".$NMITEM."','".$VOL1."','".$SAT1."','".$VOL2."','".$SAT2."','".$VOL3."','".$SAT3."','".$VOL4."','".$SAT4."','".$VOLKEG."','".$SATKEG."','".$HARGASAT."','".$JUMLAH."','".$CEKREALISASI['realisasi']."','".$JUMLAH2."','".$PAGUPHLN."','".$PAGURMP."','".$PAGURKP."','".$KDBLOKIR."','".$BLOKIRPHLN."','".$BLOKIRRMP."','".$BLOKIRRKP."','".$RPHBLOKIR."','".$KDCOPY."','".$KDABT."','".$KDSBU."','".$VOLSBK."','".$VOLRKAKL."','".$BLNKONTRAK."','".$NOKONTRAK."','".$TGKONTRAK."','".$NILKONTRAK."','".$JANUARI."','".$PEBRUARI."','".$MARET."','".$APRIL."','".$MEI."','".$JUNI."','".$JULI."','".$AGUSTUS."','".$SEPTEMBER."','".$OKTOBER."','".$NOPEMBER."','".$DESEMBER."','".$JMLTUNDA."','".$KDLUNCURAN."','".$JMLABT."','".$NOREV."','".$KDUBAH."','".$KURS."','".$INDEXKPJM."','".$KDIB."','".$VERSION."'),";
+              $string .= "('".$IDRKAKL."','".$THANG."','".$KDJENDOK."','".$KDSATKER."','".$KDDEPT."','".$KDUNIT."','".$KDPROGRAM."','".$KDGIAT."','".$NMGIAT."','".$KDOUTPUT."','".$NMOUTPUT."','".$KDSOUTPUT."','".$NMSOUTPUT."','".$KDKMPNEN."','".$NMKMPNEN."','".$KDSKMPNEN."','".$NMSKMPNEN."','".$KDAKUN."','".$NMAKUN."','".$KDKPPN."','".$KDBEBAN."','".$KDJNSBAN."','".$KDCTARIK."','".$REGISTER."','".$CARAHITUNG."','".$HEADER1."','".$HEADER2."','".$KDHEADER."','".$NOITEM."','".$NMITEM."','".$VOL1."','".$SAT1."','".$VOL2."','".$SAT2."','".$VOL3."','".$SAT3."','".$VOL4."','".$SAT4."','".$VOLKEG."','".$SATKEG."','".$HARGASAT."','".$JUMLAH."','".$CEKREALISASI['realisasi']."','".$CEKREALISASI['usulan']."','".$JUMLAH2."','".$PAGUPHLN."','".$PAGURMP."','".$PAGURKP."','".$KDBLOKIR."','".$BLOKIRPHLN."','".$BLOKIRRMP."','".$BLOKIRRKP."','".$RPHBLOKIR."','".$KDCOPY."','".$KDABT."','".$KDSBU."','".$VOLSBK."','".$VOLRKAKL."','".$BLNKONTRAK."','".$NOKONTRAK."','".$TGKONTRAK."','".$NILKONTRAK."','".$JANUARI."','".$PEBRUARI."','".$MARET."','".$APRIL."','".$MEI."','".$JUNI."','".$JULI."','".$AGUSTUS."','".$SEPTEMBER."','".$OKTOBER."','".$NOPEMBER."','".$DESEMBER."','".$JMLTUNDA."','".$KDLUNCURAN."','".$JMLABT."','".$NOREV."','".$KDUBAH."','".$KURS."','".$INDEXKPJM."','".$KDIB."','".$STATUS."','".$VERSION."'),";
             }
           }
           else {
-            $string .= "('".$IDRKAKL."','".$THANG."','".$KDJENDOK."','".$KDSATKER."','".$KDDEPT."','".$KDUNIT."','".$KDPROGRAM."','".$KDGIAT."','".$NMGIAT."','".$KDOUTPUT."','".$NMOUTPUT."','".$KDSOUTPUT."','".$NMSOUTPUT."','".$KDKMPNEN."','".$NMKMPNEN."','".$KDSKMPNEN."','".$NMSKMPNEN."','".$KDAKUN."','".$NMAKUN."','".$KDKPPN."','".$KDBEBAN."','".$KDJNSBAN."','".$KDCTARIK."','".$REGISTER."','".$CARAHITUNG."','".$HEADER1."','".$HEADER2."','".$KDHEADER."','".$NOITEM."','".$NMITEM."','".$VOL1."','".$SAT1."','".$VOL2."','".$SAT2."','".$VOL3."','".$SAT3."','".$VOL4."','".$SAT4."','".$VOLKEG."','".$SATKEG."','".$HARGASAT."','".$JUMLAH."',0,'".$JUMLAH2."','".$PAGUPHLN."','".$PAGURMP."','".$PAGURKP."','".$KDBLOKIR."','".$BLOKIRPHLN."','".$BLOKIRRMP."','".$BLOKIRRKP."','".$RPHBLOKIR."','".$KDCOPY."','".$KDABT."','".$KDSBU."','".$VOLSBK."','".$VOLRKAKL."','".$BLNKONTRAK."','".$NOKONTRAK."','".$TGKONTRAK."','".$NILKONTRAK."','".$JANUARI."','".$PEBRUARI."','".$MARET."','".$APRIL."','".$MEI."','".$JUNI."','".$JULI."','".$AGUSTUS."','".$SEPTEMBER."','".$OKTOBER."','".$NOPEMBER."','".$DESEMBER."','".$JMLTUNDA."','".$KDLUNCURAN."','".$JMLABT."','".$NOREV."','".$KDUBAH."','".$KURS."','".$INDEXKPJM."','".$KDIB."','".$VERSION."'),";
+            $string .= "('".$IDRKAKL."','".$THANG."','".$KDJENDOK."','".$KDSATKER."','".$KDDEPT."','".$KDUNIT."','".$KDPROGRAM."','".$KDGIAT."','".$NMGIAT."','".$KDOUTPUT."','".$NMOUTPUT."','".$KDSOUTPUT."','".$NMSOUTPUT."','".$KDKMPNEN."','".$NMKMPNEN."','".$KDSKMPNEN."','".$NMSKMPNEN."','".$KDAKUN."','".$NMAKUN."','".$KDKPPN."','".$KDBEBAN."','".$KDJNSBAN."','".$KDCTARIK."','".$REGISTER."','".$CARAHITUNG."','".$HEADER1."','".$HEADER2."','".$KDHEADER."','".$NOITEM."','".$NMITEM."','".$VOL1."','".$SAT1."','".$VOL2."','".$SAT2."','".$VOL3."','".$SAT3."','".$VOL4."','".$SAT4."','".$VOLKEG."','".$SATKEG."','".$HARGASAT."','".$JUMLAH."',0,0,'".$JUMLAH2."','".$PAGUPHLN."','".$PAGURMP."','".$PAGURKP."','".$KDBLOKIR."','".$BLOKIRPHLN."','".$BLOKIRRMP."','".$BLOKIRRKP."','".$RPHBLOKIR."','".$KDCOPY."','".$KDABT."','".$KDSBU."','".$VOLSBK."','".$VOLRKAKL."','".$BLNKONTRAK."','".$NOKONTRAK."','".$TGKONTRAK."','".$NILKONTRAK."','".$JANUARI."','".$PEBRUARI."','".$MARET."','".$APRIL."','".$MEI."','".$JUNI."','".$JULI."','".$AGUSTUS."','".$SEPTEMBER."','".$OKTOBER."','".$NOPEMBER."','".$DESEMBER."','".$JMLTUNDA."','".$KDLUNCURAN."','".$JMLABT."','".$NOREV."','".$KDUBAH."','".$KURS."','".$INDEXKPJM."','".$KDIB."','".$STATUS."','".$VERSION."'),";
           }
         }
       }
@@ -251,7 +275,8 @@
       $result= $this->query($query);
       $tahun = $data[2]["A"];
       $versi = $this->cekVersi($tahun);
-      if ($versi != 0) {
+      if ($tahun == date("Y") && $versi != 0) {
+        $this->cekRevisiStatus($tahun, $versi);
         $this->updDelRowHadRealisasi($tahun);
       }
       $query = "CREATE TABLE rkakl_full_".$tahun."_".$versi."
