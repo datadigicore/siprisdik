@@ -286,7 +286,7 @@ switch ($process) {
     break;
   case 'save':
     $mdl_rab->save($_POST);
-    $utility->load("content/rab","success","Data RAB berhasil dimasukkan ke dalam database");
+    $utility->load("content/rab/?kdoutput=".$_POST['output']."&kdsoutput=".$_POST['soutput']."&kdkmpnen=".$_POST['komp']."&kdskmpnen=".$_POST['skomp']."&tahun=".$_POST['tahun']."","success","Data RAB berhasil dimasukkan ke dalam database");
     break;
   case 'edit':
     $mdl_rab->edit($_POST);
