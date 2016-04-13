@@ -1,4 +1,4 @@
-<?php
+  <?php
   require_once __DIR__ . "/../utility/database/mysql_db.php";
 
   class modelRab extends mysql_db {
@@ -1212,6 +1212,30 @@
                             AND KDKMPNEN='$kdkmpnen'
                             AND KDSKMPNEN='$kdskmpnen'
                             LIMIT 1";
+      $result    = $this->query($query);
+      while ($rkakl = $this->fetch_object($result)) {
+        $all[] = $rkakl;
+      }
+      return $all;
+    }
+
+    public function getrkaklfull3($data){
+      $thang      = $data['thang'];
+      $kdgiat     = $data['kdgiat'];
+      $kdoutput   = $data['kdoutput'];
+      $kdsoutput  = $data['kdsoutput'];
+      $kdkmpnen   = $data['kdkmpnen'];
+      $kdskmpnen  = $data['kdskmpnen'];
+
+      $query  = "SELECT * FROM rkakl_full
+                            WHERE THANG='$thang'  
+                            AND KDGIAT='$kdgiat'
+                            AND KDOUTPUT='$kdoutput'
+                            AND KDSOUTPUT='$kdsoutput'
+                            AND KDKMPNEN='$kdkmpnen'
+                            AND KDSKMPNEN='$kdskmpnen'
+                            LIMIT 1";
+                            // echo $query;
       $result    = $this->query($query);
       while ($rkakl = $this->fetch_object($result)) {
         $all[] = $rkakl;
