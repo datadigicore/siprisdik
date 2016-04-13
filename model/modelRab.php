@@ -1541,6 +1541,7 @@
                             'lokasi'      => $getview['lokasi'],
                             'tempat'      => $getview['tempat'],
 
+                            'asal'       => $asal,
                             'jenis'       => $array['jenis'],
                             'penerima'    => $penerima, 
                             'npwp'        => $npwp,
@@ -1605,28 +1606,58 @@
         if ($uang_saku != "") {
           $x++;
           if ($asal == "L") {
-            $kdakun = "524113";
+            # 524111 / 524113
+            $kdakun = "524111";
+            $kdakun_lain = "524113";
           }else{
+            # 524114 / 524119
             $kdakun = "524114";
+            $kdakun_lain = "524119";
           }
           $insert[$x] = $dataorang;
           $insert[$x]['kdakun'] = $kdakun;
           $insert[$x]['noitem'] = '1';
           $insert[$x]['value'] = $uang_saku;
-          $jumrkakl = $this->getJumlahRkakl($getview, $kdakun);
+
+          $jumrkakl       = $this->getJumlahRkakl($getview, $kdakun);
+          $jumrkakl_lain  = $this->getJumlahRkakl($getview, $kdakun_lain);
           if (!empty($jumrkakl)) {
             $pagu = $jumrkakl['jumlah'] - ($jumrkakl['realisasi'] + $jumrkakl['usulan'] + $uang_saku_tot);
             if ($pagu >= $uang_saku) {
               $insert[$x]['error'] = '0';
             }else{
-              $insert[$x]['error'] = '1';
+              if (!empty($jumrkakl_lain)) {
+                $pagu = $jumrkakl_lain['jumlah'] - ($jumrkakl_lain['realisasi'] + $jumrkakl_lain['usulan'] + $uang_saku_tot);
+                if ($pagu >= $uang_saku) {
+                  $insert[$x]['error'] = '0';
+                  $insert[$x]['kdakun'] = $kdakun_lain;
+                }else{
+                  $insert[$x]['error'] = '1';
+                  $error = 'true';
+                }
+              }else{
+                $insert[$x]['error'] = '1';
+                $error = 'true';
+              }
+            }
+          }else{
+            if (!empty($jumrkakl_lain)) {
+              $pagu = $jumrkakl_lain['jumlah'] - ($jumrkakl_lain['realisasi'] + $jumrkakl_lain['usulan'] + $uang_saku_tot);
+              if ($pagu >= $uang_saku) {
+                $insert[$x]['error'] = '0';
+                $insert[$x]['kdakun'] = $kdakun_lain;
+              }else{
+                $insert[$x]['error'] = '1';
+                $insert[$x]['kdakun'] = $kdakun_lain;
+                $error = 'true';
+              }
+            }else{
+              $insert[$x]['error'] = '2';
               $error = 'true';
             }
-            $uang_saku_tot += $uang_saku;
-          }else{
-            $insert[$x]['error'] = '2';
-            $error = 'true';
           }
+          $uang_saku_tot += $uang_saku;
+
           $insert[$x]['keterangan'] = "Uang Saku";
           $this->insertTempRab($insert[$x]);
         }
@@ -1660,45 +1691,73 @@
           $this->insertTempRab($insert[$x]);
         }
 
-        if ($uang_represen != "") {  #524119
+        if ($uang_represen != "") {  
           $x++;
           if ($asal == "L") {
             # 524119, 524111
             $kdakun = "524119"; 
+            $kdakun_lain = "524111"; 
           }else{
             # 524114, 524113
             $kdakun = "524114";
+            $kdakun_lain = "524113"; 
           }
           $insert[$x] = $dataorang;
           $insert[$x]['kdakun'] = $kdakun;
           $insert[$x]['noitem'] = '1';
           $insert[$x]['value'] = $uang_represen;
-          $jumrkakl = $this->getJumlahRkakl($getview, $kdakun);
+          $jumrkakl       = $this->getJumlahRkakl($getview, $kdakun);
+          $jumrkakl_lain  = $this->getJumlahRkakl($getview, $kdakun_lain);
           if (!empty($jumrkakl)) {
             $pagu = $jumrkakl['jumlah'] - ($jumrkakl['realisasi'] + $jumrkakl['usulan'] + $uang_represen_tot);
             if ($pagu >= $uang_represen) {
               $insert[$x]['error'] = '0';
             }else{
-              $insert[$x]['error'] = '1';
+              if (!empty($jumrkakl_lain)) {
+                $pagu = $jumrkakl_lain['jumlah'] - ($jumrkakl_lain['realisasi'] + $jumrkakl_lain['usulan'] + $uang_represen_tot);
+                if ($pagu >= $uang_represen) {
+                  $insert[$x]['error'] = '0';
+                  $insert[$x]['kdakun'] = $kdakun_lain;
+                }else{
+                  $insert[$x]['error'] = '1';
+                  $error = 'true';
+                }
+              }else{
+                $insert[$x]['error'] = '1';
+                $error = 'true';
+              }
+            }
+          }else{
+            if (!empty($jumrkakl_lain)) {
+              $pagu = $jumrkakl_lain['jumlah'] - ($jumrkakl_lain['realisasi'] + $jumrkakl_lain['usulan'] + $uang_represen_tot);
+              if ($pagu >= $uang_represen) {
+                $insert[$x]['error'] = '0';
+                $insert[$x]['kdakun'] = $kdakun_lain;
+              }else{
+                $insert[$x]['error'] = '1';
+                $insert[$x]['kdakun'] = $kdakun_lain;
+                $error = 'true';
+              }
+            }else{
+              $insert[$x]['error'] = '2';
               $error = 'true';
             }
-            $uang_represen_tot += $uang_represen;
-          }else{
-            $insert[$x]['error'] = '2';
-            $error = 'true';
           }
+          $uang_represen_tot += $uang_represen;
           $insert[$x]['keterangan'] = "Uang Representatif";
           $this->insertTempRab($insert[$x]);
         }
 
-        if ($rute1 != "") {  #524119
+        if ($rute1 != "") {  
           $x++;
           if ($asal == "L") {
             # 524119, 524111
             $kdakun = "524119"; 
+            $kdakun_lain = "524111"; 
           }else{
             # 524114, 524113
             $kdakun = "524114";
+            $kdakun_lain = "524113";
           }
           $insert[$x] = $dataorang;
           $insert[$x]['kdakun'] = $kdakun;
@@ -1708,85 +1767,411 @@
           $insert[$x]['lama_hari'] = $lama_hari;
           if ($taxi_asal119 != "") {
             $insert[$x]['taxi_asal'] = $taxi_asal119;
+            $taxi_asal = $taxi_asal119;
           }else{
             $insert[$x]['taxi_asal'] = $taxi_asal111;
+            $taxi_asal = $taxi_asal111;
           }
           if ($taxi_tujuan119 != "") {
             $insert[$x]['taxi_tujuan'] = $taxi_tujuan119;
+            $taxi_tujuan = $taxi_tujuan119;
           }else{
             $insert[$x]['taxi_tujuan'] = $taxi_tujuan111;
+            $taxi_tujuan = $taxi_tujuan111;
           }
+          if ($tgl_mulai != "") {
+            $pecah1 = explode("/", date("d/m/Y", strtotime($tgl_mulai)));
+            $tgl_mulai = $pecah1[2].'-'.$pecah1[1].'-'.$pecah1[0];
+          }else{
+            $tgl_mulai = null;
+          }
+          if ($tgl_akhir != "") {
+            $pecah2 = explode("/", date("d/m/Y", strtotime($tgl_akhir)));
+            $tgl_akhir = $pecah2[2].'-'.$pecah2[1].'-'.$pecah2[0];
+          }else{
+            $tgl_akhir = null;
+          }
+          $insert[$x]['alat_trans'] = $alat_trans;
           $insert[$x]['kota_asal'] = $kota_asal;
           $insert[$x]['kota_tujuan'] = $kota_tujuan;
           $insert[$x]['tgl_mulai'] = $tgl_mulai;
           $insert[$x]['tgl_akhir'] = $tgl_akhir;
           $insert[$x]['airport_tax'] = $airporttax;
           $insert[$x]['tingkat_jalan'] = $tingkat_jalan;
-          $insert[$x]['tgl_akhir'] = $tgl_akhir;
+          $insert[$x]['lama_hari'] = $lama_hari;
+          $insert[$x]['uang_harian'] = $uang_harian;
           $insert[$x]['rute'] = $rute1;
           $insert[$x]['harga_tiket'] = $harga_tiket1;
-          $jumrab = $harga_tiket1 + $taxi_asal + $taxi_tujuan + ($uang_harian * $lama_hari) + $airporttax;
+          $insert[$x]['darat'] = $darat;
+          $insert[$x]['biaya_akom'] = $biaya_akom;
+          $jumrab = $harga_tiket1 + $taxi_asal + $taxi_tujuan + ($uang_harian * $lama_hari) + $airporttax + $darat + $biaya_akom;
           $insert[$x]['value'] = $jumrab;
 
-          $jumrkakl = $this->getJumRkakl2($getview, $kdakun);
+          $jumrkakl       = $this->getJumlahRkakl($getview, $kdakun);
+          $jumrkakl_lain  = $this->getJumlahRkakl($getview, $kdakun_lain);
           if (!empty($jumrkakl)) {
-            $pagu = $jumrkakl->jumlah + $jumrkakl->realisasi + $jumrkakl->usulan + $jumperjalanan;
+            $pagu = $jumrkakl['jumlah'] - ($jumrkakl['realisasi'] + $jumrkakl['usulan'] + $jumperjalanan);
             if ($pagu >= $jumrab) {
               $insert[$x]['error'] = '0';
             }else{
-              $insert[$x]['error'] = '1';
+              if (!empty($jumrkakl_lain)) {
+                $pagu = $jumrkakl_lain['jumlah'] - ($jumrkakl_lain['realisasi'] + $jumrkakl_lain['usulan'] + $jumperjalanan);
+                if ($pagu >= $jumrab) {
+                  $insert[$x]['error'] = '0';
+                  $insert[$x]['kdakun'] = $kdakun_lain;
+                }else{
+                  $insert[$x]['error'] = '1';
+                  $error = 'true';
+                }
+              }else{
+                $insert[$x]['error'] = '1';
+                $error = 'true';
+              }
+            }
+          }else{
+            if (!empty($jumrkakl_lain)) {
+              $pagu = $jumrkakl_lain['jumlah'] - ($jumrkakl_lain['realisasi'] + $jumrkakl_lain['usulan'] + $jumperjalanan);
+              if ($pagu >= $jumrab) {
+                $insert[$x]['error'] = '0';
+                $insert[$x]['kdakun'] = $kdakun_lain;
+              }else{
+                $insert[$x]['error'] = '1';
+                $insert[$x]['kdakun'] = $kdakun_lain;
+                $error = 'true';
+              }
+            }else{
+              $insert[$x]['error'] = '2';
               $error = 'true';
             }
-            $jumperjalanan += $jumrab;
-          }else{
-            $insert[$x]['error'] = '2';
-            $error = 'true';
           }
-          $sub_query = "tgl_mulai   = ''".$insert[$x]['tgl_mulai']."',
-                      tgl_akhir   = ''".$insert[$x]['tgl_akhir']."',
-                      alat_trans  = ''".$insert[$x]['alat_trans']."',
-                      kota_asal   = ''".$insert[$x]['kota_asal']."',
-                      kota_tujuan = ''".$insert[$x]['kota_tujuan']."'
-                      taxi_asal   = ''".$insert[$x]['taxi_asal']."',
-                      taxi_tujuan = ''".$insert[$x]['taxi_tujuan']."',
-                      rute        = ''".$insert[$x]['rute']."',
-                      harga_tiket = ''".$insert[$x]['harga_tiket']."',
-                      uang_harian = ''".$insert[$x]['uang_harian']."',
-                      lama_hari   = ''".$insert[$x]['lama_hari']."',
-                      tingkat_jalan = ''".$insert[$x]['tingkat_jalan']."',
-                      airport_tax   = ''".$insert[$x]['airport_tax']."',
+          $jumperjalanan += $jumrab;
+
+          // $subquery = "tgl_mulai   = ''".$insert[$x]['tgl_mulai']."',
+          //             tgl_akhir   = ''".$insert[$x]['tgl_akhir']."',
+          $subquery = "alat_trans   = '".$insert[$x]['alat_trans']."',
+                      kota_asal     = '".$insert[$x]['kota_asal']."',
+                      kota_tujuan   = '".$insert[$x]['kota_tujuan']."',
+                      taxi_asal     = '".$insert[$x]['taxi_asal']."',
+                      taxi_tujuan   = '".$insert[$x]['taxi_tujuan']."',
+                      rute          = '".$insert[$x]['rute']."',
+                      harga_tiket   = '".$insert[$x]['harga_tiket']."',
+                      uang_harian   = '".$insert[$x]['uang_harian']."',
+                      lama_hari     = '".$insert[$x]['lama_hari']."',
+                      tingkat_jalan = '".$insert[$x]['tingkat_jalan']."',
+                      airport_tax   = '".$insert[$x]['airport_tax']."',
+                      biaya_akom    = '".$insert[$x]['biaya_akom']."',
+                      darat         = '".$insert[$x]['darat']."',
                       ";
-          $this->insertTempRab($insert,$subquery);
+          $insert[$x]['keterangan'] = "Perjalanan";
+          $this->insertTempRab($insert[$x],$subquery);
         }else{
           if ($uang_harian != "") {  #524119
             $x++;
             if ($asal == "L") {
               # 524119, 524111
               $kdakun = "524119"; 
+              $kdakun_lain = "524111"; 
             }else{
               # 524114, 524113
               $kdakun = "524114";
+              $kdakun_lain = "524113";
             }
             $insert[$x] = $dataorang;
             $insert[$x]['kdakun'] = $kdakun;
             $insert[$x]['noitem'] = '1';
+            $uang_harian = $uang_harian * $lama_hari;
+            $insert[$x]['lama_hari'] = $lama_hari;
             $insert[$x]['value'] = $uang_harian;
-            $jumrkakl = $this->getJumlahRkakl($getview, $kdakun);
+            $jumrkakl       = $this->getJumlahRkakl($getview, $kdakun);
+            $jumrkakl_lain  = $this->getJumlahRkakl($getview, $kdakun_lain);
             if (!empty($jumrkakl)) {
               $pagu = $jumrkakl['jumlah'] - ($jumrkakl['realisasi'] + $jumrkakl['usulan'] + $uang_harian_tot);
               if ($pagu >= $uang_harian) {
                 $insert[$x]['error'] = '0';
               }else{
+                if (!empty($jumrkakl_lain)) {
+                  $pagu = $jumrkakl_lain['jumlah'] - ($jumrkakl_lain['realisasi'] + $jumrkakl_lain['usulan'] + $uang_harian_tot);
+                  if ($pagu >= $uang_harian) {
+                    $insert[$x]['error'] = '0';
+                    $insert[$x]['kdakun'] = $kdakun_lain;
+                  }else{
+                    $insert[$x]['error'] = '1';
+                    $error = 'true';
+                  }
+                }else{
+                  $insert[$x]['error'] = '1';
+                  $error = 'true';
+                }
+              }
+            }else{
+              if (!empty($jumrkakl_lain)) {
+                $pagu = $jumrkakl_lain['jumlah'] - ($jumrkakl_lain['realisasi'] + $jumrkakl_lain['usulan'] + $uang_harian_tot);
+                if ($pagu >= $uang_harian) {
+                  $insert[$x]['error'] = '0';
+                  $insert[$x]['kdakun'] = $kdakun_lain;
+                }else{
+                  $insert[$x]['error'] = '1';
+                  $insert[$x]['kdakun'] = $kdakun_lain;
+                  $error = 'true';
+                }
+              }else{
+                $insert[$x]['error'] = '2';
+                $error = 'true';
+              }
+            }
+            $uang_harian_tot += $uang_harian;
+            $subquery = "lama_hari     = '".$insert[$x]['lama_hari']."',";
+            $insert[$x]['keterangan'] = "Uang Harian";
+            $this->insertTempRab($insert[$x]);
+          }
+        }
+
+        if ($rute2 != "") {  
+          $x++;
+          if ($asal == "L") {
+            # 524119, 524111
+            $kdakun = "524119"; 
+            $kdakun_lain = "524111"; 
+          }else{
+            # 524114, 524113
+            $kdakun = "524114";
+            $kdakun_lain = "524113";
+          }
+          $insert[$x] = $dataorang;
+          $insert[$x]['kdakun'] = $kdakun;
+          $insert[$x]['noitem'] = '1';
+
+          if ($tgl_mulai != "") {
+            $pecah1 = explode("/", $tgl_mulai);
+            $tgl_mulai = $pecah1[2].'-'.$pecah1[1].'-'.$pecah1[0];
+          }else{
+            $tgl_mulai = null;
+          }
+          if ($tgl_akhir != "") {
+            $pecah2 = explode("/", $tgl_akhir);
+            $tgl_akhir = $pecah2[2].'-'.$pecah2[1].'-'.$pecah2[0];
+          }else{
+            $tgl_akhir = null;
+          }
+
+          $insert[$x]['tgl_mulai'] = $tgl_mulai;
+          $insert[$x]['tgl_akhir'] = $tgl_akhir;
+          $insert[$x]['rute'] = $rute2;
+          $insert[$x]['harga_tiket'] = $harga_tiket2;
+          $jumrab = $harga_tiket2;
+          $insert[$x]['value'] = $jumrab;
+
+          $jumrkakl       = $this->getJumlahRkakl($getview, $kdakun);
+          $jumrkakl_lain  = $this->getJumlahRkakl($getview, $kdakun_lain);
+          if (!empty($jumrkakl)) {
+            $pagu = $jumrkakl['jumlah'] - ($jumrkakl['realisasi'] + $jumrkakl['usulan'] + $jumperjalanan);
+            if ($pagu >= $jumrab) {
+              $insert[$x]['error'] = '0';
+            }else{
+              if (!empty($jumrkakl_lain)) {
+                $pagu = $jumrkakl_lain['jumlah'] - ($jumrkakl_lain['realisasi'] + $jumrkakl_lain['usulan'] + $jumperjalanan);
+                if ($pagu >= $jumrab) {
+                  $insert[$x]['error'] = '0';
+                  $insert[$x]['kdakun'] = $kdakun_lain;
+                }else{
+                  $insert[$x]['error'] = '1';
+                  $error = 'true';
+                }
+              }else{
                 $insert[$x]['error'] = '1';
                 $error = 'true';
               }
-              $uang_harian_tot += $uang_harian;
+            }
+          }else{
+            if (!empty($jumrkakl_lain)) {
+              $pagu = $jumrkakl_lain['jumlah'] - ($jumrkakl_lain['realisasi'] + $jumrkakl_lain['usulan'] + $jumperjalanan);
+              if ($pagu >= $jumrab) {
+                $insert[$x]['error'] = '0';
+                $insert[$x]['kdakun'] = $kdakun_lain;
+              }else{
+                $insert[$x]['error'] = '1';
+                $insert[$x]['kdakun'] = $kdakun_lain;
+                $error = 'true';
+              }
             }else{
               $insert[$x]['error'] = '2';
               $error = 'true';
             }
-            $this->insertTempRab($insert[$x]);
           }
+          $jumperjalanan += $jumrab;
+          // $subquery = "tgl_mulai = '".$insert[$x]['tgl_mulai']."',
+          //             tgl_akhir  = '".$insert[$x]['tgl_akhir']."',
+          $subquery = "rute         = '".$insert[$x]['rute']."',
+                      harga_tiket   = '".$insert[$x]['harga_tiket']."',
+                      ";
+          $insert[$x]['keterangan'] = "Perjalanan 2";
+          $this->insertTempRab($insert[$x],$subquery);
+        }
+
+        if ($rute3 != "") {  
+          $x++;
+          if ($asal == "L") {
+            # 524119, 524111
+            $kdakun = "524119"; 
+            $kdakun_lain = "524111"; 
+          }else{
+            # 524114, 524113
+            $kdakun = "524114";
+            $kdakun_lain = "524113";
+          }
+          $insert[$x] = $dataorang;
+          $insert[$x]['kdakun'] = $kdakun;
+          $insert[$x]['noitem'] = '1';
+
+          if ($tgl_mulai != "") {
+            $pecah1 = explode("/", $tgl_mulai);
+            $tgl_mulai = $pecah1[2].'-'.$pecah1[1].'-'.$pecah1[0];
+          }else{
+            $tgl_mulai = null;
+          }
+          if ($tgl_akhir != "") {
+            $pecah2 = explode("/", $tgl_akhir);
+            $tgl_akhir = $pecah2[2].'-'.$pecah2[1].'-'.$pecah2[0];
+          }else{
+            $tgl_akhir = null;
+          }
+
+          $insert[$x]['tgl_mulai'] = $tgl_mulai;
+          $insert[$x]['tgl_akhir'] = $tgl_akhir;
+          $insert[$x]['rute'] = $rute3;
+          $insert[$x]['harga_tiket'] = $harga_tiket3;
+          $jumrab = $harga_tiket3;
+          $insert[$x]['value'] = $jumrab;
+
+          $jumrkakl       = $this->getJumlahRkakl($getview, $kdakun);
+          $jumrkakl_lain  = $this->getJumlahRkakl($getview, $kdakun_lain);
+          if (!empty($jumrkakl)) {
+            $pagu = $jumrkakl['jumlah'] - ($jumrkakl['realisasi'] + $jumrkakl['usulan'] + $jumperjalanan);
+            if ($pagu >= $jumrab) {
+              $insert[$x]['error'] = '0';
+            }else{
+              if (!empty($jumrkakl_lain)) {
+                $pagu = $jumrkakl_lain['jumlah'] - ($jumrkakl_lain['realisasi'] + $jumrkakl_lain['usulan'] + $jumperjalanan);
+                if ($pagu >= $jumrab) {
+                  $insert[$x]['error'] = '0';
+                  $insert[$x]['kdakun'] = $kdakun_lain;
+                }else{
+                  $insert[$x]['error'] = '1';
+                  $error = 'true';
+                }
+              }else{
+                $insert[$x]['error'] = '1';
+                $error = 'true';
+              }
+            }
+          }else{
+            if (!empty($jumrkakl_lain)) {
+              $pagu = $jumrkakl_lain['jumlah'] - ($jumrkakl_lain['realisasi'] + $jumrkakl_lain['usulan'] + $jumperjalanan);
+              if ($pagu >= $jumrab) {
+                $insert[$x]['error'] = '0';
+                $insert[$x]['kdakun'] = $kdakun_lain;
+              }else{
+                $insert[$x]['error'] = '1';
+                $insert[$x]['kdakun'] = $kdakun_lain;
+                $error = 'true';
+              }
+            }else{
+              $insert[$x]['error'] = '2';
+              $error = 'true';
+            }
+          }
+          $jumperjalanan += $jumrab;
+
+          // $subquery = "tgl_mulai = '".$insert[$x]['tgl_mulai']."',
+          //             tgl_akhir  = '".$insert[$x]['tgl_akhir']."',
+          $subquery = "rute         = '".$insert[$x]['rute']."',
+                      harga_tiket   = '".$insert[$x]['harga_tiket']."',
+                      ";
+          $insert[$x]['keterangan'] = "Perjalanan 3";
+          $this->insertTempRab($insert[$x],$subquery);
+        }
+
+        if ($rute4 != "") {  
+          $x++;
+          if ($asal == "L") {
+            # 524119, 524111
+            $kdakun = "524119"; 
+            $kdakun_lain = "524111"; 
+          }else{
+            # 524114, 524113
+            $kdakun = "524114";
+            $kdakun_lain = "524113";
+          }
+          $insert[$x] = $dataorang;
+          $insert[$x]['kdakun'] = $kdakun;
+          $insert[$x]['noitem'] = '1';
+
+          if ($tgl_mulai != "") {
+            $pecah1 = explode("/", $tgl_mulai);
+            $tgl_mulai = $pecah1[2].'-'.$pecah1[1].'-'.$pecah1[0];
+          }else{
+            $tgl_mulai = null;
+          }
+          if ($tgl_akhir != "") {
+            $pecah2 = explode("/", $tgl_akhir);
+            $tgl_akhir = $pecah2[2].'-'.$pecah2[1].'-'.$pecah2[0];
+          }else{
+            $tgl_akhir = null;
+          }
+
+          $insert[$x]['tgl_mulai'] = $tgl_mulai;
+          $insert[$x]['tgl_akhir'] = $tgl_akhir;
+          $insert[$x]['rute'] = $rute4;
+          $insert[$x]['harga_tiket'] = $harga_tiket4;
+          $jumrab = $harga_tiket4;
+          $insert[$x]['value'] = $jumrab;
+
+          $jumrkakl       = $this->getJumlahRkakl($getview, $kdakun);
+          $jumrkakl_lain  = $this->getJumlahRkakl($getview, $kdakun_lain);
+          if (!empty($jumrkakl)) {
+            $pagu = $jumrkakl['jumlah'] - ($jumrkakl['realisasi'] + $jumrkakl['usulan'] + $jumperjalanan);
+            if ($pagu >= $jumrab) {
+              $insert[$x]['error'] = '0';
+            }else{
+              if (!empty($jumrkakl_lain)) {
+                $pagu = $jumrkakl_lain['jumlah'] - ($jumrkakl_lain['realisasi'] + $jumrkakl_lain['usulan'] + $jumperjalanan);
+                if ($pagu >= $jumrab) {
+                  $insert[$x]['error'] = '0';
+                  $insert[$x]['kdakun'] = $kdakun_lain;
+                }else{
+                  $insert[$x]['error'] = '1';
+                  $error = 'true';
+                }
+              }else{
+                $insert[$x]['error'] = '1';
+                $error = 'true';
+              }
+            }
+          }else{
+            if (!empty($jumrkakl_lain)) {
+              $pagu = $jumrkakl_lain['jumlah'] - ($jumrkakl_lain['realisasi'] + $jumrkakl_lain['usulan'] + $jumperjalanan);
+              if ($pagu >= $jumrab) {
+                $insert[$x]['error'] = '0';
+                $insert[$x]['kdakun'] = $kdakun_lain;
+              }else{
+                $insert[$x]['error'] = '1';
+                $insert[$x]['kdakun'] = $kdakun_lain;
+                $error = 'true';
+              }
+            }else{
+              $insert[$x]['error'] = '2';
+              $error = 'true';
+            }
+          }
+          $jumperjalanan += $jumrab;
+
+          // $subquery = "tgl_mulai = '".$insert[$x]['tgl_mulai']."',
+          //             tgl_akhir  = '".$insert[$x]['tgl_akhir']."',
+          $subquery = "rute         = '".$insert[$x]['rute']."',
+                      harga_tiket   = '".$insert[$x]['harga_tiket']."',
+                      ";
+          $insert[$x]['keterangan'] = "Perjalanan 4";
+          $this->insertTempRab($insert[$x],$subquery);
         }
 
         if ($belanja_atk != "") {  
@@ -1810,6 +2195,7 @@
             $insert[$x]['error'] = '2';
             $error = 'true';
           }
+          $insert[$x]['keterangan'] = "Belanja ATK";
           $this->insertTempRab($insert[$x]);
         }
 
@@ -1834,6 +2220,7 @@
             $insert[$x]['error'] = '2';
             $error = 'true';
           }
+          $insert[$x]['keterangan'] = "Belanja Habis Pakai";
           $this->insertTempRab($insert[$x]);
         }
 
@@ -1858,6 +2245,7 @@
             $insert[$x]['error'] = '2';
             $error = 'true';
           }
+          $insert[$x]['keterangan'] = "Belanja Konsumsi";
           $this->insertTempRab($insert[$x]);
         }
 
@@ -2485,6 +2873,7 @@
                     tanggal     = '".$data['tanggal']."',
                     lokasi      = '".$data['lokasi']."',
 
+                    asal       = '".$data['asal']."',
                     jenis       = '".$data['jenis']."',
                     penerima    = '".$data['penerima']."',
                     npwp        = '".$data['npwp']."',
@@ -2495,10 +2884,11 @@
                     pajak       = '".$data['pajak']."',
 
                     error       = '".$data['error']."',
-                    created_at       = '".$timestamp."',
+                    created_at       = '".$data['created_at']."',
                     created_by       = '".$_SESSION['id']."',
                     keterangan       = '".$data['keterangan']."'
                 ";
+      
       $result = $this->query($query);
     }
 
@@ -2507,6 +2897,30 @@
       $result = $this->query($query);
       $data  = $this->fetch_object($result);
       return $data;
+    }
+
+    public function save_temprabfull($id_rab_view){
+      $datatemp = $this->gettemprab($id_rab_view);
+      $rabfull = "SELECT * FROM rabfull limit 1";
+      $resrab = $this->query($rabfull);
+      $x=0;
+      foreach($this->fetch_object($resrab) as $key => $value) {
+        $indeks[$x] = $key;
+        $x++;
+      }
+      unset($indeks[0]);
+      for ($i=0; $i < count($datatemp); $i++) { 
+        $query      = "INSERT INTO rabfull SET ";
+        for ($j=1; $j <= count($indeks); $j++) { 
+          if ($j == count($indeks)) {
+            $query .= $indeks[$j]." = '".$datatemp[$i]->$indeks[$j]."'";
+          }else{
+            $query .= $indeks[$j]." = '".$datatemp[$i]->$indeks[$j]."', ";
+          }
+        }
+        $result = $this->query($query);
+      }
+      return $result;
     }
 
   }
