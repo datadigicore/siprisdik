@@ -53,7 +53,7 @@
             <select class="form-control" name="thang" required>
             <?php $earliest_year = date('Y');
             echo '<option  value="" disabled selected>-- Pilih Tahun Anggaran --</option>';
-            foreach (range(date('Y')+1, $earliest_year) as $x) {
+            foreach (range(date('Y'), $earliest_year+1) as $x) {
               echo '<option value="'.$x.'">'.$x.'</option>';
             }?>
             </select>
@@ -100,7 +100,7 @@
           </div>
           <div class="form-group">
             <label>Tanggal DIPA</label>
-            <input type="text" class="form-control tanggal" id="tanggal" name="tanggal" placeholder="dd/mm/yyyy">
+            <input type="text" class="form-control tanggal" id="tanggald" name="tanggal" placeholder="dd/mm/yyyy">
           </div>
           <div class="form-group">
             <label>Nomor DIPA</label>
@@ -190,8 +190,8 @@
       ],
       "order": [[ 0, "desc" ]]
     });
-    $('.tanggal').mask('00/00/0000');
-    $(".tanggal").datepicker({ 
+    $('#tanggal, #tanggald').mask('00/00/0000');
+    $("#tanggal, #tanggald").datepicker({ 
       changeMonth: true,
       changeYear: true,
       format: 'dd/mm/yyyy' 
