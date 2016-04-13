@@ -157,7 +157,7 @@
           type: 'pie'
         },
         title: {
-          text: 'Realisasi Dana RKAKL'
+          text: 'Rencana Kerja dan Anggaran Kementerian Negara / Lembaga'
         },
         tooltip: {
           pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
