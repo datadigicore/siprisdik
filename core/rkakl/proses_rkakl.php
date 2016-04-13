@@ -12,7 +12,7 @@ switch ($process) {
     $revisi   = $purifier->purify($_POST['revisi']);
     $tanggal  = $purifier->purify($_POST['tanggal']);
     $pecahtgl = explode("/", $tanggal);
-    $tanggal  = $pecahtgl[2].'-'.$pecahtgl[1].'-'.$pecahtgl[0];
+    $tanggal  = $pecahtgl[2].'-'.$pecahtgl[0].'-'.$pecahtgl[1];
     $no_dipa  = $purifier->purify($_POST['no_dipa']);
     $result   = $rkakl->checkThang($thang);
     if ($result->num_rows == 0 || $revisi == 'true') {

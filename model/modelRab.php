@@ -2932,6 +2932,13 @@
         $indeks[$x] = $key;
         $x++;
       }
+      $temprabfull = "SELECT * FROM temprabfull limit 1";
+      $tempresrab = $this->query($temprabfull);
+      $y=0;
+      foreach($this->fetch_object($tempresrab) as $key => $value) {
+        $tempindeks[$y] = $key;
+        $y++;
+      }
       unset($indeks[0]);
       for ($i=0; $i < count($datatemp); $i++) { 
         $query      = "INSERT INTO rabfull SET ";
@@ -2943,7 +2950,20 @@
           }
         }
         $result = $this->query($query);
+
+        $querytemplog = "INSERT INTO temprabfull_log SET ";
+        for ($k=0; $k < count($tempindeks); $k++) { 
+          if ($k == count($indeks)) {
+            $querytemplog .= $tempindeks[$k]." = '".$datatemp[$i]->$tempindeks[$k]."'";
+          }else{
+            $querytemplog .= $tempindeks[$k]." = '".$datatemp[$i]->$tempindeks[$k]."', ";
+          }
+        }
+        $result = $this->query($querytemplog);
       }
+      $hapustemp = "DELETE FROM temprabfull where id_rab_view = '".$id_rab_view."' and created_by = '".$_SESSION['id']."'  ";
+      $result = $this->query($hapustemp);
+      
       return $result;
     }
 
