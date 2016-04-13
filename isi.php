@@ -53,13 +53,13 @@ else {
                   $kdkmpnen =$_GET['kdkmpnen'];
                   $kdskmpnen =$_GET['kdskmpnen'];
                   $tahun =$_GET['tahun'];
-                  // $data['thang']=$tahun;
-                  // $data['kdgiat']= $_SESSION['direktorat'];
-                  // $data['kdoutput']= $kdoutput;
-                  // $data['kdsoutput']= $kdsoutput;
-                  // $data['kdkmpnen']= $kdkmpnen;
-                  // $data['kdskmpnen']= $kdskmpnen;
-                  // $datarkakl = $mdl_rab->getrkaklfull3($data);
+                  $data['thang']=$tahun;
+                  $data['kdgiat']= $_SESSION['direktorat'];
+                  $data['kdoutput']= $kdoutput;
+                  $data['kdsoutput']= $kdsoutput;
+                  $data['kdkmpnen']= $kdkmpnen;
+                  $data['kdskmpnen']= $kdskmpnen;
+                  $datarkakl = $mdl_rab->getrkaklfull3($data);
                 } else {
                   $kdoutput ="";
                   $kdsoutput ="";
@@ -75,7 +75,7 @@ else {
             $tahun = $mdl_rab->getYear();
              if(isset($_GET['kdoutput']) && isset($_GET['kdsoutput']) && isset($_GET['kdkmpnen']) && isset($_GET['kdskmpnen']))
                 {
-
+                  $tahun = $_GET['tahun'];
                   $kdoutput =$_GET['kdoutput'];
                   $kdsoutput =$_GET['kdsoutput'];
                   $kdkmpnen =$_GET['kdkmpnen'];
@@ -168,22 +168,22 @@ else {
         case 'rab':
           if($data[2]=='tambah'){
             $direktorat = $_SESSION['direktorat'];
-            $tahun = $mdl_rab->getYear();
+            // $tahun = $mdl_rab->getYear();
             if(isset($_GET['kdoutput']) && isset($_GET['kdsoutput']) && isset($_GET['kdkmpnen']) && isset($_GET['kdskmpnen']))
                 {
-
+                  $tahun = $_GET['tahun'];
                   $kdoutput =$_GET['kdoutput'];
                   $kdsoutput =$_GET['kdsoutput'];
                   $kdkmpnen =$_GET['kdkmpnen'];
                   $kdskmpnen =$_GET['kdskmpnen'];
                   $tahun_skrg = $_GET['tahun'];
-                  // $data['thang']=$tahun;
-                  // $data['kdgiat']= $_SESSION['direktorat'];
-                  // $data['kdoutput']= $kdoutput;
-                  // $data['kdsoutput']= $kdsoutput;
-                  // $data['kdkmpnen']= $kdkmpnen;
-                  // $data['kdskmpnen']= $kdskmpnen;
-                  // $datarkakl = $mdl_rab->getrkaklfull3($data);
+                  $data['thang']=$tahun;
+                  $data['kdgiat']= $_SESSION['direktorat'];
+                  $data['kdoutput']= $kdoutput;
+                  $data['kdsoutput']= $kdsoutput;
+                  $data['kdkmpnen']= $kdkmpnen;
+                  $data['kdskmpnen']= $kdskmpnen;
+                  $datarkakl = $mdl_rab->getrkaklfull3($data);
                 } else {
                   $kdoutput ="";
                   $kdsoutput ="";

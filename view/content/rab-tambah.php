@@ -23,11 +23,14 @@
             <div class="box-body">
               <div class="form-group">
                 <label>Tahun Anggaran</label>
-                <select class="form-control" name="tahun" id="tahun" required>
-                  <?php for ($i=0; $i < count($tahun); $i++) { 
-                    echo "<option value='".$tahun[$i]."'>".$tahun[$i].'</option>';
-                  }?>
-                </select>
+                <!-- <select class="form-control" name="tahun" id="tahun" required>
+                  <?php 
+                  // // for ($i=0; $i < count($tahun); $i++) { 
+                  //   // echo "<option value='".$tahun[$i]."'>".$tahun[$i].'</option>';
+                  // }
+                  ?>
+                </select> -->
+                <input class="form-control " type="text" id="tahun" name="tahun" value="<?php echo $tahun ?>" readonly/>
               </div>
               <input type="hidden" id="prog" name="prog" value="06" />
               <?php if ($_SESSION['direktorat'] == "") { ?>
@@ -47,7 +50,11 @@
               <div class="form-group">
                 <label>Output</label>
                 <?php if($kdoutput!=""){?>
-                  <input class="form-control" type="text" id="output" name="output" value="<?php echo $kdoutput ?>" readonly/>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon2"><?php echo $datarkakl[0]->NMOUTPUT ?></span>
+                  <input class="form-control " type="text" id="output" name="output" value="<?php echo $kdoutput ?>" readonly/>
+
+                  </div>
                   <?php } else {?>
                 <select class="form-control" id="output" name="output" onchange="chout()" required>
                   <option value="">-- Pilih Output --</option>
@@ -57,7 +64,10 @@
               <div class="form-group">
                 <label>Suboutput</label>
                 <?php if($kdsoutput!=""){?>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon2"><?php echo $datarkakl[0]->NMSOUTPUT ?></span>
                   <input class="form-control" type="text" id="soutput" name="soutput" value="<?php echo $kdsoutput ?>" readonly/>
+                  </div>
                   <?php } else {?>
                 <select class="form-control" id="soutput" name="soutput" onchange="chsout()" required>
                   <option value="">-- Pilih Sub Output --</option>
@@ -67,7 +77,10 @@
               <div class="form-group">
                 <label>Komponen</label>
                 <?php if($kdkmpnen!=""){?>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon2"><?php echo $datarkakl[0]->NMKMPNEN ?></span>
                   <input class="form-control" type="text" id="komp" name="komp" value="<?php echo $kdkmpnen ?>" readonly/>
+                  </div>
                   <?php } else {?>
                 <select class="form-control" id="komp" name="komp" onchange="chkomp()" required>
                   <option value="">-- Pilih Komponen --</option>
@@ -77,7 +90,10 @@
               <div class="form-group">
                 <label>Sub Komponen</label>
                 <?php if($kdskmpnen!=""){?>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon2"><?php echo $datarkakl[0]->NMSKMPNEN ?></span>
                   <input class="form-control" type="text" id="skomp" name="skomp" value="<?php echo $kdskmpnen ?>" readonly/>
+                  </div>
                   <?php } else {?>
                 <select class="form-control" id="skomp" name="skomp" onchange="chskomp()" required>
                   <option value="">-- Pilih Sub Komponen --</option>
