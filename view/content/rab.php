@@ -1,17 +1,5 @@
 <?php
-  if(isset($_GET['kdoutput']) && isset($_GET['kdsoutput']) && isset($_GET['kdkmpnen']) && isset($_GET['kdskmpnen']))
-  {
-
-    $kdoutput =$_GET['kdoutput'];
-    $kdsoutput =$_GET['kdsoutput'];
-    $kdkmpnen =$_GET['kdkmpnen'];
-    $kdskmpnen =$_GET['kdskmpnen'];
-  } else {
-    $kdoutput ="";
-    $kdsoutput ="";
-    $kdkmpnen ="";
-    $kdskmpnen ="";
-  }
+ 
   
 
 ?>
@@ -34,13 +22,13 @@
             <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya</h3>
 
             <?php if ($_SESSION['level'] != '0') {
-              echo '<a href="'.$url_rewrite.'content/rab/tambah" class="btn btn-flat btn-success btn-md pull-right"><i class="fa fa-plus"></i>&nbsp;Tambah RAB</a>';
+              echo '<a href="'.$url_rewrite.'content/rab/tambah/?kdoutput='.$kdoutput.'&kdsoutput='.$kdsoutput.'&kdkmpnen='.$kdkmpnen.'&kdskmpnen='.$kdsoutput.'&tahun='.$tahun.'" class="btn btn-flat btn-success btn-md pull-right"><i class="fa fa-plus"></i>&nbsp;Tambah RAB</a>';
             }?>
 
           </div>
           <div class="box-body">
             <?php include "view/include/alert.php" ?>
-            <table class="display table table-bordered table-striped" style="width:750px">
+            <!-- <table class="display table table-bordered table-striped" style="width:750px">
               <tr>
                 <td><label>Tahun</label></td>
                 <td>
@@ -72,6 +60,22 @@
                 </td>
               </tr>
               <?php } ?>
+            </table> -->
+            <table class="display table table-bordered table-striped">
+              <tr>
+                <th colspan='2'><label>Info</label></th>
+              </tr>
+              <tr>
+                <td valign="top" class="col-md-1">
+                  <table class="table-striped col-md-12">
+                      <tr><td valign="top">Tahun</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->THANG?></td></tr>
+                      <tr><td valign="top">Kegiatan</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMGIAT?></td></tr>
+                      <tr><td valign="top">Output</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMOUTPUT?></td></tr>
+                      <tr><td valign="top">Sub Output</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMSOUTPUT?></td></tr>
+                      <tr><td valign="top">Komponen</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NMKMPNEN?></td></tr>
+                      <tr><td valign="top">Sub Komponen</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NmSkmpnen?></td></tr>
+                  </table>
+                </td>
             </table>
             <table id="table" class="display table table-bordered table-striped " cellspacing="0" width="100%">
               <thead style="background-color:#11245B;color:white;">
@@ -321,7 +325,8 @@ var table;
           "columnDefs" : [
             {"targets" : 0,
              "visible" : false},
-            {"targets" : 1},
+            {"targets" : 1,
+          "visible" : false},
             {"targets" : 2},
             {"targets" : 3},
             {"targets" : 4},
@@ -332,7 +337,8 @@ var table;
           "columnDefs" : [
             {"targets" : 0,
              "visible" : false},
-            {"targets" : 1},
+            {"targets" : 1,
+          "visible" : false},
             {"targets" : 2, 
               "visible": false},
             {"targets" : 3},
