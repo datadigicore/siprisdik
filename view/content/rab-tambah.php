@@ -23,11 +23,14 @@
             <div class="box-body">
               <div class="form-group">
                 <label>Tahun Anggaran</label>
-                <select class="form-control" name="tahun" id="tahun" required>
-                  <?php for ($i=0; $i < count($tahun); $i++) { 
-                    echo "<option value='".$tahun[$i]."'>".$tahun[$i].'</option>';
-                  }?>
-                </select>
+                <!-- <select class="form-control" name="tahun" id="tahun" required>
+                  <?php 
+                  // // for ($i=0; $i < count($tahun); $i++) { 
+                  //   // echo "<option value='".$tahun[$i]."'>".$tahun[$i].'</option>';
+                  // }
+                  ?>
+                </select> -->
+                <input class="form-control " type="text" id="tahun" name="tahun" value="<?php echo $tahun ?>" readonly/>
               </div>
               <input type="hidden" id="prog" name="prog" value="06" />
               <?php if ($_SESSION['direktorat'] == "") { ?>
@@ -42,31 +45,60 @@
                 </select>
               </div>
               <?php } else{ ?>
-              <input type="hidden" id="direktorat" name="direktorat" value="<?php echo $_SESSION['direktorat']; ?>" />
+              <input  type="hidden" id="direktorat" name="direktorat" value="<?php echo $_SESSION['direktorat']; ?>" />
               <?php } ?>
               <div class="form-group">
                 <label>Output</label>
+                <?php if($kdoutput!=""){?>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon2"><?php echo $datarkakl[0]->NMOUTPUT ?></span>
+                  <input class="form-control " type="text" id="output" name="output" value="<?php echo $kdoutput ?>" readonly/>
+
+                  </div>
+                  <?php } else {?>
                 <select class="form-control" id="output" name="output" onchange="chout()" required>
                   <option value="">-- Pilih Output --</option>
                 </select>
+                <?php }?>
               </div>
               <div class="form-group">
                 <label>Suboutput</label>
+                <?php if($kdsoutput!=""){?>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon2"><?php echo $datarkakl[0]->NMSOUTPUT ?></span>
+                  <input class="form-control" type="text" id="soutput" name="soutput" value="<?php echo $kdsoutput ?>" readonly/>
+                  </div>
+                  <?php } else {?>
                 <select class="form-control" id="soutput" name="soutput" onchange="chsout()" required>
                   <option value="">-- Pilih Sub Output --</option>
                 </select>
+                <?php }?>
               </div>
               <div class="form-group">
                 <label>Komponen</label>
+                <?php if($kdkmpnen!=""){?>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon2"><?php echo $datarkakl[0]->NMKMPNEN ?></span>
+                  <input class="form-control" type="text" id="komp" name="komp" value="<?php echo $kdkmpnen ?>" readonly/>
+                  </div>
+                  <?php } else {?>
                 <select class="form-control" id="komp" name="komp" onchange="chkomp()" required>
                   <option value="">-- Pilih Komponen --</option>
                 </select>
+                <?php }?>
               </div>
               <div class="form-group">
                 <label>Sub Komponen</label>
+                <?php if($kdskmpnen!=""){?>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon2"><?php echo $datarkakl[0]->NMSKMPNEN ?></span>
+                  <input class="form-control" type="text" id="skomp" name="skomp" value="<?php echo $kdskmpnen ?>" readonly/>
+                  </div>
+                  <?php } else {?>
                 <select class="form-control" id="skomp" name="skomp" onchange="chskomp()" required>
                   <option value="">-- Pilih Sub Komponen --</option>
                 </select>
+                <?php }?>
               </div>
               <div class="form-group">
                 <label>Uraian Acara</label>
@@ -102,6 +134,7 @@
 
 <script>
 $(function() {
+chprog();
   $("#tanggal").datepicker({
     autoclose: true,
     monthNames: [ "Januari", "Pebruari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" ],
@@ -110,7 +143,7 @@ $(function() {
            changeMonth: true,
 
            // numberOfMonths: 3,
-           format: 'dd/mm/yyyy',
+           dateFormat: 'dd/mm/yy',
            onClose: function(selectedDate) {
             // alert("tes");
            $("#tanggal_akhir").datepicker("option", "minDate", selectedDate);
@@ -128,14 +161,19 @@ $(function() {
     monthNames: [ "Januari", "Pebruari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" ],
       changeMonth: true,
       changeYear: true,
-      format: 'dd/mm/yyyy'
+      dateFormat: 'dd/mm/yy'
     });
     $("#tanggal_akhir").datepicker({ 
       changeMonth: true,
       changeYear: true,
-      format: 'dd/mm/yyyy'
+      dateFormat: 'dd/mm/yy'
     });
-    chprog();
+    
+    <?php if($kdoutput != ""){?>
+      $("#output").prop('readonly', true);
+      <?php
+    }
+    ?>
     // $(".tanggal").datepicker({ 
     //   monthNames: [ "Januari", "Pebruari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" ],
     //   changeMonth: true,
@@ -182,7 +220,11 @@ function chprog(){
       success: function(data){
         var obj = jQuery.parseJSON(data);
         for (var i = 0; i < obj.KDOUTPUT.length; i++) {
-          $('#output').append('<option value="'+obj.KDOUTPUT[i]+'">'+obj.KDOUTPUT[i]+' - '+obj.NMOUTPUT[i]+'</option>')
+          if(<?php echo $kdoutput?> == obj.KDOUTPUT[i]){
+            $('#output').append('<option value="'+obj.KDOUTPUT[i]+'" selected>'+obj.KDOUTPUT[i]+' - '+obj.NMOUTPUT[i]+'</option>');
+          } else {
+            $('#output').append('<option value="'+obj.KDOUTPUT[i]+'">'+obj.KDOUTPUT[i]+' - '+obj.NMOUTPUT[i]+'</option>');
+          }
         };
       },
     });
@@ -211,10 +253,12 @@ function chprog(){
       success: function(data){
         var obj = jQuery.parseJSON(data);
         for (var i = 0; i < obj.KDSOUTPUT.length; i++) {
+
           $('#soutput').append('<option value="'+obj.KDSOUTPUT[i]+'">'+obj.KDSOUTPUT[i]+' - '+obj.NMSOUTPUT[i]+'</option>')
         };
       },
     });
+
   }
   function chsout(){   
     $("#komp option").remove();   

@@ -202,17 +202,17 @@ switch ($process) {
     $column = array(
       array( 'db' => 'KDGIAT',      'dt' => 0 ),
       array( 'db' => 'NMGIAT',      'dt' => 1),
-      array( 'db' => 'NMOUTPUT',      'dt' => 2, 'formatter' => function($d,$row){
-        return $row[10]." - ".$d;
+      array( 'db' => 'KDOUTPUT',      'dt' => 2, 'formatter' => function($d,$row){
+        return $d." - ".$row[10];
       }),
-      array( 'db' => 'NMSOUTPUT',      'dt' => 3, 'formatter' => function($d,$row){
-        return $row[11]." - ".$d;
+      array( 'db' => 'KDSOUTPUT',      'dt' => 3, 'formatter' => function($d,$row){
+        return $d." - ".$row[11];
       }),
-      array( 'db' => 'NMKMPNEN',      'dt' => 4, 'formatter' => function($d,$row){
-        return $row[12]." - ".$d;
+      array( 'db' => 'KDKMPNEN',      'dt' => 4, 'formatter' => function($d,$row){
+        return$d." - ". $row[12];
       }),
-      array( 'db' => 'NMSKMPNEN',      'dt' => 5, 'formatter' => function($d,$row){
-        return $row[13]." - ".$d;
+      array( 'db' => 'KDSKMPNEN',      'dt' => 5, 'formatter' => function($d,$row){
+        return $d." - ".$row[13];
       }),
       array( 'db' => 'SUM(JUMLAH)',      'dt' => 6, 'formatter' => function($d,$row){
         return number_format($d,0,".",".");
@@ -236,15 +236,16 @@ switch ($process) {
       array( 'db' => 'KDSKMPNEN',      'dt' => 9, 'formatter' => function($d,$row){
         return number_format($row[6]+$row[7],0,".",".");
       }),
-      array( 'db' => 'KDOUTPUT',      'dt' => 10, 'formatter' => function($d,$row, $dataArray){
-        $button = '<div class="btn-group"><a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rab/?kdoutput='.$d.'&kdsoutput='.$row[11].'&kdkmpnen='.$row[12].'&kdskmpnen='.$row[13].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a><div>';
+      array( 'db' => 'NMOUTPUT',      'dt' => 10, 'formatter' => function($d,$row, $dataArray){
+        $button = '<div class="btn-group"><a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rab/?kdoutput='.$row[2].'&kdsoutput='.$row[3].'&kdkmpnen='.$row[4].'&kdskmpnen='.$row[5].'&tahun='.$row[14].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a><div>';
         return $button;
       }),
 
       //kode
-      array( 'db' => 'KDSOUTPUT',      'dt' => 11),
-      array( 'db' => 'KDKMPNEN',      'dt' => 12),
-      array( 'db' => 'KDSKMPNEN',      'dt' => 13),
+      array( 'db' => 'NMSOUTPUT',      'dt' => 11),
+      array( 'db' => 'NMKMPNEN',      'dt' => 12),
+      array( 'db' => 'NMSKMPNEN',      'dt' => 13),
+      array( 'db' => 'THANG',      'dt' => 14),
       //kode
     );
     $where="";
@@ -285,7 +286,7 @@ switch ($process) {
     break;
   case 'save':
     $mdl_rab->save($_POST);
-    $utility->load("content/rab","success","Data RAB berhasil dimasukkan ke dalam database");
+    $utility->load("content/rab/?kdoutput=".$_POST['output']."&kdsoutput=".$_POST['soutput']."&kdkmpnen=".$_POST['komp']."&kdskmpnen=".$_POST['skomp']."&tahun=".$_POST['tahun']."","success","Data RAB berhasil dimasukkan ke dalam database");
     break;
   case 'edit':
     $mdl_rab->edit($_POST);
