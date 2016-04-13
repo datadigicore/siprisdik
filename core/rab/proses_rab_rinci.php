@@ -225,6 +225,7 @@ switch ($process) {
 		$id_rabfull = $_POST['id_rabfull'];
 		$akun = $_POST['kdakun'];	    
 		$noitem = $_POST['noitem'];	    
+		echo "<pre>";print_r($_POST);die;
 		if ($akun == '524119') {
 			$taxi_asal    = str_replace(".", "", $_POST['taxi_asal'][0]);
 	        $taxi_tujuan  = str_replace(".", "", $_POST['taxi_tujuan'][0]);
