@@ -571,7 +571,7 @@ switch ($process) {
 		}else{
 			$mdl_rab->delrabakun($id_rabfull);
 		}
-
+		$getidrab = $mdl_rab->getminrabid($getrabfull);
 		$akun = $getrabfull['kdakun'];
 		$noitem = $getrabfull['noitem'];
 		$value = $getrabfull['value'];
