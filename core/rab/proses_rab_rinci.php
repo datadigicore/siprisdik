@@ -571,6 +571,38 @@ switch ($process) {
 		}else{
 			$mdl_rab->delrabakun($id_rabfull);
 		}
+
+		$akun = $getrabfull['kdakun'];
+		$noitem = $getrabfull['noitem'];
+		$value = $getrabfull['value'];
+		if ($akun == '521211') {  //belanja bahan
+	    	$jum_rkakl = $mdl_rab->getJumlahRkakl($getrabfull, $akun, $noitem);
+        	$total = $jum_rkakl['usulan'] - $value;
+        	// print_r($total);die;
+            $mdl_rab->insertUsulan($getrabfull, $akun, $noitem, $total);
+	    }elseif($akun != ""){  // bukan belanja bahan
+	      	$jum_rkakl = $mdl_rab->getJumlahRkakl($getrabfull, $akun);
+	        $totalusul = $jum_rkakl['usulan'] - $value;
+	        $itemgroup = $jum_rkakl['itemgroup'];
+	        $pecah_item = explode(",", $itemgroup);
+	        $banyakitem = count($pecah_item);
+
+	        $totalperitem = floor($totalusul/$banyakitem);
+	        $sisaitem = $totalusul % $banyakitem;
+
+	      for ($x=0; $x < $banyakitem; $x++) { 
+	        if ($sisaitem == 0) {
+        		$mdl_rab->insertUsulan($getrabfull, $akun, $pecah_item[$x], $totalperitem);
+	        }else{
+	        	if ($x == ($banyakitem-1)) {
+	                $totalperitem = $totalperitem + $sisaitem;
+            		$mdl_rab->insertUsulan($getrabfull, $akun, $pecah_item[$x], $totalperitem);
+	            }else{
+            		$mdl_rab->insertUsulan($getrabfull, $akun, $pecah_item[$x], $totalperitem);
+	            }
+	        }
+	      }
+	    }
     	$utility->load("content/rabakun/".$getidrab->id,"success","Data berhasil dihapus");
 		break;
 	case 'importrab':

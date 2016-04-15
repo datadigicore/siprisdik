@@ -289,12 +289,15 @@ switch ($process) {
     $utility->load("content/rab/?kdoutput=".$_POST['output']."&kdsoutput=".$_POST['soutput']."&kdkmpnen=".$_POST['komp']."&kdskmpnen=".$_POST['skomp']."&tahun=".$_POST['tahun']."","success","Data RAB berhasil dimasukkan ke dalam database");
     break;
   case 'edit':
+    $id_rabview = $_POST['idview'];
+    $akun = $mdl_rab->getview($id_rabview);
     $mdl_rab->edit($_POST);
-    $utility->load("content/rab","success","Data RAB berhasil diubah");
+    $utility->load("content/rab/?kdoutput=".strval($akun['kdoutput'])."&kdsoutput=".strval($akun['kdsoutput'])."&kdkmpnen=".strval($akun['kdkmpnen'])."&kdskmpnen=".strval($akun['kdskmpnen'])."&tahun=".strval($akun['thang']),"success","Data RAB telah diubah");
     break;
   case 'ajukan':
     $id_rabview = $_POST['id_rab_aju'];
     $akun = $mdl_rab->getakun($id_rabview);
+    $view = $mdl_rab->getview($id_rabview);
     $error = false;
     for ($i=0; $i < count($akun); $i++) { 
       if ($akun[$i]->kdakun == "") {  //kode akun kosong
@@ -305,19 +308,20 @@ switch ($process) {
     if (!$error) {
       $status = '1';
       $mdl_rab->chstatus($id_rabview, $status);
-      $utility->load("content/rab","success","Data RAB telah diajukan ke Bendahara Pengeluaran");
+      $utility->load("content/rab/?kdoutput=".strval($view['kdoutput'])."&kdsoutput=".strval($view['kdsoutput'])."&kdkmpnen=".strval($view['kdkmpnen'])."&kdskmpnen=".strval($view['kdskmpnen'])."&tahun=".strval($view['thang']),"success","Data RAB telah diajukan ke Bendahara Pengeluaran");
     }else{
       $kodeError = implode(", ", $kderror);
       if ($error == 1) {
-        $utility->load("content/rab","warning","Proses tidak dilanjutkan. Kode Akun ".$kodeError." melebihi Pagu");
+        $utility->load("content/rab/?kdoutput=".strval($view['kdoutput'])."&kdsoutput=".strval($view['kdsoutput'])."&kdkmpnen=".strval($view['kdkmpnen'])."&kdskmpnen=".strval($view['kdskmpnen'])."&tahun=".strval($view['thang']),"warning","Proses tidak dilanjutkan. Kode Akun ".$kodeError." melebihi Pagu");
       }else{
-        $utility->load("content/rab","error","Proses tidak dilanjutkan. Terdapat data yang kosong");
+        $utility->load("content/rab/?kdoutput=".strval($view['kdoutput'])."&kdsoutput=".strval($view['kdsoutput'])."&kdkmpnen=".strval($view['kdkmpnen'])."&kdskmpnen=".strval($view['kdskmpnen'])."&tahun=".strval($view['thang']),"error","Proses tidak dilanjutkan. Terdapat data yang kosong");
       }
     }
     break;
   case 'sahkan':
     $id_rabview = $_POST['id_rab_sah'];
     $akun = $mdl_rab->getakun($id_rabview);
+    $view = $mdl_rab->getview($id_rabview);
     for ($i=0; $i < count($akun); $i++) { 
       if ($akun[$i]->kdakun == 521211) {  //belanja bahan
         $rab = $mdl_rab->getRabItem($akun[$i]);
@@ -344,21 +348,22 @@ switch ($process) {
     }
     $status = '2';
     $mdl_rab->chstatus($id_rabview, $status);
-    $utility->load("content/rab","success","Data RAB telah disahkan");
+    $utility->load("content/rab/?kdoutput=".strval($view['kdoutput'])."&kdsoutput=".strval($view['kdsoutput'])."&kdkmpnen=".strval($view['kdkmpnen'])."&kdskmpnen=".strval($view['kdskmpnen'])."&tahun=".strval($view['thang']),"success","Data RAB telah disahkan");
     break;
   case 'revisi':
     $id_rabview = $_POST['id_rab_rev'];
+    $view = $mdl_rab->getview($id_rabview);
     $status = '3';
     $pesan = $_POST['pesan'];
     $mdl_rab->chstatus($id_rabview, $status);
     $mdl_rab->pesanrevisi($id_rabview, $pesan);
-    $utility->load("content/rab","success","Data RAB direvisi");
+    $utility->load("content/rab/?kdoutput=".strval($view['kdoutput'])."&kdsoutput=".strval($view['kdsoutput'])."&kdkmpnen=".strval($view['kdkmpnen'])."&kdskmpnen=".strval($view['kdskmpnen'])."&tahun=".strval($view['thang']),"success","Data RAB direvisi");
     break;
   case 'delete':
     $id_rabview = $_POST['id_rab_del'];
-    $akun = $mdl_rab->getakun($id_rabview);
+    $akun = $mdl_rab->getview($id_rabview);
     $mdl_rab->deleterab($id_rabview);
-    $utility->load("content/rab","success","Data RAB telah dihapus");
+    $utility->load("content/rab/?kdoutput=".strval($akun['kdoutput'])."&kdsoutput=".strval($akun['kdsoutput'])."&kdkmpnen=".strval($akun['kdkmpnen'])."&kdskmpnen=".strval($akun['kdskmpnen'])."&tahun=".strval($akun['thang']),"success","Data RAB telah dihapus");
     break;
   default:
     $utility->location_goto(".");

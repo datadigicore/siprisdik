@@ -1227,7 +1227,8 @@
       $kdkmpnen   = $data['kdkmpnen'];
       $kdskmpnen  = $data['kdskmpnen'];
 
-      $query  = "SELECT * FROM rkakl_full
+      if ($kdgiat !== "") {
+        $query  = "SELECT * FROM rkakl_full
                             WHERE THANG='$thang'  
                             AND KDGIAT='$kdgiat'
                             AND KDOUTPUT='$kdoutput'
@@ -1235,6 +1236,16 @@
                             AND KDKMPNEN='$kdkmpnen'
                             AND KDSKMPNEN='$kdskmpnen'
                             LIMIT 1";
+      }else{
+        $query  = "SELECT * FROM rkakl_full
+                            WHERE THANG='$thang'  
+                            AND KDOUTPUT='$kdoutput'
+                            AND KDSOUTPUT='$kdsoutput'
+                            AND KDKMPNEN='$kdkmpnen'
+                            AND KDSKMPNEN='$kdskmpnen'
+                            LIMIT 1";
+      }
+      
                             // echo $query;
       $result    = $this->query($query);
       while ($rkakl = $this->fetch_object($result)) {
@@ -1365,10 +1376,11 @@
     }
 
     public function getminrabid($data){
-      $query = "SELECT MIN(id) as id, count(id) as banyak FROM rabfull where rabview_id    = '$data->rabview_id'
-                                                    AND penerima      = '$data->penerima'
-                                                    AND npwp          = '$data->npwp'
-                                                    AND jenis         = '$data->jenis'
+      $query = "SELECT MIN(id) as id, count(id) as banyak FROM rabfull 
+                                                  where rabview_id    = '".$data['rabview_id']."'
+                                                    AND penerima      = '".$data['penerima']."'
+                                                    AND npwp          = '".$data['npwp']."'
+                                                    AND jenis         = '".$data['jenis']."'
                                                   ";
       $result = $this->query($query);
       $data  = $this->fetch_object($result);

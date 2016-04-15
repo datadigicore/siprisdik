@@ -46,7 +46,7 @@ else {
         case 'rab':
           if($data[2]=='tambah'){
             if(isset($_GET['kdoutput']) && isset($_GET['kdsoutput']) && isset($_GET['kdkmpnen']) && isset($_GET['kdskmpnen']))
-                {
+            {
 
                   $kdoutput =$_GET['kdoutput'];
                   $kdsoutput =$_GET['kdsoutput'];
@@ -72,8 +72,7 @@ else {
             include ('view/content/rab-add-rincian.php');
           } else {
             $direktorat = $_SESSION['direktorat'];
-            $tahun = $mdl_rab->getYear();
-             if(isset($_GET['kdoutput']) && isset($_GET['kdsoutput']) && isset($_GET['kdkmpnen']) && isset($_GET['kdskmpnen']))
+            if(isset($_GET['kdoutput']) && isset($_GET['kdsoutput']) && isset($_GET['kdkmpnen']) && isset($_GET['kdskmpnen']))
                 {
                   $tahun = $_GET['tahun'];
                   $kdoutput =$_GET['kdoutput'];
@@ -87,6 +86,9 @@ else {
                   $data['kdkmpnen']= $kdkmpnen;
                   $data['kdskmpnen']= $kdskmpnen;
                   $datarkakl = $mdl_rab->getrkaklfull3($data);
+                  // echo($tahun);
+                  // echo "tesaja";exit;
+
                 } else {
                   $kdoutput ="";
                   $kdsoutput ="";
