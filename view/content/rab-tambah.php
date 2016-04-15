@@ -1,12 +1,12 @@
 <div class="content-wrapper">
   <section class="content-header">
-    <a href="<?php echo $url_rewrite?>content/rab" class="btn btn-app bg-navy"><i class="fa fa-arrow-left"></i>Kembali</a>
+    <a  href="<?php echo $url_rewrite?>content/rab/?kdoutput=<?php echo $datarkakl[0]->KDOUTPUT?>&kdsoutput=<?php echo $datarkakl[0]->KDSOUTPUT?>&kdkmpnen=<?php echo $datarkakl[0]->KDKMPNEN?>&kdskmpnen=<?php echo $datarkakl[0]->KDSKMPNEN?>&tahun=<?php echo $datarkakl[0]->THANG?>" class="btn btn-app bg-navy"><i class="fa fa-arrow-left"></i>Kembali</a>
     <h1>
       Data RAB 
     </h1>
     <ol class="breadcrumb">
       <li><i class="fa fa-table"></i> <b>
-        <a href="<?php echo $url_rewrite?>content/rab"> Data RAB</a> 
+        <a  href="<?php echo $url_rewrite?>content/rab/?kdoutput=<?php echo $datarkakl[0]->KDOUTPUT?>&kdsoutput=<?php echo $datarkakl[0]->KDSOUTPUT?>&kdkmpnen=<?php echo $datarkakl[0]->KDKMPNEN?>&kdskmpnen=<?php echo $datarkakl[0]->KDSKMPNEN?>&tahun=<?php echo $datarkakl[0]->THANG?>"> Data RAB</a> 
         > Tambah RAB 
         </b>
       </li>
