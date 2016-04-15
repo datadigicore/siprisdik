@@ -2927,7 +2927,7 @@
       $datatemp = $this->gettemprab($id_rab_view);
       $rabfull = "SELECT `COLUMN_NAME` 
                   FROM `INFORMATION_SCHEMA`.`COLUMNS` 
-                  WHERE `TABLE_SCHEMA`='rkakl' 
+                  WHERE `TABLE_SCHEMA`='dikti_keuangan' 
                       AND `TABLE_NAME`='rabfull';";
       $resrab = $this->query($rabfull);
       $x=0;
