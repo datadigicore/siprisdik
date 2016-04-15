@@ -3001,11 +3001,7 @@
         $querytemplog = "INSERT INTO temprabfull_log SET ";
 
         for ($k=0; $k < count($tempindeks); $k++) { 
-          if ($k == count($tempindeks)) {
-            $querytemplog .= $tempindeks[$k]." = '".$datatemp[$i]->$tempindeks[$k]."'";
-          }else{
             $querytemplog .= $tempindeks[$k]." = '".$datatemp[$i]->$tempindeks[$k]."', ";
-          }
         }
         $querytemplog2 = substr($querytemplog,0,-2);
         $result = $this->query($querytemplog2);
