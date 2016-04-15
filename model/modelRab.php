@@ -2925,13 +2925,17 @@
 
     public function save_temprabfull($id_rab_view){
       $datatemp = $this->gettemprab($id_rab_view);
-      $rabfull = "SELECT * FROM rabfull limit 1";
+      $rabfull = "SELECT `COLUMN_NAME` 
+                  FROM `INFORMATION_SCHEMA`.`COLUMNS` 
+                  WHERE `TABLE_SCHEMA`='rkakl' 
+                      AND `TABLE_NAME`='rabfull';";
       $resrab = $this->query($rabfull);
       $x=0;
-      foreach($this->fetch_object($resrab) as $key => $value) {
-        $indeks[$x] = $key;
+      while($fetch = $this->fetch_array($resrab)) {
+        $indeks[$x] = $fetch[0];
         $x++;
       }
+
       $temprabfull = "SELECT * FROM temprabfull limit 1";
       $tempresrab = $this->query($temprabfull);
       $y=0;
@@ -2939,6 +2943,7 @@
         $tempindeks[$y] = $key;
         $y++;
       }
+
       unset($indeks[0]);
       for ($i=0; $i < count($datatemp); $i++) { 
         $query      = "INSERT INTO rabfull SET ";
@@ -2949,21 +2954,71 @@
             $query .= $indeks[$j]." = '".$datatemp[$i]->$indeks[$j]."', ";
           }
         }
-        $result = $this->query($query);
+        $resultrabfull = $this->query($query);
+
+        $getrab = array('thang' => $datatemp[$i]->thang,
+                        'kdprogram' => $datatemp[$i]->kdprogram,
+                        'kdgiat'  => $datatemp[$i]->kdgiat,
+                        'kdoutput'  => $datatemp[$i]->kdoutput,
+                        'kdsoutput'  => $datatemp[$i]->kdsoutput,
+                        'kdkmpnen'  => $datatemp[$i]->kdkmpnen,
+                        'kdskmpnen'  => $datatemp[$i]->kdskmpnen,
+                        );
+
+        $akun = $datatemp[$i]->kdakun;
+        $noitem = $datatemp[$i]->noitem;
+        $value = $datatemp[$i]->value;
+
+        if ($akun == '521211') {  //belanja bahan
+          $jum_rkakl = $this->getJumlahRkakl($getrab, $akun, $noitem);
+          $total = $jum_rkakl['usulan'] + $value;
+          $this->insertUsulan($getrab, $akun, $noitem, $total);
+        }
+        elseif($akun != ""){  // bukan belanja bahan
+          $jum_rkakl = $this->getJumlahRkakl($getrab, $akun);
+          $totalusul = $jum_rkakl['usulan'] + $value;
+          $itemgroup = $jum_rkakl['itemgroup'];
+          $pecah_item = explode(",", $itemgroup);
+          $banyakitem = count($pecah_item);
+
+          $totalperitem = floor($totalusul/$banyakitem);
+          $sisaitem = $totalusul % $banyakitem;
+
+          for ($x=0; $x < $banyakitem; $x++) { 
+            if ($sisaitem == 0) {
+              $this->insertUsulan($getrab, $akun, $pecah_item[$x], $totalperitem);
+            }else{
+              if ($x == ($banyakitem-1)) {
+                $totalperitem = $totalperitem + $sisaitem;
+                $this->insertUsulan($getrab, $akun, $pecah_item[$x], $totalperitem);
+              }else{
+                $this->insertUsulan($getrab, $akun, $pecah_item[$x], $totalperitem);
+              }
+            }
+          }
+        }
 
         $querytemplog = "INSERT INTO temprabfull_log SET ";
+
         for ($k=0; $k < count($tempindeks); $k++) { 
-          if ($k == count($indeks)) {
+          if ($k == count($tempindeks)) {
             $querytemplog .= $tempindeks[$k]." = '".$datatemp[$i]->$tempindeks[$k]."'";
           }else{
             $querytemplog .= $tempindeks[$k]." = '".$datatemp[$i]->$tempindeks[$k]."', ";
           }
         }
-        $result = $this->query($querytemplog);
+        $querytemplog2 = substr($querytemplog,0,-2);
+        $result = $this->query($querytemplog2);
       }
-      $hapustemp = "DELETE FROM temprabfull where id_rab_view = '".$id_rab_view."' and created_by = '".$_SESSION['id']."'  ";
+      $hapustemp = "DELETE FROM temprabfull where rabview_id = '".$id_rab_view."' and created_by = '".$_SESSION['id']."'  ";
       $result = $this->query($hapustemp);
       
+      return $result;
+    }
+
+    public function hapustemprab($id_rab_view){
+      $hapustemp = "DELETE FROM temprabfull where rabview_id = '".$id_rab_view."' and created_by = '".$_SESSION['id']."'  ";
+      $result = $this->query($hapustemp);
       return $result;
     }
 

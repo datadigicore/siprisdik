@@ -201,9 +201,11 @@
               </tbody>
             </table>
           </div>
+          <?php if($stat_err == 0) { ?>
           <div class="box-footer" align="center">
             <button type="submit" class="btn btn-flat btn-lg btn-success"><i class="fa fa-save"></i> Simpan</button>
           </div>
+          <?php } ?>
           </form>
         </div>        
       </div>
@@ -213,7 +215,7 @@
 
 <script>
 var oTable;
-$(document).ready(function() {
+  $(function () {
     $('#example').DataTable( {
       "info":false,
       "oLanguage": {
@@ -345,4 +347,16 @@ $(document).ready(function() {
       }
     });
 } );
+
+$(document).ready(function() {
+  <?php if($stat_err == 1) { ?>
+  $.ajax({
+    url: "<?php echo $url_rewrite;?>process/rab_rinci/deltemprab",
+    type: "POST",
+    data: {'id_rab_view':'<?php echo $id_rab_view;?>' }
+  }).done(function() {
+    alert('berhasil dihapus');
+  });
+  <?php }?>
+  });
 </script>

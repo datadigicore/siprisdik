@@ -606,9 +606,9 @@ switch ($process) {
 	            $data = $mdl_rab->importRab($array,$allDataInSheet);
 	            // echo "<pre>"; print_r($data);die;
 	            if ($data['error'] == 'true') {
-		            $utility->load("content/rabdetail/".$id_rab_view."/upload",'error','Proses Tidak Dapat Dilanjutkan. Silahkan Validasi dan Unggah Kembali.');
+		            $utility->load("content/rabdetail/".$id_rab_view."/upload/1",'error','Proses Tidak Dapat Dilanjutkan. Silahkan Validasi dan Unggah Kembali.');
 	            }else{
-		            $utility->load("content/rabdetail/".$id_rab_view."/upload",'success','Telah Berhasil Diupload. Silahkan Melanjutkan Proses.');
+		            $utility->load("content/rabdetail/".$id_rab_view."/upload/0",'success','Telah Berhasil Diupload. Silahkan Melanjutkan Proses.');
 	          	}
 	          }
 	        }
@@ -627,14 +627,14 @@ switch ($process) {
 		//     ->setCellValue('C7', '5')
 		//     ->setCellValue('C8', '6')       
 		//     ->setCellValue('C9', '7');
-		// print_r($excel2);die;
-
-		$objWriter = PHPExcel_IOFactory::createWriter($excel2, 'Excel5');
-		header("Content-type: text/xls");
-		header("Cache-Control: no-store, no-cache");
-		header('Content-Disposition: attachment; filename="importRAB.xls"');
-		$objWriter->save('php://output','w');
-    	break;
+		// print_r($excel2);die;	
+		
+		$objWriter = new PHPExcel_Writer_Excel2007($excel2);
+		
+		ob_clean();
+    	
+		$objWriter->save("php://output");
+		break;
     case 'table_upload':
 		$rabview_id = $_POST['id_rab_view'];
 		$dataArray['url_rewrite'] = $url_rewrite;
@@ -1777,6 +1777,9 @@ switch ($process) {
 		$id_rab_view = $_POST['id_rab_view'];
 		$getsave = $mdl_rab->save_temprabfull($id_rab_view);
     	$utility->load("content/rabdetail/".$id_rab_view,"success","Data berhasil dimasukkan ke dalam database");
+		break;
+	case 'deltemprab':
+		$mdl_rab->hapustemprab($id_rab_view);
 		break;
 	default:
 		$utility->location_goto(".");
