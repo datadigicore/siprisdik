@@ -221,7 +221,7 @@ switch ($process) {
         if(is_null($d)){
           return 0;
         } else {
-          return number_format($d,0,".",".");
+          return number_format(abs($d),0,".",".");
         }
         
       }),

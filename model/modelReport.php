@@ -1615,8 +1615,8 @@
         if($value[kota_asal]!="") $kota_asal= $value[kota_asal];
         if($value[kota_tujuan]!="") $kota_tujuan = $value[kota_tujuan];
         if($value[lama_hari]!="") $lama_hari = $value[lama_hari];
-        if($value[tgl_mulai]!="") $tgl_mulai = $this->konversi_tanggal($value[tgl_mulai],"");
-        if($value[tgl_akhir]!="") $tgl_akhir = $this->konversi_tanggal($value[tgl_akhir],"");
+        if($value[tgl_mulai]!="0000-00-00") $tgl_mulai = $this->konversi_tanggal($value[tgl_mulai],"");
+        if($value[tgl_akhir]!="0000-00-00") $tgl_akhir = $this->konversi_tanggal($value[tgl_akhir],"");
         if($value[npwp]!="") $npwp = $value[npwp];
         if($value[lokasi]!="") $lokasi = $value[lokasi];
         $penerima=$value[penerima];
@@ -2259,8 +2259,8 @@ public function daftar_peng_riil($result,$det){
     if($val[taxi_tujuan]>0) $taxi_tujuan = $val[taxi_tujuan];
     if($val[lama_hari]>0)   $jml_hari = $val[lama_hari];
     if($val[uang_harian]>0) $uang_harian = $val[uang_harian];
-    if($val[tgl_mulai]!="") $tgl_mulai = $this->konversi_tanggal($val[tgl_mulai],"");
-    if($val[tgl_akhir]!="") $tgl_akhir = $this->konversi_tanggal($val[tgl_akhir],"");  
+    if($val[tgl_mulai]!="0000-00-00") $tgl_mulai = $this->konversi_tanggal($val[tgl_mulai],"");
+    if($val[tgl_akhir]!="0000-00-00") $tgl_akhir = $this->konversi_tanggal($val[tgl_akhir],"");  
     $penerima = $val['penerima'];
     $jabatan = $val['jabatan'];
                
