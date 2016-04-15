@@ -79,9 +79,11 @@
               <select style="margin:5px auto" class="form-control" id="kode-akun" name="kdakun" onchange="chakun()" required />
               </select>
 
-              <label>No Item</label>
-              <select style="margin:5px auto" class="form-control" id="noitem" name="noitem" onchange="tambahinfopagu()" required />
-              </select>
+              <div id="div-item" style="display:none">
+                <label>No Item</label>
+                <select style="margin:5px auto" class="form-control" id="noitem" name="noitem" onchange="tambahinfopagu()" />
+                </select>
+              </div>
 
               <div id="bahan">
               </div>
@@ -310,25 +312,35 @@
   function chakun(){
     var id_rabfull = $('#id_rabfull').val();
     var kdAkun = $('#kode-akun').val();
-    $("#noitem option").remove();
-    var isi ="<option value=''>-- Pilih No Item --</option>";
-    $.ajax({
-      method: "GET",
-      url: "<?php echo $url_rewrite?>ajax/show_item.php",
-      data: { 'id_rabfull': id_rabfull,
-              'kdAkun'    : kdAkun, }
-    })
-    .done(function( r ) {
-        r=JSON.parse(r);
-        if(r!=null){
-          $.each( r, function( key, value ) {
-            isi = isi+ '<option value="'+key+'">'+key+' - '+value+'</option>';
-          });
-          $("#noitem").append(isi);
-        } else {
-          alert("Tidak terdapat item pada kode akun yang anda pilih");
-        }
-      });
+    
+    if (kdAkun == "521211") {
+      $('#item-hide').remove();
+      $('#div-item').show();
+      $("#noitem option").remove();
+      var isi ="<option value=''>-- Pilih No Item --</option>";
+      $.ajax({
+        method: "GET",
+        url: "<?php echo $url_rewrite?>ajax/show_item.php",
+        data: { 'id_rabfull': id_rabfull,
+                'kdAkun'    : kdAkun, }
+      })
+      .done(function( r ) {
+          r=JSON.parse(r);
+          if(r!=null){
+            $.each( r, function( key, value ) {
+              isi = isi+ '<option value="'+key+'">'+key+' - '+value+'</option>';
+            });
+            $("#noitem").append(isi);
+          } else {
+            alert("Tidak terdapat item pada kode akun yang anda pilih");
+          }
+        });
+    }else{
+      $('#item-hide').remove();
+      $('#div-tambah-akun').append('<input type="hidden" id="item-hide" name="noitem" value="1" />');
+      $('#div-item').hide();
+    };
+
 
     var noitem = $('#noitem').val();
     if (kdAkun == '521211' && noitem == null) {

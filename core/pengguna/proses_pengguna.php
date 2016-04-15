@@ -97,7 +97,9 @@ switch ($process) {
     $utility->load("content/edit_profile","success","Data berhasil diubah");
   break;
   case 'edit':
-    $_POST['password'] = $utility->sha512($_POST['password']);
+    if (!empty($_POST['password'])) {
+      $_POST['password'] = $utility->sha512($_POST['password']);
+    }
     $pengguna->editPengguna($purifier->purifyArray($_POST));
     $utility->load("content/user","success","Data Pengguna berhasil diperbaharui");
   break;

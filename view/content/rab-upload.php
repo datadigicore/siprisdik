@@ -21,6 +21,7 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="box">
+          <form enctype="multipart/form-data" method="post" action="<?php echo $url_rewrite;?>process/rab_rinci/save_dataimport">
           <div class="box-header">
             <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya</h3>
             <input type="hidden" id="id_rab_view" name="id_rab_view" value="<?php echo $id_rab_view ?>" />
@@ -59,6 +60,28 @@
               <thead style="background-color:#11245B;color:white;">
                 <tr>
                   <th rowspan="2">No</th>
+                  <th rowspan="2">Jenis</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
+                  <th rowspan="2">val</th>
                   <th rowspan="2">Nama</th>
                   <th rowspan="2">Asal</th>
                   <th rowspan="2">NPWP</th>
@@ -119,7 +142,6 @@
                   <th>Belanja Biaya Pemeliharaan Peralatan dan Mesin</th>
                   <th>Belanja Penambahan Nilai Gedung dan Bangunan</th>
                   <th>Belanja Modal Lainnya</th>
-                  <th rowspan="2">Status</th>
                 </tr>
                 <tr>
                   <th>521213</th>
@@ -176,18 +198,15 @@
                 </tr>
               </thead>
               <tbody>
-                <?php for ($i=0; $i < count($insert); $i++) { ?>
-                      <tr>
-                        <td><?php echo $i+1; ?></td>
-                        <td><?php echo $insert[$i]->penerima ?></td>
-                        <td><?php echo $insert[$i]->kdakun ?></td>
-                        <td><?php echo 'Rp '.number_format($insert[$i]->value, 2) ?></td>
-                        <td><?php echo $insert[$i]->error ?></td>
-                      </tr>
-                <?php }?>
               </tbody>
             </table>
           </div>
+          <?php if($stat_err == 0) { ?>
+          <div class="box-footer" align="center">
+            <button type="submit" class="btn btn-flat btn-lg btn-success"><i class="fa fa-save"></i> Simpan</button>
+          </div>
+          <?php } ?>
+          </form>
         </div>        
       </div>
     </div>
@@ -196,7 +215,7 @@
 
 <script>
 var oTable;
-$(document).ready(function() {
+  $(function () {
     $('#example').DataTable( {
       "info":false,
       "oLanguage": {
@@ -205,6 +224,122 @@ $(document).ready(function() {
       "processing": true,
       "serverSide": true,
       "scrollX": true,
+      "columnDefs" : [
+            {"targets" : 0,
+             "visible" : false},
+            {"targets" : 1,
+             "visible" : false},
+            {"targets" : 2,
+             "visible" : false},
+            {"targets" : 3,
+             "visible" : false},
+            {"targets" : 4,
+             "visible" : false},
+            {"targets" : 5,
+             "visible" : false},
+            {"targets" : 6,
+             "visible" : false},
+            {"targets" : 7,
+             "visible" : false},
+            {"targets" : 8,
+             "visible" : false},
+            {"targets" : 9,
+             "visible" : false},
+            {"targets" : 10,
+             "visible" : false},
+            {"targets" : 11,
+             "visible" : false},
+            {"targets" : 12,
+             "visible" : false},
+            {"targets" : 13,
+             "visible" : false},
+            {"targets" : 14,
+             "visible" : false},
+            {"targets" : 15,
+             "visible" : false},
+            {"targets" : 16,
+             "visible" : false},
+            {"targets" : 17,
+             "visible" : false},
+            {"targets" : 18,
+             "visible" : false},
+            {"targets" : 19,
+             "visible" : false},
+            {"targets" : 20,
+             "visible" : false},
+            {"targets" : 21,
+             "visible" : false},
+            {"targets" : 22,
+             "visible" : false},
+            {"targets" : 23},
+            {"targets" : 24},
+            {"targets" : 25},
+            {"targets" : 26},
+            {"targets" : 27},
+            {"targets" : 28},
+            {"targets" : 29},
+            {"targets" : 30},
+            {"targets" : 31},
+            {"targets" : 32},
+            {"targets" : 33},
+            {"targets" : 34},
+            {"targets" : 35},
+            {"targets" : 36},
+            {"targets" : 37},
+            {"targets" : 38},
+            {"targets" : 39},
+            {"targets" : 40},
+            {"targets" : 41},
+            {"targets" : 42},
+            {"targets" : 43},
+            {"targets" : 44},
+            {"targets" : 45},
+            {"targets" : 46},
+            {"targets" : 47},
+            {"targets" : 48},
+            {"targets" : 49},
+            {"targets" : 50},
+            {"targets" : 51},
+            {"targets" : 52},
+            {"targets" : 53},
+            {"targets" : 54},
+            {"targets" : 55},
+            {"targets" : 56},
+            {"targets" : 57},
+            {"targets" : 58},
+            {"targets" : 59},
+            {"targets" : 60},
+            {"targets" : 61},
+            {"targets" : 62},
+            {"targets" : 63},
+            {"targets" : 64},
+            {"targets" : 65},
+            {"targets" : 66},
+            {"targets" : 67},
+            {"targets" : 68},
+            {"targets" : 69},
+            {"targets" : 70},
+            {"targets" : 71},
+            {"targets" : 72},
+            {"targets" : 73},
+            {"targets" : 74},
+            {"targets" : 75},
+            {"targets" : 76},
+            {"targets" : 77},
+            {"targets" : 78},
+            {"targets" : 79},
+            {"targets" : 80},
+            {"targets" : 81},
+            {"targets" : 82},
+            {"targets" : 83},
+            {"targets" : 84},
+            {"targets" : 85},
+            {"targets" : 86},
+            {"targets" : 87},
+            {"targets" : 88},
+            {"targets" : 89},
+            {"targets" : 90},
+          ],
       "ajax": {
         "url": "<?php echo $url_rewrite;?>process/rab_rinci/table_upload",
         "type": "POST",
@@ -212,4 +347,16 @@ $(document).ready(function() {
       }
     });
 } );
+
+$(document).ready(function() {
+  <?php if($stat_err == 1) { ?>
+  $.ajax({
+    url: "<?php echo $url_rewrite;?>process/rab_rinci/deltemprab",
+    type: "POST",
+    data: {'id_rab_view':'<?php echo $id_rab_view;?>' }
+  }).done(function() {
+    alert('berhasil dihapus');
+  });
+  <?php }?>
+  });
 </script>
