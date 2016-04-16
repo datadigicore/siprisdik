@@ -137,13 +137,19 @@ else {
           include ('view/content/report.php');
         break;
         case 'rab51':
-          if($data[3]=='addnew'){
+          if($data[2]=='addnew'){
             $tahun = $mdl_rab->getYear();
-            $direktorat = $data[2];
+            $direktorat = '5696';
             include ('view/content/rab51-add.php');
+          }elseif($data[2]=='edit'){
+            $tahun = $mdl_rab->getYear();
+            $direktorat = '5696';
+            $id = $data[3];
+            $getrab = $mdl_rab->getrabfull($id);
+            include ('view/content/rab51-edit.php');
           } else {
             $tahun = $mdl_rab->getYear();
-            $direktorat = $data[2];
+            $direktorat = '5696';
             $tahun = $mdl_rab->getYear();
             include ('view/content/rab51.php');
           }
@@ -290,22 +296,10 @@ else {
           }
           break;
         case 'rab51':
-          if($data[3]=='addnew'){
-            $tahun = $mdl_rab->getYear();
-            $direktorat = $data[2];
-            include ('view/content/rab51-add.php');
-          }elseif($data[3]=='edit'){
-            $tahun = $mdl_rab->getYear();
-            $direktorat = $data[2];
-            $id = $data[4];
-            $getrab = $mdl_rab->getrabfull($id);
-            include ('view/content/rab51-edit.php');
-          } else {
-            $tahun = $mdl_rab->getYear();
-            $direktorat = $data[2];
-            $tahun = $mdl_rab->getYear();
-            include ('view/content/rab51.php');
-          }
+          $tahun = $mdl_rab->getYear();
+          $direktorat = $_SESSION['direktorat'];
+          $tahun = $mdl_rab->getYear();
+          include ('view/content/rab51.php');
           break;
         default:
           include ('view/content/home.php');

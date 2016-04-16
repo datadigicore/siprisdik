@@ -33,27 +33,35 @@
               </div>
               <div class="form-group">
                 <label>Output</label>
-                <select class="form-control" id="output" name="output" onchange="chout()" required>
+                <!-- <select class="form-control" id="output" name="output" onchange="chout()" required>
                   <option>-- Pilih Output --</option>
-                </select>
+                </select> -->
+                <input type="text" class="form-control" value="994 - Layanan Perkantoran" readonly>
+                <input type="hidden" id="output" name="output" value="994">
               </div>
               <div class="form-group">
                 <label>Suboutput</label>
-                <select class="form-control" id="soutput" name="soutput" onchange="chsout()" required>
+                <!-- <select class="form-control" id="soutput" name="soutput" onchange="chsout()" required>
                   <option>-- Pilih Sub Output --</option>
-                </select>
+                </select> -->
+                <input type="text" class="form-control" value="001 - Layanan Perkantoran" readonly>
+                <input type="hidden" id="soutput" name="soutput" value="001">
               </div>
               <div class="form-group">
                 <label>Komponen</label>
-                <select class="form-control" id="komp" name="komp" onchange="chkomp()" required>
+                <!-- <select class="form-control" id="komp" name="komp" onchange="chkomp()" required>
                   <option>-- Pilih Komponen --</option>
-                </select>
+                </select> -->
+                <input type="text" class="form-control" value="001 - Gaji dan Tunjangan" readonly>
+                <input type="hidden" id="komp" name="komp" value="001">
               </div>
               <div class="form-group">
                 <label>Sub Komponen</label>
-                <select class="form-control" id="skomp" name="skomp" onchange="chskomp()" required>
+                <!-- <select class="form-control" id="skomp" name="skomp" onchange="chskomp()" required>
                   <option>-- Pilih Sub Komponen --</option>
-                </select>
+                </select> -->
+                <input type="text" class="form-control" value="A - Pembayaran Gaji dan Tunjangan" readonly>
+                <input type="hidden" id="skomp" name="skomp" value="A">
               </div>
               <div class="form-group">
                 <label>Akun</label>
@@ -61,17 +69,17 @@
                   <option>-- Pilih Akun --</option>
                 </select>
               </div>
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label>Deskripsi</label>
                 <textarea rows="5" type="text" class="form-control" id="deskripsi" name="deskripsi" placeholder="Deskripsi" style="resize:none;" required></textarea>
-              </div>
+              </div> -->
               <div class="form-group">
                 <label>Tanggal</label>
                 <input class="form-control" type="text" id="tanggal" name="tanggal" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" />
               </div>
               <div class="form-group">
                 <label>Jumlah</label>
-                <input class="form-control" required type="number" name="jumlah" value="0" placeholder="" />
+                <input class="form-control uang" required type="text" name="jumlah" />
               </div>
               
             </div>
@@ -90,127 +98,128 @@ $(function() {
     $("#tanggal").datepicker({ 
       changeMonth: true,
       changeYear: true,
-      format: 'dd/mm/yyyy' 
+      dateFormat: 'dd/mm/yy' 
     });
-    chprog();
+    $('.uang').mask('000.000.000.000.000.000.000', {reverse: true});
+    chskomp();
 });
 
-function chprog(){
-    $("#output option").remove();   
-    $("#soutput option").remove();   
-    $("#komp option").remove();   
-    $("#skomp option").remove();   
-    $("#akun option").remove();   
-    $('#output').append('<option>-- Pilih Output --</option>');
-    $('#soutput').append('<option>-- Pilih Sub Output --</option>');
-    $('#komp').append('<option>-- Pilih Komponen --</option>');
-    $('#skomp').append('<option>-- Pilih Sub Komponen --</option>');
-    $('#akun').append('<option>-- Pilih Akun --</option>');
-    var tahun = $('#tahun').val();
-    var direktorat = $('#direktorat').val();
-    var prog = $('#prog').val();
-    $.ajax({
-      type: "POST",
-      url: "<?php echo $url_rewrite;?>process/rab/getout",
-      data: { 'prog' : prog,
-              'tahun' : tahun,
-              'direktorat' : direktorat
-            },
-      success: function(data){
-        var obj = jQuery.parseJSON(data);
-        for (var i = 0; i < obj.KDOUTPUT.length; i++) {
-          $('#output').append('<option value="'+obj.KDOUTPUT[i]+'">'+obj.KDOUTPUT[i]+' - '+obj.NMOUTPUT[i]+'</option>')
-        };
-      },
-    });
-  }
-  function chout(){
-    $("#soutput option").remove();   
-    $("#komp option").remove();   
-    $("#skomp option").remove();   
-    $("#akun option").remove();   
-    $('#soutput').append('<option>-- Pilih Sub Output --</option>');
-    $('#komp').append('<option>-- Pilih Komponen --</option>');
-    $('#skomp').append('<option>-- Pilih Sub Komponen --</option>');
-    $('#akun').append('<option>-- Pilih Akun --</option>');
-    var prog = $('#prog').val();
-    var output = $('#output').val();
-    var tahun = $('#tahun').val();
-    var direktorat = $('#direktorat').val();
-    $.ajax({
-      type: "POST",
-      url: "<?php echo $url_rewrite;?>process/rab/getsout",
-      data: { 'prog' : prog,
-              'output' : output,
-              'tahun' : tahun,
-              'direktorat' : direktorat
-            },
-      success: function(data){
-        var obj = jQuery.parseJSON(data);
-        for (var i = 0; i < obj.KDSOUTPUT.length; i++) {
-          $('#soutput').append('<option value="'+obj.KDSOUTPUT[i]+'">'+obj.KDSOUTPUT[i]+' - '+obj.NMSOUTPUT[i]+'</option>')
-        };
-      },
-    });
-  }
-  function chsout(){   
-    $("#komp option").remove();   
-    $("#skomp option").remove();   
-    $("#akun option").remove();   
-    $('#komp').append('<option>-- Pilih Komponen --</option>');
-    $('#skomp').append('<option>-- Pilih Sub Komponen --</option>');
-    $('#akun').append('<option>-- Pilih Akun --</option>');
-    var tahun = $('#tahun').val();
-    var direktorat = $('#direktorat').val();
-    var prog = $('#prog').val();
-    var output = $('#output').val();
-    var soutput = $('#soutput').val();
-    $.ajax({
-      type: "POST",
-      url: "<?php echo $url_rewrite;?>process/rab/getkomp",
-      data: { 'prog' : prog,
-              'output' : output,
-              'soutput' : soutput,
-              'tahun' : tahun,
-              'direktorat' : direktorat
-            },
-      success: function(data){
-        var obj = jQuery.parseJSON(data);
-        for (var i = 0; i < obj.KDKMPNEN.length; i++) {
-          $('#komp').append('<option value="'+obj.KDKMPNEN[i]+'">'+obj.KDKMPNEN[i]+' - '+obj.NMKMPNEN[i]+'</option>')
-        };
-      },
-    });
-  }
-  function chkomp(){
-    $("#skomp option").remove();   
-    $("#akun option").remove();   
-    $('#skomp').append('<option>-- Pilih Sub Komponen --</option>');
-    $('#akun').append('<option>-- Pilih Akun --</option>');
-    var tahun = $('#tahun').val();
-    var direktorat = $('#direktorat').val();
-    var prog = $('#prog').val();
-    var output = $('#output').val();
-    var soutput = $('#soutput').val();
-    var komp = $('#komp').val();
-    $.ajax({
-      type: "POST",
-      url: "<?php echo $url_rewrite;?>process/rab/getskomp",
-      data: { 'prog' : prog,
-              'output' : output,
-              'soutput' : soutput,
-              'komp' : komp,
-              'tahun' : tahun,
-              'direktorat' : direktorat
-            },
-      success: function(data){
-        var obj = jQuery.parseJSON(data);
-        for (var i = 0; i < obj.KDSKMPNEN.length; i++) {
-          $('#skomp').append('<option value="'+obj.KDSKMPNEN[i]+'">'+obj.KDSKMPNEN[i]+' - '+obj.NMSKMPNEN[i]+'</option>')
-        };
-      },
-    });
-  }
+// function chprog(){
+//     $("#output option").remove();   
+//     $("#soutput option").remove();   
+//     $("#komp option").remove();   
+//     $("#skomp option").remove();   
+//     $("#akun option").remove();   
+//     $('#output').append('<option>-- Pilih Output --</option>');
+//     $('#soutput').append('<option>-- Pilih Sub Output --</option>');
+//     $('#komp').append('<option>-- Pilih Komponen --</option>');
+//     $('#skomp').append('<option>-- Pilih Sub Komponen --</option>');
+//     $('#akun').append('<option>-- Pilih Akun --</option>');
+//     var tahun = $('#tahun').val();
+//     var direktorat = $('#direktorat').val();
+//     var prog = $('#prog').val();
+//     $.ajax({
+//       type: "POST",
+//       url: "<?php echo $url_rewrite;?>process/rab/getout",
+//       data: { 'prog' : prog,
+//               'tahun' : tahun,
+//               'direktorat' : direktorat
+//             },
+//       success: function(data){
+//         var obj = jQuery.parseJSON(data);
+//         for (var i = 0; i < obj.KDOUTPUT.length; i++) {
+//           $('#output').append('<option value="'+obj.KDOUTPUT[i]+'">'+obj.KDOUTPUT[i]+' - '+obj.NMOUTPUT[i]+'</option>')
+//         };
+//       },
+//     });
+//   }
+//   function chout(){
+//     $("#soutput option").remove();   
+//     $("#komp option").remove();   
+//     $("#skomp option").remove();   
+//     $("#akun option").remove();   
+//     $('#soutput').append('<option>-- Pilih Sub Output --</option>');
+//     $('#komp').append('<option>-- Pilih Komponen --</option>');
+//     $('#skomp').append('<option>-- Pilih Sub Komponen --</option>');
+//     $('#akun').append('<option>-- Pilih Akun --</option>');
+//     var prog = $('#prog').val();
+//     var output = $('#output').val();
+//     var tahun = $('#tahun').val();
+//     var direktorat = $('#direktorat').val();
+//     $.ajax({
+//       type: "POST",
+//       url: "<?php echo $url_rewrite;?>process/rab/getsout",
+//       data: { 'prog' : prog,
+//               'output' : output,
+//               'tahun' : tahun,
+//               'direktorat' : direktorat
+//             },
+//       success: function(data){
+//         var obj = jQuery.parseJSON(data);
+//         for (var i = 0; i < obj.KDSOUTPUT.length; i++) {
+//           $('#soutput').append('<option value="'+obj.KDSOUTPUT[i]+'">'+obj.KDSOUTPUT[i]+' - '+obj.NMSOUTPUT[i]+'</option>')
+//         };
+//       },
+//     });
+//   }
+//   function chsout(){   
+//     $("#komp option").remove();   
+//     $("#skomp option").remove();   
+//     $("#akun option").remove();   
+//     $('#komp').append('<option>-- Pilih Komponen --</option>');
+//     $('#skomp').append('<option>-- Pilih Sub Komponen --</option>');
+//     $('#akun').append('<option>-- Pilih Akun --</option>');
+//     var tahun = $('#tahun').val();
+//     var direktorat = $('#direktorat').val();
+//     var prog = $('#prog').val();
+//     var output = $('#output').val();
+//     var soutput = $('#soutput').val();
+//     $.ajax({
+//       type: "POST",
+//       url: "<?php echo $url_rewrite;?>process/rab/getkomp",
+//       data: { 'prog' : prog,
+//               'output' : output,
+//               'soutput' : soutput,
+//               'tahun' : tahun,
+//               'direktorat' : direktorat
+//             },
+//       success: function(data){
+//         var obj = jQuery.parseJSON(data);
+//         for (var i = 0; i < obj.KDKMPNEN.length; i++) {
+//           $('#komp').append('<option value="'+obj.KDKMPNEN[i]+'">'+obj.KDKMPNEN[i]+' - '+obj.NMKMPNEN[i]+'</option>')
+//         };
+//       },
+//     });
+//   }
+//   function chkomp(){
+//     $("#skomp option").remove();   
+//     $("#akun option").remove();   
+//     $('#skomp').append('<option>-- Pilih Sub Komponen --</option>');
+//     $('#akun').append('<option>-- Pilih Akun --</option>');
+//     var tahun = $('#tahun').val();
+//     var direktorat = $('#direktorat').val();
+//     var prog = $('#prog').val();
+//     var output = $('#output').val();
+//     var soutput = $('#soutput').val();
+//     var komp = $('#komp').val();
+//     $.ajax({
+//       type: "POST",
+//       url: "<?php echo $url_rewrite;?>process/rab/getskomp",
+//       data: { 'prog' : prog,
+//               'output' : output,
+//               'soutput' : soutput,
+//               'komp' : komp,
+//               'tahun' : tahun,
+//               'direktorat' : direktorat
+//             },
+//       success: function(data){
+//         var obj = jQuery.parseJSON(data);
+//         for (var i = 0; i < obj.KDSKMPNEN.length; i++) {
+//           $('#skomp').append('<option value="'+obj.KDSKMPNEN[i]+'">'+obj.KDSKMPNEN[i]+' - '+obj.NMSKMPNEN[i]+'</option>')
+//         };
+//       },
+//     });
+//   }
   function chskomp(){ 
     $("#akun option").remove();   
     $('#akun').append('<option>-- Pilih Akun --</option>');
