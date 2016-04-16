@@ -14,8 +14,8 @@
         <div class="box">
           <div class="box-header">
             <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya</h3>
-            <?php if ($_SESSION['level'] != '0') {
-              echo '<a href="'.$url_rewrite.'content/rab51/'.$direktorat.'/addnew" class="btn btn-flat btn-success btn-sm pull-right">Tambah RAB</a>';
+            <?php if ($_SESSION['level'] == '0') {
+              echo '<a href="'.$url_rewrite.'content/rab51/addnew" class="btn btn-flat btn-success btn-sm pull-right">Tambah RAB</a>';
             }?>
           </div>
           <div class="box-body">
@@ -36,16 +36,30 @@
                 <td><label><?php echo $direk[$direktorat]; ?></label></td>
                 <input type="hidden" id="direktorat2" name="direktorat2" value="<?php echo $direktorat; ?>" />
               </tr>
+              <tr>
+                <td><label>Output</label></td>
+                <td><label>(994) Layanan Perkantoran</label></td>
+              </tr>
+              <tr>
+                <td><label>Sub Output</label></td>
+                <td><label>(001) Layanan Perkantoran</label></td>
+              </tr>
+              <tr>
+                <td><label>Komponen</label></td>
+                <td><label>(001) Gaji dan Tunjangan</label></td>
+              </tr>
+              <tr>
+                <td><label>Sub Komponen</label></td>
+                <td><label>(A) Pembayaran Gaji dan Tunjangan</label></td>
+              </tr>
             </table>
             <table id="table" class="display nowrap table table-bordered table-striped" cellspacing="0" width="100%">
               <thead style="background-color:#11245B;color:white;">
                 <tr>
                   <th>No</th>
-                  <th>Kode RKAKL</th>
-                  <th>Deskripsi</th>
+                  <th>Kode Akun</th>
                   <th>Tanggal</th>
                   <th>Jumlah</th>
-                  <th>Status</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -158,8 +172,6 @@ var table;
             {"targets" : 2},
             {"targets" : 3},
             {"targets" : 4},
-            {"targets" : 5},
-            {"targets" : 6},
           ],
         "order": [[ 0, "desc" ]]
     });
@@ -206,8 +218,6 @@ var table;
             {"targets" : 2},
             {"targets" : 3},
             {"targets" : 4},
-            {"targets" : 5},
-            {"targets" : 6},
           ],
         "order": [[ 0, "desc" ]]
     });

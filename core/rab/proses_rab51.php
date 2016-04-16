@@ -4,6 +4,7 @@ include 'config/application.php';
 switch ($process) {
   case 'table':
     $table = "rabfull";
+
     $key   = "id";
     $dataArray['url_rewrite'] = $url_rewrite; 
     $dataArray['direktorat'] = $direk; 
@@ -11,82 +12,30 @@ switch ($process) {
     $direktorat = $_POST['direktorat'];
     $column = array(
       array( 'db' => 'id',      'dt' => 0 ),
-      array( 'db' => 'kdprogram',  'dt' => 1, 'formatter' => function($d,$row, $dataArray){ 
-          return '<table><tr><td>Program</td><td>&nbsp;:&nbsp;</td><td>'.$d.'</td></tr>'.
-                 '<tr><td>Output</td><td>&nbsp;:&nbsp;</td><td>'.$row[7].'</td></tr>'.
-                 '<tr><td>Sub Output</td><td>&nbsp;:&nbsp;</td><td>'.$row[8].'</td></tr>'.
-                 '<tr><td>Komponen</td><td>&nbsp;:&nbsp;</td><td>'.$row[9].'</td></tr>'.
-                 '<tr><td>Sub Komponen</td><td>&nbsp;:&nbsp;</td><td>'.$row[10].'</td></tr>'.
-                 '<tr><td>Akun</td><td>&nbsp;:&nbsp;</td><td>'.$row[11].'</td></tr></table>';
-      }),
-      array( 'db' => 'deskripsi',  'dt' => 2),
-      array( 'db' => 'tanggal',  'dt' => 3, 'formatter' => function( $d, $row ) {
+      array( 'db' => '(select concat(r.kdakun," - ",r.nmakun) from rkakl_full as r where r.KDAKUN = rabfull.kdakun limit 1)', 'dt' => 1),
+      array( 'db' => 'tanggal',  'dt' => 2, 'formatter' => function( $d, $row ) {
             return date( 'j M Y', strtotime($d));
           }
       ),
-      array( 'db' => 'value',  'dt' => 4,'formatter' => function ($d, $row) {
+      array( 'db' => 'value',  'dt' => 3,'formatter' => function ($d, $row) {
         return number_format($d,2);
       }),
-      array( 'db' => 'status', 'dt' => 5, 'formatter' => function($d,$row){ 
-        if($d==0){
-          return '<i>Belum Diajukan</i>';
-        }
-        elseif($d==1){
-          return '<i>Telah Diajukan</i>';
-        }
-        elseif($d==2){
-          return '<i>Telah Disahkan</i>';
-        }
-        elseif($d==3){
-          return '<i>Revisi</i>';
-        }
-        elseif($d==4){
-          return '<i>Close</i>';
-        }
-        elseif($d==5){
-          return '<i>Adendum</i>';
-        }
-        elseif($d==6){
-          return '<i>Close Adendum</i>';
-        }
-        elseif($d==7){
-          return '<i>Penutupan Anggaran</i>';
-        }
-      }),
-      array( 'db' => 'status',  'dt' => 6, 'formatter' => function($d,$row, $dataArray){ 
+      array( 'db' => 'status',  'dt' => 4, 'formatter' => function($d,$row, $dataArray){ 
+          if ($_SESSION['level']==0) {
             $button = '<center><div class="text-center btn-group-vertical">';
-            if ($d == 0 && $_SESSION['level'] != 0 ) {
-              $button .= '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Ajukan</a>';
-              $button .= '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rab51/5696/edit/'.$row[0].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i> Edit Transaksi</a>';
-            }elseif ($d == 0 && $_SESSION['level'] == 0) {
-              $button .= 'N/A';
-            }
-            if ($d == 1 && $_SESSION['level'] != 0 ) {
-              $button .= 'N/A';
-            }elseif ($d == 1 && $_SESSION['level'] == 0) {
-              $button .= '<a style="margin:0 2px;" id="btn-sah" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>';
-              $button .= '<a style="margin:0 2px;" id="btn-rev" href="#revisi" class="btn btn-flat btn-warning btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Revisi</a>';
-            }
-            if ($d == 2 && $_SESSION['level'] != 0 ) {
-              $button .= 'N/A';
-            }elseif ($d == 2 && $_SESSION['level'] == 0) {
-              $button .= 'N/A';
-            }
-            if ($d == 3 && $_SESSION['level'] != 0 ) {
-              $button .= '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Ajukan</a>';
-              $button .= '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rab51/5696/edit/'.$row[0].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i> Edit Transaksi</a>';
-            }elseif ($d == 3 && $_SESSION['level'] == 0) {
-              $button .= 'N/A';
-            }
-            
+            $button .= '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rab51/edit/'.$row[0].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i> Edit Transaksi</a>';
             $button .= '</div></center>';
+          }
+          else{
+            $button = '<center> - </center>';
+          }
             return $button;
       }),
-      array( 'db' => 'kdoutput',  'dt' => 7),
-      array( 'db' => 'kdsoutput',  'dt' => 8),
-      array( 'db' => 'kdkmpnen',  'dt' => 9),
-      array( 'db' => 'kdskmpnen',  'dt' => 10),
-      array( 'db' => 'kdakun',  'dt' => 11),
+      // array( 'db' => 'kdoutput',  'dt' => 5),
+      // array( 'db' => 'kdsoutput',  'dt' => 6),
+      // array( 'db' => 'kdkmpnen',  'dt' => 7),
+      // array( 'db' => 'kdskmpnen',  'dt' => 8),
+      // array( 'db' => 'kdakun',  'dt' => 9),
     );
     $where='kdakun like "51%" ';
     if ($tahun != "") {
@@ -104,6 +53,7 @@ switch ($process) {
       }
     }
     $datatable->get_table($table, $key, $column,$where,$dataArray);
+    // $datatable->get_table_join($table,$table2, $key, $column, $on, $where, $group, $dataArray);
     break;
   case 'getnpwp':
     $npwp = $mdl_rab->getnpwp();
@@ -115,7 +65,7 @@ switch ($process) {
     break;
   case 'save':
     $mdl_rab->save51($_POST);
-    $utility->load("content/rab51/".$_POST['direktorat'],"success","Data RAB berhasil dimasukkan ke dalam database");
+    $utility->load("content/rab51","success","Data RAB berhasil dimasukkan ke dalam database");
     break;
   case 'edit':
     $mdl_rab->edit51($_POST);

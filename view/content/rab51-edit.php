@@ -15,7 +15,7 @@
             <h3 class="box-title" style="margin-top:6px;">Edit RAB</h3>
           </div>
           <form action="<?php echo $url_rewrite;?>process/rab51/edit" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="idrab" value="<?php echo $getrab->id;?>" />
+            <input type="hidden" name="idrab" value="<?php echo $getrab['id'];?>" />
             <div class="box-body">
               <div class="form-group">
                 <label>Tahun Anggaran</label>
@@ -64,16 +64,12 @@
                 </select>
               </div>
               <div class="form-group">
-                <label>Deskripsi</label>
-                <textarea rows="5" type="text" class="form-control" id="deskripsi" name="deskripsi" placeholder="Deskripsi" style="resize:none;" required><?php echo $getrab->deskripsi;?></textarea>
-              </div>
-              <div class="form-group">
                 <label>Tanggal</label>
-                <input class="form-control" type="text" id="tanggal" name="tanggal" data-date-format="dd/mm/yyyy" value="<?php echo date('d/m/Y',strtotime($getrab->tanggal));?>" placeholder="dd/mm/yyyy" />
+                <input class="form-control" type="text" id="tanggal" name="tanggal" data-date-format="dd/mm/yyyy" value="<?php echo date('d/m/Y',strtotime($getrab['tanggal']));?>" placeholder="dd/mm/yyyy" />
               </div>
               <div class="form-group">
                 <label>Jumlah</label>
-                <input class="form-control" required type="number" name="jumlah" value="<?php echo $getrab->value;?>" placeholder="" />
+                <input class="form-control" required type="number" name="jumlah" value="<?php echo $getrab['value'];?>" placeholder="" />
               </div>
               
             </div>
@@ -89,11 +85,11 @@
 
 <script>
 $(function() {
-    $('#tahun').val('<?php echo $getrab->thang; ?>');
+    $('#tahun').val('<?php echo $getrab["thang"]; ?>');
     $("#tanggal").datepicker({ 
       changeMonth: true,
       changeYear: true,
-      format: 'dd/mm/yyyy' 
+      dateFormat: 'dd/mm/yy' 
     });
     chprog();
 });
@@ -124,7 +120,7 @@ function chprog(){
         for (var i = 0; i < obj.KDOUTPUT.length; i++) {
           $('#output').append('<option value="'+obj.KDOUTPUT[i]+'">'+obj.KDOUTPUT[i]+' - '+obj.NMOUTPUT[i]+'</option>')
         };
-        $('#output').val('<?php echo $getrab->kdoutput; ?>');
+        $('#output').val('<?php echo $getrab["kdoutput"]; ?>');
         chout();
       },
     });
@@ -156,7 +152,7 @@ function chprog(){
         for (var i = 0; i < obj.KDSOUTPUT.length; i++) {
           $('#soutput').append('<option value="'+obj.KDSOUTPUT[i]+'">'+obj.KDSOUTPUT[i]+' - '+obj.NMSOUTPUT[i]+'</option>')
         };
-        $('#soutput').val('<?php echo $getrab->kdsoutput; ?>');
+        $('#soutput').val('<?php echo $getrab["kdsoutput"]; ?>');
         chsout();
       },
     });
@@ -187,7 +183,7 @@ function chprog(){
         for (var i = 0; i < obj.KDKMPNEN.length; i++) {
           $('#komp').append('<option value="'+obj.KDKMPNEN[i]+'">'+obj.KDKMPNEN[i]+' - '+obj.NMKMPNEN[i]+'</option>')
         };
-        $('#komp').val('<?php echo $getrab->kdkmpnen; ?>');
+        $('#komp').val('<?php echo $getrab["kdkmpnen"]; ?>');
         chkomp();
       },
     });
@@ -218,7 +214,7 @@ function chprog(){
         for (var i = 0; i < obj.KDSKMPNEN.length; i++) {
           $('#skomp').append('<option value="'+obj.KDSKMPNEN[i]+'">'+obj.KDSKMPNEN[i]+' - '+obj.NMSKMPNEN[i]+'</option>')
         };
-        $('#skomp').val('<?php echo $getrab->kdskmpnen; ?>');
+        $('#skomp').val('<?php echo $getrab["kdskmpnen"]; ?>');
         chskomp();
       },
     });
@@ -249,7 +245,7 @@ function chprog(){
         for (var i = 0; i < obj.KDAKUN.length; i++) {
           $('#akun').append('<option value="'+obj.KDAKUN[i]+'">'+obj.KDAKUN[i]+' - '+obj.NMAKUN[i]+'</option>')
         };
-        $('#akun').val('<?php echo $getrab->kdakun; ?>');
+        $('#akun').val('<?php echo $getrab["kdakun"]; ?>');
       },
     });
   }

@@ -100,9 +100,14 @@
 
     public function getakunrkakl51($prog, $output, $soutput, $komp, $skomp, $th, $dr) {
       $query  = "SELECT KDAKUN, NMAKUN FROM rkakl_full as r 
-                  where kdprogram='$prog' and kdoutput='$output' and kdsoutput='$soutput' and kdkmpnen='$komp' and kdskmpnen='$skomp' and thang='$th' and kdgiat='$dr' 
-                  AND kdakun like '51%'
-                  group by r.KDSKMPNEN";
+                  where kdprogram='$prog' 
+                  and kdoutput='$output' 
+                  and kdsoutput='$soutput' 
+                  and kdkmpnen='$komp' 
+                  and kdskmpnen='$skomp' 
+                  and thang='$th' 
+                  and kdgiat='$dr' 
+                  group by r.KDAKUN";
       $result = $this->query($query);
       $i=0;
       while($fetch  = $this->fetch_object($result)) {
@@ -170,11 +175,9 @@
       $skomp = $data['skomp'];
       $akun = $data['akun'];
       $deskripsi = $data['deskripsi'];
-      $value = $data['jumlah'];
+      $value      = str_replace(".", "", $data['jumlah']);
       $t = explode("/", $data['tanggal']);
       $tgl=$t[2].'-'.$t[1].'-'.$t[0];
-      $t2         = explode("/", $data['tanggal_akhir']);
-      $tgl_akhir  = $t2[2].'-'.$t2[1].'-'.$t2[0];
 
       $query      = "INSERT INTO rabfull SET
         thang       = '$tahun',
@@ -187,9 +190,9 @@
         kdakun    = '$akun',
         deskripsi   = '$deskripsi',
         tanggal     = '$tgl',
-        tanggal_akhir     = '$tgl_akhir',
+        tanggal_akhir     = '$tgl',
         value     = '$value',
-        status      = '0'
+        status      = '2'
       ";
       $result = $this->query($query);
       return $result;
@@ -257,10 +260,8 @@
       $akun = $data['akun'];
       $deskripsi = $data['deskripsi'];
       $value = $data['jumlah'];
-      $t = explode("/", $data['tanggal']);
-      $tgl=$t[2].'-'.$t[1].'-'.$t[0];
-      $t2         = explode("/", $data['tanggal_akhir']);
-      $tgl_akhir  = $t2[2].'-'.$t2[1].'-'.$t2[0];
+      $t          = explode("/", $data['tanggal']);
+      $tgl        = $t[2].'-'.$t[1].'-'.$t[0];
 
       $query      = "UPDATE rabfull SET
         thang       = '$tahun',
@@ -271,7 +272,7 @@
         kdakun      = '$akun',
         deskripsi   = '$deskripsi',
         tanggal     = '$tgl',
-        tanggal_akhir = '$tgl_akhir',
+        tanggal_akhir = '$tgl',
         value       = '$value'
         WHERE id = '".$idrab."'
       ";

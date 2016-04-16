@@ -146,7 +146,7 @@ class SSP {
                         'ASC' :
                         'DESC';
 
-                    $orderBy[] = '`'.$column['db'].'` '.$dir;
+                    $orderBy[] = ''.$column['db'].' '.$dir;
                 }
             }
 
@@ -252,7 +252,7 @@ class SSP {
         $limit = self::limit( $request, $columns );
         $order = self::order( $request, $columns );
         $where = self::filter( $request, $columns, $bindings );
-
+        
         // Main query to actually get the data
         $data = self::sql_exec( $db, $bindings,
             "SELECT SQL_CALC_FOUND_ROWS `".implode("`, `", self::pluck($columns, 'db'))."`
@@ -316,10 +316,16 @@ class SSP {
 
             $whereAllSql = 'WHERE '.$whereAll;
         }
-
+        
+        // $tes="SELECT SQL_CALC_FOUND_ROWS ".implode(", ", self::pluck($columns, 'db'))."
+        //      FROM `$table`
+        //      $where
+        //      $order
+        //      $limit";
+        // print_r($tes);die;
         // Main query to actually get the data
         $data = self::sql_exec( $db, $bindings,
-            "SELECT SQL_CALC_FOUND_ROWS `".implode("`, `", self::pluck($columns, 'db'))."`
+            "SELECT SQL_CALC_FOUND_ROWS ".implode(", ", self::pluck($columns, 'db'))."
              FROM `$table`
              $where
              $order
@@ -378,12 +384,7 @@ class SSP {
         if ( $groupby ) {
             $group =' GROUP BY '.$groupby;
         }
-        // $tes="SELECT SQL_CALC_FOUND_ROWS ".implode(", ", self::pluck($columns, 'db'))."
-        //      FROM `$table`
-        //      $where
-        //      $group
-        //      ORDER BY id DESC";
-        // print_r($tes);die;
+        
 
         // Main query to actually get the data
         $data = self::sql_exec( $db, $bindings,
