@@ -220,8 +220,9 @@
       $npwp= $res[npwp];
       $nip= $res[nip];
 
-      $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$kdgiat' ");
+      $result_pb = $this->query("SELECT bpp, nama, nip_bpp, ppk, nip_ppk from direktorat where kode='$kdgiat' ");
       $arr_pb = $this->fetch_array($result_pb);
+      $nama_direktorat=$arr_pb[nama];
       $bpp = $arr_pb[bpp];
       $nip_bpp = $arr_pb[nip_bpp];
       $ppk = $arr_pb[ppk];
@@ -371,6 +372,7 @@
                           'kdkmpnen'  => $kdkmpnen,
                           'kdskmpnen' => $kdskmpnen,
                           'no_kw'     => $no_kw,
+                          'nama_direktorat'=> $nama_direktorat,
                           'bpp'       => $bpp,
                           'nip_bpp'   => $nip_bpp,
                           'ppk'       => $ppk,
@@ -488,9 +490,9 @@
       $rkl_view = $this->fetch_array($res_sql);
 
 
-      $sql = "SELECT view.deskripsi as deskripsi, r.NMITEM as nmitem, r.NMGIAT as nmgiat, r.NMAKUN as nmakun, f.kdgiat as kdgiat, f.kdprogram as kdprogram, f.kdoutput as kdoutput, f.kdakun as kdakun, f.penerima as penerima, f.tanggal as tanggal, f.value  as value, f.pajak as pajak, f.ppn as ppn, f.pph as pph FROM rabfull as f LEFT JOIN rkakl_full as r on f.kdgiat = r.KDGIAT and f.kdoutput = r.KDOUTPUT and f.kdsoutput = r.KDSOUTPUT and f.kdkmpnen = r.KDKMPNEN and f.kdskmpnen = r.KDSKMPNEN  and f.kdakun = r.KDAKUN and f.noitem = r.NOITEM  
+      $sql = "SELECT view.deskripsi as deskripsi, r.NMITEM as nmitem, r.NMGIAT as nmgiat, r.NMAKUN as nmakun, f.kdgiat as kdgiat, f.kdprogram as kdprogram, f.kdoutput as kdoutput, f.kdsoutput as kdsoutput, f.kdkmpnen as kdkmpnen, f.kdskmpnen as kdskmpnen,  f.kdakun as kdakun, f.penerima as penerima, f.tanggal as tanggal,f.thang as thang, f.value  as value, f.pajak as pajak, f.ppn as ppn, f.pph as pph, f.no_kuitansi as no_kuitansi FROM rabfull as f LEFT JOIN rkakl_full as r on f.kdgiat = r.KDGIAT and f.kdoutput = r.KDOUTPUT and f.kdsoutput = r.KDSOUTPUT and f.kdkmpnen = r.KDKMPNEN and f.kdskmpnen = r.KDSKMPNEN  and f.kdakun = r.KDAKUN and f.noitem = r.NOITEM  
                 LEFT JOIN rabview as view on f.rabview_id = view.id
-                where f.kdakun ='$data' and f.kdgiat='$direktorat' ";
+                where f.kdakun ='$data' and f.kdgiat='$direktorat' and f.status in(2,4,6,7)";
       // print_r($sql);
       $res = $this->query($sql);
       $id = $this->fetch_array($res);
@@ -568,7 +570,7 @@
                 <td>'.$value[penerima].'</td>
                 <td style="text-align: justify;">'." Biaya ".$item[0]." kegiatan ".$value[deskripsi].", tgl. ".$this->konversi_tanggal($value[tanggal],"").'</td>
                 <td>'.$this->konversi_tanggal($value[tanggal],"/").'</td>
-                <td>'."-".'</td>
+                <td>'.$value[no_kuitansi]."/".$value[kdoutput].".".$value[kdsoutput].".".$value[kdkmpnen].".".$value[kdskmpnen].".".$value[kdakun]."/".$value[thang].'</td>
                 <td align="right">'.number_format($value[value],0,",",".").'</td>
                 <td align="right">'.number_format($value[ppn],0,",",".").'</td>
                 <td align="right">'.number_format($value[pph],0,",",".").'</td>
@@ -1409,7 +1411,7 @@
         }
         $total=$val;
       }
-      echo '  <p align="right">No '.$nmr_kw."/".$det['kdgiat'].".".$det['kdoutput'].".".$det['kdsoutput'].".".$det['kdkmpnen']."/2016".'</p>'; 
+      echo '  <p align="right">No '.$nmr_kw."/".$det['kdgiat'].".".$det['kdoutput'].".".$det['kdsoutput'].".".$det['kdkmpnen'].".".$kd_akun."/2016".'</p>'; 
       require __DIR__ . "/../utility/report/header_dikti.php";
       echo '  <p align="center" style="text-decoration:underline;">KUITANSI</p>
                     <table style="width: 100%; font-size:80%; border-collapse: collapse;"  border="0">               
@@ -2020,14 +2022,14 @@
       }
 
       $diterima = $total-$pph;  
-        echo '  <p align="right">No '.$nmr_kw."/".$det['kdgiat'].".".$det['kdoutput'].".".$det['kdsoutput'].".".$det['kdkmpnen']."/2016".'</p>'; 
+        echo '  <p align="right">No '.$nmr_kw."/".$det['kdgiat'].".".$det['kdoutput'].".".$det['kdsoutput'].".".$det['kdkmpnen'].".".$kd_akun."/2016".'</p>'; 
         require __DIR__ . "/../utility/report/header_dikti.php";
         echo ' <p align="center" style="font-weight:bold; font-size:1.2em">KUITANSI</p>
                     <table cellpadding="3" style="width: 100%; font-size:0.7em;"  border="0">               
                     <tr>
                         <td align="left" width="20%">Sudah Terima Dari </td>
                         <td width="1%" align="left">:</td>
-                        <td colspan="2"> '.$penerima.'</td>
+                        <td colspan="2"> Kuasa Pengguna Anggaran Direktorat Jenderal Kelembagaan IPTEK dan DIKTI</td>
                        
                     </tr> 
                     <tr>
@@ -2044,9 +2046,9 @@
                     </tr>                
                     <tr>
                         <td align="left">Untuk Pembayaran</td>
-                        <td align="left">: '."".'</td>
-                        <td></td>
-                        <td></td>
+                        <td align="left">: </td>
+                        <td colspan="2">'.$item." di lingkungan ".$det['nama_direktorat'].'</td>
+                        
                     </tr>'; 
          echo  '</table>';
             
@@ -2057,33 +2059,45 @@
                 echo '<tr>
                         <td width="21%"></td>
                         <td width="40%">'.substr($value[NMITEM],0,strpos($value[NMITEM],"[")-1).'</td>
-                        <td> : Rp. </td>
+                        <td width="5%"> : Rp. </td>
                         <td align="right">'."".number_format($value[value],0,",",".").'</td>
                       </tr>';
                 }
             }
           }
           else{
+            // echo '<tr>
+            //           <td width="21%"></td>
+            //           <td width="40%">'.$item.'</td>
+            //           <td> : Rp. </td>
+            //           <td align="right">'."".number_format($total,0,",",".").'</td>
+            //         </tr>';
             echo '<tr>
                       <td width="21%"></td>
-                      <td width="40%">'.$item.'</td>
-                      <td> : Rp. </td>
-                      <td align="right">'."".number_format($total,0,",",".").'</td>
+                      <td colspan="3">'.$item."&nbsp; &nbsp; &nbsp;".":"."&nbsp; &nbsp;"."Rp. "."&nbsp;".number_format($total,0,",",".").'</td>
                     </tr>';
 
           }
+          // echo '<tr>
+          //         <td ></td>
+          //         <td >'."PPh. ".$det['pajak']."  %".'</td>
+          //         <td> : Rp. </td>
+          //         <td align="right">'." ".number_format($pph,0,",",".").'</td>
+          //       </tr>';
+           echo '<tr>
+                      <td width="21%"></td>
+                      <td colspan="3">'."PPh. ".$det['pajak']."  %"."&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;".":"."&nbsp; &nbsp;"."Rp. "."&nbsp;".number_format($pph,0,",",".").'</td>
+                    </tr>';
+          // echo '<tr>
+          //         <td ></td>
+          //         <td >'."Diterima ".'</td>
+          //         <td> : Rp. </td>
+          //         <td align="right">'."".number_format($diterima,0,",",".").'</td>
+          //       </tr>';
           echo '<tr>
-                  <td ></td>
-                  <td >'."PPh. ".$det['pajak']."  %".'</td>
-                  <td> : Rp. </td>
-                  <td align="right">'." ".number_format($pph,0,",",".").'</td>
-                </tr>';
-          echo '<tr>
-                  <td ></td>
-                  <td >'."Diterima ".'</td>
-                  <td> : Rp. </td>
-                  <td align="right">'."".number_format($diterima,0,",",".").'</td>
-                </tr>';
+                      <td width="21%"></td>
+                      <td colspan="3">'."Diterima"."&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;".":"."&nbsp; &nbsp;"."Rp. "."&nbsp;".number_format($diterima,0,",",".").'</td>
+                    </tr>';
            echo  '</table>';
         
         
@@ -2527,7 +2541,7 @@ public function daftar_peng_riil($result,$det){
                 <td colspan="3">Direktorat Jenderal Kelembagaan Ilmu Pengetahuan Teknologi dan Pendidikan Tinggi</td>
               </tr>
               <tr>
-                <td>2</td>
+                <td>2</ td>
                 <td>Kegiatan</td>
                  <td>:</td>
                 <td colspan="3">'.$res2[NMGIAT].'</td>               
@@ -3724,6 +3738,7 @@ public function daftar_peng_riil($result,$det){
     function rincian_kebutuhan_dana($data,$jns){
       $cond_query;
       $title;
+      $subtotal_pajak=0;
       if($jns=="1"){
         $title = "DAFTAR PERTANGGUNG JAWABAN UMK";
         $cond_query = " ";
@@ -3734,7 +3749,7 @@ public function daftar_peng_riil($result,$det){
         $cond_query = " ";
       }
 
-      $sql = "SELECT  rab.lama_hari,  rab.golongan, rab.penerima, rab.kdakun, rab.taxi_asal,rab.taxi_tujuan, rab.harga_tiket, rab.value, rab.uang_muka, rab.uang_harian, rab.uang_saku, rab.pajak, rab.biaya_akom, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ".$cond_query." order by rab.penerima asc ";
+      $sql = "SELECT  rab.lama_hari,  rab.golongan, rab.penerima, rab.kdakun, rab.taxi_asal,rab.taxi_tujuan, rab.harga_tiket, rab.value, rab.uang_muka, rab.uang_harian, rab.uang_saku, rab.pajak, rab.biaya_akom, rab.pph, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rabview_id='$data' ".$cond_query." order by rab.penerima asc ";
       
       $sql2 = "SELECT rab.deskripsi, rab.tanggal, rab.lokasi, rab.tempat, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdskmpnen, rkkl.NMGIAT, rkkl.NMOUTPUT, rkkl.NMSOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and  rab.kdskmpnen = rkkl.KDSKMPNEN  where rabview_id='$data' LIMIT 1";
       
@@ -3862,6 +3877,7 @@ public function daftar_peng_riil($result,$det){
       $subtot_lain = 0;   
       $subtot_jml = 0;   
       foreach ($res as $val) {
+        $subtotal_pajak += $val[pph];
         $transport = 0;
       $honor = 0;
       $uang_harian = 0;
@@ -3960,8 +3976,9 @@ public function daftar_peng_riil($result,$det){
         // $acc+= ($transport+$uang_harian+$uang_saku+$tiket+$honor+$akomodasi+$lain2);
         $cell->setCellValue('H'.$row,$transport);
         $cell->getStyle('H'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+        $cell->getStyle('L'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
 
-        $cell->setCellValue('L'.$row,$val[pajak]." %");
+        $cell->setCellValue('L'.$row,$val[pph]);
         $cell->setCellValue('M'.$row,$acc);
         $cell->getStyle('M'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
       }
@@ -3975,7 +3992,7 @@ public function daftar_peng_riil($result,$det){
       $cell->setCellValue('I'.$row,$subtot_tiket);
       $cell->setCellValue('J'.$row,$subtot_akomodasi);
       $cell->setCellValue('K'.$row,$subtot_lain);
-      $cell->setCellValue('L'.$row,'-');
+      $cell->setCellValue('L'.$row,$subtotal_pajak);
       $cell->setCellValue('M'.$row,$subtot_jml);
       $cell->getStyle('A'.$row.':M'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
       $row+=2;
