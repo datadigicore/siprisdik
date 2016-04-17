@@ -439,16 +439,16 @@
         
       }
       if($dinas==1){
-        $query = "SELECT golongan, npwp, lokasi,  jabatan, kota_asal, tgl_mulai,tanggal_akhir as tgl_akhir, kota_tujuan, rute, harga_tiket, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima, value FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
+        $query = "SELECT golongan, npwp, lokasi,  jabatan, kota_asal, tgl_mulai,tanggal_akhir as tgl_akhir, kota_tujuan, rute, harga_tiket, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima, value, kdakun FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
         // print_r($query);
         $nmr_kuitansi = $this->log_kwitansi($det_giat,"524119");
         $result = $this->query($query);
         $array = $this->fetch_array($result, $det_giat);
         // print_r($array);
         $this->SPPD($result, $det_giat);
-         echo '<pagebreak />';
+        if($format!="pdf") echo '<pagebreak />';
         $this->Rincian_Biaya_PD($result, $det_giat);
-         echo '<pagebreak />';
+        if($format!="pdf") echo '<pagebreak />';
         $this->daftar_peng_riil($result, $det_giat);
       }
         // echo "<br>Item Terpilih : ".$item."<br> Honorarium : ".$honor."<br> Uang saku : ".$uang_saku_dalam."Transport Lokal  : ".$transport_lokal;
@@ -1610,6 +1610,7 @@
 
       $jumlah_record = $this->num_rows($data);
       foreach ($data as $value) {
+      if($value[kdakun]!='524119') continue;
         if($value[golongan]!=""){ $golongan = $value[golongan]; }
         if($value[jabatan]!=""){ $jabatan = $value[jabatan]; }
         if($value[tingkat_jalan]!=""){ $tingkat_jalan = $value[tingkat_jalan]; }
@@ -1726,7 +1727,7 @@
                       <td colspan="2">
                           <p>Pembebanan Anggaran</p>
                           <p>a. Direktorat Jenderal Kelembagaan Ilmu Pengetahuan Teknologi, dan Pendidikan Tinggi</p>
-                          <p>b. Belanja</p>
+                          <p>b. Belanja Perjalanan Dinas Paket Meeting Luar Kota</p>
                       </td>
                     </tr>
                     <tr>
@@ -1780,7 +1781,7 @@
       $jumlah_record = $this->num_rows($result);
       // print_r($result);
       foreach ($result as $val) {
-        // if($val[kdakun]=="524119"){
+          if($val[kdakun]!="524119") continue;
           if($val[alat_trans]!="") $alat_trans = $val[alat_trans];
           if($val[kota_asal]!="") $asal = $val[kota_asal];
           if($val[kota_tujuan]!="") $tujuan = $val[kota_tujuan];
@@ -3799,13 +3800,14 @@ public function daftar_peng_riil($result,$det){
       $objPHPExcel->getDefaultStyle()->getBorders()->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
       $objPHPExcel->getDefaultStyle()->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
       $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+      $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
       $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
       $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(3);
       $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(10);
       $objPHPExcel->getActiveSheet()->getStyle('E')->getAlignment()->setWrapText(true); 
       $objPHPExcel->getActiveSheet()->getStyle('H')->getAlignment()->setWrapText(true); 
       for($col = 'A'; $col !== 'N'; $col++) {
-        if($col!='E'and $col!='H' and $col!='A' and $col!='L'){
+        if($col!='E'and $col!='H' and $col!='A' and $col!='L' and $col!='D'){
           $objPHPExcel->getActiveSheet()
           ->getColumnDimension($col)
           ->setAutoSize(true);
@@ -3984,7 +3986,8 @@ public function daftar_peng_riil($result,$det){
       }
       $row+=1;
       $sheet->getStyle("A".$row.":M".$row)->applyFromArray($border); 
-      $sheet->mergeCells('A'.$row.':'.'D'.$row);
+      // $sheet->mergeCells('A'.$row.':'.'D'.$row);
+      $cell->setCellValue('A'.$row,'Subtotal');
       $cell->setCellValue('E'.$row,$subtot_honor);
       $cell->setCellValue('F'.$row,$subtot_uangHarian);
       $cell->setCellValue('G'.$row,$subtot_uangSaku);
@@ -3997,23 +4000,32 @@ public function daftar_peng_riil($result,$det){
       $cell->getStyle('A'.$row.':M'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
       $row+=2;
       $sheet->mergeCells('L'.$row.':M'.$row);
+      $sheet->mergeCells('E'.$row.':F'.$row);
       $sheet->getStyle('A'.$row.':M'.$row)->getFont()->setBold(true); 
       $cell->setCellValue('L'.$row,$id_giat[lokasi].', '.$tanggal);
       $row+=2;
       $sheet->mergeCells('L'.$row.':M'.$row);
       $sheet->mergeCells('A'.$row.':'.'D'.$row);
+      $sheet->mergeCells('E'.$row.':'.'F'.$row);
       $sheet->getStyle('A'.$row.':M'.$row)->getFont()->setBold(true); 
       $cell->setCellValue('L'.$row,'BPP,');
-      $cell->setCellValue('A'.$row,'Pejabat Pembuat Komitmen');
-      $row+=4;
+      $cell->setCellValue('A'.$row,'Kepala Bagian Umum');
+      $cell->setCellValue('E'.$row,'Pelaksana Kegiatan');
+      $row+=1;
+      $sheet->mergeCells('E'.$row.':'.'F'.$row);
+      $cell->setCellValue('E'.$row,'Kasubbag Rumah Tangga');
+      $row+=5;
       $cell->setCellValue('L'.$row,$bpp);
       $sheet->getStyle('A'.$row.':M'.$row)->getFont()->setBold(true); 
       $cell->setCellValue('A'.$row,$ppk);
+      $cell->setCellValue('E'.$row,"Arsiadi");
       $row+=1;
       $sheet->mergeCells('L'.$row.':M'.$row);
+      $sheet->mergeCells('E'.$row.':'.'F'.$row);
       $sheet->mergeCells('A'.$row.':D'.$row);
       $sheet->getStyle('A'.$row.':M'.$row)->getFont()->setBold(true); 
       $cell->setCellValueExplicit('A'.$row,$nip_ppk);
+      $cell->setCellValueExplicit('E'.$row,"NIP. 196002151982031001");
       $cell->setCellValueExplicit('L'.$row, $nip_bpp, PHPExcel_Cell_DataType::TYPE_STRING);
 
 
