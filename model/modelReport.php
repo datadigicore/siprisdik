@@ -1625,8 +1625,8 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
         if($value[alat_trans]!=""){ $transportasi = $value[alat_trans]; }
         if($value[kota_asal]!="" and $kota_asal==null ) $kota_asal= $value[kota_asal];
         if($value[kota_tujuan]!="") $kota_tujuan = $value[kota_tujuan];
-        if($value[lama_hari]!="") $lama_hari = $value[lama_hari];
-        if($value[tgl_mulai]!="0000-00-00") $tgl_mulai = $this->konversi_tanggal($value[tgl_mulai],"");
+        if($value[lama_hari]!="") $lama_hari += $value[lama_hari];
+        if($value[tgl_mulai]!="0000-00-00" and $tgl_mulai==null) $tgl_mulai = $this->konversi_tanggal($value[tgl_mulai],"");
         if($value[tgl_akhir]!="0000-00-00") $tgl_akhir = $this->konversi_tanggal($value[tgl_akhir],"");
         if($value[npwp]!="") $npwp = $value[npwp];
         if($value[lokasi]!="") $lokasi = $value[lokasi];
@@ -1808,20 +1808,21 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
           if($val[lokasi]!="") $lokasi = $val[lokasi];   
           $penerima=$val[penerima];
           // array_push($array_transport, $asal." - ".$tujuan, $tiket);
+          $jml_uang_harian = $jml_hari * $uang_harian;
           $array_transport[$counter]["rute"] = $asal." - ".$tujuan;
           $array_transport[$counter]["harga"] = $tiket;
           $array_airporttax[$counter]["tax"] = $airport_tax;
           $array_transport[$counter]["taxi"] = $taxi_asal + $taxi_tujuan;
-          
-          
-          array_push($array_uang_harian, $uang_harian);
+          $array_transport[$counter]["uang_harian"] = $uang_harian;
+          $array_transport[$counter]["jml_hari"] = $jml_hari;
+          $array_transport[$counter]["total_uang_harian"] = $jml_uang_harian;
       
-          $jml_uang_harian = $jml_hari * $uang_harian;
-          $total += $tiket + $airport_tax + $taxi_asal + $taxi_tujuan;
+          
+          $total += $tiket + $airport_tax + $taxi_asal + $taxi_tujuan+ $jml_uang_harian;
           if($total==0) continue;
           $counter++;
           }
-          $total +=$jml_uang_harian;
+          // $total +=$jml_uang_harian;
           require __DIR__ . "/../utility/report/header_rbpd.php";
           echo '<p align="center" style="font-weight:bold; font-size:1.0em">RINCIAN BIAYA PERJALANAN DINAS</p>';
           echo '  <table style="width: 40%; font-size:80%; font-weight:bold;"  border="0">     
@@ -1912,14 +1913,16 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                       <td style="border-left:1px solid; border-right:1px solid;"></td>
                     </tr>';
 
-              //Uang Harian
+              foreach ($array_transport as $key => $value) {
+                # code...
+              
               echo '<tr>
                       <td style="border-left:1px solid; border-right:1px solid;"></td>
-                      <td style="border-left:1px solid; border-right:1px solid;">'.$jml_hari." Hari X Rp. ".number_format($uang_harian,0,",",".")." = Rp.".$jml_uang_harian.'</td>
-                      <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($jml_uang_harian,0,",",".").'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;">'.$value["jml_hari"]." Hari X Rp. ".number_format($value["uang_harian"],0,",",".")." = Rp.".$jml_uang_harian.'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($value["total_uang_harian"],0,",",".").'</td>
                       <td style="border-left:1px solid; border-right:1px solid;"></td>
                     </tr>';
-              
+              }
               echo '<tr>
                       <td style="border-left:1px solid; border-right:1px solid;"></td>
                       <td style="border-left:1px solid; border-right:1px solid;">'."Jumlah".'</td>
