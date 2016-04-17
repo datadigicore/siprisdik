@@ -277,7 +277,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
         $kondisi_akun = "id='$id' ";
       }
       else{
-        $kondisi_akun = " rab.rabview_id='$rabv_id' and rab.npwp like '$npwp%' and rab.nip like '$nip%' order by rab.kdakun asc ";
+        $kondisi_akun = " rab.rabview_id='$rabv_id' and rab.npwp like '$npwp%' and rab.nip like '$nip%' order by rab.kdakun, rab.id asc ";
       }
       // $result = $this->query("SELECT rab.alat_trans, rab.kota_asal, rab.kota_tujuan, rab.lama_hari, rab.tgl_mulai, rab.tgl_akhir, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rab.rabview_id='$rabv_id' and rab.npwp='$npwp' order by rab.kdakun asc ");
       $sql = "SELECT rab.penerima, rab.nip, rab.jabatan, rab.pns, rab.golongan, rab.kdakun, rkkl.NMGIAT, rab.value, rab.pajak, rab.ppn, rab.pph, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM, rab.tanggal_akhir, rab.lokasi FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where ".$kondisi_akun." ";
@@ -1623,7 +1623,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
         if($value[jabatan]!=""){ $jabatan = $value[jabatan]; }
         if($value[tingkat_jalan]!=""){ $tingkat_jalan = $value[tingkat_jalan]; }
         if($value[alat_trans]!=""){ $transportasi = $value[alat_trans]; }
-        if($value[kota_asal]!="") $kota_asal= $value[kota_asal];
+        if($value[kota_asal]!="" and $kota_asal==null ) $kota_asal= $value[kota_asal];
         if($value[kota_tujuan]!="") $kota_tujuan = $value[kota_tujuan];
         if($value[lama_hari]!="") $lama_hari = $value[lama_hari];
         if($value[tgl_mulai]!="0000-00-00") $tgl_mulai = $this->konversi_tanggal($value[tgl_mulai],"");
@@ -1632,7 +1632,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
         if($value[lokasi]!="") $lokasi = $value[lokasi];
         $penerima=$value[penerima];
       
-        
+      }  
       // ob_start();  
       require __DIR__ . "/../utility/report/header_sppd.php";
       echo '  <table style="width: 50%; font-size:80%;"   border="0">               
@@ -1768,7 +1768,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
           echo '<pagebreak />';
           $jumlah_record-=1;
         }
-      }
+      
 
     }
 
@@ -1781,6 +1781,9 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       // print_r($query);
       // $result = $this->query($query);
       // $array = $this->fetch_array($result);
+      $array_transport = array();
+      $array_taxi = array();
+      $array_uang_harian = array();
       $asal=""; $tujuan=""; $alat_trans; $tiket=0; $airport_tax=0;
       $taxi_asal=0; $taxi_tujuan=0; $jml_hari=1; $uang_harian=0; $lokasi;
       $jml_uang_harian;
@@ -1788,7 +1791,8 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       $tgl_akhir = null;
       $jumlah_record = $this->num_rows($result);
       // print_r($result);
-      foreach ($result as $val) {
+      $counter=0;
+        foreach ($result as $val) {
           if($val[kdakun]!="524119") continue;
           if($val[alat_trans]!="") $alat_trans = $val[alat_trans];
           if($val[kota_asal]!="") $asal = $val[kota_asal];
@@ -1803,10 +1807,21 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
           if($val[uang_harian]>0) $uang_harian = $val[uang_harian];   
           if($val[lokasi]!="") $lokasi = $val[lokasi];   
           $penerima=$val[penerima];
+          // array_push($array_transport, $asal." - ".$tujuan, $tiket);
+          $array_transport[$counter]["rute"] = $asal." - ".$tujuan;
+          $array_transport[$counter]["harga"] = $tiket;
+          $array_airporttax[$counter]["tax"] = $airport_tax;
+          $array_transport[$counter]["taxi"] = $taxi_asal + $taxi_tujuan;
+          
+          
+          array_push($array_uang_harian, $uang_harian);
       
           $jml_uang_harian = $jml_hari * $uang_harian;
-          $total = $tiket + $airport_tax + $taxi_asal + $taxi_tujuan +$jml_uang_harian;
+          $total += $tiket + $airport_tax + $taxi_asal + $taxi_tujuan;
           if($total==0) continue;
+          $counter++;
+          }
+          $total +=$jml_uang_harian;
           require __DIR__ . "/../utility/report/header_rbpd.php";
           echo '<p align="center" style="font-weight:bold; font-size:1.0em">RINCIAN BIAYA PERJALANAN DINAS</p>';
           echo '  <table style="width: 40%; font-size:80%; font-weight:bold;"  border="0">     
@@ -1823,7 +1838,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
 
             </table>';    
 
-          echo '  <table cellpadding="8" style="width: 100%; border-collapse:collapse; font-size:80%;">     
+          echo '  <table cellpadding="6" style="width: 100%; border-collapse:collapse; font-size:80%;">     
             <tr>
                 <td width="9%" style="border:1px solid; text-align:center;">NO</td>
                 <td width="40%"  style="border:1px solid; text-align:center;">PERINCIAN BIAYA</td>
@@ -1841,47 +1856,57 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
               //       </tr>';
               //       $jml+=$value[value];
               // }
+          
               echo '<tr>
-                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                      <td style="border-left:1px solid; border-right:1px solid; text-align:center;">1</td>
                       <td style="border-left:1px solid; border-right:1px solid;">Transport : </td>
                       <td style="border-left:1px solid; border-right:1px solid;"></td>
                       <td style="border-left:1px solid; border-right:1px solid;"></td>
                     </tr>';
-
-              echo '<tr>
-                      <td style="border-left:1px solid; border-right:1px solid;"></td>
-                      <td style="border-left:1px solid; border-right:1px solid;">'.$asal." - ".$tujuan.'</td>
-                      <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($tiket,0,",",".").'</td>
-                      <td style="border-left:1px solid; border-right:1px solid;"></td>
-                    </tr>';
-              if($airport_tax>0){
-              echo '<tr>
-                      <td style="border-left:1px solid; border-right:1px solid;"></td>
-                      <td style="border-left:1px solid; border-right:1px solid;">'."Airport tax".'</td>
-                      <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($airport_tax).'</td>
-                      <td style="border-left:1px solid; border-right:1px solid;"></td>
-                    </tr>';
+              
+              foreach ($array_transport as $key => $value) {
+                echo '<tr>
+                        <td style="border-left:1px solid; border-right:1px solid;"></td>
+                        <td style="border-left:1px solid; border-right:1px solid;">'.$value["rute"].'</td>
+                        <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($value["harga"],0,",",".").'</td>
+                        <td style="border-left:1px solid; border-right:1px solid;"></td>
+                      </tr>';
               }
+              if($airport_tax>0){
+                foreach ($array_airporttax as $key => $value) {
+                  echo '<tr>
+                          <td style="border-left:1px solid; border-right:1px solid;"></td>
+                          <td style="border-left:1px solid; border-right:1px solid;">'."Airport tax".'</td>
+                          <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($array_airporttax["tax"],0,",",".").'</td>
+                          <td style="border-left:1px solid; border-right:1px solid;"></td>
+                        </tr>';
+                  }
+              }
+
               echo '<tr>
                       <td style="border-left:1px solid; border-right:1px solid;"></td>
                       <td style="border-left:1px solid; border-right:1px solid;">'."Biaya Taxi dari / ke Bandara :  ".'</td>
                       <td style="border-left:1px solid; border-right:1px solid;"></td>
                       <td style="border-left:1px solid; border-right:1px solid;"></td>
                     </tr>';
+              foreach ($array_transport as $key => $value) {
+
+                echo '<tr>
+                        <td style="border-left:1px solid; border-right:1px solid;"></td>
+                        <td style="border-left:1px solid; border-right:1px solid;">'.$value["rute"].'</td>
+                        <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($value["taxi"],0,",",".").'</td>
+                                                <td style="border-left:1px solid; border-right:1px solid;"></td>
+                                              </tr>';
+                        
+                                      // echo '<tr>
+                                      //         <td style="border-left:1px solid; border-right:1px solid;"></td>
+                                      //         <td style="border-left:1px solid; border-right:1px solid;">'.$tujuan.'</td>
+                                      //         <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($taxi_tujuan,0,",",".").'</td>
+                                      //         <td style="border-left:1px solid; border-right:1px solid;"></td>]
+              //       </tr>';
+              }
               echo '<tr>
-                      <td style="border-left:1px solid; border-right:1px solid;"></td>
-                      <td style="border-left:1px solid; border-right:1px solid;">'.$asal.'</td>
-                      <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($taxi_asal,0,",",".").'</td>
-                      <td style="border-left:1px solid; border-right:1px solid;"></td>
-                    </tr>';
-              echo '<tr>
-                      <td style="border-left:1px solid; border-right:1px solid;"></td>
-                      <td style="border-left:1px solid; border-right:1px solid;">'.$tujuan.'</td>
-                      <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($taxi_tujuan,0,",",".").'</td>
-                      <td style="border-left:1px solid; border-right:1px solid;"></td>
-                    </tr>';
-              echo '<tr>
-                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                      <td style="border-left:1px solid; border-right:1px solid; text-align:center;">2</td>
                       <td style="border-left:1px solid; border-right:1px solid;">'."Uang Harian :".'</td>
                       <td style="border-left:1px solid; border-right:1px solid;"></td>
                       <td style="border-left:1px solid; border-right:1px solid;"></td>
@@ -1894,6 +1919,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                       <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($jml_uang_harian,0,",",".").'</td>
                       <td style="border-left:1px solid; border-right:1px solid;"></td>
                     </tr>';
+              
               echo '<tr>
                       <td style="border-left:1px solid; border-right:1px solid;"></td>
                       <td style="border-left:1px solid; border-right:1px solid;">'."Jumlah".'</td>
@@ -1907,6 +1933,9 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                     </tr>';                
 
           echo '</table>';
+          // print_r($array_taxi);
+          // print_r($array_transport);
+          // print_r($array_uang_harian);
           
           $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
           $arr_pb = $this->fetch_array($result_pb);
@@ -1992,7 +2021,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
               echo '<pagebreak />';
               $jumlah_record-=1;
             } 
-          }
+          
        // }               
     }
 
