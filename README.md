@@ -14,3 +14,8 @@ Untuk rabfull :
 <li>Kolom selain value dipakai untu yang ada perjalanan saja</li>
 <li>Untuk uang_harian dan biaya_akom agak sedikit berbeda. Kalau akunnya itu perjalanan, maka 2 hal ini masuk ke dalam kolomnya sendiri sesuai nama. Tetapi kalau dia bukan perjalanan, berarti dia berdiri sendiri dan masuknya ke kolom value.</li>
 </ul>
+
+<hr>
+<h3>Untuk Clean Usulan Dan Realisasi</h3>
+
+<i>UPDATE rkakl_full SET usulan = null, realisasi = null</i>
