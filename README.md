@@ -7,7 +7,8 @@ mysql -u username -p database_name < file.sql
 
 <h4>informasi kolom</h4>
 
-tabel rabfull dan rabview telah dihapus sebagian kolom yang tidak terpakai
+tabel rabfull dan rabview telah dihapus sebagian kolom yang tidak terpakai.
+<br>
 Untuk rabfull : 
 <ul>
 <li>Tabel rabfull setiap row pasti memakai value sebagai jumlahnya berapa</li>
