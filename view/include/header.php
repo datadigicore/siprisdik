@@ -12,8 +12,8 @@
         </a>
         <div class="navbar-custom-menu">
           <ul class="nav navbar-nav">
-            <?php include ('header-notif.php'); ?>
-            <?php include ('header-message.php'); ?>
+            <?php //include ('header-notif.php'); ?>
+            <?php //include ('header-message.php'); ?>
             <li class="dropdown user user-menu">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <img src="<?php echo $url_rewrite;?>static/dist/img/risetdikti.png" class="user-image" alt="User Image">

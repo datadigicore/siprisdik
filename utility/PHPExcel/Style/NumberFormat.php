@@ -275,7 +275,7 @@ class PHPExcel_Style_NumberFormat extends PHPExcel_Style_Supervisor implements P
 			self::$_builtInFormats[19] = 'h:mm:ss AM/PM';
 			self::$_builtInFormats[20] = 'h:mm';
 			self::$_builtInFormats[21] = 'h:mm:ss';
-			self::$_builtInFormats[22] = 'm/d/yy h:mm';
+			self::$_builtInFormats[22] = 'dd/mm/yyyy hh:mm';
 
 			self::$_builtInFormats[37] = '#,##0 ;(#,##0)';
 			self::$_builtInFormats[38] = '#,##0 ;[Red](#,##0)';

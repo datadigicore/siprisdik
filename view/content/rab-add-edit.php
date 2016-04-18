@@ -246,7 +246,7 @@
     $(".tanggal").datepicker({ 
       changeMonth: true,
       changeYear: true,
-      format: 'dd/mm/yyyy' 
+      dateFormat: 'dd/mm/yy' 
     });
     $('.tanggal').mask('00/00/0000');
     $('.uang').mask('000.000.000.000.000.000.000', {reverse: true});

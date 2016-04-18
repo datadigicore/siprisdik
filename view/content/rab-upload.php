@@ -31,6 +31,7 @@
             <table class="display table table-bordered table-striped">
               <tr>
                 <th colspan='2'><label>Info</label></th>
+                <th><label>Keterangan Tabel</label></th>
               </tr>
               <tr>
                 <td valign="top" class="col-md-1">
@@ -43,7 +44,7 @@
                       <tr><td valign="top">Sub Komponen</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $datarkakl[0]->NmSkmpnen?></td></tr>
                   </table>
                 </td>
-                <td class="col-md-1">
+                <td valign="top" class="col-md-1">
                   <table class="table-striped col-md-12">
                       <tr><td valign="top">Uraian Acara</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo $view['deskripsi']; ?></td></tr>
                       <tr><td valign="top">Tanggal</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo date("d M Y",strtotime($view['tanggal'])).' - '.date("d M Y",strtotime($view['tanggal_akhir'])); ?></td></tr>
@@ -54,17 +55,27 @@
                       <tr><td valign="top">Sisa</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo 'Rp '.number_format(($jumlah['jumlah'] - ($jumlah['realisasi'] + $jumlah['usulan'])),2,',','.'); ?></td></tr>
                   </table>
                 </td>
+                <td valign="top" class="col-md-1">
+                  <table class="table-striped col-md-12">
+                      <tr><td valign="top"><span class="label label-success">Hijau</span></td><td valign="top">&nbsp;</td><td valign="top">Jumlah Usulan Telah Valid</td></tr>
+                      <tr><td valign="top"><span class="label label-warning">Kuning</span></td><td valign="top">&nbsp;</td><td valign="top">Jumlah Usulan Melebihi PAGU</td></tr>
+                      <tr><td valign="top"><span class="label label-danger">Merah</span></td><td valign="top">&nbsp;</td><td valign="top">Tidak Terdapat Kode Akun dalam Kegiatan Tersebut</td></tr>
+                  </table>
+                </td>
             </table>
             <br>
             <table id="example"  class="table table-striped table-hover table-bordered">
               <thead style="background-color:#11245B;color:white;">
+                <tr style="background-color:#0000BB;color:white;">
+                  <th style="background-color:#FFFFFF;" colspan="41">-</th>
+                  <th colspan="11"><center>RUTE 1</center></th>
+                  <th colspan="11"><center>RUTE 2</center></th>
+                  <th colspan="11"><center>RUTE 3</center></th>
+                  <th colspan="11"><center>RUTE 4</center></th>
+                </tr>
                 <tr>
                   <th rowspan="2">No</th>
                   <th rowspan="2">Jenis</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">val</th>
                   <th rowspan="2">val</th>
                   <th rowspan="2">val</th>
                   <th rowspan="2">val</th>
@@ -95,106 +106,84 @@
                   <th>Uang Saku</th>
                   <th>Transport Lokal</th>
                   <th>Uang Representatif</th>
-                  <th>Uang Harian</th>
-                  <th>Tiket</th>
+                  <th>Biaya Akom (Hotel)</th>
+                  <th colspan="3">Belanja Bahan 521211</th>
                   <th rowspan="2">Tanggal Berangkat</th>
                   <th rowspan="2">Tanggal Kembali</th>
-                  <th rowspan="2">Lama Hari</th>
-                  <th rowspan="2">Tingkat dalam Perjalanan Dinas</th>
-                  <th rowspan="2">Alat Transportasi</th>
+                  <th rowspan="2">Tingkat dlm Perjalanan Dinas</th>
                   <th rowspan="2">Kota Asal</th>
                   <th rowspan="2">Kota Tujuan</th>
+                  <th rowspan="2">Alat Transportasi</th>
+                  <th colspan="2">Rute 1</th>
                   <th colspan="2">Taxi Asal</th>
                   <th colspan="2">Taxi Tujuan</th>
-                  <th>Perjalanan Darat</th>
-                  <th>Airportax</th>
+                  <th>Uang Harian</th>
+                  <th rowspan="2">Lama Hari</th>
+                  <th rowspan="2">Tanggal Berangkat</th>
+                  <th rowspan="2">Tanggal Kembali</th>
+                  <th rowspan="2">Alat Transportasi</th>
                   <th colspan="2">Rute 1</th>
-                  <th colspan="2">Rute 2</th>
-                  <th colspan="2">Rute 3</th>
-                  <th colspan="2">Rute 4</th>
-                  <th>Harga Tiket</th>
-                  <th rowspan="2">Kelompok HR</th>
-                  <th rowspan="2">Malam</th>
-                  <th>Biaya Akom</th>
-                  <th colspan="3">Belanja Bahan 521211</th>
-                  <th>Belanja Gaji Pokok PNS</th>
-                  <th>Belanja Pembulatan Gaji PNS</th>
-                  <th>Belanja Tunj. Suami/Istri PNS</th>
-                  <th>Belanja Tunj. Anak PNS</th>
-                  <th>Belanja Tunj. Struktural PNS</th>
-                  <th>Belanja Tunj. PPh PNS</th>
-                  <th>Belanja Tunj. Beras PNS</th>
-                  <th>Belanja Uang Makan PNS</th>
-                  <th>Belanja Tunj. Khusus Peralihan PNS</th>
-                  <th>Belanja Tunj. Lain-lain</th>
-                  <th>Belanja Tunj. Umum PNS</th>
-                  <th>Belanja Uang Lembur</th>
-                  <th>Belanja Pegawai Transito</th>
-                  <th>Belanja Keperluan Perkantoran</th>
-                  <th>Belanja Penambah Daya Tahan Tubuh</th>
-                  <th>Belanja pengiriman  surat pos </th>
-                  <th>Honor Operasional Satker</th>
-                  <th>Belanja Barang Operasional Lainnya</th>
-                  <th>Belanja Barang untuk persediaan Barang Konsumsi</th>
-                  <th>Belanja Jasa Konsultan</th>
-                  <th>Belanja Sewa</th>
-                  <th>Belanja Modal Peralatan dan Mesin</th>
-                  <th>Belanja Biaya Pemeliharaan Peralatan dan Mesin</th>
-                  <th>Belanja Penambahan Nilai Gedung dan Bangunan</th>
-                  <th>Belanja Modal Lainnya</th>
+                  <th colspan="2">Taxi Asal</th>
+                  <th colspan="2">Taxi Tujuan</th>
+                  <th>Uang Harian</th>
+                  <th rowspan="2">Lama Hari</th>
+                  <th rowspan="2">Tanggal Berangkat</th>
+                  <th rowspan="2">Tanggal Kembali</th>
+                  <th rowspan="2">Alat Transportasi</th>
+                  <th colspan="2">Rute 1</th>
+                  <th colspan="2">Taxi Asal</th>
+                  <th colspan="2">Taxi Tujuan</th>
+                  <th>Uang Harian</th>
+                  <th rowspan="2">Lama Hari</th>
+                  <th rowspan="2">Tanggal Berangkat</th>
+                  <th rowspan="2">Tanggal Kembali</th>
+                  <th rowspan="2">Alat Transportasi</th>
+                  <th colspan="2">Rute 1</th>
+                  <th colspan="2">Taxi Asal</th>
+                  <th colspan="2">Taxi Tujuan</th>
+                  <th>Uang Harian</th>
+                  <th rowspan="2">Lama Hari</th>
+                  <th rowspan="2">Tanggal Berangkat</th>
+                  <th rowspan="2">Tanggal Kembali</th>
                 </tr>
                 <tr>
                   <th>521213</th>
                   <th>522151</th>
                   <th>524113 / 524114</th>
                   <th>524113 / 524114</th>
-                  <th>524111/524113/524114 / 524119</th>
-                  <th>524111/524114 / 524119/524211</th>
-                  <th>524111/524119/524211</th>
-                  <th>524111</th>
-                  <th>524119</th>
-                  <th>524111</th>
-                  <th>524119</th>
-                  <th>524111/524119</th>
-                  <th>524111/524119/524211</th>
-                  <th>524111/524119/524211</th>
-                  <th>Harga Tiket</th>
-                  <th>524111/524119/524211</th>
-                  <th>Harga Tiket</th>
-                  <th>524111/524119/524211</th>
-                  <th>Harga Tiket</th>
-                  <th>524111/524119/524211</th>
-                  <th>Harga Tiket</th>
-                  <th>524111/524119</th>
-                  <th>524113/524114/524119</th>
+                  <th>524111 / 524113 / 524114 / 524119</th>
+                  <th>524113 / 524114 / 524119</th>
                   <th>ATK</th>
                   <th>Bahan Habis Pakai</th>
                   <th>Konsumsi</th>
-                  <th>511111</th>
-                  <th>511119</th>
-                  <th>511121</th>
-                  <th>511122</th>
-                  <th>511123</th>
-                  <th>511125</th>
-                  <th>511126</th>
-                  <th>511129</th>
-                  <th>511133</th>
-                  <th>511147</th>
-                  <th>511151</th>
-                  <th>512211</th>
-                  <th>512412</th>
-                  <th>521111</th>
-                  <th>521113</th>
-                  <th>521114</th>
-                  <th>521115</th>
-                  <th>521119</th>
-                  <th>521811</th>
-                  <th>522131</th>
-                  <th>522141</th>
-                  <th>532111</th>
-                  <th>523121</th>
-                  <th>533121</th>
-                  <th>536111</th>
+                  <th>524111/524119/524211</th>
+                  <th>Harga Tiket</th>
+                  <th>524111</th>
+                  <th>524119</th>
+                  <th>524111</th>
+                  <th>524119</th>
+                  <th>524111 / 524114 / 524119 / 524211</th>
+                  <th>524111/524119/524211</th>
+                  <th>Harga Tiket</th>
+                  <th>524111</th>
+                  <th>524119</th>
+                  <th>524111</th>
+                  <th>524119</th>
+                  <th>524111 / 524114 / 524119 / 524211</th>
+                  <th>524111/524119/524211</th>
+                  <th>Harga Tiket</th>
+                  <th>524111</th>
+                  <th>524119</th>
+                  <th>524111</th>
+                  <th>524119</th>
+                  <th>524111 / 524114 / 524119 / 524211</th>
+                  <th>524111/524119/524211</th>
+                  <th>Harga Tiket</th>
+                  <th>524111</th>
+                  <th>524119</th>
+                  <th>524111</th>
+                  <th>524119</th>
+                  <th>524111 / 524114 / 524119 / 524211</th>
                 </tr>
               </thead>
               <tbody>
@@ -263,14 +252,10 @@ var oTable;
              "visible" : false},
             {"targets" : 18,
              "visible" : false},
-            {"targets" : 19,
-             "visible" : false},
-            {"targets" : 20,
-             "visible" : false},
-            {"targets" : 21,
-             "visible" : false},
-            {"targets" : 22,
-             "visible" : false},
+            {"targets" : 19},
+            {"targets" : 20},
+            {"targets" : 21},
+            {"targets" : 22},
             {"targets" : 23},
             {"targets" : 24},
             {"targets" : 25},
@@ -333,12 +318,6 @@ var oTable;
             {"targets" : 82},
             {"targets" : 83},
             {"targets" : 84},
-            {"targets" : 85},
-            {"targets" : 86},
-            {"targets" : 87},
-            {"targets" : 88},
-            {"targets" : 89},
-            {"targets" : 90},
           ],
       "ajax": {
         "url": "<?php echo $url_rewrite;?>process/rab_rinci/table_upload",

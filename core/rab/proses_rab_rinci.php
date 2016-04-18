@@ -691,16 +691,12 @@ switch ($process) {
 	      array( 'db' => 'GROUP_CONCAT(DISTINCT(lama_hari) SEPARATOR ", ")',  'dt' => 15), //
 	      array( 'db' => 'GROUP_CONCAT(DISTINCT(uang_harian) SEPARATOR ", ")',  'dt' => 16), //
 	      array( 'db' => 'GROUP_CONCAT(DISTINCT(biaya_akom) SEPARATOR ", ")',  'dt' => 17), //
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(klmpk_hr) SEPARATOR ", ")',  'dt' => 18), //
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(malam) SEPARATOR ", ")',  'dt' => 19), //
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(airport_tax) SEPARATOR ", ")',  'dt' => 20), //
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(tingkat_jalan) SEPARATOR ", ")',  'dt' => 21), //
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(darat) SEPARATOR ", ")',  'dt' => 22), //
-	      array( 'db' => 'penerima',  'dt' => 23),
-	      array( 'db' => 'asal',  'dt' => 24),
-	      array( 'db' => 'npwp',  'dt' => 25),
-	      array( 'db' => 'nip',  'dt' => 26),
-	      array( 'db' => 'golongan',  'dt' => 27, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(tingkat_jalan) SEPARATOR ", ")',  'dt' => 18), //
+	      array( 'db' => 'penerima',  'dt' => 19),
+	      array( 'db' => 'asal',  'dt' => 20),
+	      array( 'db' => 'npwp',  'dt' => 21),
+	      array( 'db' => 'nip',  'dt' => 22),
+	      array( 'db' => 'golongan',  'dt' => 23, 'formatter' => function($d,$row){
 	      	if ($d == 1) $gol = 'I';
 	      	elseif($d == 2) $gol =  'II';
 	      	elseif($d == 3) $gol =  'III';
@@ -708,7 +704,7 @@ switch ($process) {
 	      	else $gol =  'N/A';
 	      	return $gol;
 	      }),
-	      array( 'db' => 'pns',  'dt' => 28, 'formatter' => function($d,$row){
+	      array( 'db' => 'pns',  'dt' => 24, 'formatter' => function($d,$row){
 	      	if ($d == 0) {
 	      		if ($row[1] == 0) {
 	      			$pns = 'N/A';
@@ -720,9 +716,9 @@ switch ($process) {
 	      	}
 	      	return $pns;
 	      }),
-	      array( 'db' => 'pajak',  'dt' => 29),
-	      array( 'db' => 'jabatan',  'dt' => 30),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 31, 'formatter' => function($d,$row){
+	      array( 'db' => 'pajak',  'dt' => 25),
+	      array( 'db' => 'jabatan',  'dt' => 26),
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 27, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[2]);
 	      	$pecaherror = explode(", ", $row[5]);
@@ -730,11 +726,83 @@ switch ($process) {
 	      	foreach ($pecah as $key => $value) {
 	      		if ($value == "Honor Output") {
 	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
+	      				$val = '<span class="label label-warning">'.number_format($pecahvalue[$key],2,',','.').'</span>';
 	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
+	      				$val = '<span class="label label-danger">'.number_format($pecahvalue[$key],2,',','.').'</span>';
 	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
+	      				$val = '<span class="label label-success">'.number_format($pecahvalue[$key],2,',','.').'</span>';
+	      			}
+	      		}
+	      	}
+	      	return $val;
+	      }),
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 28, 'formatter' => function($d,$row){
+	      	$pecah = explode(", ", $d);
+	      	$pecahvalue = explode(", ", $row[2]);
+	      	$pecaherror = explode(", ", $row[5]);
+	      	$val = "-";
+	      	foreach ($pecah as $key => $value) {
+	      		if ($value == "Honor Profesi") {
+	      			if ($pecaherror[$key] == "1") {
+	      				$val = '<span class="label label-warning">'.number_format($pecahvalue[$key],2,',','.').'</span>';
+	      			}elseif ($pecaherror[$key] == "2") {
+	      				$val = '<span class="label label-danger">'.number_format($pecahvalue[$key],2,',','.').'</span>';
+	      			}else{
+	      				$val = '<span class="label label-success">'.number_format($pecahvalue[$key],2,',','.').'</span>';
+	      			}
+	      		}
+	      	}
+	      	return $val;
+	      }),
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 29, 'formatter' => function($d,$row){
+	      	$pecah = explode(", ", $d);
+	      	$pecahvalue = explode(", ", $row[2]);
+	      	$pecaherror = explode(", ", $row[5]);
+	      	$val = "-";
+	      	foreach ($pecah as $key => $value) {
+	      		if ($value == "Uang Saku") {
+	      			if ($pecaherror[$key] == "1") {
+	      				$val = '<span class="label label-warning">'.number_format($pecahvalue[$key],2,',','.').'</span>';
+	      			}elseif ($pecaherror[$key] == "2") {
+	      				$val = '<span class="label label-danger">'.number_format($pecahvalue[$key],2,',','.').'</span>';
+	      			}else{
+	      				$val = '<span class="label label-success">'.number_format($pecahvalue[$key],2,',','.').'</span>';
+	      			}
+	      		}
+	      	}
+	      	return $val;
+	      }),
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 30, 'formatter' => function($d,$row){
+	      	$pecah = explode(", ", $d);
+	      	$pecahvalue = explode(", ", $row[2]);
+	      	$pecaherror = explode(", ", $row[5]);
+	      	$val = "-";
+	      	foreach ($pecah as $key => $value) {
+	      		if ($value == "Transport Lokal") {
+	      			if ($pecaherror[$key] == "1") {
+	      				$val = '<span class="label label-warning">'.number_format($pecahvalue[$key],2,',','.').'</span>';
+	      			}elseif ($pecaherror[$key] == "2") {
+	      				$val = '<span class="label label-danger">'.number_format($pecahvalue[$key],2,',','.').'</span>';
+	      			}else{
+	      				$val = '<span class="label label-success">'.number_format($pecahvalue[$key],2,',','.').'</span>';
+	      			}
+	      		}
+	      	}
+	      	return $val;
+	      }),
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 31, 'formatter' => function($d,$row){
+	      	$pecah = explode(", ", $d);
+	      	$pecahvalue = explode(", ", $row[2]);
+	      	$pecaherror = explode(", ", $row[5]);
+	      	$val = "-";
+	      	foreach ($pecah as $key => $value) {
+	      		if ($value == "Uang Representatif") {
+	      			if ($pecaherror[$key] == "1") {
+	      				$val = '<span class="label label-warning">'.number_format($pecahvalue[$key],2,',','.').'</span>';
+	      			}elseif ($pecaherror[$key] == "2") {
+	      				$val = '<span class="label label-danger">'.number_format($pecahvalue[$key],2,',','.').'</span>';
+	      			}else{
+	      				$val = '<span class="label label-success">'.number_format($pecahvalue[$key],2,',','.').'</span>';
 	      			}
 	      		}
 	      	}
@@ -744,93 +812,135 @@ switch ($process) {
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[2]);
 	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
+	      	$akom = "-";
 	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "Honor Profesi") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
+	      		if ($value == "Perjalanan") {
+	      			$akom = $pecahvalue[$key];
+	      			$error = $pecaherror[$key];
+	      		}
+	      		elseif ($value == "Biaya Akomodasi"){
+	      			$akom += $pecahvalue[$key];
+	      			if ($error == 0) {
+	      				$error = $pecaherror[$key];
 	      			}
 	      		}
 	      	}
-	      	return $val;
+	      	if ($error == "1") {
+  				$akom = '<span class="label label-warning">'.number_format($akom,2,',','.').'</span>';
+  			}elseif ($error == "2") {
+  				$akom = '<span class="label label-danger">'.number_format($akom,2,',','.').'</span>';
+  			}else{
+  				$akom = '<span class="label label-success">'.number_format($akom,2,',','.').'</span>';
+  			}
+	      	return $akom;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 33, 'formatter' => function($d,$row){
+
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 33, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
+	      	$pecahitem = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[2]);
 	      	$pecaherror = explode(", ", $row[5]);
 	      	$val = "-";
 	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "Uang Saku") {
+	      		if ($value == "521211" && $pecahitem[$key] == "1") {
 	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
+	      				$val = '<span class="label label-warning">'.number_format($pecahvalue[$key],2,',','.').'</span>';
 	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
+	      				$val = '<span class="label label-danger">'.number_format($pecahvalue[$key],2,',','.').'</span>';
 	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
+	      				$val = '<span class="label label-success">'.number_format($pecahvalue[$key],2,',','.').'</span>';
 	      			}
 	      		}
 	      	}
 	      	return $val;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 34, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 34, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
+	      	$pecahitem = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[2]);
 	      	$pecaherror = explode(", ", $row[5]);
 	      	$val = "-";
 	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "Transport Lokal") {
+	      		if ($value == "521211" && $pecahitem[$key] == "2") {
 	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
+	      				$val = '<span class="label label-warning">'.number_format($pecahvalue[$key],2,',','.').'</span>';
 	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
+	      				$val = '<span class="label label-danger">'.number_format($pecahvalue[$key],2,',','.').'</span>';
 	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
+	      				$val = '<span class="label label-success">'.number_format($pecahvalue[$key],2,',','.').'</span>';
 	      			}
 	      		}
 	      	}
 	      	return $val;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 35, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 35, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
+	      	$pecahitem = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[2]);
 	      	$pecaherror = explode(", ", $row[5]);
 	      	$val = "-";
 	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "Uang Representatif") {
+	      		if ($value == "521211" && $pecahitem[$key] == "3") {
 	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
+	      				$val = '<span class="label label-warning">'.number_format($pecahvalue[$key],2,',','.').'</span>';
 	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
+	      				$val = '<span class="label label-danger">'.number_format($pecahvalue[$key],2,',','.').'</span>';
 	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
+	      				$val = '<span class="label label-success">'.number_format($pecahvalue[$key],2,',','.').'</span>';
 	      			}
 	      		}
 	      	}
 	      	return $val;
 	      }),
+
+	      ### RUTE 1 ###
+	      # Alat Trans
 	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 36, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
+	      	$pecahvalue = explode(", ", $row[6]);
 	      	$pecaherror = explode(", ", $row[5]);
 	      	$val = "-";
 	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "Uang Harian") {
+	      		if ($value == "Perjalanan") {
+	      			$val = $pecahvalue[$key];
+	      		}
+	      	}
+	      	return $val;
+	      }),
+	      # Rute 1
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 47, 'formatter' => function($d,$row){
+	      	$pecah = explode(", ", $d);
+	      	$pecahvalue = explode(", ", $row[7]);
+	      	$pecaherror = explode(", ", $row[5]);
+	      	$val = "-";
+	      	foreach ($pecah as $key => $value) {
+	      		if ($value == "Perjalanan") {
+	      			$val = $pecahvalue[$key];
+	      		}
+	      	}
+	      	return $val;
+	      }),
+	      # Harga Tiket 1
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 48, 'formatter' => function($d,$row){
+	      	$pecah = explode(", ", $d);
+	      	$pecahvalue = explode(", ", $row[8]);
+	      	$pecaherror = explode(", ", $row[5]);
+	      	$val = "-";
+	      	foreach ($pecah as $key => $value) {
+	      		if ($value == "Perjalanan") {
 	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
+	      				$val = '<span class="label label-warning">'.number_format($pecahvalue[$key],2,',','.').'</span>';
 	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
+	      				$val = '<span class="label label-danger">'.number_format($pecahvalue[$key],2,',','.').'</span>';
 	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
+	      				$val = '<span class="label label-success">'.number_format($pecahvalue[$key],2,',','.').'</span>';
 	      			}
 	      		}
 	      	}
 	      	return $val;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 37, 'formatter' => function($d,$row){
+
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 36, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[8]);
 	      	$pecaherror = explode(", ", $row[5]);
@@ -870,7 +980,7 @@ switch ($process) {
   			}
 	      	return $tiket;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 38, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 34, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[13]);
 	      	$pecaherror = explode(", ", $row[5]);
@@ -886,7 +996,7 @@ switch ($process) {
 	      	}
 	      	return $val;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 39, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 35, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[14]);
 	      	$pecaherror = explode(", ", $row[5]);
@@ -902,7 +1012,7 @@ switch ($process) {
 	      	}
 	      	return $val;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 40, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 36, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[15]);
 	      	$pecaherror = explode(", ", $row[5]);
@@ -920,7 +1030,7 @@ switch ($process) {
 	      	}
 	      	return $val;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 41, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 37, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[21]);
 	      	$pecaherror = explode(", ", $row[5]);
@@ -932,7 +1042,7 @@ switch ($process) {
 	      	}
 	      	return $val;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 42, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 38, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[6]);
 	      	$pecaherror = explode(", ", $row[5]);
@@ -944,7 +1054,7 @@ switch ($process) {
 	      	}
 	      	return $val;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 43, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 39, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[9]);
 	      	$pecaherror = explode(", ", $row[5]);
@@ -956,7 +1066,7 @@ switch ($process) {
 	      	}
 	      	return $val;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 44, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 40, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[10]);
 	      	$pecaherror = explode(", ", $row[5]);
@@ -968,7 +1078,7 @@ switch ($process) {
 	      	}
 	      	return $val;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 45, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 41, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[11]);
 	      	$pecaherror = explode(", ", $row[5]);
@@ -989,7 +1099,7 @@ switch ($process) {
 	      	}
 	      	return $val;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 46, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 42, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[11]);
 	      	$pecaherror = explode(", ", $row[5]);
@@ -1011,7 +1121,7 @@ switch ($process) {
 	      	}
 	      	return $val;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 47, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 43, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[12]);
 	      	$pecaherror = explode(", ", $row[5]);
@@ -1032,7 +1142,7 @@ switch ($process) {
 	      	}
 	      	return $val;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 48, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 44, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[12]);
 	      	$pecaherror = explode(", ", $row[5]);
@@ -1053,7 +1163,7 @@ switch ($process) {
 	      	}
 	      	return $val;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 49, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 45, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[22]);
 	      	$pecaherror = explode(", ", $row[5]);
@@ -1071,7 +1181,7 @@ switch ($process) {
 	      	}
 	      	return $val;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 50, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 46, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[20]);
 	      	$pecaherror = explode(", ", $row[5]);
@@ -1089,7 +1199,7 @@ switch ($process) {
 	      	}
 	      	return $val;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 51, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 47, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[7]);
 	      	$pecaherror = explode(", ", $row[5]);
@@ -1101,13 +1211,73 @@ switch ($process) {
 	      	}
 	      	return $val;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 52, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 48, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[8]);
 	      	$pecaherror = explode(", ", $row[5]);
 	      	$val = "-";
 	      	foreach ($pecah as $key => $value) {
 	      		if ($value == "Perjalanan") {
+	      			if ($pecaherror[$key] == "1") {
+	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
+	      			}elseif ($pecaherror[$key] == "2") {
+	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
+	      			}else{
+	      				$val = number_format($pecahvalue[$key],2,',','.');
+	      			}
+	      		}
+	      	}
+	      	return $val;
+	      }),
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 49, 'formatter' => function($d,$row){
+	      	$pecah = explode(", ", $d);
+	      	$pecahvalue = explode(", ", $row[7]);
+	      	$pecaherror = explode(", ", $row[5]);
+	      	$val = "-";
+	      	foreach ($pecah as $key => $value) {
+	      		if ($value == "Perjalanan 2") {
+	      			$val = $pecahvalue[$key];
+	      		}
+	      	}
+	      	return $val;
+	      }),
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 50, 'formatter' => function($d,$row){
+	      	$pecah = explode(", ", $d);
+	      	$pecahvalue = explode(", ", $row[8]);
+	      	$pecaherror = explode(", ", $row[5]);
+	      	$val = "-";
+	      	foreach ($pecah as $key => $value) {
+	      		if ($value == "Perjalanan 2") {
+	      			if ($pecaherror[$key] == "1") {
+	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
+	      			}elseif ($pecaherror[$key] == "2") {
+	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
+	      			}else{
+	      				$val = number_format($pecahvalue[$key],2,',','.');
+	      			}
+	      		}
+	      	}
+	      	return $val;
+	      }),
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 51, 'formatter' => function($d,$row){
+	      	$pecah = explode(", ", $d);
+	      	$pecahvalue = explode(", ", $row[7]);
+	      	$pecaherror = explode(", ", $row[5]);
+	      	$val = "-";
+	      	foreach ($pecah as $key => $value) {
+	      		if ($value == "Perjalanan 3") {
+	      			$val = $pecahvalue[$key];
+	      		}
+	      	}
+	      	return $val;
+	      }),
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 52, 'formatter' => function($d,$row){
+	      	$pecah = explode(", ", $d);
+	      	$pecahvalue = explode(", ", $row[8]);
+	      	$pecaherror = explode(", ", $row[5]);
+	      	$val = "-";
+	      	foreach ($pecah as $key => $value) {
+	      		if ($value == "Perjalanan 3") {
 	      			if ($pecaherror[$key] == "1") {
 	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
 	      			}elseif ($pecaherror[$key] == "2") {
@@ -1125,7 +1295,7 @@ switch ($process) {
 	      	$pecaherror = explode(", ", $row[5]);
 	      	$val = "-";
 	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "Perjalanan 2") {
+	      		if ($value == "Perjalanan 4") {
 	      			$val = $pecahvalue[$key];
 	      		}
 	      	}
@@ -1137,7 +1307,7 @@ switch ($process) {
 	      	$pecaherror = explode(", ", $row[5]);
 	      	$val = "-";
 	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "Perjalanan 2") {
+	      		if ($value == "Perjalanan 4") {
 	      			if ($pecaherror[$key] == "1") {
 	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
 	      			}elseif ($pecaherror[$key] == "2") {
@@ -1150,66 +1320,6 @@ switch ($process) {
 	      	return $val;
 	      }),
 	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 55, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[7]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "Perjalanan 3") {
-	      			$val = $pecahvalue[$key];
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 56, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[8]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "Perjalanan 3") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 57, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[7]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "Perjalanan 4") {
-	      			$val = $pecahvalue[$key];
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 58, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[8]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "Perjalanan 4") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 59, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[8]);
 	      	$pecaherror = explode(", ", $row[5]);
@@ -1249,7 +1359,7 @@ switch ($process) {
   			}
 	      	return $tiket;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 60, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 56, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[18]);
 	      	$pecaherror = explode(", ", $row[5]);
@@ -1261,7 +1371,7 @@ switch ($process) {
 	      	}
 	      	return $val;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 61, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 57, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[19]);
 	      	$pecaherror = explode(", ", $row[5]);
@@ -1273,520 +1383,13 @@ switch ($process) {
 	      	}
 	      	return $val;
 	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 62, 'formatter' => function($d,$row){
+	      array( 'db' => 'GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ", ")', 'dt' => 58, 'formatter' => function($d,$row){
 	      	$pecah = explode(", ", $d);
 	      	$pecahvalue = explode(", ", $row[17]);
 	      	$pecaherror = explode(", ", $row[5]);
 	      	$val = "-";
 	      	foreach ($pecah as $key => $value) {
 	      		if ($value == "Perjalanan") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 63, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahitem = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "521211" && $pecahitem[$key] == "1") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 64, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahitem = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "521211" && $pecahitem[$key] == "2") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 65, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahitem = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "521211" && $pecahitem[$key] == "3") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 66, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "511111") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 67, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "511119") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 68, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "511121") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 69, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "511122") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 70, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "511123") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 71, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "511125") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 72, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "511126") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 73, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "511129") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 74, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "511133") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 75, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "511147") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 76, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "511151") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 77, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "512211") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 78, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "512412") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 79, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "521111") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 80, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "521113") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 81, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "521114") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 82, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "521115") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 83, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "521119") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 84, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "521811") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 85, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "522131") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 86, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "522141") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 87, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "532111") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 88, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "523121") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 89, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "533121") {
-	      			if ($pecaherror[$key] == "1") {
-	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
-	      			}elseif ($pecaherror[$key] == "2") {
-	      				$val = '<b><span style="color:#999900">'.number_format($pecahvalue[$key],2,',','.').'</span></b>';
-	      			}else{
-	      				$val = number_format($pecahvalue[$key],2,',','.');
-	      			}
-	      		}
-	      	}
-	      	return $val;
-	      }),
-	      array( 'db' => 'GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ", ")', 'dt' => 90, 'formatter' => function($d,$row){
-	      	$pecah = explode(", ", $d);
-	      	$pecahvalue = explode(", ", $row[2]);
-	      	$pecaherror = explode(", ", $row[5]);
-	      	$val = "-";
-	      	foreach ($pecah as $key => $value) {
-	      		if ($value == "536111") {
 	      			if ($pecaherror[$key] == "1") {
 	      				$val = '<span style="color:#FF0000">'.number_format($pecahvalue[$key],2,',','.').'</span>';
 	      			}elseif ($pecaherror[$key] == "2") {
