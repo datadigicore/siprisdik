@@ -1220,32 +1220,18 @@
       return $all;
     }
 
-    public function getrkaklfull3($data){
-      $thang      = $data['thang'];
-      $kdgiat     = $data['kdgiat'];
-      $kdoutput   = $data['kdoutput'];
-      $kdsoutput  = $data['kdsoutput'];
-      $kdkmpnen   = $data['kdkmpnen'];
-      $kdskmpnen  = $data['kdskmpnen'];
+    public function getrkaklfull3($id){
+      // $thang      = $data['thang'];
+      // $kdgiat     = $data['kdgiat'];
+      // $kdoutput   = $data['kdoutput'];
+      // $kdsoutput  = $data['kdsoutput'];
+      // $kdkmpnen   = $data['kdkmpnen'];
+      // $kdskmpnen  = $data['kdskmpnen'];
 
-      if ($kdgiat !== "") {
         $query  = "SELECT * FROM rkakl_full
-                            WHERE THANG='$thang'  
-                            AND KDGIAT='$kdgiat'
-                            AND KDOUTPUT='$kdoutput'
-                            AND KDSOUTPUT='$kdsoutput'
-                            AND KDKMPNEN='$kdkmpnen'
-                            AND KDSKMPNEN='$kdskmpnen'
+                            WHERE IDRKAKL='$id'
                             LIMIT 1";
-      }else{
-        $query  = "SELECT * FROM rkakl_full
-                            WHERE THANG='$thang'  
-                            AND KDOUTPUT='$kdoutput'
-                            AND KDSOUTPUT='$kdsoutput'
-                            AND KDKMPNEN='$kdkmpnen'
-                            AND KDSKMPNEN='$kdskmpnen'
-                            LIMIT 1";
-      }
+      
       
                             // echo $query;
       $result    = $this->query($query);
@@ -1253,6 +1239,45 @@
         $all[] = $rkakl;
       }
       return $all;
+    }
+    public function getIdRkakl($data){
+      $thang      = $data['thang'];
+      $kdgiat     = $data['kdgiat'];
+      $kdoutput   = $data['kdoutput'];
+      $kdsoutput  = $data['kdsoutput'];
+      $kdkmpnen   = $data['kdkmpnen'];
+      $kdskmpnen  = $data['kdskmpnen'];
+
+        $query  = "SELECT IDRKAKL FROM rkakl_full
+                            WHERE THANG   ='$thang'
+                            AND KDGIAT    ='$kdgiat'
+                            AND KDOUTPUT  ='$kdoutput'
+                            AND KDSOUTPUT ='$kdsoutput'
+                            AND KDKMPNEN  ='$kdkmpnen'
+                            AND KDSKMPNEN ='$kdskmpnen'
+                            LIMIT 1";
+      
+      
+                            // echo $query;
+      $result    = $this->query($query);
+      while ($rkakl = $this->fetch_object($result)) {
+        $all[] = $rkakl;
+      }
+      return $all;
+    }
+
+    public function cekRkaklDirektorat($id,$direktorat){
+      $query  = "SELECT KDGIAT FROM rkakl_full
+                            WHERE IDRKAKL   ='$id'
+                            LIMIT 1";
+      $result    = $this->query($query);
+      $rkakl = $this->fetch_object($result);
+      $rsDirektorat = $rkakl->KDGIAT;
+      if($direktorat == $rsDirektorat){
+        return true;
+      } else {
+        return false;
+      }
     }
 
     public function getrkaklfull2($data){

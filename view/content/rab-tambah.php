@@ -1,12 +1,12 @@
 <div class="content-wrapper">
   <section class="content-header">
-    <a  href="<?php echo $url_rewrite?>content/rab/?kdoutput=<?php echo $datarkakl[0]->KDOUTPUT?>&kdsoutput=<?php echo $datarkakl[0]->KDSOUTPUT?>&kdkmpnen=<?php echo $datarkakl[0]->KDKMPNEN?>&kdskmpnen=<?php echo $datarkakl[0]->KDSKMPNEN?>&tahun=<?php echo $datarkakl[0]->THANG?>" class="btn btn-app bg-navy"><i class="fa fa-arrow-left"></i>Kembali</a>
+    <a  href="<?php echo $url_rewrite?>content/rab/<?php echo $idrkakl ?>" class="btn btn-app bg-navy"><i class="fa fa-arrow-left"></i>Kembali</a>
     <h1>
       Data RAB 
     </h1>
     <ol class="breadcrumb">
       <li><i class="fa fa-table"></i> <b>
-        <a  href="<?php echo $url_rewrite?>content/rab/?kdoutput=<?php echo $datarkakl[0]->KDOUTPUT?>&kdsoutput=<?php echo $datarkakl[0]->KDSOUTPUT?>&kdkmpnen=<?php echo $datarkakl[0]->KDKMPNEN?>&kdskmpnen=<?php echo $datarkakl[0]->KDSKMPNEN?>&tahun=<?php echo $datarkakl[0]->THANG?>"> Data RAB</a> 
+        <a  href="<?php echo $url_rewrite?>content/rab/<?php echo $idrkakl ?>"> Data RAB</a> 
         > Tambah RAB 
         </b>
       </li>
@@ -30,7 +30,7 @@
                   // }
                   ?>
                 </select> -->
-                <input class="form-control " type="text" id="tahun" name="tahun" value="<?php echo $tahun ?>" readonly/>
+                <input class="form-control " type="text" id="tahun" name="tahun" value="<?php echo $datarkakl[0]->THANG ?>" readonly/>
               </div>
               <input type="hidden" id="prog" name="prog" value="06" />
               <?php if ($_SESSION['direktorat'] == "") { ?>
@@ -49,10 +49,10 @@
               <?php } ?>
               <div class="form-group">
                 <label>Output</label>
-                <?php if($kdoutput!=""){?>
+                <?php if($datarkakl[0]->KDOUTPUT!=""){?>
                 <div class="input-group">
                   <span class="input-group-addon" id="basic-addon2"><?php echo $datarkakl[0]->NMOUTPUT ?></span>
-                  <input class="form-control " type="text" id="output" name="output" value="<?php echo $kdoutput ?>" readonly/>
+                  <input class="form-control " type="text" id="output" name="output" value="<?php echo $datarkakl[0]->KDOUTPUT ?>" readonly/>
 
                   </div>
                   <?php } else {?>
@@ -63,10 +63,10 @@
               </div>
               <div class="form-group">
                 <label>Suboutput</label>
-                <?php if($kdsoutput!=""){?>
+                <?php if($datarkakl[0]->KDSOUTPUT!=""){?>
                 <div class="input-group">
                   <span class="input-group-addon" id="basic-addon2"><?php echo $datarkakl[0]->NMSOUTPUT ?></span>
-                  <input class="form-control" type="text" id="soutput" name="soutput" value="<?php echo $kdsoutput ?>" readonly/>
+                  <input class="form-control" type="text" id="soutput" name="soutput" value="<?php echo $datarkakl[0]->KDSOUTPUT ?>" readonly/>
                   </div>
                   <?php } else {?>
                 <select class="form-control" id="soutput" name="soutput" onchange="chsout()" required>
@@ -76,10 +76,10 @@
               </div>
               <div class="form-group">
                 <label>Komponen</label>
-                <?php if($kdkmpnen!=""){?>
+                <?php if($datarkakl[0]->KDKMPNEN!=""){?>
                 <div class="input-group">
                   <span class="input-group-addon" id="basic-addon2"><?php echo $datarkakl[0]->NMKMPNEN ?></span>
-                  <input class="form-control" type="text" id="komp" name="komp" value="<?php echo $kdkmpnen ?>" readonly/>
+                  <input class="form-control" type="text" id="komp" name="komp" value="<?php echo $datarkakl[0]->KDKMPNEN ?>" readonly/>
                   </div>
                   <?php } else {?>
                 <select class="form-control" id="komp" name="komp" onchange="chkomp()" required>
@@ -89,10 +89,10 @@
               </div>
               <div class="form-group">
                 <label>Sub Komponen</label>
-                <?php if($kdskmpnen!=""){?>
+                <?php if($datarkakl[0]->KDSKMPNEN!=""){?>
                 <div class="input-group">
                   <span class="input-group-addon" id="basic-addon2"><?php echo $datarkakl[0]->NMSKMPNEN ?></span>
-                  <input class="form-control" type="text" id="skomp" name="skomp" value="<?php echo $kdskmpnen ?>" readonly/>
+                  <input class="form-control" type="text" id="skomp" name="skomp" value="<?php echo $datarkakl[0]->KDSKMPNEN ?>" readonly/>
                   </div>
                   <?php } else {?>
                 <select class="form-control" id="skomp" name="skomp" onchange="chskomp()" required>
@@ -134,7 +134,7 @@
 
 <script>
 $(function() {
-chprog();
+// chprog();
   $("#tanggal").datepicker({
     autoclose: true,
     monthNames: [ "Januari", "Pebruari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" ],
@@ -169,7 +169,7 @@ chprog();
       dateFormat: 'dd/mm/yy'
     });
     
-    <?php if($kdoutput != ""){?>
+    <?php if($datarkakl[0]->KDOUTPUT != ""){?>
       $("#output").prop('readonly', true);
       <?php
     }
@@ -220,7 +220,7 @@ function chprog(){
       success: function(data){
         var obj = jQuery.parseJSON(data);
         for (var i = 0; i < obj.KDOUTPUT.length; i++) {
-          if(<?php echo $kdoutput?> == obj.KDOUTPUT[i]){
+          if(<?php echo $datarkakl[0]->KDOUTPUT?> == obj.KDOUTPUT[i]){
             $('#output').append('<option value="'+obj.KDOUTPUT[i]+'" selected>'+obj.KDOUTPUT[i]+' - '+obj.NMOUTPUT[i]+'</option>');
           } else {
             $('#output').append('<option value="'+obj.KDOUTPUT[i]+'">'+obj.KDOUTPUT[i]+' - '+obj.NMOUTPUT[i]+'</option>');
