@@ -22,7 +22,7 @@
             <h3 class="box-title" style="margin-top:6px;">Table Rencana Anggaran Biaya</h3>
 
             <?php if ($_SESSION['level'] != '0') {
-              echo '<a href="'.$url_rewrite.'content/rab/tambah/?kdoutput='.$kdoutput.'&kdsoutput='.$kdsoutput.'&kdkmpnen='.$kdkmpnen.'&kdskmpnen='.$kdskmpnen.'&tahun='.$tahun.'" class="btn btn-flat btn-success btn-md pull-right"><i class="fa fa-plus"></i>&nbsp;Tambah RAB</a>';
+              echo '<a href="'.$url_rewrite.'content/rab/tambah/'.$idrkakl.'" class="btn btn-flat btn-success btn-md pull-right"><i class="fa fa-plus"></i>&nbsp;Tambah RAB</a>';
             }?>
 
           </div>
@@ -315,10 +315,10 @@ var table;
           "type": "POST",
           "data": {'tahun':tahun,
                     'direktorat':direktorat,
-                    'kdoutput':'<?php echo $kdoutput?>',
-                    'kdsoutput':'<?php echo $kdsoutput?>',
-                    'kdkmpnen':'<?php echo $kdkmpnen?>',
-                    'kdskmpnen':'<?php echo $kdskmpnen?>',
+                    'kdoutput':'<?php echo $datarkakl[0]->KDOUTPUT?>',
+                    'kdsoutput':'<?php echo $datarkakl[0]->KDSOUTPUT?>',
+                    'kdkmpnen':'<?php echo $datarkakl[0]->KDKMPNEN?>',
+                    'kdskmpnen':'<?php echo $datarkakl[0]->KDSKMPNEN?>',
                      }
         },
         <?php if ($_SESSION['direktorat'] == "") { ?>

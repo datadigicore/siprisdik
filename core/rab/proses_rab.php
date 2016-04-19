@@ -237,15 +237,19 @@ switch ($process) {
         return number_format($row[6]+$row[7],0,".",".");
       }),
       array( 'db' => 'NMOUTPUT',      'dt' => 10, 'formatter' => function($d,$row, $dataArray){
-        $button = '<div class="btn-group"><a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rab/?kdoutput='.$row[2].'&kdsoutput='.$row[3].'&kdkmpnen='.$row[4].'&kdskmpnen='.$row[5].'&tahun='.$row[14].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a><div>';
+        $button = '<div class="btn-group"><a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rab/'.$row[14].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a><div>';
         return $button;
       }),
+      // array( 'db' => 'NMOUTPUT',      'dt' => 10, 'formatter' => function($d,$row, $dataArray){
+      //   $button = '<div class="btn-group"><a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rab/?kdoutput='.$row[2].'&kdsoutput='.$row[3].'&kdkmpnen='.$row[4].'&kdskmpnen='.$row[5].'&tahun='.$row[14].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a><div>';
+      //   return $button;
+      // }),
 
       //kode
       array( 'db' => 'NMSOUTPUT',      'dt' => 11),
       array( 'db' => 'NMKMPNEN',      'dt' => 12),
       array( 'db' => 'NMSKMPNEN',      'dt' => 13),
-      array( 'db' => 'THANG',      'dt' => 14),
+      array( 'db' => 'IDRKAKL',      'dt' => 14),
       //kode
     );
     $where="";
