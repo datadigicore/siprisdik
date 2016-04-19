@@ -47,18 +47,18 @@ else {
           if($data[2]=='tambah'){
             // if(isset($_GET['kdoutput']) && isset($_GET['kdsoutput']) && isset($_GET['kdkmpnen']) && isset($_GET['kdskmpnen']))
             $idrkakl=$data[3];
-
-            if($idrkakl!="")
+            $cek = $mdl_rab->cekRkaklEksis($idrkakl);
+            if($cek)
             {
 
-                  $cek = $mdl_rab->cekRkaklDirektorat($idrkakl,$direktorat);
-                  if($cek==true){
+                  // $cek = $mdl_rab->cekRkaklDirektorat($idrkakl,$direktorat);
+                  // if($cek==true){
                     $datarkakl = $mdl_rab->getrkaklfull3($idrkakl);
-                  include ('view/content/rab-tambah.php');
-                  }
-                  else {
-                    $utility->load("./content/rab-rkakl",'warning','Anda tidak punya kewenangan untuk mengubah RAB direktorat lain !');
-                  }
+                  include ('view/content/rab-tambah.php');  
+                  // }
+                  // else {
+                  //   $utility->load("./content/rab-rkakl",'warning','Anda tidak punya kewenangan untuk mengubah RAB direktorat lain !');
+                  // }
                   
                 } else {
                   $utility->load("./content/rab-rkakl",'warning','ID RKAKL tidak dapat ditemukan !');
@@ -71,16 +71,18 @@ else {
             $direktorat = $_SESSION['direktorat'];
             // if(isset($_GET['kdoutput']) && isset($_GET['kdsoutput']) && isset($_GET['kdkmpnen']) && isset($_GET['kdskmpnen']))
             $idrkakl = $data[2];
-            if($idrkakl!="")
+            $cek = $mdl_rab->cekRkaklEksis($idrkakl);
+            
+            if($cek)
                 {
-                  $cek = $mdl_rab->cekRkaklDirektorat($idrkakl,$direktorat);
-                  if($cek==true){
+                  
+                  // if($cek==true){
                     $datarkakl = $mdl_rab->getrkaklfull3($idrkakl);
                     include ('view/content/rab.php');
-                  }
-                  else {
-                    $utility->load("./content/rab-rkakl",'warning','Anda tidak punya kewenangan untuk mengubah RAB direktorat lain !');
-                  }
+                  // }
+                  // else {
+                  //   $utility->load("./content/rab-rkakl",'warning','Anda tidak punya kewenangan untuk mengubah RAB direktorat lain !');
+                  // }
 
                   
                 } else {
@@ -169,8 +171,8 @@ else {
             // $tahun = $mdl_rab->getYear();
             // if(isset($_GET['kdoutput']) && isset($_GET['kdsoutput']) && isset($_GET['kdkmpnen']) && isset($_GET['kdskmpnen']))
             $idrkakl=$data[3];
-
-            if($idrkakl!="")
+            $cek = $mdl_rab->cekRkaklEksis($idrkakl);
+            if($cek)
             {
 
                   $cek = $mdl_rab->cekRkaklDirektorat($idrkakl,$direktorat);
@@ -204,7 +206,8 @@ else {
             // if(isset($_GET['kdoutput']) && isset($_GET['kdsoutput']) && isset($_GET['kdkmpnen']) && isset($_GET['kdskmpnen']))
             // print_r($data[2]);exit;
             $idrkakl = $data[2];
-            if($idrkakl!="")
+            $cek = $mdl_rab->cekRkaklEksis($idrkakl);
+            if($cek)
                 {
                   $cek = $mdl_rab->cekRkaklDirektorat($idrkakl,$direktorat);
                   if($cek==true){

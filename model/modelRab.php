@@ -1280,6 +1280,21 @@
       }
     }
 
+    public function cekRkaklEksis($id){
+      $query  = "SELECT IDRKAKL FROM rkakl_full
+                            WHERE IDRKAKL   ='$id'
+                            LIMIT 1";
+      $result    = $this->query($query);
+      $rkakl = $this->fetch_object($result);
+      $rsId = $rkakl->IDRKAKL;
+      
+      if($rsId != null){
+        return true;
+      } else {
+        return false;
+      }
+    }
+
     public function getrkaklfull2($data){
       $thang      = $data['thang'];
       $kdprogram  = $data['kdprogram'];
