@@ -26,8 +26,11 @@
         </li>     
         <li><a href="<?php echo $url_rewrite;?>content/report"><i class="fa fa-file-text"></i> <span>Cetak Laporan</span></a></li>
         <!-- <li><a href="<?php echo $url_rewrite;?>content/report"><i class="fa fa-file-text"></i> <span>Cetak SPJB</span></a></li> -->
+
+      <li class="header">Maintenance</li>
         <li><a href="<?php echo $url_rewrite;?>content/user"><i class="fa fa-group"></i> <span>Data Pengguna</span></a></li>
-        
+
+        <li><a href="<?php echo $url_rewrite;?>content/real-upload"><i class="fa fa-table"></i> <span>Unggah Data Realisasi</span></a></li> 
         <!-- <li class="treeview">
               <a href="#"><i class="fa fa-file-text-o"></i> <span>Cetak Dokumen V.2</span> <i class="fa fa-angle-left pull-right"></i></a>            
               <ul class="treeview-menu">

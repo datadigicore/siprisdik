@@ -1414,6 +1414,7 @@ switch ($process) {
     	$utility->load("content/rabdetail/".$id_rab_view,"success","Data berhasil dimasukkan ke dalam database");
 		break;
 	case 'deltemprab':
+		$id_rab_view = $_POST['id_rab_view'];
 		$mdl_rab->hapustemprab($id_rab_view);
 		break;
 	default:

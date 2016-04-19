@@ -129,7 +129,6 @@ else {
             include ('view/content/rab-add.php');
           }
           break;
-          break;
         case 'insertrab':
           include ('view/content/rab-insert.php');
         break;
@@ -153,6 +152,13 @@ else {
             $tahun = $mdl_rab->getYear();
             include ('view/content/rab51.php');
           }
+          break;
+        case 'real-upload':
+            $id_rab_view = "";
+            $insert = $mdl_rab->gettemprab($id_rab_view);
+            $import = $mdl_rab->getimportreal();
+            $stat_err = $data[2];
+          include ('view/content/real-upload.php');
           break;
         default:
           include ('view/content/home.php');

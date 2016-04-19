@@ -365,6 +365,101 @@ switch ($process) {
     $mdl_rab->deleterab($id_rabview);
     $utility->load("content/rab/?kdoutput=".strval($akun['kdoutput'])."&kdsoutput=".strval($akun['kdsoutput'])."&kdkmpnen=".strval($akun['kdkmpnen'])."&kdskmpnen=".strval($akun['kdskmpnen'])."&tahun=".strval($akun['thang']),"success","Data RAB telah dihapus");
     break;
+  case 'importrkaklreal':
+    if(isset($_POST) && !empty($_FILES['fileimport']['name'])) {
+        $path = $_FILES['fileimport']['name'];
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+        if($ext != 'xls' && $ext != 'xlsx') {
+          $utility->load("content/rabdetail/".$id_rab_view."/add/".$status,"error","Jenis file yang di upload tidak sesuai");
+        }
+        else {
+          $time = time();
+          $target_dir = $path_upload;
+          $target_name = basename(date("Ymd-His-\R\A\B.",$time).$ext);
+          $target_file = $target_dir . $target_name;
+          $response = move_uploaded_file($_FILES['fileimport']['tmp_name'],$target_file);
+          if($response) {
+            try {
+              $objPHPExcel = PHPExcel_IOFactory::load($target_file);
+            }
+            catch(Exception $e) {
+              die('Kesalahan! Gagal dalam mengupload file : "'.pathinfo($_FILES['excelupload']['name'],PATHINFO_BASENAME).'": '.$e->getMessage());
+            }
+            $allDataInSheet = $objPHPExcel->getActiveSheet()->toArray(NULL,TRUE,FALSE,TRUE);
+            // echo "<pre>";
+            // print_r($allDataInSheet);die;
+            $data = $mdl_rab->importrealisasi($allDataInSheet);
+            // echo "<pre>"; print_r($data);die;
+            if ($data['error'] == 'true') {
+              $utility->load("content/real-upload/1",'error','Proses Tidak Dapat Dilanjutkan. Silahkan Validasi dan Unggah Kembali.');
+            }else{
+              $utility->load("content/real-upload/0",'success','Telah Berhasil Diupload. Silahkan Melanjutkan Proses.');
+            }
+          }
+        }
+      }
+      else {
+        $utility->load("content/real-upload/1","warning","Belum ada file Excel yang di lampirkan");
+      }
+    die();
+    break;
+  case 'table_real_upload':
+    $rabview_id = $_POST['id_rab_view'];
+    $dataArray['url_rewrite'] = $url_rewrite;
+    $get_table = "import_real";
+    $key   = "id";
+    $column = array(
+        array( 'db' => 'id',      'dt' => 0 ),
+        array( 'db' => 'kode',  'dt' => 1),
+        array( 'db' => 'uraian',  'dt' => 2),
+        array( 'db' => 'dipa', 'dt' => 3, 'formatter' => function($d,$row){
+          $error = $row[6];
+          if ($error == "1") {
+            $val = '<span class="label label-warning">'.number_format($d,2,',','.').'</span>';
+          }elseif ($error == "2") {
+            $val = '<span class="label label-danger">'.number_format($d,2,',','.').'</span>';
+          }else{
+            $val = number_format($d,2,',','.');
+          }
+          return $val;
+        }),
+        array( 'db' => 'realisasi', 'dt' => 4, 'formatter' => function($d,$row){
+          $error = $row[6];
+          if ($error == "1") {
+            $val = '<span class="label label-warning">'.number_format($d,2,',','.').'</span>';
+          }elseif ($error == "2") {
+            $val = '<span class="label label-danger">'.number_format($d,2,',','.').'</span>';
+          }else{
+            $val = number_format($d,2,',','.');
+          }
+          return $val;
+        }),
+        array( 'db' => 'sisa', 'dt' => 5, 'formatter' => function($d,$row){$error = $row[6];
+          if ($error == "1") {
+            $val = '<span class="label label-warning">'.number_format($d,2,',','.').'</span>';
+          }elseif ($error == "2") {
+            $val = '<span class="label label-danger">'.number_format($d,2,',','.').'</span>';
+          }else{
+            $val = number_format($d,2,',','.');
+          }
+          return $val;
+        }),
+        array( 'db' => 'error',  'dt' => 6),
+    );
+
+    $where = 'created_by = "'.$_SESSION['id'].'"';
+    $group = '';
+
+    $datatable->get_table($get_table, $key, $column,$wherex, $dataArray);
+    break;
+  case 'save_import_real':
+    $id_rab_view = "0";
+    $getsave = $mdl_rab->save_temprabfull_real($id_rab_view);
+    $utility->load("content/real-upload/","success","Data berhasil dimasukkan ke dalam database");
+    break;
+  case 'delimportreal':
+    $mdl_rab->hapusimportreal();
+    break;
   default:
     $utility->location_goto(".");
   break;

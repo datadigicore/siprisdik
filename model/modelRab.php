@@ -627,9 +627,21 @@
       return $data;
     }
 
-    public function gettemprab($id){
+    public function gettemprab($id=""){
       $query  = "SELECT *
-                 FROM temprabfull as r where rabview_id = '$id'";
+                 FROM temprabfull as r where rabview_id = '$id' and created_by = '".$_SESSION['id']."'";
+      $result = $this->query($query);
+      $x=0;
+      while ($fetch = $this->fetch_object($result)) {
+        $data[$x] = $fetch;
+        $x++;
+      }
+      return $data;
+    }
+
+    public function getimportreal(){
+      $query  = "SELECT *
+                 FROM import_real as r where created_by = '".$_SESSION['id']."'";
       $result = $this->query($query);
       $x=0;
       while ($fetch = $this->fetch_object($result)) {
@@ -2575,10 +2587,355 @@
       return $result;
     }
 
+    public function save_temprabfull_real($id_rab_view){
+      $datatemp = $this->gettemprab($id_rab_view);
+      $rabfull = "SELECT `COLUMN_NAME` 
+                  FROM `INFORMATION_SCHEMA`.`COLUMNS` 
+                  WHERE `TABLE_SCHEMA`='rkakl' 
+                      AND `TABLE_NAME`='rabfull';";
+      $resrab = $this->query($rabfull);
+      $x=0;
+      while($fetch = $this->fetch_array($resrab)) {
+        $indeks[$x] = $fetch[0];
+        $x++;
+      }
+
+      $temprabfull = "SELECT * FROM temprabfull limit 1";
+      $tempresrab = $this->query($temprabfull);
+      $y=0;
+      foreach($this->fetch_object($tempresrab) as $key => $value) {
+        $tempindeks[$y] = $key;
+        $y++;
+      }
+
+      unset($indeks[0]);
+      for ($i=0; $i < count($datatemp); $i++) { 
+        $query      = "INSERT INTO rabfull SET ";
+        for ($j=1; $j <= count($indeks); $j++) { 
+          if ($j == count($indeks)) {
+            $query .= $indeks[$j]." = '".$datatemp[$i]->$indeks[$j]."'";
+          }else{
+            $query .= $indeks[$j]." = '".$datatemp[$i]->$indeks[$j]."', ";
+          }
+        }
+        $resultrabfull = $this->query($query);
+
+        $getrab = array('thang' => $datatemp[$i]->thang,
+                        'kdprogram' => $datatemp[$i]->kdprogram,
+                        'kdgiat'  => $datatemp[$i]->kdgiat,
+                        'kdoutput'  => $datatemp[$i]->kdoutput,
+                        'kdsoutput'  => $datatemp[$i]->kdsoutput,
+                        'kdkmpnen'  => $datatemp[$i]->kdkmpnen,
+                        'kdskmpnen'  => $datatemp[$i]->kdskmpnen,
+                        );
+
+        $akun = $datatemp[$i]->kdakun;
+        $noitem = $datatemp[$i]->noitem;
+        $value = $datatemp[$i]->value;
+
+        if ($akun == '521211') {  //belanja bahan
+          $jum_rkakl = $this->getJumlahRkakl($getrab, $akun, $noitem);
+          $total = $jum_rkakl['realisasi'] + $value;
+          $this->insertRealisasi($getrab, $akun, $noitem, $total);
+        }
+        elseif($akun != ""){  // bukan belanja bahan
+          $jum_rkakl = $this->getJumlahRkakl($getrab, $akun);
+          $totalusul = $jum_rkakl['realisasi'] + $value;
+          $itemgroup = $jum_rkakl['itemgroup'];
+          $pecah_item = explode(",", $itemgroup);
+          $banyakitem = count($pecah_item);
+
+          $totalperitem = floor($totalusul/$banyakitem);
+          $sisaitem = $totalusul % $banyakitem;
+
+          for ($x=0; $x < $banyakitem; $x++) { 
+            if ($sisaitem == 0) {
+              $this->insertRealisasi($getrab, $akun, $pecah_item[$x], $totalperitem);
+            }else{
+              if ($x == ($banyakitem-1)) {
+                $totalperitem = $totalperitem + $sisaitem;
+                $this->insertRealisasi($getrab, $akun, $pecah_item[$x], $totalperitem);
+              }else{
+                $this->insertRealisasi($getrab, $akun, $pecah_item[$x], $totalperitem);
+              }
+            }
+          }
+        }
+
+        $querytemplog = "INSERT INTO temprabfull_log SET ";
+
+        for ($k=0; $k < count($tempindeks); $k++) { 
+            $querytemplog .= $tempindeks[$k]." = '".$datatemp[$i]->$tempindeks[$k]."', ";
+        }
+        $querytemplog2 = substr($querytemplog,0,-2);
+        $result = $this->query($querytemplog2);
+      }
+      $hapustemp = "DELETE FROM temprabfull where rabview_id = '".$id_rab_view."' and created_by = '".$_SESSION['id']."'  ";
+      $result = $this->query($hapustemp);
+      
+      return $result;
+    }
+
     public function hapustemprab($id_rab_view){
       $hapustemp = "DELETE FROM temprabfull where rabview_id = '".$id_rab_view."' and created_by = '".$_SESSION['id']."'  ";
       $result = $this->query($hapustemp);
       return $result;
+    }
+
+    public function hapusimportreal(){
+      $hapustemp = "DELETE FROM import_real where created_by = '".$_SESSION['id']."'  ";
+      $result = $this->query($hapustemp);
+      return $result;
+    }
+
+    public function importRealisasi($data){
+      $timestamp = date("Y-m-d H:i:s");
+      $tahun = date("Y");
+      $jenis = $array['jenis'];
+      $arrayCount = count($data);
+
+      $x = 0;$y = 0;$error = 'false';
+      $giat = "";
+      $output = "";
+      $soutput = "";
+      $kmpnen = "";
+      $skmpnen = "";
+      $akun = "";
+      $totdipa=0;$totreal=0;$totsisa=0;
+
+      for ($i=16; $i < $arrayCount; $i++) { 
+        $kolomA          = trim($data[$i]["A"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $kolomB          = trim($data[$i]["B"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $pecahB   = explode(" ", $kolomB);
+        $kolomB   = $pecahB[0];
+        $kolomC          = trim($data[$i]["C"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $kolomD          = trim($data[$i]["D"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        // $kolomE              = trim($data[$i]["E"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        // $kolomF              = trim($data[$i]["F"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        // $kolomG              = trim($data[$i]["G"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $dipa            = trim($data[$i]["H"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $real            = trim($data[$i]["O"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+        $sisa            = trim($data[$i]["P"]," \t\n\r\0\x0B\xA0\x0D\x0A");
+
+        $dataorang = array( 'thang'       => $tahun,
+                            // 'kdprogram'   => $getview['kdprogram'],
+                            // 'kdgiat'      => $getview['kdgiat'],
+                            // 'kdoutput'    => $getview['kdoutput'],
+                            // 'kdsoutput'   => $getview['kdsoutput'],
+                            // 'kdkmpnen'    => $getview['kdkmpnen'],
+                            // 'kdskmpnen'   => $getview['kdskmpnen'],
+
+                            'deskripsi'     => '-',
+                            'tanggal'       => $timestamp,
+                            'tanggal_akhir' => $timestamp,
+                            'lokasi'        => '-',
+                            'tempat'        => '-',
+
+                            'asal'       => 'Upload',
+                            'jenis'       => '3',
+                            'status'      => '2',
+                            'created_by'  => $_SESSION['id'],
+                            'created_at'  => $timestamp
+                            );
+
+        if (ctype_digit($kolomA) && $kolomA > 3000) {
+          $giat = $kolomA;
+          $output = "";
+          $soutput = "";
+          $kmpnen = "";
+          $skmpnen = "";
+          $akun = "";
+          $import[$y]['kode'] = $kolomA; 
+          $import[$y]['uraian'] = $data[$i]["B"];
+          $import[$y]['dipa'] = $dipa;
+          $import[$y]['realisasi'] = $real;
+          $import[$y]['sisa'] = $sisa;
+          $import[$y]['error'] = '0';
+          $import[$y]['created_by'] = $_SESSION['id'];
+          $import[$y]['created_at'] = $timestamp;
+          $this->insertimportreal($import[$y]); 
+          continue;
+        }
+        if (ctype_digit($kolomA) && $kolomA < 1000 && $kolomA > $output) {
+          $output = $kolomA;
+          $countout = strlen($output);
+          if ($countout == 1) {
+            $kode = '00'.$output;
+          }elseif ($countout == 2) {
+            $kode = '0'.$output;
+          }else{
+            $kode = $output;
+          }
+          $import[$y]['kode'] = $kode; 
+          $import[$y]['uraian'] = $data[$i]["B"];
+          $import[$y]['dipa'] = $dipa;
+          $import[$y]['realisasi'] = $real;
+          $import[$y]['sisa'] = $sisa;
+          $import[$y]['error'] = '0';
+          $import[$y]['created_by'] = $_SESSION['id'];
+          $import[$y]['created_at'] = $timestamp;
+          $this->insertimportreal($import[$y]); 
+          continue;
+        }
+        if (ctype_digit($kolomA) && $kolomA < 1000 && $kolomA <= $output) {
+          $soutput = $kolomA;
+          $countsout = strlen($soutput);
+          if ($countsout == 1) {
+            $kode = '00'.$soutput;
+          }elseif ($countsout == 2) {
+            $kode = '0'.$soutput;
+          }else{
+            $kode = $soutput;
+          }
+          $import[$y]['kode'] = $kode; 
+          $import[$y]['uraian'] = $data[$i]["B"];
+          $import[$y]['dipa'] = $dipa;
+          $import[$y]['realisasi'] = $real;
+          $import[$y]['sisa'] = $sisa;
+          $import[$y]['error'] = '0';
+          $import[$y]['created_by'] = $_SESSION['id'];
+          $import[$y]['created_at'] = $timestamp;
+          $this->insertimportreal($import[$y]); 
+          continue;
+        }
+        if (ctype_digit($kolomB)) {
+          $kmpnen = $kolomB;
+          $pecahkode = explode(" ", $data[$i]["B"]);
+          $kode = $pecahkode[0];
+          unset($pecahkode[0]);
+          $uraian = implode(" ", $pecahkode);
+          $import[$y]['kode'] = $kode; 
+          $import[$y]['uraian'] = $data[$i]["B"];
+          $import[$y]['dipa'] = $dipa;
+          $import[$y]['realisasi'] = $real;
+          $import[$y]['sisa'] = $sisa;
+          $import[$y]['error'] = '0';
+          $import[$y]['created_by'] = $_SESSION['id'];
+          $import[$y]['created_at'] = $timestamp;
+          $this->insertimportreal($import[$y]); 
+          continue;
+        }
+        if (ctype_alpha($kolomB)) {
+          $skmpnen = $kolomB;
+          $import[$y]['kode'] = $kolomB; 
+          $import[$y]['uraian'] = $data[$i]["C"];
+          $import[$y]['dipa'] = $dipa;
+          $import[$y]['realisasi'] = $real;
+          $import[$y]['sisa'] = $sisa;
+          $import[$y]['error'] = '0';
+          $import[$y]['created_by'] = $_SESSION['id'];
+          $import[$y]['created_at'] = $timestamp;
+          $this->insertimportreal($import[$y]); 
+          continue;
+        }
+        
+        if (ctype_digit($kolomC)) {
+          $akun = $kolomC;
+          $value = $real;
+
+          $insert[$x] = $dataorang;
+          $insert[$x]['kdprogram'] = '06';
+          $insert[$x]['kdgiat'] = $giat;
+
+          if ($output != "") {
+            if ($countout == 1) {
+              $insert[$x]['kdoutput'] = '00'.$output;
+            }elseif ($countout == 2) {
+              $insert[$x]['kdoutput'] = '0'.$output;
+            }else{
+              $insert[$x]['kdoutput'] = $output;
+            }
+          }
+
+          if ($soutput != "") {
+            if ($countsout == 1) {
+              $insert[$x]['kdsoutput'] = '00'.$soutput;
+            }elseif ($countsout == 2) {
+              $insert[$x]['kdsoutput'] = '0'.$soutput;
+            }else{
+              $insert[$x]['kdsoutput'] = $soutput;
+            }
+          }else{
+            $insert[$x]['kdsoutput'] = '001';
+          }
+
+          if ($kmpnen != "") {
+            $insert[$x]['kdkmpnen'] = $kmpnen;
+          }
+
+          if ($skmpnen != "") {
+            $insert[$x]['kdskmpnen'] = $skmpnen;
+          }else{
+            $insert[$x]['kdskmpnen'] = 'A';
+          }
+
+          $insert[$x]['kdakun'] = $akun;
+          $insert[$x]['noitem'] = '1';
+          $insert[$x]['status'] = '2';
+          $insert[$x]['value'] = $real;
+
+          $totdipa += $dipa;
+          $totreal += $real;
+          $totsisa += $sisa;
+          // $insert[$x] .= $dataorang;
+
+          $jumrkakl = $this->getJumlahRkakl($insert[$x], $akun);
+          if (!empty($jumrkakl['jumlah'])) {
+            $pagu = $jumrkakl['jumlah'] - ($jumrkakl['realisasi'] + $jumrkakl['usulan'] );
+            if ($pagu >= $value) {
+              $insert[$x]['error'] = '0';
+            }else{
+              $insert[$x]['error'] = '1';
+              $error = 'true';
+            }
+          }else{
+            $insert[$x]['error'] = '2';
+            $error = 'true';
+          }
+
+          $import[$y]['kode'] = $kolomC; 
+          $import[$y]['uraian'] = $data[$i]["D"];
+          $import[$y]['dipa'] = $dipa;
+          $import[$y]['realisasi'] = $real;
+          $import[$y]['sisa'] = $sisa;
+          $import[$y]['error'] = $insert[$x]['error'];
+          $import[$y]['created_by'] = $_SESSION['id'];
+          $import[$y]['created_at'] = $timestamp;
+
+          $this->insertimportreal($import[$y]); 
+          // echo "<pre>";
+          // print_r($insert[$x]);echo "<br>";
+          $this->insertTempRab($insert[$x]);
+          $x++;
+        }
+
+      }
+      $queryupdatetotal = "UPDATE import_real SET 
+                              total_dipa = '".$totdipa."',
+                              total_realisasi = '".$totreal."',
+                              total_sisa = '".$totsisa."'
+                            where created_by = '".$_SESSION['id']."'
+                              ";
+      $hasil = $this->query($queryupdatetotal);
+      // die();
+      $insert['error'] = $error;
+      return $insert;
+    }
+
+    public function insertimportreal($data){
+      $query      = "INSERT INTO import_real SET
+                    kode              = '".$data['kode']."',
+                    uraian            = '".$data['uraian']."',
+                    dipa              = '".$data['dipa']."',
+                    realisasi         = '".$data['realisasi']."',
+                    sisa              = '".$data['sisa']."',
+
+                    error            = '".$data['error']."',
+                    created_at       = '".$data['created_at']."',
+                    created_by       = '".$_SESSION['id']."'
+                ";
+      
+      $result = $this->query($query);
     }
 
   }
