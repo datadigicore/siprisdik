@@ -8,7 +8,9 @@
       $password   = $data['password'];
       $email      = $data['email'];
       $level      = $data['level'];
+      $kdprogram  = $data['kdprogram'];
       $direktorat = $data['direktorat'];
+      $kdoutput   = $data['kdoutput'];
       $status     = $data['status'];
 
       $query      = "INSERT INTO pengguna SET
@@ -17,7 +19,9 @@
         password  = '$password',
         email     = '$email',
         level     = '$level',
+        kdprogram = '$kdprogram',
         direktorat= '$direktorat',
+        kdoutput  = '$kdoutput',
         status    = '$status'
       ";
 

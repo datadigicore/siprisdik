@@ -31,12 +31,33 @@
       return $data;
     }
 
+    // !!!!!!!!! dipake juga di tambah pengguna
     public function getProg() {
       $query  = "SELECT KDPROGRAM FROM rkakl_full as r group by r.kdprogram";
       $result = $this->query($query);
       $i=0;
       while($fetch  = $this->fetch_object($result)) {
         $data[$i] = $fetch->KDPROGRAM;
+        $i++;
+      }
+      return $data;
+    }
+
+    public function getDirektorat($kdProg){
+      $where = "";
+      foreach ($kdProg as $value) {
+        if($where == ""){
+          $where = "WHERE KDPROGRAM = '$value' ";
+        } else {
+          $where = $where."OR KDPROGRAM = '$value' ";
+        }
+      }
+      $query  = "SELECT KDGIAT, NMGIAT FROM rkakl_full $where GROUP BY KDGIAT";
+      $result = $this->query($query);
+      $i=0;
+      while($fetch  = $this->fetch_object($result)) {
+        $data['KDGIAT'][$i] = $fetch->KDGIAT;
+        $data['NMGIAT'][$i] = $fetch->NMGIAT;
         $i++;
       }
       return $data;
@@ -49,6 +70,35 @@
       $result = $this->query($query);
       $i=0;
       while($fetch  = $this->fetch_object($result)) {
+        $data['KDOUTPUT'][$i] = $fetch->KDOUTPUT;
+        $data['NMOUTPUT'][$i] = $fetch->NMOUTPUT;
+        $i++;
+      }
+      return $data;
+    }
+    public function getout2($prog, $kdgiat) {
+      $WHERE = "";
+      foreach ($kdProg as $value) {
+        if($where == ""){
+          $where = "WHERE KDPROGRAM = '$value' ";
+        } else {
+          $where = $where."OR KDPROGRAM = '$value' ";
+        }
+      }
+      foreach ($kdgiat as $value) {
+        if($where == ""){
+          $where = "WHERE KDGIAT = '$value' ";
+        } else {
+          $where = $where."OR KDGIAT = '$value' ";
+        }
+      }
+
+      $query  = "SELECT KDGIAT ,KDOUTPUT, NMOUTPUT FROM rkakl_full as r 
+                $where group by r.KDGIAT, r.KDOUTPUT";
+      $result = $this->query($query);
+      $i=0;
+      while($fetch  = $this->fetch_object($result)) {
+        $data['KDGIAT'][$i] = $fetch->KDGIAT;
         $data['KDOUTPUT'][$i] = $fetch->KDOUTPUT;
         $data['NMOUTPUT'][$i] = $fetch->NMOUTPUT;
         $i++;
@@ -77,6 +127,7 @@
       $result = $this->query($query);
       $i=0;
       while($fetch  = $this->fetch_object($result)) {
+        
         $data['KDKMPNEN'][$i] = $fetch->KDKMPNEN;
         $data['NMKMPNEN'][$i] = $fetch->NMKMPNEN;
         $i++;

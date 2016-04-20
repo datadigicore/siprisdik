@@ -276,9 +276,18 @@ switch ($process) {
     $output = $mdl_rab->getout($_POST['prog'],$_POST['tahun'],$_POST['direktorat']);
     echo json_encode($output);
     break;
+  case 'getout2':
+    $output = $mdl_rab->getout2($_POST['prog'],$_POST['direktorat']);
+    echo json_encode($output);
+    break;
   case 'getsout':
     $soutput = $mdl_rab->getsout($_POST['prog'],$_POST['output'],$_POST['tahun'],$_POST['direktorat']);
     echo json_encode($soutput);
+    break;
+  case 'getDirektorat':
+    $kdprog = $_POST['prog'];
+    $rs = $mdl_rab->getDirektorat($kdprog);
+    echo json_encode($rs);
     break;
   case 'getkomp':
     $komp = $mdl_rab->getkomp($_POST['prog'],$_POST['output'],$_POST['soutput'],$_POST['tahun'],$_POST['direktorat']);

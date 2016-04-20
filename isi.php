@@ -35,6 +35,7 @@ else {
           include ('view/content/edit_pass.php');
         break;
         case 'adduser':
+          $kdprog = $mdl_rab->getProg();
           include ('view/content/pengguna-add.php');
         break;
         case 'rkakl':

@@ -10,8 +10,19 @@ $newpassword  = $utility->sha512($_POST[newpass]);
 $newpassword2 = $utility->sha512($_POST[newpass2]);
 $email        = $purifier->purify($_POST[email]);
 $level        = $purifier->purify($_POST[level]);
+$kdprogram    = $purifier->purify($_POST[kdprogram]);
 $direktorat   = $purifier->purify($_POST[direktorat]);
+$kdoutput     = $purifier->purifyArray($_POST[kdoutput]);
 $status       = $purifier->purify($_POST[status]);
+
+$strKdoutput = "";
+foreach ($kdoutput as $value) {
+  if($strKdoutput==""){
+    $strKdoutput = $value;
+  } else {
+    $strKdoutput = $strKdoutput.",".$value;
+  }
+}
 
 $data_pengguna = array(
   "id"           => $id,
@@ -22,7 +33,9 @@ $data_pengguna = array(
   "newpassword2" => $newpassword2,
   "email"        => $email,
   "level"        => $level,
+  "kdprogram"    => $kdprogram,
   "direktorat"   => $direktorat,
+  "kdoutput"     => $strKdoutput,
   "status"       => $status
 );
 
@@ -70,6 +83,16 @@ switch ($process) {
     $pengguna->deactivatePengguna($id);
   break;
   case 'add':
+    
+    // $strKdoutput = "";
+    // foreach ($kdoutput as $value) {
+    //   if($strKdoutput==""){
+    //     $strKdoutput = $value;
+    //   } else {
+    //     $strKdoutput = $strKdoutput.",".$value;
+    //   }
+    // }
+    // echo $strKdoutput;
     $pengguna->insertPengguna($data_pengguna);
     $utility->load("content/adduser","success","Data berhasil ditambahkan");
   break;
