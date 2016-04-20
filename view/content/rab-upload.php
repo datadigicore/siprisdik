@@ -31,7 +31,6 @@
             <table class="display table table-bordered table-striped">
               <tr>
                 <th colspan='2'><label>Info</label></th>
-                <th><label>Keterangan Tabel</label></th>
               </tr>
               <tr>
                 <td valign="top" class="col-md-1">
@@ -55,135 +54,20 @@
                       <tr><td valign="top">Sisa</td><td valign="top">:&nbsp;</td><td valign="top"><?php echo 'Rp '.number_format(($jumlah['jumlah'] - ($jumlah['realisasi'] + $jumlah['usulan'])),2,',','.'); ?></td></tr>
                   </table>
                 </td>
-                <td valign="top" class="col-md-1">
-                  <table class="table-striped col-md-12">
-                      <tr><td valign="top"><span class="label label-success">Hijau</span></td><td valign="top">&nbsp;</td><td valign="top">Jumlah Usulan Telah Valid</td></tr>
-                      <tr><td valign="top"><span class="label label-warning">Kuning</span></td><td valign="top">&nbsp;</td><td valign="top">Jumlah Usulan Melebihi PAGU</td></tr>
-                      <tr><td valign="top"><span class="label label-danger">Merah</span></td><td valign="top">&nbsp;</td><td valign="top">Tidak Terdapat Kode Akun dalam Kegiatan Tersebut</td></tr>
-                  </table>
-                </td>
             </table>
             <br>
             <table id="example"  class="table table-striped table-hover table-bordered">
-              <thead style="background-color:#11245B;color:white;">
-                <tr style="background-color:#0000BB;color:white;">
-                  <th style="background-color:#FFFFFF;" colspan="41">-</th>
-                  <th colspan="11"><center>RUTE 1</center></th>
-                  <th colspan="11"><center>RUTE 2</center></th>
-                  <th colspan="11"><center>RUTE 3</center></th>
-                  <th colspan="11"><center>RUTE 4</center></th>
-                </tr>
+              <thead>
                 <tr>
-                  <th rowspan="2">No</th>
-                  <th rowspan="2">Jenis</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">val</th>
-                  <th rowspan="2">Nama</th>
-                  <th rowspan="2">Asal</th>
-                  <th rowspan="2">NPWP</th>
-                  <th rowspan="2">NIP</th>
-                  <th rowspan="2">Golongan</th>
-                  <th rowspan="2">PNS/Non PNS</th>
-                  <th rowspan="2">PAJAK</th>
-                  <th rowspan="2">Jabatan</th>
-                  <th>Honor Output</th>
-                  <th>Honor Profesi</th>
-                  <th>Uang Saku</th>
-                  <th>Transport Lokal</th>
-                  <th>Uang Representatif</th>
-                  <th>Biaya Akom (Hotel)</th>
-                  <th colspan="3">Belanja Bahan 521211</th>
-                  <th rowspan="2">Tanggal Berangkat</th>
-                  <th rowspan="2">Tanggal Kembali</th>
-                  <th rowspan="2">Tingkat dlm Perjalanan Dinas</th>
-                  <th rowspan="2">Kota Asal</th>
-                  <th rowspan="2">Kota Tujuan</th>
-                  <th rowspan="2">Alat Transportasi</th>
-                  <th colspan="2">Rute 1</th>
-                  <th colspan="2">Taxi Asal</th>
-                  <th colspan="2">Taxi Tujuan</th>
-                  <th>Uang Harian</th>
-                  <th rowspan="2">Lama Hari</th>
-                  <th rowspan="2">Tanggal Berangkat</th>
-                  <th rowspan="2">Tanggal Kembali</th>
-                  <th rowspan="2">Alat Transportasi</th>
-                  <th colspan="2">Rute 1</th>
-                  <th colspan="2">Taxi Asal</th>
-                  <th colspan="2">Taxi Tujuan</th>
-                  <th>Uang Harian</th>
-                  <th rowspan="2">Lama Hari</th>
-                  <th rowspan="2">Tanggal Berangkat</th>
-                  <th rowspan="2">Tanggal Kembali</th>
-                  <th rowspan="2">Alat Transportasi</th>
-                  <th colspan="2">Rute 1</th>
-                  <th colspan="2">Taxi Asal</th>
-                  <th colspan="2">Taxi Tujuan</th>
-                  <th>Uang Harian</th>
-                  <th rowspan="2">Lama Hari</th>
-                  <th rowspan="2">Tanggal Berangkat</th>
-                  <th rowspan="2">Tanggal Kembali</th>
-                  <th rowspan="2">Alat Transportasi</th>
-                  <th colspan="2">Rute 1</th>
-                  <th colspan="2">Taxi Asal</th>
-                  <th colspan="2">Taxi Tujuan</th>
-                  <th>Uang Harian</th>
-                  <th rowspan="2">Lama Hari</th>
-                  <th rowspan="2">Tanggal Berangkat</th>
-                  <th rowspan="2">Tanggal Kembali</th>
-                </tr>
-                <tr>
-                  <th>521213</th>
-                  <th>522151</th>
-                  <th>524113 / 524114</th>
-                  <th>524113 / 524114</th>
-                  <th>524111 / 524113 / 524114 / 524119</th>
-                  <th>524113 / 524114 / 524119</th>
-                  <th>ATK</th>
-                  <th>Bahan Habis Pakai</th>
-                  <th>Konsumsi</th>
-                  <th>524111/524119/524211</th>
-                  <th>Harga Tiket</th>
-                  <th>524111</th>
-                  <th>524119</th>
-                  <th>524111</th>
-                  <th>524119</th>
-                  <th>524111 / 524114 / 524119 / 524211</th>
-                  <th>524111/524119/524211</th>
-                  <th>Harga Tiket</th>
-                  <th>524111</th>
-                  <th>524119</th>
-                  <th>524111</th>
-                  <th>524119</th>
-                  <th>524111 / 524114 / 524119 / 524211</th>
-                  <th>524111/524119/524211</th>
-                  <th>Harga Tiket</th>
-                  <th>524111</th>
-                  <th>524119</th>
-                  <th>524111</th>
-                  <th>524119</th>
-                  <th>524111 / 524114 / 524119 / 524211</th>
-                  <th>524111/524119/524211</th>
-                  <th>Harga Tiket</th>
-                  <th>524111</th>
-                  <th>524119</th>
-                  <th>524111</th>
-                  <th>524119</th>
-                  <th>524111 / 524114 / 524119 / 524211</th>
+                  <th>No</th>
+                  <th>Nama</th>
+                  <th>Asal</th>
+                  <th>NPWP</th>
+                  <th>NIP</th>
+                  <th>Golongan</th>
+                  <th>PNS/Non PNS</th>
+                  <th>PAJAK</th>
+                  <th>Jabatan</th>
                 </tr>
               </thead>
               <tbody>
@@ -201,10 +85,29 @@
     </div>
   </section>
 </div>
+<script type="text/javascript">
+var table_data_json = '[{"name":"Tiger Nixon","position":"System Architect","salary":"$320,800","start_date":"2011/04/25","office":"Edinburgh","extn":"5421"},{"name":"Garrett Winters","position":"Accountant","salary":"$170,750","start_date":"2011/07/25","office":"Tokyo","extn":"8422"},{"name":"Ashton Cox","position":"Junior Technical Author","salary":"$86,000","start_date":"2009/01/12","office":"San Francisco","extn":"1562"}]';
 
-<script>
-var oTable;
-  $(function () {
+/* Formatting function for row details - modify as you need */
+function format ( d ) {
+    // `d` is the original data object for the row
+    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+        '<tr>'+
+            '<td>Full name:</td>'+
+            '<td>'+d.name+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Extension number:</td>'+
+            '<td>'+d.extn+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Extra info:</td>'+
+            '<td>And any further details here (images etc)...</td>'+
+        '</tr>'+
+    '</table>';
+}
+ 
+$(document).ready(function() {
     $('#example').DataTable( {
       "info":false,
       "oLanguage": {
@@ -216,108 +119,10 @@ var oTable;
       "columnDefs" : [
             {"targets" : 0,
              "visible" : false},
-            {"targets" : 1,
-             "visible" : false},
-            {"targets" : 2,
-             "visible" : false},
-            {"targets" : 3,
-             "visible" : false},
-            {"targets" : 4,
-             "visible" : false},
-            {"targets" : 5,
-             "visible" : false},
-            {"targets" : 6,
-             "visible" : false},
-            {"targets" : 7,
-             "visible" : false},
-            {"targets" : 8,
-             "visible" : false},
-            {"targets" : 9,
-             "visible" : false},
-            {"targets" : 10,
-             "visible" : false},
-            {"targets" : 11,
-             "visible" : false},
-            {"targets" : 12,
-             "visible" : false},
-            {"targets" : 13,
-             "visible" : false},
-            {"targets" : 14,
-             "visible" : false},
-            {"targets" : 15,
-             "visible" : false},
-            {"targets" : 16,
-             "visible" : false},
-            {"targets" : 17,
-             "visible" : false},
-            {"targets" : 18,
-             "visible" : false},
-            {"targets" : 19},
-            {"targets" : 20},
-            {"targets" : 21},
-            {"targets" : 22},
-            {"targets" : 23},
-            {"targets" : 24},
-            {"targets" : 25},
-            {"targets" : 26},
-            {"targets" : 27},
-            {"targets" : 28},
-            {"targets" : 29},
-            {"targets" : 30},
-            {"targets" : 31},
-            {"targets" : 32},
-            {"targets" : 33},
-            {"targets" : 34},
-            {"targets" : 35},
-            {"targets" : 36},
-            {"targets" : 37},
-            {"targets" : 38},
-            {"targets" : 39},
-            {"targets" : 40},
-            {"targets" : 41},
-            {"targets" : 42},
-            {"targets" : 43},
-            {"targets" : 44},
-            {"targets" : 45},
-            {"targets" : 46},
-            {"targets" : 47},
-            {"targets" : 48},
-            {"targets" : 49},
-            {"targets" : 50},
-            {"targets" : 51},
-            {"targets" : 52},
-            {"targets" : 53},
-            {"targets" : 54},
-            {"targets" : 55},
-            {"targets" : 56},
-            {"targets" : 57},
-            {"targets" : 58},
-            {"targets" : 59},
-            {"targets" : 60},
-            {"targets" : 61},
-            {"targets" : 62},
-            {"targets" : 63},
-            {"targets" : 64},
-            {"targets" : 65},
-            {"targets" : 66},
-            {"targets" : 67},
-            {"targets" : 68},
-            {"targets" : 69},
-            {"targets" : 70},
-            {"targets" : 71},
-            {"targets" : 72},
-            {"targets" : 73},
-            {"targets" : 74},
-            {"targets" : 75},
-            {"targets" : 76},
-            {"targets" : 77},
-            {"targets" : 78},
-            {"targets" : 79},
-            {"targets" : 80},
-            {"targets" : 81},
-            {"targets" : 82},
-            {"targets" : 83},
-            {"targets" : 84},
+            {"targets" : 1},
+            {"targets" : 2},
+            {"targets" : 3},
+            {"targets" : 4},
           ],
       "ajax": {
         "url": "<?php echo $url_rewrite;?>process/rab_rinci/table_upload",
@@ -325,17 +130,11 @@ var oTable;
         "data": {'id_rab_view':'<?php echo $id_rab_view;?>' }
       }
     });
+     
+    // Add event listener for opening and closing details
+    $("#example").DataTable().rows().every( function () {
+        this.child(format(this.data())).show();
+        this.nodes().to$().addClass('shown');
+    } );
 } );
-
-$(document).ready(function() {
-  <?php if($stat_err == 1) { ?>
-  $.ajax({
-    url: "<?php echo $url_rewrite;?>process/rab_rinci/deltemprab",
-    type: "POST",
-    data: {'id_rab_view':'<?php echo $id_rab_view;?>' }
-  }).done(function() {
-    alert('berhasil dihapus');
-  });
-  <?php }?>
-  });
 </script>
