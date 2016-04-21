@@ -679,8 +679,32 @@
     }
 
     public function gettemprab($id=""){
-      $query  = "SELECT *
-                 FROM temprabfull as r where rabview_id = '$id' and created_by = '".$_SESSION['id']."'";
+      $query  = "SELECT id, jenis, penerima, asal, npwp, nip, pajak, golongan, jabatan, pns,
+                COUNT(kdakun) as banyak_akun,
+                GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ', ') as kdakun,
+                GROUP_CONCAT(DISTINCT(noitem) SEPARATOR ', ') as noitem,
+                GROUP_CONCAT(DISTINCT(value) SEPARATOR ', ') as value,
+                GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ', ') as keterangan,
+                GROUP_CONCAT(DISTINCT(alat_trans) SEPARATOR ', ') as alat_trans,
+                GROUP_CONCAT(DISTINCT(rute) SEPARATOR ', ') as rute,
+                GROUP_CONCAT(DISTINCT(harga_tiket) SEPARATOR ', ') as harga_tiket,
+                GROUP_CONCAT(DISTINCT(kota_asal) SEPARATOR ', ') as kota_asal,
+                GROUP_CONCAT(DISTINCT(kota_tujuan) SEPARATOR ', ') as kota_tujuan,
+                GROUP_CONCAT(DISTINCT(taxi_asal) SEPARATOR ', ') as taxi_asal,
+                GROUP_CONCAT(DISTINCT(taxi_tujuan) SEPARATOR ', ') as taxi_tujuan,
+                GROUP_CONCAT(DISTINCT(tgl_mulai) SEPARATOR ', ') as tgl_mulai,
+                GROUP_CONCAT(DISTINCT(tgl_akhir) SEPARATOR ', ') as tgl_akhir,
+                GROUP_CONCAT(DISTINCT(lama_hari) SEPARATOR ', ') as lama_hari,
+                GROUP_CONCAT(DISTINCT(uang_harian) SEPARATOR ', ') as uang_harian,
+                GROUP_CONCAT(DISTINCT(biaya_akom) SEPARATOR ', ') as biaya_akom,
+                GROUP_CONCAT(DISTINCT(tingkat_jalan) SEPARATOR ', ') as tingkat_jalan,
+                GROUP_CONCAT(DISTINCT(no_surat) SEPARATOR ', ') as no_surat,
+                GROUP_CONCAT(DISTINCT(tgl_surat) SEPARATOR ', ') as tgl_surat,
+                GROUP_CONCAT(DISTINCT(tgl_mulai_all) SEPARATOR ', ') as tgl_mulai_all,
+                GROUP_CONCAT(DISTINCT(tgl_akhir_all) SEPARATOR ', ') as tgl_akhir_all,
+                GROUP_CONCAT(DISTINCT(error) SEPARATOR ', ') as error
+                 FROM temprabfull as r where rabview_id = '$id' and created_by = '".$_SESSION['id']."'
+                 GROUP BY npwp, penerima, pns, golongan";
       $result = $this->query($query);
       $x=0;
       while ($fetch = $this->fetch_object($result)) {
@@ -1882,7 +1906,7 @@
 
         if ($rute1 != "") {  
           $x++;
-          if ($asal == "L") {
+          if ($asal == "LUAR KOTA") {
             # 524119, 524111
             $kdakun = "524119"; 
             $kdakun_lain = "524111"; 
@@ -2724,12 +2748,13 @@
         $noitem = $datatemp[$i]->noitem;
         $value = $datatemp[$i]->value;
 
-        if ($akun == '521211') {  //belanja bahan
-          $jum_rkakl = $this->getJumlahRkakl($getrab, $akun, $noitem);
-          $total = $jum_rkakl['realisasi'] + $value;
-          $this->insertRealisasi($getrab, $akun, $noitem, $total);
-        }
-        elseif($akun != ""){  // bukan belanja bahan
+        // if ($akun == '521211') {  //belanja bahan
+        //   $jum_rkakl = $this->getJumlahRkakl($getrab, $akun, $noitem);
+        //   $total = $jum_rkakl['realisasi'] + $value;
+        //   $this->insertRealisasi($getrab, $akun, $noitem, $total);
+        // }
+        // else
+        if($akun != ""){  // bukan belanja bahan
           $jum_rkakl = $this->getJumlahRkakl($getrab, $akun);
           $totalusul = $jum_rkakl['realisasi'] + $value;
           $itemgroup = $jum_rkakl['itemgroup'];
@@ -2763,6 +2788,8 @@
       }
       $hapustemp = "DELETE FROM temprabfull where rabview_id = '".$id_rab_view."' and created_by = '".$_SESSION['id']."'  ";
       $result = $this->query($hapustemp);
+      $hapusimport = "DELETE FROM import_real where created_by = '".$_SESSION['id']."'  ";
+      $result = $this->query($hapusimport);
       
       return $result;
     }
@@ -2831,12 +2858,14 @@
 
         if (ctype_digit($kolomA) && $kolomA > 3000) {
           $giat = $kolomA;
+          $kdgiat = $giat;
           $output = "";
           $soutput = "";
           $kmpnen = "";
           $skmpnen = "";
           $akun = "";
           $import[$y]['kode'] = $kolomA; 
+          $import[$y]['kdgiat'] = $kolomA; 
           $import[$y]['uraian'] = $data[$i]["B"];
           $import[$y]['dipa'] = $dipa;
           $import[$y]['realisasi'] = $real;
@@ -2851,13 +2880,15 @@
           $output = $kolomA;
           $countout = strlen($output);
           if ($countout == 1) {
-            $kode = '00'.$output;
+            $kode_out = '00'.$output;
           }elseif ($countout == 2) {
-            $kode = '0'.$output;
+            $kode_out = '0'.$output;
           }else{
-            $kode = $output;
+            $kode_out = $output;
           }
-          $import[$y]['kode'] = $kode; 
+          $import[$y]['kode'] = $kdgiat.'.'.$kode_out; 
+          $import[$y]['kdgiat'] = $kdgiat; 
+          $import[$y]['kdoutput'] = $kode_out; 
           $import[$y]['uraian'] = $data[$i]["B"];
           $import[$y]['dipa'] = $dipa;
           $import[$y]['realisasi'] = $real;
@@ -2872,13 +2903,16 @@
           $soutput = $kolomA;
           $countsout = strlen($soutput);
           if ($countsout == 1) {
-            $kode = '00'.$soutput;
+            $kode_sout = '00'.$soutput;
           }elseif ($countsout == 2) {
-            $kode = '0'.$soutput;
+            $kode_sout = '0'.$soutput;
           }else{
-            $kode = $soutput;
+            $kode_sout = $soutput;
           }
-          $import[$y]['kode'] = $kode; 
+          $import[$y]['kode'] = $kdgiat.'.'.$kode_out.'.'.$kode_sout; 
+          $import[$y]['kdgiat'] = $kdgiat; 
+          $import[$y]['kdoutput'] = $kode_out; 
+          $import[$y]['kdsoutput'] = $kode_sout; 
           $import[$y]['uraian'] = $data[$i]["B"];
           $import[$y]['dipa'] = $dipa;
           $import[$y]['realisasi'] = $real;
@@ -2892,11 +2926,19 @@
         if (ctype_digit($kolomB)) {
           $kmpnen = $kolomB;
           $pecahkode = explode(" ", $data[$i]["B"]);
-          $kode = $pecahkode[0];
+          $kode_kmpnen = $pecahkode[0];
           unset($pecahkode[0]);
           $uraian = implode(" ", $pecahkode);
-          $import[$y]['kode'] = $kode; 
-          $import[$y]['uraian'] = $data[$i]["B"];
+          
+          if ($kode_sout == "") {
+            $kode_sout = "001";
+          }
+          $import[$y]['kode'] = $kdgiat.'.'.$kode_out.'.'.$kode_sout.'.'.$kode_kmpnen; 
+          $import[$y]['kdgiat'] = $kdgiat; 
+          $import[$y]['kdoutput'] = $kode_out; 
+          $import[$y]['kdsoutput'] = $kode_sout; 
+          $import[$y]['kdkmpnen'] = $kode_kmpnen; 
+          $import[$y]['uraian'] = $uraian;
           $import[$y]['dipa'] = $dipa;
           $import[$y]['realisasi'] = $real;
           $import[$y]['sisa'] = $sisa;
@@ -2908,7 +2950,14 @@
         }
         if (ctype_alpha($kolomB)) {
           $skmpnen = $kolomB;
-          $import[$y]['kode'] = $kolomB; 
+
+          $import[$y]['kode'] = $kdgiat.'.'.$kode_out.'.'.$kode_sout.'.'.$kode_kmpnen.'.'.$skmpnen; 
+          $import[$y]['kdgiat'] = $kdgiat; 
+          $import[$y]['kdoutput'] = $kode_out; 
+          $import[$y]['kdsoutput'] = $kode_sout; 
+          $import[$y]['kdkmpnen'] = $kode_kmpnen; 
+          $import[$y]['kdskmpnen'] = $skmpnen;
+
           $import[$y]['uraian'] = $data[$i]["C"];
           $import[$y]['dipa'] = $dipa;
           $import[$y]['realisasi'] = $real;
@@ -2957,6 +3006,7 @@
           if ($skmpnen != "") {
             $insert[$x]['kdskmpnen'] = $skmpnen;
           }else{
+            $skmpnen = 'A';
             $insert[$x]['kdskmpnen'] = 'A';
           }
 
@@ -2984,7 +3034,14 @@
             $error = 'true';
           }
 
-          $import[$y]['kode'] = $kolomC; 
+          $import[$y]['kode'] = $kdgiat.'.'.$kode_out.'.'.$kode_sout.'.'.$kode_kmpnen.'.'.$skmpnen.'.'.$akun; 
+          $import[$y]['kdgiat'] = $kdgiat; 
+          $import[$y]['kdoutput'] = $kode_out; 
+          $import[$y]['kdsoutput'] = $kode_sout; 
+          $import[$y]['kdkmpnen'] = $kode_kmpnen; 
+          $import[$y]['kdskmpnen'] = $skmpnen;
+          $import[$y]['kdakun'] = $akun; 
+
           $import[$y]['uraian'] = $data[$i]["D"];
           $import[$y]['dipa'] = $dipa;
           $import[$y]['realisasi'] = $real;
@@ -3014,8 +3071,28 @@
     }
 
     public function insertimportreal($data){
+      if ($data['kdgiat'] != "") {
+        $sub = "kdgiat            = '".$data['kdgiat']."', ";
+      }
+      if ($data['kdoutput'] != "") {
+        $sub .= "kdoutput            = '".$data['kdoutput']."', ";
+      }
+      if ($data['kdsoutput'] != "") {
+        $sub .= "kdsoutput            = '".$data['kdsoutput']."', ";
+      }
+      if ($data['kdkmpnen'] != "") {
+        $sub .= "kdkmpnen            = '".$data['kdkmpnen']."', ";
+      }
+      if ($data['kdskmpnen'] != "") {
+        $sub .= "kdskmpnen            = '".$data['kdskmpnen']."', ";
+      }
+      if ($data['kdakun'] != "") {
+        $sub .= "kdakun            = '".$data['kdakun']."', ";
+      }
+
       $query      = "INSERT INTO import_real SET
                     kode              = '".$data['kode']."',
+                    ".$sub."
                     uraian            = '".$data['uraian']."',
                     dipa              = '".$data['dipa']."',
                     realisasi         = '".$data['realisasi']."',

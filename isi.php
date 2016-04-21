@@ -253,7 +253,7 @@ else {
             $jumlah = $mdl_rab->getJumlahRkakl($view);
             $insert = $mdl_rab->gettemprab($id_rab_view);
             $stat_err = $data[4];
-            include ('view/content/rab-upload.php');
+            include ('view/content/rab-test.php');
           } else{
             $id_rab_view = $data[2];
             $view = $mdl_rab->getview($id_rab_view);
