@@ -199,6 +199,7 @@ else {
             $direktorat = $_SESSION['direktorat'];
             $tahun = $mdl_rab->getYear();
             $idview = $data[3];
+            $idrkakl = $data[4];
             $getview = $mdl_rab->getview($idview);
             $rabfull = $mdl_rab->getjumlahgiat($idview);
             if ($rabfull->jumlah == "") {
@@ -251,9 +252,15 @@ else {
             $view = $mdl_rab->getview($id_rab_view);
             $datarkakl = $mdl_rab->getrkaklfull($view);
             $jumlah = $mdl_rab->getJumlahRkakl($view);
-            $insert = $mdl_rab->gettemprab($id_rab_view);
+            $insert = $mdl_rab->gettemprab2($id_rab_view);
             $stat_err = $data[4];
-            include ('view/content/rab-test.php');
+            $banyak_akun = 0;
+            foreach ($insert as $key) {
+              if ($key->banyak_akun > $banyak_akun) {
+                $banyak_akun = $key->banyak_akun;
+              }
+            }
+            include ('view/content/rab-upload.php');
           } else{
             $id_rab_view = $data[2];
             $view = $mdl_rab->getview($id_rab_view);

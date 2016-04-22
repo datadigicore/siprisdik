@@ -679,30 +679,41 @@
     }
 
     public function gettemprab($id=""){
+      $query  = "SELECT * FROM temprabfull as r where rabview_id = '$id' and created_by = '".$_SESSION['id']."'";
+      $result = $this->query($query);
+      $x=0;
+      while ($fetch = $this->fetch_object($result)) {
+        $data[$x] = $fetch;
+        $x++;
+      }
+      return $data;
+    }
+
+    public function gettemprab2($id=""){
       $query  = "SELECT id, jenis, penerima, asal, npwp, nip, pajak, golongan, jabatan, pns,
-                COUNT(kdakun) as banyak_akun,
-                GROUP_CONCAT(DISTINCT(kdakun) SEPARATOR ', ') as kdakun,
-                GROUP_CONCAT(DISTINCT(noitem) SEPARATOR ', ') as noitem,
-                GROUP_CONCAT(DISTINCT(value) SEPARATOR ', ') as value,
-                GROUP_CONCAT(DISTINCT(keterangan) SEPARATOR ', ') as keterangan,
-                GROUP_CONCAT(DISTINCT(alat_trans) SEPARATOR ', ') as alat_trans,
-                GROUP_CONCAT(DISTINCT(rute) SEPARATOR ', ') as rute,
-                GROUP_CONCAT(DISTINCT(harga_tiket) SEPARATOR ', ') as harga_tiket,
-                GROUP_CONCAT(DISTINCT(kota_asal) SEPARATOR ', ') as kota_asal,
-                GROUP_CONCAT(DISTINCT(kota_tujuan) SEPARATOR ', ') as kota_tujuan,
-                GROUP_CONCAT(DISTINCT(taxi_asal) SEPARATOR ', ') as taxi_asal,
-                GROUP_CONCAT(DISTINCT(taxi_tujuan) SEPARATOR ', ') as taxi_tujuan,
-                GROUP_CONCAT(DISTINCT(tgl_mulai) SEPARATOR ', ') as tgl_mulai,
-                GROUP_CONCAT(DISTINCT(tgl_akhir) SEPARATOR ', ') as tgl_akhir,
-                GROUP_CONCAT(DISTINCT(lama_hari) SEPARATOR ', ') as lama_hari,
-                GROUP_CONCAT(DISTINCT(uang_harian) SEPARATOR ', ') as uang_harian,
-                GROUP_CONCAT(DISTINCT(biaya_akom) SEPARATOR ', ') as biaya_akom,
-                GROUP_CONCAT(DISTINCT(tingkat_jalan) SEPARATOR ', ') as tingkat_jalan,
-                GROUP_CONCAT(DISTINCT(no_surat) SEPARATOR ', ') as no_surat,
-                GROUP_CONCAT(DISTINCT(tgl_surat) SEPARATOR ', ') as tgl_surat,
-                GROUP_CONCAT(DISTINCT(tgl_mulai_all) SEPARATOR ', ') as tgl_mulai_all,
-                GROUP_CONCAT(DISTINCT(tgl_akhir_all) SEPARATOR ', ') as tgl_akhir_all,
-                GROUP_CONCAT(DISTINCT(error) SEPARATOR ', ') as error
+                  COUNT(kdakun) as banyak_akun,
+                  GROUP_CONCAT(kdakun SEPARATOR ', ') as kdakun,
+                  GROUP_CONCAT(noitem SEPARATOR ', ') as noitem,
+                  GROUP_CONCAT(value SEPARATOR ', ') as value,
+                  GROUP_CONCAT(keterangan SEPARATOR ', ') as keterangan,
+                  GROUP_CONCAT(alat_trans SEPARATOR ', ') as alat_trans,
+                  GROUP_CONCAT(rute SEPARATOR ', ') as rute,
+                  GROUP_CONCAT(harga_tiket SEPARATOR ', ') as harga_tiket,
+                  GROUP_CONCAT(kota_asal SEPARATOR ', ') as kota_asal,
+                  GROUP_CONCAT(kota_tujuan SEPARATOR ', ') as kota_tujuan,
+                  GROUP_CONCAT(taxi_asal SEPARATOR ', ') as taxi_asal,
+                  GROUP_CONCAT(taxi_tujuan SEPARATOR ', ') as taxi_tujuan,
+                  GROUP_CONCAT(tgl_mulai SEPARATOR ', ') as tgl_mulai,
+                  GROUP_CONCAT(tgl_akhir SEPARATOR ', ') as tgl_akhir,
+                  GROUP_CONCAT(lama_hari SEPARATOR ', ') as lama_hari,
+                  GROUP_CONCAT(uang_harian SEPARATOR ', ') as uang_harian,
+                  GROUP_CONCAT(biaya_akom SEPARATOR ', ') as biaya_akom,
+                  GROUP_CONCAT(tingkat_jalan SEPARATOR ', ') as tingkat_jalan,
+                  GROUP_CONCAT(no_surat SEPARATOR ', ') as no_surat,
+                  GROUP_CONCAT(tgl_surat SEPARATOR ', ') as tgl_surat,
+                  GROUP_CONCAT(tgl_mulai_all SEPARATOR ', ') as tgl_mulai_all,
+                  GROUP_CONCAT(tgl_akhir_all SEPARATOR ', ') as tgl_akhir_all,
+                  GROUP_CONCAT(error SEPARATOR ', ') as error
                  FROM temprabfull as r where rabview_id = '$id' and created_by = '".$_SESSION['id']."'
                  GROUP BY npwp, penerima, pns, golongan";
       $result = $this->query($query);
@@ -1964,7 +1975,7 @@
           $insert[$x]['kota_asal']      = $kota_asal;
           $insert[$x]['kota_tujuan']    = $kota_tujuan;
 
-          $insert[$x]['alat_trans']     = $alat_trans;
+          $insert[$x]['alat_trans']     = $alat_trans1;
           $insert[$x]['rute']           = $rute1;
           $insert[$x]['harga_tiket']    = $harga_tiket1;
           $insert[$x]['taxi_asal']      = $taxi_asal;
@@ -2154,7 +2165,7 @@
           $insert[$x]['kota_asal']      = $kota_asal;
           $insert[$x]['kota_tujuan']    = $kota_tujuan;
 
-          $insert[$x]['alat_trans']     = $alat_trans;
+          $insert[$x]['alat_trans']     = $alat_trans2;
           $insert[$x]['rute']           = $rute2;
           $insert[$x]['harga_tiket']    = $harga_tiket2;
           $insert[$x]['taxi_asal']      = $taxi_asal;
@@ -2284,7 +2295,7 @@
           $insert[$x]['kota_asal']      = $kota_asal;
           $insert[$x]['kota_tujuan']    = $kota_tujuan;
 
-          $insert[$x]['alat_trans']     = $alat_trans;
+          $insert[$x]['alat_trans']     = $alat_trans3;
           $insert[$x]['rute']           = $rute3;
           $insert[$x]['harga_tiket']    = $harga_tiket3;
           $insert[$x]['taxi_asal']      = $taxi_asal;
@@ -2414,7 +2425,7 @@
           $insert[$x]['kota_asal']      = $kota_asal;
           $insert[$x]['kota_tujuan']    = $kota_tujuan;
 
-          $insert[$x]['alat_trans']     = $alat_trans;
+          $insert[$x]['alat_trans']     = $alat_trans4;
           $insert[$x]['rute']           = $rute4;
           $insert[$x]['harga_tiket']    = $harga_tiket4;
           $insert[$x]['taxi_asal']      = $taxi_asal;
