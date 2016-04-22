@@ -65,13 +65,14 @@
                 </td>
             </table>
             <br>
+            <div style="overflow-x: auto;">
             <table id="example" class="display table table-striped table-hover table-bordered" cellspacing="0" width="100%">
               <thead>
                   <tr>
-                      <th></th>
-                      <th>Penerima</th>
+                      <th class="col-md-1"></th>
+                      <th class="col-md-1">Penerima</th>
                       <?php for ($i=0; $i < $banyak_akun; $i++) { 
-                        echo "<th>Kode Akun ".(1+$i)."</th>";
+                        echo "<th class='col-md-1'>Kode Akun ".(1+$i)."</th>";
                       }?>
                   </tr>
               </thead>
@@ -254,6 +255,7 @@
               </tfoot>
           </table>
           </div>
+          </div>
           <?php if($stat_err == 0) { ?>
           <div class="box-footer" align="center">
             <button type="submit" class="btn btn-flat btn-lg btn-success"><i class="fa fa-save"></i> Simpan</button>
@@ -384,9 +386,10 @@
  
 $(document).ready(function() {
     var table_data_json = '[{"name":"Tiger Nixon","position":"System Architect","salary":"$320,800","start_date":"2011/04/25","office":"Edinburgh","extn":"5421"},{"name":"Garrett Winters","position":"Accountant","salary":"$170,750","start_date":"2011/07/25","office":"Tokyo","extn":"8422"},{"name":"Ashton Cox","position":"Junior Technical Author","salary":"$86,000","start_date":"2009/01/12","office":"San Francisco","extn":"1562"}]';
-      $('#example').DataTable( {
+      $('#example').DataTable();
+      // $('#example').DataTable( {
         // "data": JSON.parse(table_data_json),
-        "columns": [
+        // "columns": [
             // {
             //     "className":      'details-control',
             //     "orderable":      false,
@@ -397,12 +400,12 @@ $(document).ready(function() {
             // { "data": "position" },
             // { "data": "office" },
             // { "data": "salary" }
-        ],
-        "order": [[1, 'asc']]
-    } );
-    $("#example").DataTable().rows().every( function () {
-        this.child(format(this.data())).show();
-        this.nodes().to$().addClass('shown');
-    });  
+        // ],
+        // "order": [[1, 'asc']]
+    // } );
+    // $("#example").DataTable().rows().every( function () {
+    //     this.child(format(this.data())).show();
+    //     this.nodes().to$().addClass('shown');
+    // });  
 } );
 </script>
