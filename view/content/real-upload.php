@@ -33,7 +33,7 @@
 		          <input type="hidden" id="adendum" name="adendum" value="<?php echo $status;?>" />
 		          <input type="hidden" id="jenisimport" name="jenisimport" value="" />
 		          <div class="form-group">
-		            <label>Download Template <a href="<?php echo $url_rewrite;?>template/TemplateRkaklRealisasi.xls" download>Here</a>.</label>
+		            <label>Download Template <a href="<?php echo $url_rewrite;?>template/TemplateImportRealisasi.xlsx" download>Here</a>.</label>
 		          </div>
 		          <div class="form-group">
 		            <input type="file" id="fileimport" name="fileimport" style="display:none;">
