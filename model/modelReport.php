@@ -227,6 +227,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       $kdakun= $res[kdskmpnen];
       $npwp= $res[npwp];
       $nip= $res[nip];
+      $npwp_dan_nip = $npwp.$nip;
 
       $result_pb = $this->query("SELECT bpp, nama, nip_bpp, ppk, nip_ppk from direktorat where kode='$kdgiat' ");
       $arr_pb = $this->fetch_array($result_pb);
@@ -277,7 +278,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
         $kondisi_akun = "id='$id' ";
       }
       else{
-        $kondisi_akun = " rab.rabview_id='$rabv_id' and rab.npwp like '$npwp%' and rab.nip like '$nip%' order by rab.kdakun, rab.id asc ";
+        $kondisi_akun = " rab.rabview_id='$rabv_id' and concat(rab.npwp,rab.nip) like '$npwp_dan_nip%' order by rab.kdakun, rab.id asc ";
       }
       // $result = $this->query("SELECT rab.alat_trans, rab.kota_asal, rab.kota_tujuan, rab.lama_hari, rab.tgl_mulai, rab.tgl_akhir, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rab.rabview_id='$rabv_id' and rab.npwp='$npwp' order by rab.kdakun asc ");
       $sql = "SELECT rab.penerima, rab.nip, rab.jabatan, rab.pns, rab.golongan, rab.kdakun, rkkl.NMGIAT, rab.value, rab.pajak, rab.ppn, rab.pph, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM, rab.tanggal_akhir, rab.lokasi FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where ".$kondisi_akun." ";
