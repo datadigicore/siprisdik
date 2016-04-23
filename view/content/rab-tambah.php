@@ -20,6 +20,7 @@
             <h3 class="box-title" style="margin-top:6px;">Tambah RAB</h3>
           </div>
           <form action="<?php echo $url_rewrite;?>process/rab/save" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="idrkakl" value="<?php echo $idrkakl;?>" />
             <div class="box-body">
               <div class="form-group">
                 <label>Tahun Anggaran</label>
