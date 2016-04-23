@@ -448,7 +448,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
         
       }
       if($dinas==1){
-        $query = "SELECT golongan, npwp, lokasi,  jabatan, kota_asal, tgl_mulai,tanggal_akhir as tgl_akhir, kota_tujuan, rute, harga_tiket, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima, value, kdakun FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
+        $query = "SELECT no_surat, tgl_surat, golongan, npwp, lokasi,  jabatan, kota_asal, tgl_mulai,tanggal_akhir as tgl_akhir, kota_tujuan, rute, harga_tiket, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima, value, kdakun FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
         // print_r($query);
         $nmr_kuitansi = $this->log_kwitansi($det_giat,"524119");
         $result = $this->query($query);
@@ -612,7 +612,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                     
                     <td>Direktorat Jendral Kelembagaan Iptek dan Dikti</td>
                     <td></td>
-                    <td>Bendahara Pengeluaran</td>
+                    <td>Bendahara Pengeluaran Pembantu</td>
                   </tr>
                   <tr>
                     
@@ -1604,6 +1604,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
     public function SPPD($data,$pejabat){
       // $query = "SELECT kota_asal, golongan, tingkat_jalan,  jabatan, kota_tujuan, alat_trans, lama_hari, tgl_mulai, tgl_akhir, uang_harian, penerima FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
       // $data = $this->query($query);
+      $no_surat; $tgl_surat;
       $golongan=null;
       $jabatan=null;
       $tingkat_jalan=null;
@@ -1631,6 +1632,8 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
         if($value[tgl_akhir]!="0000-00-00") $tgl_akhir = $this->konversi_tanggal($value[tgl_akhir],"");
         if($value[npwp]!="") $npwp = $value[npwp];
         if($value[lokasi]!="") $lokasi = $value[lokasi];
+        if($value[tgl_surat]!="") $tgl_surat = $value[tgl_surat];
+        if($value[no_surat]!="") $no_surat = $value[no_surat];
         $penerima=$value[penerima];
       
       }  
@@ -1640,14 +1643,17 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                     <tr>
                         <td align="left">Lembar Ke</td>
                         <td align="left">: </td>
+                        <td align="left"> </td>
                     </tr> 
                     <tr>
                         <td align="left">Kode Nomor</td>
                         <td align="left">:</td>
+                        <td align="left"></td>
                     </tr> 
                     <tr>
                         <td align="left">Nomor</td>
                         <td align="left">: </td>
+                        <td align="left">'.$no_surat.'</td>
                     </tr>                
                     </table>';
           echo '<p align="center">SURAT PERINTAH PERJALANAN DINAS</p>';
@@ -1756,12 +1762,12 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
               <tr>
                 <td width="60%"></td>
                 <td>Dikeluarkan Di </td>
-                <td> : '.$lokasi.'</td>
+                <td> : '.'______________________________'.'</td>
               </tr>
               <tr>
                 <td width="60%"></td>
                 <td>Pada Tanggal</td>
-                <td> : '.$tgl_akhir.'</td>
+                <td> : '.'______________________________'.'</td>
               </tr>
 
               </table>';
@@ -1776,7 +1782,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
     //Rincian Biaya Perjalanan Dinas
     public function Rincian_Biaya_PD($result,$pejabat){
       $direktorat=$pejabat['kdgiat'];
-      $penerima;
+      $penerima; $no_surat; $tgl_surat;
       // $jml=0; 
       // $query = "SELECT kota_asal, kota_tujuan, airport_tax, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima, npwp FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
       // print_r($query);
@@ -1795,6 +1801,8 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       $counter=0;
         foreach ($result as $val) {
           if($val[kdakun]!="524119") continue;
+          if($val[no_surat]!="") $no_surat = $val[no_surat];
+          if($val[tgl_surat]!="") $tgl_surat = $val[tgl_surat];
           if($val[alat_trans]!="") $alat_trans = $val[alat_trans];
           if($val[kota_asal]!="") $asal = $val[kota_asal];
           if($val[kota_tujuan]!="") $tujuan = $val[kota_tujuan];
@@ -1830,11 +1838,12 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
             <tr>
                 <td align="left">Lampiran SPPD Nomor</td>
                 <td align="left">: </td>
+                <td align="left">'.$no_surat.'</td>
             </tr> 
             <tr>
                 <td align="left">Tanggal</td>
                 <td align="left">:</td>
-                <td align="left"></td>
+                <td align="left">'.$this->konversi_tanggal($tgl_surat).'</td>
             </tr> 
                    
 
@@ -1953,7 +1962,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
 
                 <td></td>
                 <td width="23%"></td>
-                <td>'.$lokasi.','.$this->konversi_tanggal($tgl_akhir).'</td>
+                <td>'.$lokasi.','.$this->konversi_tanggal($tgl_mulai).'</td>
               </tr>
 
               <tr>
@@ -2304,8 +2313,10 @@ public function daftar_peng_riil($result,$det){
   $asal=""; $tujuan=""; $alat_trans=""; $tiket=0; $airport_tax=0;
   $taxi_asal=0; $taxi_tujuan=0; $jml_hari=1; $uang_harian=0; $penerima; $jabatan; $tgl_mulai; $tgl_akhir;
   $jenis_transport="";
-
+  $tgl_surat; $no_surat;
   foreach ($result as $val) {
+    if($val[no_surat]!="") $no_surat = $val[no_surat];
+    if($val[tgl_surat]!="") $tgl_surat = $val[tgl_surat];
     if($val[alat_trans]!="") $alat_trans = $val[alat_trans];
     if($val[kota_asal]!="") $asal = $val[kota_asal];
     if($val[kota_tujuan]!="") $tujuan = $val[kota_tujuan];
@@ -2373,7 +2384,7 @@ public function daftar_peng_riil($result,$det){
           <td colspan="4"> <br></br><br></br> </td>
         </tr>
         <tr>
-          <td colspan="4">Berdasarkan Surat Perjalanan Dinas (SPD) Tanggal '.$tgl_mulai.' Nomor: ___________________________, dengan ini saya menyatakan dengan sesungguhnya bahwa:</td>
+          <td colspan="4">Berdasarkan Surat Perjalanan Dinas (SPD) Tanggal '.$tgl_surat.' Nomor: '.$no_surat.', dengan ini saya menyatakan dengan sesungguhnya bahwa:</td>
         </tr>
         <tr>
           <td colspan="4"><br></br><br></br></td>
@@ -2873,13 +2884,19 @@ public function daftar_peng_riil($result,$det){
                   <td style="border-left:1px solid; font-weight:bold;" align="left" >'.$value['kdgiat'].'</td>
                   <td style="border-left:1px solid; font-weight:bold; " colspan="2">'.$nmdir['kdgiat'].'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nmdir['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>';
+                   if($nilai['jml_lalu']>=50000000){
+                        echo '<td style="border-left:1px solid;">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                              <td style="border-left:1px solid;">'.'-'.'</td>';
+                    }
+                    else{
+                      echo '<td style="border-left:1px solid;">'.'-'.'</td>
+                            <td style="border-left:1px solid;">'.number_format($nilai['jumlah'],2,",",".").'</td>';
+                    }
+          echo  '<td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml,2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
@@ -2896,13 +2913,19 @@ public function daftar_peng_riil($result,$det){
                   <td style="border-left:1px solid; font-weight:bold;" align="center">'.$value['kdoutput'].'</td>
                   <td style="border-left:1px solid; font-weight:bold;" colspan="2">'.$nmdir['kdout'].'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nmdir['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>';
+                   if($nilai['jml_lalu']>=50000000){
+                        echo '<td style="border-left:1px solid;">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                              <td style="border-left:1px solid;">'.'-'.'</td>';
+                    }
+                    else{
+                      echo '<td style="border-left:1px solid;">'.'-'.'</td>
+                            <td style="border-left:1px solid;">'.number_format($nilai['jumlah'],2,",",".").'</td>';
+                    }
+          echo  '<td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml,2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
@@ -2919,13 +2942,19 @@ public function daftar_peng_riil($result,$det){
                   <td style="border-left:1px solid; font-weight:bold;" align="center">'.''.'</td>
                   <td style="border-left:1px solid; font-weight:bold;" colspan="2">'.$value['kdsoutput']."  ".$nmdir['kdsout'].'</td>
                   <td style="border-left:1px solid;">'.''.'</td>
-                  <td style="border-left:1px solid;">'.''.'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nmdir['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.''.'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>';
+                   if($nilai['jml_lalu']>=50000000){
+                        echo '<td style="border-left:1px solid;">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                              <td style="border-left:1px solid;">'.'-'.'</td>';
+                    }
+                    else{
+                      echo '<td style="border-left:1px solid;">'.'-'.'</td>
+                            <td style="border-left:1px solid;">'.number_format($nilai['jumlah'],2,",",".").'</td>';
+                    }
+          echo  '<td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml,2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
@@ -2942,13 +2971,19 @@ public function daftar_peng_riil($result,$det){
                   <td style="border-left:1px solid;"  align="center">'.''.'</td>
                   <td style="border-left:1px solid; font-weight:bold;" colspan="2">'.$value['kdkmpnen']." ".$nmdir['kdkmp'].'</td>
                   <td style="border-left:1px solid;">'.''.'</td>
-                  <td style="border-left:1px solid;">'.''.'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nmdir['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.''.'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>';
+                   if($nilai['jml_lalu']>=50000000){
+                        echo '<td style="border-left:1px solid;">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                              <td style="border-left:1px solid;">'.'-'.'</td>';
+                    }
+                    else{
+                      echo '<td style="border-left:1px solid;">'.'-'.'</td>
+                            <td style="border-left:1px solid;">'.number_format($nilai['jumlah'],2,",",".").'</td>';
+                    }
+          echo  '<td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml,2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
@@ -2966,13 +3001,19 @@ public function daftar_peng_riil($result,$det){
                   <td style="border-left:1px solid;">'.''.'</td>
                   <td style=" font-weight:bold;" colspan="1">'.$value['kdskmpnen']."  ".$nmdir['kdskmp'].'</td>
                   <td style="border-left:1px solid;">'.''.'</td>
-                  <td style="border-left:1px solid;">'.''.'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nmdir['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid;">'.''.'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>';
+                   if($nilai['jml_lalu']>=50000000){
+                        echo '<td style="border-left:1px solid;">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                              <td style="border-left:1px solid;">'.'-'.'</td>';
+                    }
+                    else{
+                      echo '<td style="border-left:1px solid;">'.'-'.'</td>
+                            <td style="border-left:1px solid;">'.number_format($nilai['jumlah'],2,",",".").'</td>';
+                    }
+          echo  '<td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml,2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
@@ -2993,13 +3034,27 @@ public function daftar_peng_riil($result,$det){
                   <td style="border-left:1px solid" align="center">'.''.'</td>
                   <td style="border-left:1px solid"  colspan="2">'.$value['kdakun']." ".$value['NMAKUN'].'</td>
                   <td style="border-left:1px solid;">'.''.'</td>
-                  <td style="border-left:1px solid;">'.''.'</td>
-                  <td style="border-left:1px solid; text-align:right;">'.number_format($value['jumlah'],2,",",".").'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; text-align:right; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; text-align:right;  ">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                  <td style="border-left:1px solid; text-align:right;">'.number_format($value['jumlah'],2,",",".").'</td>';
+          if($nilai['jml_lalu']>=50000000){
+              echo '<td style="border-left:1px solid;">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
+                    <td style="border-left:1px solid;">'.'-'.'</td>';
+          }
+          else{
+            echo '<td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
+                    ';
+          }
+                  
+          echo   '<td style="border-left:1px solid; text-align:right; ">'.number_format($nilai['jml_lalu'],2,",",".").'</td>';
+          if($nilai['jml_lalu']>=50000000){
+              echo '<td style="border-left:1px solid;">'.number_format($nilai['jumlah'],2,",",".").'</td>
+                    <td style="border-left:1px solid;">'.'-'.'</td>';
+          }
+          else{
+            echo '<td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.number_format($nilai['jumlah'],2,",",".").'</td>';
+          }
+          echo   '<td style="border-left:1px solid; text-align:right;  ">'.number_format($nilai['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; ">'.number_format($jml,2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; ">'.number_format($sisa,2,",",".").'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
@@ -3029,7 +3084,7 @@ public function daftar_peng_riil($result,$det){
       echo '</table>';
       $html = ob_get_contents();
       ob_clean();
-      $this->create_pdf("Realisasi Per Kegiatan","A4-L",$html);
+      $this->create_pdf("Realisasi Per Kegiatan",array(390,210),$html);
     }
 
     public function rekap_realisasi_daya_serap($dir, $tanggal ) {
