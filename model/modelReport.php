@@ -2864,6 +2864,8 @@ public function daftar_peng_riil($result,$det){
       $acc_sp2d_gu_ini = 0;
       $acc_sp2d_ini = 0;
       $acc_sisa_ang = 0;
+      $tot_keu = 0;
+      $tot_fisik = 0;
       foreach ($res as $value) {
         if($kd_dir!=$value['kdgiat']){
           $nmdir = $this->get_nama($value['kdgiat']);
@@ -2878,6 +2880,11 @@ public function daftar_peng_riil($result,$det){
           $acc_sp2d_gu_ini += $nilai['jumlah'];
           $acc_sp2d_ini += $nilai['jumlah'];
           $acc_sisa_ang += $sisa;
+          $keu = ($jml/$nmdir['jumlah'])*100;
+          $fisik = 100-$keu;
+          $tot_keu+=$keu;
+          $tot_fisik+=$fisik;
+          
           echo '<tr>
                   <td colspan="15" style="border-bottom:1px solid"></td>
                 </tr>';
@@ -2900,8 +2907,8 @@ public function daftar_peng_riil($result,$det){
           echo  '<td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml,2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
                 </tr>';
         }
 
@@ -2929,8 +2936,8 @@ public function daftar_peng_riil($result,$det){
           echo  '<td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml,2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
                 </tr>';
         }
 
@@ -2958,8 +2965,8 @@ public function daftar_peng_riil($result,$det){
           echo  '<td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml,2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
                 </tr>';
         }
 
@@ -2987,8 +2994,8 @@ public function daftar_peng_riil($result,$det){
           echo  '<td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml,2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
                 </tr>';
         }
 
@@ -3017,8 +3024,8 @@ public function daftar_peng_riil($result,$det){
           echo  '<td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml,2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
                 </tr>';
         }
           $kd_dir = $value['kdgiat'];
@@ -3059,8 +3066,8 @@ public function daftar_peng_riil($result,$det){
           echo   '<td style="border-left:1px solid; text-align:right;  ">'.number_format($nilai['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; ">'.number_format($jml,2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; ">'.number_format($sisa,2,",",".").'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
                 </tr>';
           
       // }
@@ -3077,8 +3084,8 @@ public function daftar_peng_riil($result,$det){
               <td style="border:1px solid; text-align:right; font-weight:bold; ">'.number_format($acc_sp2d_ini,2,",",".").'</td>
               <td style="border:1px solid; text-align:right; font-weight:bold;">'.number_format($acc_tot_spp,2,",",".").'</td>
               <td style="border:1px solid; text-align:right; font-weight:bold; ">'.number_format($acc_sisa_ang,2,",",".").'</td>
-              <td style="border:1px solid;">'.'-'.'</td>
-              <td style="border:1px solid; border-right:1px solid;">'.'-'.'</td>
+              <td style="border:1px solid; text-align:center;">'.number_format($tot_keu,2,",",".").'</td>
+              <td style="border:1px solid; text-align:center;">'.number_format($tot_keu,2,",",".").'</td>
             </tr>';
       echo '<tr>
               <td colspan="15" style="border-top:1px solid"></td>
@@ -3086,7 +3093,7 @@ public function daftar_peng_riil($result,$det){
       echo '</table>';
       $html = ob_get_contents();
       ob_clean();
-      $this->create_pdf("Realisasi Per Kegiatan",array(390,210),$html);
+      $this->create_pdf("Lapbul Ristek Per Kegiatan-SubKomponen",array(390,210),$html);
     }
 
     public function rekap_realisasi_daya_serap($dir, $tanggal ) {
@@ -3181,6 +3188,8 @@ public function daftar_peng_riil($result,$det){
       $acc_sp2d_gu_ini = 0;
       $acc_sp2d_ini = 0;
       $acc_sisa_ang = 0;
+      $tot_keu = 0;
+      $tot_fisik = 0;
       foreach ($res as $value) {
         if($kd_dir!=$value['kdgiat']){
           $nmdir = $this->get_nama($value['kdgiat']);
@@ -3195,6 +3204,10 @@ public function daftar_peng_riil($result,$det){
           $acc_sp2d_gu_ini += $nilai['jumlah'];
           $acc_sp2d_ini += $nilai['jumlah'];
           $acc_sisa_ang += $sisa;
+          $keu = ($jml/$nmdir['jumlah'])*100;
+          $fisik = 100-$keu;
+          $tot_keu+=$keu;
+          $tot_fisik+=$fisik;
           echo '<tr>
                   <td colspan="15" style="border-bottom:1px solid"></td>
                 </tr>';
@@ -3211,8 +3224,8 @@ public function daftar_peng_riil($result,$det){
                   <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml,2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
                 </tr>';
         }
 
@@ -3234,8 +3247,8 @@ public function daftar_peng_riil($result,$det){
                   <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml,2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
                 </tr>';
         }
 
@@ -3264,8 +3277,8 @@ public function daftar_peng_riil($result,$det){
                   <td style="border-left:1px solid; text-align:right;  ">'.number_format($nilai['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; ">'.number_format($jml,2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; ">'.number_format($sisa,2,",",".").'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
-                  <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
                 </tr>';
           
       // }
@@ -3291,7 +3304,7 @@ public function daftar_peng_riil($result,$det){
       echo '</table>';
       $html = ob_get_contents();
       ob_clean();
-      $this->create_pdf("Pengajuan UMK","A4-L",$html);
+      $this->create_pdf("Lapbul Ristek Per Kegiatan-Output",array(390,210),$html);
     }
 
     public function rekap_total($dir, $tanggal ) {
@@ -3363,7 +3376,8 @@ public function daftar_peng_riil($result,$det){
       $tot_nilai_57 = 0;
       $tot_sisa=0;
       $acc_alokasi = 0;
-
+      $tot_keu = 0;
+      $tot_fisik = 0;
       foreach ($res as $value) {
         if($kd_dir!=$value['kdgiat']){
           $nmdir = $this->get_nama($value['kdgiat']);
@@ -3389,8 +3403,11 @@ public function daftar_peng_riil($result,$det){
           $tot_nilai_57 += $nilai_57['jumlah'];
           $tot_sisa+=$jml_dipa-$jml_nilai;
           $acc_alokasi += $jml_dipa;
-
           $acc_sisa_ang += $sisa;
+          $keu = ($jml/$nmdir['jumlah'])*100;
+          $fisik = 100-$keu;
+          $tot_keu+=$keu;
+          $tot_fisik+=$fisik;
           echo '<tr>
                   <td colspan="20" style="border-bottom:1px solid"></td>
                 </tr>';
@@ -3411,8 +3428,8 @@ public function daftar_peng_riil($result,$det){
                   <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($nilai_57['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml_dipa,2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($jml_nilai,2,",",".").'</td>
-                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.'-'.'</td>
-                  <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold; ">'.number_format($sisa,2,",",".").'</td>
                   <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
                 </tr>';
@@ -3450,8 +3467,8 @@ public function daftar_peng_riil($result,$det){
                   <td style="border-left:1px solid; text-align:right;  ">'.number_format($nilai_57['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; ">'.number_format($jml_dipa,2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right; ">'.number_format($jml_nilai,2,",",".").'</td>
-                  <td style="border-left:1px solid; text-align:right;  ">'.'-'.'</td>
-                  <td style="border-left:1px solid; text-align:right;  ">'.'-'.'</td>
+                  <td style="border-left:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
+                  <td style="border-left:1px solid; border-right:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
                   <td style="border-left:1px solid; text-align:right;  ">'.number_format($sisa,2,",",".").'</td>
                   <td style="border-left:1px solid; border-right:1px solid;">'.'-'.'</td>
                 </tr>';
@@ -3473,8 +3490,8 @@ public function daftar_peng_riil($result,$det){
         <td style="border:1px solid; text-align:right;  ">'.number_format($tot_nilai_57,2,",",".").'</td>
         <td style="border:1px solid; text-align:right; ">'.number_format($jml_dipa,2,",",".").'</td>
         <td style="border:1px solid; text-align:right; ">'.number_format($jml_nilai,2,",",".").'</td>
-        <td style="border:1px solid; text-align:right;  ">'.'-'.'</td>
-        <td style="border:1px solid; text-align:right;  ">'.'-'.'</td>
+        <td style="border:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
+        <td style="border:1px solid; text-align:center;">'.number_format($keu,2,",",".").'</td>
         <td style="border:1px solid; text-align:right;  ">'.number_format($tot_sisa,2,",",".").'</td>
         <td style="border:1px solid; border-right:1px solid;">'.'-'.'</td>
       </tr>';
@@ -3485,7 +3502,7 @@ public function daftar_peng_riil($result,$det){
       echo '</table>';
       $html = ob_get_contents();
       // ob_clean();
-      $this->create_pdf("Pengajuan UMK","A4-L",$html);
+      $this->create_pdf("Lapbul Ristek Total Per Kegiatan",array(390,210),$html);
     }
 
     public function pajak_orang($data){
