@@ -1819,6 +1819,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
           // array_push($array_transport, $asal." - ".$tujuan, $tiket);
           $jml_uang_harian = $jml_hari * $uang_harian;
           $array_transport[$counter]["rute"] = $asal." - ".$tujuan;
+          $array_transport[$counter]["alat_trans"] = $alat_trans;
           $array_transport[$counter]["harga"] = $tiket;
           $array_airporttax[$counter]["tax"] = $airport_tax;
           $array_transport[$counter]["taxi"] = $taxi_asal + $taxi_tujuan;
@@ -1880,7 +1881,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                         <td style="border-left:1px solid; border-right:1px solid;"></td>
                         <td style="border-left:1px solid; border-right:1px solid;">'.$value["rute"].'</td>
                         <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($value["harga"],0,",",".").'</td>
-                        <td style="border-left:1px solid; border-right:1px solid;"></td>
+                        <td style="border-left:1px solid; border-right:1px solid;">Kendaraan'." ".$value["alat_trans"].'</td>
                       </tr>';
               }
               if($airport_tax>0){
@@ -2384,7 +2385,7 @@ public function daftar_peng_riil($result,$det){
           <td colspan="4"> <br></br><br></br> </td>
         </tr>
         <tr>
-          <td colspan="4">Berdasarkan Surat Perjalanan Dinas (SPD) Tanggal '.$tgl_surat.' Nomor: '.$no_surat.', dengan ini saya menyatakan dengan sesungguhnya bahwa:</td>
+          <td colspan="4">Berdasarkan Surat Perjalanan Dinas (SPD) Tanggal '.$this->konversi_tanggal($tgl_surat).' Nomor: '.$no_surat.', dengan ini saya menyatakan dengan sesungguhnya bahwa:</td>
         </tr>
         <tr>
           <td colspan="4"><br></br><br></br></td>
@@ -2774,7 +2775,7 @@ public function daftar_peng_riil($result,$det){
 
     public function realisasi_daya_serap($dir, $tanggal ) {
       // $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, value  FROM rabfull group by kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun order by kdgiat asc, kdoutput asc, kdsoutput asc, kdkmpnen asc, kdskmpnen asc, kdakun asc ";
-      $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, NMAKUN,  sum(jumlah) as jumlah  FROM rkakl_full where kdgiat like '%$dir%' group by kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun order by kdgiat asc, kdoutput asc, kdsoutput asc, kdkmpnen asc, kdskmpnen asc, kdakun asc ";
+      $sql = " SELECT kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun, NMAKUN  FROM rkakl_full where kdgiat like '%$dir%' group by kdgiat, kdoutput, kdsoutput,kdkmpnen, kdskmpnen, kdakun order by kdgiat asc, kdoutput asc, kdsoutput asc, kdkmpnen asc, kdskmpnen asc, kdakun asc ";
       $res = $this->query($sql);
       ob_start();
       $res_sql = $this->query("SELECT * from rkakl_view where status=1 ");
@@ -2883,7 +2884,7 @@ public function daftar_peng_riil($result,$det){
           echo '<tr>
                   <td style="border-left:1px solid; font-weight:bold;" align="left" >'.$value['kdgiat'].'</td>
                   <td style="border-left:1px solid; font-weight:bold; " colspan="2">'.$nmdir['kdgiat'].'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.$value['volkeg'].'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nmdir['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
@@ -2912,7 +2913,7 @@ public function daftar_peng_riil($result,$det){
           echo '<tr>
                   <td style="border-left:1px solid; font-weight:bold;" align="center">'.$value['kdoutput'].'</td>
                   <td style="border-left:1px solid; font-weight:bold;" colspan="2">'.$nmdir['kdout'].'</td>
-                  <td style="border-left:1px solid;">'.'-'.'</td>
+                  <td style="border-left:1px solid;">'.$value['volkeg'].'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nmdir['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
@@ -2941,7 +2942,7 @@ public function daftar_peng_riil($result,$det){
           echo '<tr>
                   <td style="border-left:1px solid; font-weight:bold;" align="center">'.''.'</td>
                   <td style="border-left:1px solid; font-weight:bold;" colspan="2">'.$value['kdsoutput']."  ".$nmdir['kdsout'].'</td>
-                  <td style="border-left:1px solid;">'.''.'</td>
+                  <td style="border-left:1px solid;">'.$value['volkeg'].'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nmdir['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid;">'.''.'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
@@ -2970,7 +2971,7 @@ public function daftar_peng_riil($result,$det){
           echo '<tr>
                   <td style="border-left:1px solid;"  align="center">'.''.'</td>
                   <td style="border-left:1px solid; font-weight:bold;" colspan="2">'.$value['kdkmpnen']." ".$nmdir['kdkmp'].'</td>
-                  <td style="border-left:1px solid;">'.''.'</td>
+                  <td style="border-left:1px solid;">'.$value['volkeg'].'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nmdir['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid;">'.''.'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
@@ -3000,7 +3001,7 @@ public function daftar_peng_riil($result,$det){
                   <td style="border-left:1px solid" align="center">'.''.'</td>
                   <td style="border-left:1px solid;">'.''.'</td>
                   <td style=" font-weight:bold;" colspan="1">'.$value['kdskmpnen']."  ".$nmdir['kdskmp'].'</td>
-                  <td style="border-left:1px solid;">'.''.'</td>
+                  <td style="border-left:1px solid;">'.$value['volkeg'].'</td>
                   <td style="border-left:1px solid; text-align:right; font-weight:bold;">'.number_format($nmdir['jumlah'],2,",",".").'</td>
                   <td style="border-left:1px solid;">'.''.'</td>
                   <td style="border-left:1px solid;">'.'-'.'</td>
@@ -3032,7 +3033,8 @@ public function daftar_peng_riil($result,$det){
           $sisa = $value['jumlah']-$jml;
           echo '<tr>
                   <td style="border-left:1px solid" align="center">'.''.'</td>
-                  <td style="border-left:1px solid"  colspan="2">'.$value['kdakun']." ".$value['NMAKUN'].'</td>
+                  <td style="border-left:1px solid" align="center">'.''.'</td>
+                  <td  >'.$value['kdakun']." ".$value['NMAKUN'].'</td>
                   <td style="border-left:1px solid;">'.''.'</td>
                   <td style="border-left:1px solid; text-align:right;">'.number_format($value['jumlah'],2,",",".").'</td>';
           if($nilai['jml_lalu']>=50000000){
@@ -3678,7 +3680,7 @@ public function daftar_peng_riil($result,$det){
           $q_akun = " and kdakun like '$kdakun%' "; 
         }  
       }
-      $query = " SELECT SUM(JUMLAH) as jumlah, NMGIAT ".$k_out." ".$k_sout." ".$k_kmp." ".$k_skmp." FROM rkakl_full WHERE kdgiat LIKE '%$kdgiat%' ".$q_out.$q_sout.$q_kmp.$q_skmp.$q_akun;
+      $query = " SELECT SUM(JUMLAH) as jumlah, NMGIAT, CONCAT(sum(VOLKEG),' ',SATKEG) as volkeg ".$k_out." ".$k_sout." ".$k_kmp." ".$k_skmp." FROM rkakl_full WHERE kdgiat LIKE '%$kdgiat%' ".$q_out.$q_sout.$q_kmp.$q_skmp.$q_akun;
       
       
       $res = $this->query($query);
@@ -3691,6 +3693,7 @@ public function daftar_peng_riil($result,$det){
                     "kdkmp" => $data['NMKMPNEN'],
                     "kdskmp" => $data['NMSKMPNEN'],
                     "kdakun" => $data['NMAKUN'],
+                    "volkeg" => "-",
                     "jumlah" => $data['jumlah']
                     );
       return $hasil;
