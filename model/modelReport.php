@@ -290,6 +290,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       // }
       $counter="";
       $id_akun;
+      $nama_item;
       
       while($res=$this->fetch_array($result)){
         $golongan=$res[golongan];
@@ -301,6 +302,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
           // $pot = "";
           // $pph=0;
           $id_akun="521213";
+          $nama_item = substr($res[NMITEM],0,strpos($res[NMITEM], "["));
         }
         //521115
 
@@ -308,12 +310,14 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
           $item_honor = "1";
           $honor_151 += $res[value];
           $id_akun="522151";
+          $nama_item = substr($res[NMITEM],0,strpos($res[NMITEM], "["));
           
         }
         else if($res[kdakun]=="521115"){
           $item_honor = "1";
           $honor_115 += $res[value];
           $id_akun="521115";
+          $nama_item = substr($res[NMITEM],0,strpos($res[NMITEM], "["));
           
         }
         else if($res[kdakun]=="524113"){
@@ -394,18 +398,18 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       // print_r($dt_akun);
       if($honor_115>0){
           $nmr_kuitansi = $this->log_kwitansi($det_giat,"521115");
-          $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "Honorarium",$honor_115,"521115", $nmr_kuitansi);
+          $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, $nama_item,$honor_115,"521115", $nmr_kuitansi);
           echo '<pagebreak />';
       }
       if($honor_151>0){
           $nmr_kuitansi = $this->log_kwitansi($det_giat,"522151");
-          $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "Honorarium",$honor_151,"522151", $nmr_kuitansi);
+          $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, $nama_item,$honor_151,"522151", $nmr_kuitansi);
           echo '<pagebreak />';
       }
       if($honor_213>0){
           // echo "Masuk";
           $nmr_kuitansi = $this->log_kwitansi($det_giat,"521213");
-          $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "Honorarium",$honor_213,"521213", $nmr_kuitansi);
+          $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, $nama_item,$honor_213,"521213", $nmr_kuitansi);
           echo '<pagebreak />';
       }
       if($uang_saku_dalam_113>0){
@@ -2124,6 +2128,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
             //           <td> : Rp. </td>
             //           <td align="right">'."".number_format($total,0,",",".").'</td>
             //         </tr>';
+            if(stripos($item,"honorarium")>=0) $item = "Honorarium";
             echo '<tr>
                       <td width="21%"></td>
                       <td colspan="3">'.$item."&nbsp; &nbsp; &nbsp;".":"."&nbsp; &nbsp;"."Rp. "."&nbsp;".number_format($total,0,",",".").'</td>
@@ -2673,7 +2678,7 @@ public function daftar_peng_riil($result,$det){
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>5. Tiket</td>
+                <td>5. Tiket / Perjalanan</td>
                 <td>: Rp.</td>
                 <td align="right">'.number_format($tiket,2,",",".").'</td>
               </tr>
