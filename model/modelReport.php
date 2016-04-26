@@ -3055,15 +3055,16 @@ public function daftar_peng_riil($result,$det){
           $kdskmp = $value['kdskmpnen'];
           
          // if(($kd_dir!=$value['kdgiat'] and $kdout!=$value['kdoutput'] and $kdsout!=$value['kdsoutput'] and $kdkmp!=$value['kdkmpnen'] and $kdskmp!=$value['kdskmpnen']) or ($kd_dir!=$value['kdgiat']) or ($kd_dir==$value['kdgiat'] and $kdout==$value['kdoutput'] and $kdsout==$value['kdsoutput'] and $kdkmp==$value['kdkmpnen'] and $kdskmp==$value['kdskmpnen'] ) ){
+          $nmdir = $this->get_nama($value['kdgiat'], $value['kdoutput'], $value['kdsoutput'], $value['kdkmpnen'], $value['kdskmpnen'],$value['kdakun'] );
           $nilai = $this->get_realisasi($tanggal, $value['kdgiat'], $value['kdoutput'], $value['kdsoutput'], $value['kdkmpnen'], $value['kdskmpnen'], $value['kdakun']);
           $jml = $nilai['jml_lalu']+$nilai['jumlah'];
-          $sisa = $value['jumlah']-$jml;
+          $sisa = $nmdir['jumlah']-$jml;
           echo '<tr>
                   <td style="border-left:1px solid" align="center">'.''.'</td>
                   <td style="border-left:1px solid" align="center">'.''.'</td>
                   <td  >'.$value['kdakun']." ".$value['NMAKUN'].'</td>
                   <td style="border-left:1px solid;">'.''.'</td>
-                  <td style="border-left:1px solid; text-align:right;">'.number_format($value['jumlah'],2,",",".").'</td>';
+                  <td style="border-left:1px solid; text-align:right;">'.number_format($nmdir['jumlah'],2,",",".").'</td>';
           if($nilai['jml_lalu']>=50000000){
               echo '<td style="border-left:1px solid;">'.number_format($nilai['jml_lalu'],2,",",".").'</td>
                     <td style="border-left:1px solid;">'.'-'.'</td>';
