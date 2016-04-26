@@ -291,7 +291,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       $counter="";
       $id_akun;
       $nama_item;
-      
+      $count_item=0;
       while($res=$this->fetch_array($result)){
         $golongan=$res[golongan];
         $pns = $res[pns];
@@ -350,8 +350,13 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
              // $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$res[kdakun]);
              //  echo '<pagebreak />';
           if($counter!==$res[kdakun]){
-            array_push($dt_akun, $res[kdakun]);
+            // array_push($dt_akun, $res[kdakun]);
+            $dt_akun[$count_item]["kode_akun"]=$res[kdakun];
+            // $dt_akun[$count_item]["nama_item"]=substr($res[NMITEM], 0, strpos($res[NMITEM],"["));
+            $dt_akun[$count_item]["nama_item"]=$res[NMITEM];
+            $dt_akun[$count_item]["value"]=$res[value];
             $counter=$res[kdakun];
+            $count_item++;
           }
         }
         
@@ -437,20 +442,27 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
         echo '<pagebreak />';
       }
 
-      if(count($dt_akun)==1){
-        $nmr_kuitansi = $this->log_kwitansi($det_giat, $dt_akun[0],$id);
-        $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[0], $nmr_kuitansi);
+      // if(count($dt_akun)==1){
+      //   $nmr_kuitansi = $this->log_kwitansi($det_giat, $dt_akun[0],$id);
+      //   $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[0], $nmr_kuitansi);
+      //   echo '<pagebreak />';
+      // }
+      // if(count($dt_akun)>1){
+      //   $nmr_kuitansi = $this->log_kwitansi($det_giat, $dt_akun[0],$id);
+      //   $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[0], $nmr_kuitansi);
+      //   echo '<pagebreak />';
+      //   $nmr_kuitansi = $this->log_kwitansi($det_giat, $dt_akun[1],$id);
+      //   $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[1], $nmr_kuitansi);
+      //   echo '<pagebreak />';
+      // }
+
+      foreach ($dt_akun as $key => $value) {
+        $nmr_kuitansi = $this->log_kwitansi($det_giat, $value["kode_akun"],$id);
+        $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, $value["nama_item"],$value["value"],$value["kode_akun"], $nmr_kuitansi);
         echo '<pagebreak />';
       }
-      if(count($dt_akun)>1){
-        $nmr_kuitansi = $this->log_kwitansi($det_giat, $dt_akun[0],$id);
-        $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[0], $nmr_kuitansi);
-        echo '<pagebreak />';
-        $nmr_kuitansi = $this->log_kwitansi($det_giat, $dt_akun[1],$id);
-        $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$dt_akun[1], $nmr_kuitansi);
-        echo '<pagebreak />';
-        
-      }
+
+      
       if($dinas==1){
         $query = "SELECT no_surat, tgl_surat, golongan, npwp, lokasi,  jabatan, kota_asal, tgl_mulai,tanggal_akhir as tgl_akhir, kota_tujuan, rute, harga_tiket, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima, value, kdakun FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
         // print_r($query);
@@ -459,9 +471,9 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
         $array = $this->fetch_array($result, $det_giat);
         // print_r($array);
         $this->SPPD($result, $det_giat);
-        echo '<pagebreak />';
+        // echo '<pagebreak />';
         $this->Rincian_Biaya_PD($result, $det_giat);
-        echo '<pagebreak />';
+        // echo '<pagebreak />';
         $this->daftar_peng_riil($result, $det_giat);
       }
         // echo "<br>Item Terpilih : ".$item."<br> Honorarium : ".$honor."<br> Uang saku : ".$uang_saku_dalam."Transport Lokal  : ".$transport_lokal;
@@ -2128,7 +2140,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
             //           <td> : Rp. </td>
             //           <td align="right">'."".number_format($total,0,",",".").'</td>
             //         </tr>';
-            if(stripos($item,"honorarium")>=0) $item = "Honorarium";
+            if(strncasecmp($item,"honorarium",10)>=0) $item = "Honorarium";
             echo '<tr>
                       <td width="21%"></td>
                       <td colspan="3">'.$item."&nbsp; &nbsp; &nbsp;".":"."&nbsp; &nbsp;"."Rp. "."&nbsp;".number_format($total,0,",",".").'</td>
@@ -2233,20 +2245,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
               </tr>';
         $no=1;
         $tot_pot=(15/100)*$val;
-        foreach ($data as $value) {
-          if($value[kdakun]==$kd_akun and $value[kdakun]!== "521213" and $value[kdakun]!== "522151"and $value[kdakun]!== "524114"and $value[kdakun]!== "524113"and $value[kdakun]!== "524119" ){
-            $pot = (15/100)*$value[value];
-            $tot_pot +=$pot;
-            $det_item=explode("[",$value[NMITEM] );
-            echo '<tr>
-                    <td>'.$no.". ".$det_item[0].'</td>
-                    <td>Rp. '.number_format($value[value],0,",",".").'</td>
-                    <td>'.$det['pajak'].' %</td>
-                    <td>'."Rp. ".number_format($det['pajak']/100*$value[value],0,",",".").'</td>
-                  </tr>';
-            $no++;
-          }
-          }
+        
           if($item!==""){  
             echo '<tr>
                     <td>1.'.$item.'</td>
@@ -2255,6 +2254,22 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                     <td>'."Rp. ".number_format($det['pajak']/100*$val,0,",",".").'</td>
                   </tr>
                 ';
+          }
+          else{
+            foreach ($data as $value) {
+              if($value[kdakun]==$kd_akun and $value[kdakun]!== "521213" and $value[kdakun]!== "522151"and $value[kdakun]!== "524114"and $value[kdakun]!== "524113"and $value[kdakun]!== "524119" ){
+                $pot = (15/100)*$value[value];
+                $tot_pot +=$pot;
+                $det_item=explode("[",$value[NMITEM] );
+                echo '<tr>
+                        <td>'.$no.". ".$det_item[0].'</td>
+                        <td>Rp. '.number_format($value[value],0,",",".").'</td>
+                        <td>'.$det['pajak'].' %</td>
+                        <td>'."Rp. ".number_format($det['pajak']/100*$value[value],0,",",".").'</td>
+                      </tr>';
+                $no++;
+              }
+          }
           }
           echo '</table>';
          echo '<table style="text-align: left; width: 100%; font-size:0.7em;"  >
@@ -4024,7 +4039,7 @@ public function daftar_peng_riil($result,$det){
         $lama_hari = 1;
         if($identitas != $val[identitas]){
           $identitas = $val[identitas];
-          $row+=1;
+          $row++;
           $no++;
           $tot_honor_perorang = 0;   
           $tot_uangHarian_perorang = 0;   
