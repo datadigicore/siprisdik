@@ -1,9 +1,3 @@
-<?php
- 
-  
-
-?>
-
 <div class="content-wrapper">
   <section class="content-header">
     <h1>
@@ -182,6 +176,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <form action="<?php echo $url_rewrite;?>process/rab/ajukan" method="POST">
+        <input type="hidden" name="idrkakl" value="<?php echo $idrkakl;?>" />
         <div class="modal-header" style="background-color:#111F3F !important; color:white;">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true" style="color:white">×</span></button>
@@ -205,6 +200,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <form action="<?php echo $url_rewrite;?>process/rab/sahkan" method="POST">
+        <input type="hidden" name="idrkakl" value="<?php echo $idrkakl;?>" />
         <div class="modal-header" style="background-color:#111F3F !important; color:white;">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true" style="color:white">×</span></button>
@@ -228,6 +224,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <form action="<?php echo $url_rewrite;?>process/rab/revisi" method="POST">
+        <input type="hidden" name="idrkakl" value="<?php echo $idrkakl;?>" />
         <div class="modal-header" style="background-color:#111F3F !important; color:white;">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true" style="color:white">×</span></button>
@@ -272,6 +269,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <form action="<?php echo $url_rewrite;?>process/rab/delete" method="POST">
+        <input type="hidden" name="idrkakl" value="<?php echo $idrkakl;?>" />
         <div class="modal-header" style="background-color:#111F3F !important; color:white;">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true" style="color:white">×</span></button>
@@ -313,7 +311,8 @@ var table;
         "ajax": {
           "url": "<?php echo $url_rewrite;?>process/rab/table",
           "type": "POST",
-          "data": {'tahun':tahun,
+          "data": {'idrkakl':'<?php echo $idrkakl;?>',
+                    'tahun':tahun,
                     'direktorat':direktorat,
                     'kdoutput':'<?php echo $datarkakl[0]->KDOUTPUT?>',
                     'kdsoutput':'<?php echo $datarkakl[0]->KDSOUTPUT?>',
@@ -392,7 +391,8 @@ var table;
         "ajax": {
           "url": "<?php echo $url_rewrite;?>process/rab/table",
           "type": "POST",
-          "data": {'tahun':tahun,
+          "data": {'idrkakl':'<?php echo $idrkakl;?>',
+                    'tahun':tahun,
                     'direktorat':direktorat }
         },
         <?php if ($_SESSION['direktorat'] == "") { ?>

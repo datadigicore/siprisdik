@@ -7,6 +7,7 @@ switch ($process) {
     $key   = "id";
     $dataArray['url_rewrite'] = $url_rewrite; 
     $dataArray['direktorat'] = $direk; 
+    $dataArray['idrkakl'] = $_POST['idrkakl'];
     $tahun = $_POST['tahun'];
     $direktorat = $_POST['direktorat'];
     // print_r($_POST);die;
@@ -87,7 +88,7 @@ switch ($process) {
           if ($_SESSION['level'] == 2) {
             $button .= '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="btn btn-flat btn-success btn-sm col-sm" data-toggle="modal"><i class="fa fa-check"></i>&nbsp; Ajukan</a>';
           }
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rab/edit/'.$row[0].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i>&nbsp; Edit</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rab/edit/'.$row[0].'/'.$dataArray['idrkakl'].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i>&nbsp; Edit</a>';
           $button .= '<a style="margin:0 2px;" id="btn-del" href="#delete" class="btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-close"></i>&nbsp; Delete</a>';
           $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Pengajuan UMK</a>';
           $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Rincian Keb. Dana</a>';
@@ -115,7 +116,7 @@ switch ($process) {
           if ($_SESSION['level'] == 2) {
             $button .= '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i>&nbsp; Ajukan Revisi</a>';
           }
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rab/edit/'.$row[0].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i>&nbsp; Edit</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rab/edit/'.$row[0].'/'.$dataArray['idrkakl'].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i>&nbsp; Edit</a>';
           if ($row[13] != "") {
             $button .= '<a style="margin:0 2px;" id="btn-pesan" href="#pesanrevisi" class="btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-envelope"></i>&nbsp; Pesan </a>';
           }
@@ -192,7 +193,7 @@ switch ($process) {
     $group='';
     $datatable->get_table_group($table, $key, $column,$where,$group,$dataArray);
     break;
-    case 'table-rkakl':
+  case 'table-rkakl':
     $table = "rkakl_full";
     $key   = "KDGIAT";
     $dataArray['url_rewrite'] = $url_rewrite; 
@@ -299,13 +300,13 @@ switch ($process) {
     break;
   case 'save':
     $mdl_rab->save($_POST);
-    $utility->load("content/rab/?kdoutput=".$_POST['output']."&kdsoutput=".$_POST['soutput']."&kdkmpnen=".$_POST['komp']."&kdskmpnen=".$_POST['skomp']."&tahun=".$_POST['tahun']."","success","Data RAB berhasil dimasukkan ke dalam database");
+    $utility->load("content/rab/".$_POST['idrkakl'],"success","Data RAB berhasil dimasukkan ke dalam database");
     break;
   case 'edit':
     $id_rabview = $_POST['idview'];
     $akun = $mdl_rab->getview($id_rabview);
     $mdl_rab->edit($_POST);
-    $utility->load("content/rab/?kdoutput=".strval($akun['kdoutput'])."&kdsoutput=".strval($akun['kdsoutput'])."&kdkmpnen=".strval($akun['kdkmpnen'])."&kdskmpnen=".strval($akun['kdskmpnen'])."&tahun=".strval($akun['thang']),"success","Data RAB telah diubah");
+    $utility->load("content/rab/".$_POST['idrkakl'],"success","Data RAB telah diubah");
     break;
   case 'ajukan':
     $id_rabview = $_POST['id_rab_aju'];
@@ -321,13 +322,13 @@ switch ($process) {
     if (!$error) {
       $status = '1';
       $mdl_rab->chstatus($id_rabview, $status);
-      $utility->load("content/rab/?kdoutput=".strval($view['kdoutput'])."&kdsoutput=".strval($view['kdsoutput'])."&kdkmpnen=".strval($view['kdkmpnen'])."&kdskmpnen=".strval($view['kdskmpnen'])."&tahun=".strval($view['thang']),"success","Data RAB telah diajukan ke Bendahara Pengeluaran");
+      $utility->load("content/rab/".$_POST['idrkakl'],"success","Data RAB telah diajukan ke Bendahara Pengeluaran");
     }else{
       $kodeError = implode(", ", $kderror);
       if ($error == 1) {
-        $utility->load("content/rab/?kdoutput=".strval($view['kdoutput'])."&kdsoutput=".strval($view['kdsoutput'])."&kdkmpnen=".strval($view['kdkmpnen'])."&kdskmpnen=".strval($view['kdskmpnen'])."&tahun=".strval($view['thang']),"warning","Proses tidak dilanjutkan. Kode Akun ".$kodeError." melebihi Pagu");
+        $utility->load("content/rab/".$_POST['idrkakl'],"warning","Proses tidak dilanjutkan. Kode Akun ".$kodeError." melebihi Pagu");
       }else{
-        $utility->load("content/rab/?kdoutput=".strval($view['kdoutput'])."&kdsoutput=".strval($view['kdsoutput'])."&kdkmpnen=".strval($view['kdkmpnen'])."&kdskmpnen=".strval($view['kdskmpnen'])."&tahun=".strval($view['thang']),"error","Proses tidak dilanjutkan. Terdapat data yang kosong");
+        $utility->load("content/rab/".$_POST['idrkakl'],"error","Proses tidak dilanjutkan. Terdapat data yang kosong");
       }
     }
     break;
@@ -361,7 +362,7 @@ switch ($process) {
     }
     $status = '2';
     $mdl_rab->chstatus($id_rabview, $status);
-    $utility->load("content/rab/?kdoutput=".strval($view['kdoutput'])."&kdsoutput=".strval($view['kdsoutput'])."&kdkmpnen=".strval($view['kdkmpnen'])."&kdskmpnen=".strval($view['kdskmpnen'])."&tahun=".strval($view['thang']),"success","Data RAB telah disahkan");
+    $utility->load("content/rab/".$_POST['idrkakl'],"success","Data RAB telah disahkan");
     break;
   case 'revisi':
     $id_rabview = $_POST['id_rab_rev'];
@@ -370,13 +371,58 @@ switch ($process) {
     $pesan = $_POST['pesan'];
     $mdl_rab->chstatus($id_rabview, $status);
     $mdl_rab->pesanrevisi($id_rabview, $pesan);
-    $utility->load("content/rab/?kdoutput=".strval($view['kdoutput'])."&kdsoutput=".strval($view['kdsoutput'])."&kdkmpnen=".strval($view['kdkmpnen'])."&kdskmpnen=".strval($view['kdskmpnen'])."&tahun=".strval($view['thang']),"success","Data RAB direvisi");
+    $utility->load("content/rab/".$_POST['idrkakl'],"success","Data RAB direvisi");
     break;
   case 'delete':
     $id_rabview = $_POST['id_rab_del'];
-    $akun = $mdl_rab->getview($id_rabview);
+    $akun = $mdl_rab->getakun($id_rabview);
+    for ($i=0; $i < count($akun); $i++) { 
+      $valrab = $akun[$i]->value;
+      $akun = $akun[$i]->kdakun;
+      if ($akun[$i]->kdakun == 521211) {  //belanja bahan
+        $rab = $mdl_rab->getRabItem($akun[$i]);
+        for ($j=0; $j < count($rab); $j++) { 
+          $jum_rkakl = $mdl_rab->getJumRkakl($akun[$i], $rab[$j]);
+          $usulan = $jum_rkakl->usulan;
+          $total =  $usulan - $valrab;
+          $item = $rab[$j]->noitem;
+          $mdl_rab->insertUsulan($akun[$i],$akun, $item, $total);
+        }
+      }elseif($akun[$i]->kdakun != ""){  // bukan belanja bahan
+        $jum_rkakl = $mdl_rab->getJumRkakl($akun[$i]);
+        // $item = $jum_rkakl->noitem;
+        // $pecah_item = explode(",", $item);
+        // $banyakitem = count($pecah_item);
+
+        // for ($x=0; $x < $banyakitem; $x++) { 
+        //   $nilai = $mdl_rab->getRealUsul($akun[$i], $pecah_item[$x]);
+        //   $total = $nilai->usulan;
+        //   $mdl_rab->moveRealisasi($akun[$i], $pecah_item[$x], $total);
+        // }
+        $totalusul = $jum_rkakl->usulan - $valrab;
+        $itemgroup = $jum_rkakl->noitem;
+        $pecah_item = explode(",", $itemgroup);
+        $banyakitem = count($pecah_item);
+
+        $totalperitem = floor($totalusul/$banyakitem);
+        $sisaitem = $totalusul % $banyakitem;
+
+        for ($x=0; $x < $banyakitem; $x++) { 
+          if ($sisaitem == 0) {
+            $mdl_rab->insertUsulan($akun[$i], $akun, $pecah_item[$x], $totalperitem);
+          }else{
+            if ($x == ($banyakitem-1)) {
+              $totalperitem = $totalperitem + $sisaitem;
+              $mdl_rab->insertUsulan($akun[$i], $akun, $pecah_item[$x], $totalperitem);
+            }else{
+              $mdl_rab->insertUsulan($akun[$i], $akun, $pecah_item[$x], $totalperitem);
+            }
+          }
+        }
+      }
+    }
     $mdl_rab->deleterab($id_rabview);
-    $utility->load("content/rab/?kdoutput=".strval($akun['kdoutput'])."&kdsoutput=".strval($akun['kdsoutput'])."&kdkmpnen=".strval($akun['kdkmpnen'])."&kdskmpnen=".strval($akun['kdskmpnen'])."&tahun=".strval($akun['thang']),"success","Data RAB telah dihapus");
+    $utility->load("content/rab/".$_POST['idrkakl'],"success","Data RAB telah dihapus");
     break;
   case 'importrkaklreal':
     if(isset($_POST) && !empty($_FILES['fileimport']['name'])) {

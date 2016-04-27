@@ -1,7 +1,7 @@
 <?php
   error_reporting(E_ALL ^ E_NOTICE);
   session_start();
-  
+  ob_start();  
   header('Cache-Control: no-store, must-revalidate');
   header('Pragma       : no-cache');
   header('Expires      : 0');

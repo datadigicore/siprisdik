@@ -20,6 +20,7 @@
             <h3 class="box-title" style="margin-top:6px;">Edit RAB</h3>
           </div>
           <form action="<?php echo $url_rewrite;?>process/rab/edit" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="idrkakl" value="<?php echo $idrkakl;?>" />
             <input type="hidden" name="idview" value="<?php echo $getview['id'];?>" />
             <div class="box-body">
               <div class="form-group">
