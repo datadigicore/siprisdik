@@ -52,10 +52,11 @@
           $where = $where."OR KDPROGRAM = '$value' ";
         }
       }
-      $query  = "SELECT KDGIAT, NMGIAT FROM rkakl_full $where GROUP BY KDGIAT";
+      $query  = "SELECT KDPROGRAM, KDGIAT, NMGIAT FROM rkakl_full $where GROUP BY KDGIAT";
       $result = $this->query($query);
       $i=0;
       while($fetch  = $this->fetch_object($result)) {
+        $data['KDPROGRAM'][$i] = $fetch->KDPROGRAM;
         $data['KDGIAT'][$i] = $fetch->KDGIAT;
         $data['NMGIAT'][$i] = $fetch->NMGIAT;
         $i++;
@@ -72,6 +73,17 @@
       while($fetch  = $this->fetch_object($result)) {
         $data['KDOUTPUT'][$i] = $fetch->KDOUTPUT;
         $data['NMOUTPUT'][$i] = $fetch->NMOUTPUT;
+        $i++;
+      }
+      return $data;
+    }
+    public function getGroup() {
+      $query  = "SELECT kode, nama FROM  grup as r";
+      $result = $this->query($query);
+      $i=0;
+      while($fetch  = $this->fetch_object($result)) {
+        $data['kode'][$i] = $fetch->kode;
+        $data['nama'][$i] = $fetch->nama;
         $i++;
       }
       return $data;
@@ -93,11 +105,12 @@
         }
       }
 
-      $query  = "SELECT KDGIAT ,KDOUTPUT, NMOUTPUT FROM rkakl_full as r 
+      $query  = "SELECT KDPROGRAM, KDGIAT ,KDOUTPUT, NMOUTPUT FROM rkakl_full as r 
                 $where group by r.KDGIAT, r.KDOUTPUT";
       $result = $this->query($query);
       $i=0;
       while($fetch  = $this->fetch_object($result)) {
+        $data['KDPROGRAM'][$i] = $fetch->KDPROGRAM;
         $data['KDGIAT'][$i] = $fetch->KDGIAT;
         $data['KDOUTPUT'][$i] = $fetch->KDOUTPUT;
         $data['NMOUTPUT'][$i] = $fetch->NMOUTPUT;

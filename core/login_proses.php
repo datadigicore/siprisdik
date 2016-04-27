@@ -20,6 +20,7 @@
         $_SESSION['email']      = $result->email;
         $_SESSION['level']      = $result->level;
         $_SESSION['direktorat'] = $result->direktorat;
+        $_SESSION['kdgrup']     = $result->kdgrup;
         $_SESSION['expire']     = time() + config::$session_time;
         $utility->location_goto("content/home");
       }

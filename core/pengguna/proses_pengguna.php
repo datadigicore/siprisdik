@@ -3,6 +3,8 @@ include 'config/application.php';
 
 $sess_id      = $_SESSION['user_id'];
 $id           = $_SESSION['id'];
+$id_data      = $purifier->purify($_POST[id]);
+$kode         = $purifier->purify($_POST[kode]);
 $name         = $purifier->purify($_POST[name]);
 $username     = $purifier->purify($_POST[username]);
 $password     = $utility->sha512($_POST[password]);
@@ -10,12 +12,15 @@ $newpassword  = $utility->sha512($_POST[newpass]);
 $newpassword2 = $utility->sha512($_POST[newpass2]);
 $email        = $purifier->purify($_POST[email]);
 $level        = $purifier->purify($_POST[level]);
-$kdprogram    = $purifier->purify($_POST[kdprogram]);
-$direktorat   = $purifier->purify($_POST[direktorat]);
+$kdprogram    = $purifier->purifyArray($_POST[kdprogram]);
+$direktorat   = $purifier->purifyArray($_POST[direktorat]);
 $kdoutput     = $purifier->purifyArray($_POST[kdoutput]);
 $status       = $purifier->purify($_POST[status]);
 
 $strKdoutput = "";
+$strKdprogram = "";
+$strDirektorat = "";
+
 foreach ($kdoutput as $value) {
   if($strKdoutput==""){
     $strKdoutput = $value;
@@ -23,9 +28,25 @@ foreach ($kdoutput as $value) {
     $strKdoutput = $strKdoutput.",".$value;
   }
 }
+foreach ($kdprogram as $value) {
+  if($strKdprogram==""){
+    $strKdprogram = $value;
+  } else {
+    $strKdprogram = $strKdprogram.",".$value;
+  }
+}
+foreach ($direktorat as $value) {
+  if($strDirektorat==""){
+    $strDirektorat = $value;
+  } else {
+    $strDirektorat = $strDirektorat.",".$value;
+  }
+}
 
 $data_pengguna = array(
   "id"           => $id,
+  "id_data"      => $id_data,
+  "kode"         => $kode,
   "name"         => $name,
   "username"     => $username,
   "password"     => $password,
@@ -33,8 +54,8 @@ $data_pengguna = array(
   "newpassword2" => $newpassword2,
   "email"        => $email,
   "level"        => $level,
-  "kdprogram"    => $kdprogram,
-  "direktorat"   => $direktorat,
+  "kdprogram"    => $strKdprogram,
+  "direktorat"   => $strDirektorat,
   "kdoutput"     => $strKdoutput,
   "status"       => $status
 );
@@ -67,11 +88,23 @@ switch ($process) {
           return 'Operator BPP';
         }
       }),
-      array( 'db' => 'direktorat',   'dt' => 6 ),
+      array( 'db' => 'kdgrup',   'dt' => 6 ),
       array( 'db' => 'level',   'dt' => 7 ),
       array( 'db' => 'status',  'dt' => 8 )
     );
     $where = "level != 0";
+    $datatable->get_table($table, $key, $column, $where);
+  break;
+  case 'table-group':
+    $table = "grup";
+    $key   = "id";
+    $column = array(
+      array( 'db' => 'id',      'dt' => 0 ),
+      array( 'db' => 'kode',  'dt' => 1 ),
+      array( 'db' => 'nama',  'dt' => 2),
+      array( 'db' => 'kdoutput',  'dt' => 3 )
+    );
+    $where = "";
     $datatable->get_table($table, $key, $column, $where);
   break;
   case 'activate':
@@ -95,6 +128,20 @@ switch ($process) {
     // echo $strKdoutput;
     $pengguna->insertPengguna($data_pengguna);
     $utility->load("content/adduser","success","Data berhasil ditambahkan");
+  break;
+  case 'add-group':
+    
+    // $strKdoutput = "";
+    // foreach ($kdoutput as $value) {
+    //   if($strKdoutput==""){
+    //     $strKdoutput = $value;
+    //   } else {
+    //     $strKdoutput = $strKdoutput.",".$value;
+    //   }
+    // }
+    // echo $strKdoutput;
+    $pengguna->insertGroup($data_pengguna);
+    $utility->load("content/addgroup","success","Data berhasil ditambahkan");
   break;
   case 'edt':
     $pengguna->updatePengguna($data_pengguna);
@@ -124,6 +171,10 @@ switch ($process) {
       $_POST['password'] = $utility->sha512($_POST['password']);
     }
     $pengguna->editPengguna($purifier->purifyArray($_POST));
+    $utility->load("content/user","success","Data Pengguna berhasil diperbaharui");
+  break;
+  case 'edit-group':
+    $pengguna->editGrup($data_pengguna);
     $utility->load("content/user","success","Data Pengguna berhasil diperbaharui");
   break;
   case 'delete':

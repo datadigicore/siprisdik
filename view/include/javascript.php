@@ -41,3 +41,5 @@
   <!-- jQuery Mask -->
   <script src="<?php echo $url_rewrite;?>static/dist/js/jquery.mask.js"></script>
   <script src="<?php echo $url_rewrite;?>static/dist/js/jquery.mask.min.js"></script>
+  <!-- validation -->
+  <script src="<?php echo $url_rewrite;?>static/plugins/jquery-validation/jquery.validate.min.js"></script>

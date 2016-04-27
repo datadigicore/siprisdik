@@ -26,6 +26,8 @@ else {
     if ($_SESSION['level'] == 0) {
       switch ($data[1]) {
         case 'user':
+          $kdprog = $mdl_rab->getProg();
+          $group = $pengguna->getGroup();
           include ('view/content/pengguna.php');
         break;
         case 'edit_profile':
@@ -35,8 +37,12 @@ else {
           include ('view/content/edit_pass.php');
         break;
         case 'adduser':
-          $kdprog = $mdl_rab->getProg();
+          $group = $pengguna->getGroup();
           include ('view/content/pengguna-add.php');
+        break;
+        case 'addgroup':
+          $kdprog = $mdl_rab->getProg();
+          include ('view/content/grup-add.php');
         break;
         case 'rkakl':
           include ('view/content/rkakl.php');
