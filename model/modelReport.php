@@ -281,7 +281,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
         $kondisi_akun = " rab.rabview_id='$rabv_id' and concat(rab.npwp,rab.nip) like '$npwp_dan_nip%' order by rab.kdakun, rab.id asc ";
       }
       // $result = $this->query("SELECT rab.alat_trans, rab.kota_asal, rab.kota_tujuan, rab.lama_hari, rab.tgl_mulai, rab.tgl_akhir, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rab.rabview_id='$rabv_id' and rab.npwp='$npwp' order by rab.kdakun asc ");
-      $sql = "SELECT rab.penerima, rab.nip, rab.jabatan, rab.pns, rab.golongan, rab.kdakun, rkkl.NMGIAT, rab.value, rab.pajak, rab.ppn, rab.pph, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM, rab.tanggal_akhir, rab.lokasi FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where ".$kondisi_akun." ";
+      $sql = "SELECT rab.penerima, rab.nip, rab.jabatan, rab.pns, rab.golongan, rab.kdakun, rkkl.NMGIAT, rab.kota_tujuan, rab.biaya_akom, rab.value, rab.pajak, rab.ppn, rab.pph, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM, rab.tanggal_akhir, rab.lokasi, rab.deskripsi FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where ".$kondisi_akun." ";
       // print($sql);
       $result = $this->query($sql);
       // while($res=$this->fetch_array($result)){
@@ -343,16 +343,23 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
           }
         }
         else if($res[kdakun]=="524119"){
-          $item = "Perjalanan Dinas Keluar";
-          $dinas=1;
+          if($res[kota_tujuan]!=""){
+            $item = "Perjalanan Dinas Keluar";
+            $dinas=1;
+          }
+          else{
+            $dt_akun[$count_item]["kode_akun"]=$res[kdakun];
+            $dt_akun[$count_item]["nama_item"]="Akomodasi";
+            $dt_akun[$count_item]["value"]=$res[biaya_akom];
+            $counter=$res[kdakun];
+            $count_item++;
+          }
+          
         }
         else{
-             // $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, "",0,$res[kdakun]);
-             //  echo '<pagebreak />';
+
           if($counter!==$res[kdakun]){
-            // array_push($dt_akun, $res[kdakun]);
             $dt_akun[$count_item]["kode_akun"]=$res[kdakun];
-            // $dt_akun[$count_item]["nama_item"]=substr($res[NMITEM], 0, strpos($res[NMITEM],"["));
             $dt_akun[$count_item]["nama_item"]=$res[NMITEM];
             $dt_akun[$count_item]["value"]=$res[value];
             $counter=$res[kdakun];
@@ -457,6 +464,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       // }
 
       foreach ($dt_akun as $key => $value) {
+        // if(strpos($value["nama_item"],"[")>=0) $value["nama_item"] = substr($value["nama_item"], 0,stripos($value["nama_item"], "["));
         $nmr_kuitansi = $this->log_kwitansi($det_giat, $value["kode_akun"],$id);
         $this->Kuitansi_Honor_Uang_Saku($result, $det_giat, $value["nama_item"],$value["value"],$value["kode_akun"], $nmr_kuitansi);
         echo '<pagebreak />';
@@ -471,9 +479,9 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
         $array = $this->fetch_array($result, $det_giat);
         // print_r($array);
         $this->SPPD($result, $det_giat);
-        // echo '<pagebreak />';
+        echo '<pagebreak />';
         $this->Rincian_Biaya_PD($result, $det_giat);
-        // echo '<pagebreak />';
+        echo '<pagebreak />';
         $this->daftar_peng_riil($result, $det_giat);
       }
         // echo "<br>Item Terpilih : ".$item."<br> Honorarium : ".$honor."<br> Uang saku : ".$uang_saku_dalam."Transport Lokal  : ".$transport_lokal;
@@ -1418,6 +1426,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       $penerima;
       $jabatan;
       $total=0;
+      $uraian_acara;
       // echo " NOmor KW : ".$nmr_kw;
       if($item==""){
         foreach ($data as $value) {
@@ -1425,6 +1434,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
              $total += $value[value];
              $penerima = $value[penerima];
              $npwp = $value[npwp];
+             if($value[deskripsi]!="") $uraian_acara = $value[deskripsi];
           }
         }
       }
@@ -1432,6 +1442,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
         foreach ($data as $value) {
            $penerima = $value[penerima];
            $jabatan = $value[jabatan];
+           if($value[deskripsi]!="") $uraian_acara = $value[deskripsi];
            break;
         }
         $total=$val;
@@ -1460,7 +1471,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                     <tr>
                         <td align="left">Untuk Pembayaran</td>
                         <td align="left">: </td>
-                        <td></td>
+                        <td colspan="2">'.$item." di lingkungan ".$det['nama_direktorat'].", dalam rangka ".$uraian_acara.'</td>
                         
                     </tr>                
 
@@ -2058,6 +2069,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
     //Kuitansi Honor Dan Uang Saku
     public function Kuitansi_Honor_Uang_Saku($data,$det,$item,$val,$kd_akun, $nmr_kw) {
       $penerima;
+      $uraian_acara;
       $total=0;
       $pph;
       // echo "Pajak Pot: ".$det['pajak'];
@@ -2067,6 +2079,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
              $total += $value[value];
              $penerima = $value[penerima];
              $npwp = $value[npwp];
+             if($value[deskripsi]!="") $uraian_acara = $value[deskripsi];
           }
           $tanggal_akhir = $value[tanggal_akhir];
           $lokasi = $value[lokasi];
@@ -2077,6 +2090,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
           $penerima = $value[penerima];
           $tanggal_akhir = $value[tanggal_akhir];
           $lokasi = $value[lokasi];
+          if($value[deskripsi]!="") $uraian_acara = $value[deskripsi];
           break;
         }
         $total=$val;
@@ -2115,7 +2129,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                     <tr>
                         <td align="left">Untuk Pembayaran</td>
                         <td align="left">: </td>
-                        <td colspan="2">'.$item." di lingkungan ".$det['nama_direktorat'].'</td>
+                        <td colspan="2">'.$item." di lingkungan ".$det['nama_direktorat'].", dalam rangka ".$uraian_acara.'</td>
                         
                     </tr>'; 
          echo  '</table>';
