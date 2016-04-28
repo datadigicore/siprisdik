@@ -36,7 +36,7 @@
                 </td>
               </tr>
               <?php if ($_SESSION['direktorat'] == "") { ?>
-              <tr>
+              <!-- <tr>
                 <td><label>Direktorat</label></td>
                   <td>
                     <select id="direktorat2" name="direktorat2" class="form-control" onchange="search()">
@@ -46,15 +46,15 @@
                       }?>
                     </select>
                   </td>
-              </tr>
+              </tr> -->
               <?php } else{ ?>
-              <tr>
+              <!-- <tr>
                 <td><label>Direktorat</label></td>
                 <td>
                   <label><?php echo $direk[$_SESSION['direktorat']];?></label>
                   <input type="hidden" id="direktorat2" name="direktorat2" value="<?php echo $_SESSION['direktorat']; ?>" />
                 </td>
-              </tr>
+              </tr> -->
               <?php } ?>
             </table>
             <table id="table" class="display table table-bordered table-striped " cellspacing="0" width="100%">
