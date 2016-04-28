@@ -18,9 +18,9 @@
             <li class="active"><a href="#tab_6" data-toggle="tab" aria-expanded="true"><b>Surat Pertanggung Jawaban Belanja</b></a></li>
             <li><a href="#tab_5" data-toggle="tab" aria-expanded="true"><b>Rincian Permintaan Pengeluaran</b></a></li>
             <li ><a href="#tab_7" data-toggle="tab" aria-expanded="true"><b>Surat Perintah <br>Pembayaran</b></a></li>
-            <li ><a href="#tab_8" data-toggle="tab" aria-expanded="true"><b>Realisasi Daya Serap Per kegiatan</b></a></li>
-            <li ><a href="#tab_9" data-toggle="tab" aria-expanded="true"><b>Rekap Realisasi Daya Serap Per kegiatan</b></a></li>
-            <li ><a href="#tab_10" data-toggle="tab" aria-expanded="true"><b>Rekap Total Realisasi Daya Serap</b></a></li>
+            <li ><a href="#tab_8" data-toggle="tab" aria-expanded="true"><b>Rekap Rincian</b></a></li>
+            <li ><a href="#tab_9" data-toggle="tab" aria-expanded="true"><b>Rekap per Output & Akun</b></a></li>
+            <li ><a href="#tab_10" data-toggle="tab" aria-expanded="true"><b>Rekap per Output</b></a></li>
             <li ><a href="#tab_11" data-toggle="tab" aria-expanded="true"><b>Rekapitulasi Pajak Per Orang</b></a></li>
             
             
