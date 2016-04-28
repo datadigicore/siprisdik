@@ -42,7 +42,33 @@
       }
       return $data;
     }
+    public function getKewenangan($kdgrup){
+      $where = "";
+      if($where == ""){
+        $where = "WHERE kode = '$kdgrup' ";
+      } else {
+        $where = $where."OR kode = '$kdgrup' ";
+      }
+      
+      $query  = "SELECT kdoutput FROM grup $where LIMIT 1";
+      $result = $this->query($query);
+      $i=0;
+      while($fetch  = $this->fetch_object($result)) {
+        $str = explode(",", $fetch->kdoutput);
+        $i=0;
+        foreach ($str as $value) {
 
+          $splitted = explode("-", $value);
+          // if(!in_array($splitted[0], $data['kdprogram']))
+          $data['kdprogram'][$i]=$splitted[0];
+          $data['kdgiat'][$i]=$splitted[1];
+          $data['kdoutput'][$i]=$splitted[2];
+          $i++;
+          # code...
+        }
+      }
+      return $data;
+    }
     public function getDirektorat($kdProg){
       $where = "";
       foreach ($kdProg as $value) {
@@ -1385,6 +1411,31 @@
       $rkakl = $this->fetch_object($result);
       $rsDirektorat = $rkakl->KDGIAT;
       if($direktorat == $rsDirektorat){
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    public function cekRkaklGrup($id,$kdgrup){
+
+      $query  = "SELECT KDPROGRAM,KDGIAT,KDOUTPUT FROM rkakl_full
+                            WHERE IDRKAKL   ='$id'
+                            LIMIT 1";
+      $query2  = "SELECT kdoutput FROM grup
+                            WHERE kode   ='$kdgrup'
+                            LIMIT 1";
+
+      $result    = $this->query($query);
+      $rkakl = $this->fetch_object($result);
+      $rsKewenangan = $rkakl->KDPROGRAM.'-'.$rkakl->KDGIAT.'-'.$rkakl->KDOUTPUT;
+
+      $result2    = $this->query($query2);
+      $grup = $this->fetch_object($result2);
+      $rsKewenangan2 = $grup->kdoutput;
+      $arrKewenangan2 = explode(",", $rsKewenangan2);
+      // print_r($arrKewenangan2);exit;
+      if(in_array($rsKewenangan, $arrKewenangan2)){
         return true;
       } else {
         return false;

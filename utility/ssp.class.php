@@ -579,6 +579,97 @@ class SSP {
         );
     }
 
+    static function union ( $request, $conn, $table, $primaryKey, $columns, $arrayWhere, $groupby=null, $dataArray=null )
+    {
+        $bindings = array();
+        $db = self::db( $conn );
+        $localWhereResult = array();
+        $localWhereAll = array();
+        $whereAllSql = '';
+        $group = '';
+
+        // Build the SQL query string from the request
+        $limit = self::limit( $request, $columns );
+        $order = self::order( $request, $columns );
+        $where = self::filter( $request, $columns, $bindings );
+        if ( $groupby ) {
+            $group =' GROUP BY '.$groupby;
+        }
+        // $whereResult = self::_flatten( $whereResult );
+        // $whereAll = self::_flatten( $whereAll );
+
+        // if ( $whereResult ) {
+        //     $where = $where ?
+        //         $where .' AND '.$whereResult :
+        //         'WHERE '.$whereResult;
+        // }
+
+        // if ( $whereAll ) {
+        //     $where = $where ?
+        //         $where .' AND '.$whereAll :
+        //         'WHERE '.$whereAll;
+
+        //     $whereAllSql = 'WHERE '.$whereAll;
+        // }
+        // Main query to actually get the data
+        $qry ="";
+        if($arrayWhere.length!=0){
+            foreach ($arrayWhere as $key => $value) {
+                if($qry == ""){
+                    $qry .="SELECT SQL_CALC_FOUND_ROWS ".implode(", ",self::pluck($columns, 'db'))."
+                     FROM `$table` WHERE $value
+                     $group";
+                } else {
+                    $qry .=" UNION SELECT ".implode(", ",self::pluck($columns, 'db'))."
+                     FROM `$table` WHERE $value
+                     $group";
+                }
+            }
+        } else {
+            $qry .="SELECT SQL_CALC_FOUND_ROWS ".implode(", ",self::pluck($columns, 'db'))."
+                     FROM `$table`
+                     $group";
+        }
+        
+        
+
+        $data = self::sql_exec( $db, $bindings,
+            "$qry
+             $order
+             $limit"
+        );
+
+        // echo "SELECT SQL_CALC_FOUND_ROWS ".implode(", ",self::pluck($columns, 'db'))."
+        //      FROM `$table` join `$table2`
+        //      ON $on
+        //      $where
+        //      $group
+        //      $order
+        //      $limit";exit;
+        // Data set length after filtering
+        $resFilterLength = self::sql_exec( $db,
+            "SELECT FOUND_ROWS()"
+        );
+        $recordsFiltered = $resFilterLength[0][0];
+
+        // Total data set length
+        // $resTotalLength = self::sql_exec( $db, $bindings,
+        //     "SELECT COUNT({$primaryKey})
+        //      FROM   `$table` ".
+        //     $whereAllSql
+        // );
+        // $recordsTotal = $resTotalLength[0][0];
+
+        /*
+         * Output
+         */
+        return array(
+            "draw"            => intval( $request['draw'] ),
+            "recordsTotal"    => intval( $recordsTotal ),
+            "recordsFiltered" => intval( $recordsFiltered ),
+            "data"            => self::data_output2( $columns, $data, $dataArray )
+        );
+    }
 
     /**
      * Connect to the database

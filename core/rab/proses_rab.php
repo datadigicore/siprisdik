@@ -199,27 +199,36 @@ switch ($process) {
     $dataArray['url_rewrite'] = $url_rewrite; 
     // $dataArray['direktorat'] = $direk; 
     $tahun = $_POST['tahun'];
-    $direktorat = $_POST['direktorat'];
+    $kdgrup = $_POST['kdgrup'];
+    $kewenangan = $mdl_rab->getKewenangan($kdgrup);
+    $arrKdprogram = $kewenangan['kdprogram'];
+    $arrDirektorat = $kewenangan['kdgiat'];
+    $arrKdoutput = $kewenangan['kdoutput'];
+
     $column = array(
-      array( 'db' => 'KDGIAT',      'dt' => 0 ),
-      array( 'db' => 'NMGIAT',      'dt' => 1),
+      array( 'db' => 'KDGIAT',      'dt' => 0, 'formatter' => function($d,$row){
+        return $row[0];
+      }),
+      array( 'db' => 'NMGIAT',      'dt' => 1, 'formatter' => function($d,$row){
+        return $row[1];
+      }),
       array( 'db' => 'KDOUTPUT',      'dt' => 2, 'formatter' => function($d,$row){
-        return $d." - ".$row[10];
+        return $row[2]." - ".$row[10];
       }),
       array( 'db' => 'KDSOUTPUT',      'dt' => 3, 'formatter' => function($d,$row){
-        return $d." - ".$row[11];
+        return $row[3]." - ".$row[11];
       }),
       array( 'db' => 'KDKMPNEN',      'dt' => 4, 'formatter' => function($d,$row){
-        return$d." - ". $row[12];
+        return $row[4]." - ". $row[12];
       }),
       array( 'db' => 'KDSKMPNEN',      'dt' => 5, 'formatter' => function($d,$row){
-        return $d." - ".$row[13];
+        return $row[5]." - ".$row[13];
       }),
       array( 'db' => 'SUM(JUMLAH)',      'dt' => 6, 'formatter' => function($d,$row){
-        return number_format($d,0,".",".");
+        return number_format($row[6],0,".",".");
       }),
       array( 'db' => 'SUM(realisasi)',      'dt' => 7, 'formatter' => function($d,$row){
-        if(is_null($d)){
+        if(is_null($row[7])){
           return 0;
         } else {
           return number_format(abs($d),0,".",".");
@@ -227,10 +236,10 @@ switch ($process) {
         
       }),
       array( 'db' => 'SUM(usulan)',      'dt' => 8, 'formatter' => function($d,$row){
-        if(is_null($d)){
+        if(is_null($row[8])){
           return 0;
         } else {
-          return number_format($d,0,".",".");
+          return number_format($row[8],0,".",".");
         }
         
       }),
@@ -253,19 +262,54 @@ switch ($process) {
       array( 'db' => 'IDRKAKL',      'dt' => 14),
       //kode
     );
-    $where="";
+    $where=[];
+    if($_SESSION['level']!=0){
+      $i=0;
+      foreach ($arrKdprogram as $key => $value) {
+        # code...
+        if ($where[$i] == "") {
+          $where[$i] .= 'KDPROGRAM = "'.$value.'"';
+        }else{
+          $where[$i] .= ' AND KDPROGRAM = "'.$value.'"';
+        }
+        $i++;
+      }
+      $i=0;
+      foreach ($arrDirektorat as $key => $value) {
+        # code...
+        if ($where[$i] == "") {
+          $where[$i] .= 'KDGIAT = "'.$value.'"';
+        }else{
+          $where[$i] .= ' AND KDGIAT = "'.$value.'"';
+        }
+        $i++;
+      }
+      $i=0;
+      foreach ($arrKdoutput as $key => $value) {
+        # code...
+        if ($where[$i] == "") {
+          $where[$i] .= 'KDOUTPUT= "'.$value.'"';
+        }else{
+          $where[$i] .= ' AND KDOUTPUT = "'.$value.'"';
+        }
+        $i++;
+      }
+    }
+    
     // if ($tahun != "") {
     //   $where = 'thang = "'.$tahun.'"';
     // }
-    if ($direktorat != "") {
-      if ($where == "") {
-        $where .= 'KDGIAT = "'.$direktorat.'"';
-      }else{
-        $where .= 'AND KDGIAT = "'.$direktorat.'"';
-      }
-    }
+    // print_r($where);exit;
+    // if ($kewenangan['kdprogram'].) {
+    //   if ($where == "") {
+    //     $where .= 'KDGIAT = "'.$direktorat.'"';
+    //   }else{
+    //     $where .= 'AND KDGIAT = "'.$direktorat.'"';
+    //   }
+    // }
+
     $group='KDOUTPUT, KDSOUTPUT, KDKMPNEN, KDSKMPNEN';
-    $datatable->get_table_group($table, $key, $column,$where,$group,$dataArray);
+    $datatable->get_table_union($table, $key, $column,$where,$group,$dataArray);
     break;
   case 'getnpwp':
     $jenis = $data[3];

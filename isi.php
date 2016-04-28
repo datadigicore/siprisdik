@@ -180,7 +180,7 @@ else {
         break;
         case 'rab':
           if($data[2]=='tambah'){
-            $direktorat = $_SESSION['direktorat'];
+            $kdgrup = $_SESSION['kdgrup'];
             // $tahun = $mdl_rab->getYear();
             // if(isset($_GET['kdoutput']) && isset($_GET['kdsoutput']) && isset($_GET['kdkmpnen']) && isset($_GET['kdskmpnen']))
             $idrkakl=$data[3];
@@ -188,7 +188,7 @@ else {
             if($cek)
             {
 
-                  $cek = $mdl_rab->cekRkaklDirektorat($idrkakl,$direktorat);
+                  $cek = $mdl_rab->cekRkaklGrup($idrkakl,$kdgrup);
                   if($cek==true){
                     $datarkakl = $mdl_rab->getrkaklfull3($idrkakl);
                     include ('view/content/rab-tambah.php');
@@ -215,7 +215,7 @@ else {
             }
             include ('view/content/rab-edit.php');
           } else {
-            $direktorat = $_SESSION['direktorat'];
+            $kdgrup = $_SESSION['kdgrup'];
             // $tahun = $mdl_rab->getYear();
             // if(isset($_GET['kdoutput']) && isset($_GET['kdsoutput']) && isset($_GET['kdkmpnen']) && isset($_GET['kdskmpnen']))
             // print_r($data[2]);exit;
@@ -223,7 +223,7 @@ else {
             $cek = $mdl_rab->cekRkaklEksis($idrkakl);
             if($cek)
                 {
-                  $cek = $mdl_rab->cekRkaklDirektorat($idrkakl,$direktorat);
+                  $cek = $mdl_rab->cekRkaklGrup($idrkakl,$kdgrup);
                   if($cek==true){
                     $datarkakl = $mdl_rab->getrkaklfull3($idrkakl);
                   

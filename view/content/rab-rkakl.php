@@ -296,7 +296,7 @@ var table;
           "url": "<?php echo $url_rewrite;?>process/rab/table-rkakl",
           "type": "POST",
           "data": {'tahun':tahun,
-                    'direktorat':direktorat }
+                    'kdgrup':'<?php echo $_SESSION['kdgrup'] ?>' }
         },
         <?php if ($_SESSION['direktorat'] == "") { ?>
           "columnDefs" : [

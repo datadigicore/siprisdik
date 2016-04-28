@@ -26,6 +26,14 @@ class datatable extends config {
             SSP::simplewheregroup( $_POST, $sql_details, $table, $primaryKey, $columns, $where,$group, $dataArray)
         );        
     }
+    function get_table_union($table, $primaryKey, $columns, $where, $group, $dataArray){
+        $config = new config();
+        $sql_details = $config->sql_details();
+        require( 'ssp.class.php' );
+        echo json_encode(
+            SSP::union( $_POST, $sql_details, $table, $primaryKey, $columns, $where,$group, $dataArray)
+        );        
+    }
     function get_table_join($table,$table2, $primaryKey, $columns, $on, $where, $group, $dataArray){
         $config = new config();
         $sql_details = $config->sql_details();
