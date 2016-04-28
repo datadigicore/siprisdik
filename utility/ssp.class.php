@@ -613,7 +613,7 @@ class SSP {
         // }
         // Main query to actually get the data
         $qry ="";
-        if($arrayWhere.length!=0){
+        if(count($arrayWhere)!=0){
             foreach ($arrayWhere as $key => $value) {
                 if($qry == ""){
                     $qry .="SELECT SQL_CALC_FOUND_ROWS ".implode(", ",self::pluck($columns, 'db'))."

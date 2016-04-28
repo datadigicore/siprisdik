@@ -210,7 +210,7 @@ switch ($process) {
         return $row[0];
       }),
       array( 'db' => 'NMGIAT',      'dt' => 1, 'formatter' => function($d,$row){
-        return $row[1];
+        return $row[0]." - ".$row[1];
       }),
       array( 'db' => 'KDOUTPUT',      'dt' => 2, 'formatter' => function($d,$row){
         return $row[2]." - ".$row[10];
