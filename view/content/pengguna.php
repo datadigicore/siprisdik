@@ -367,7 +367,8 @@
         "type": "POST"
       },
       "columnDefs" : [
-        {"targets" : 0},
+        {"targets" : 0,
+         "visible" : false},
         {"targets" : 1},
         {"targets" : 2},
         {"targets" : 3,"visible" : false},
