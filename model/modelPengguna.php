@@ -157,6 +157,11 @@
       $result = $this->query($query);
       return $result;
     }
+    public function deleteGroup($id) {
+      $query = "update grup set status=0 where kode='$id'";
+      $result = $this->query($query);
+      return $result;
+    }
     public function activatePengguna($id) {
       $query = "update pengguna set status = 1 where id='$id'";
       $result = $this->query($query);
