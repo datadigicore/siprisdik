@@ -224,10 +224,10 @@ switch ($process) {
       array( 'db' => 'KDSKMPNEN',      'dt' => 5, 'formatter' => function($d,$row){
         return $row[5]." - ".$row[13];
       }),
-      array( 'db' => 'SUM(JUMLAH)',      'dt' => 6, 'formatter' => function($d,$row){
+      array( 'db' => 'SUM(JUMLAH) as JUMLAH', 'field' => 'JUMLAH', 'as' => 'JUMLAH',    'dt' => 6, 'formatter' => function($d,$row){
         return number_format($row[6],0,".",".");
       }),
-      array( 'db' => 'SUM(realisasi)',      'dt' => 7, 'formatter' => function($d,$row){
+      array( 'db' => 'SUM(REALISASI) as REALISASI',  'field' => 'REALISASI', 'as' => 'REALISASI',   'dt' => 7, 'formatter' => function($d,$row){
         if(is_null($row[7]) || $row[7] == 0 || $row[7] == ''){
           return 0;
         } else {
@@ -235,7 +235,7 @@ switch ($process) {
         }
         
       }),
-      array( 'db' => 'SUM(usulan)',      'dt' => 8, 'formatter' => function($d,$row){
+      array( 'db' => 'SUM(USULAN) as USULAN',  'field' => 'USULAN', 'as' => 'USULAN',   'dt' => 8, 'formatter' => function($d,$row){
         if(is_null($row[8]) || $row[8] == 0 || $row[8] == ''){
           return 0;
         } else {

@@ -146,7 +146,7 @@ class SSP {
                         'ASC' :
                         'DESC';
 
-                    $orderBy[] = ''.$column['db'].' '.$dir;
+                    $orderBy[] = ($column['as']!="") ? ''.$column['as'].' '.$dir : ''.$column['db'].' '.$dir;
                 }
             }
 
@@ -631,7 +631,6 @@ class SSP {
                      $group";
         }
         
-        
 
         $data = self::sql_exec( $db, $bindings,
             "$qry
@@ -639,7 +638,7 @@ class SSP {
              $limit"
         );
 
-        // echo $qry;exit;
+        
 
         // echo "SELECT SQL_CALC_FOUND_ROWS ".implode(", ",self::pluck($columns, 'db'))."
         //      FROM `$table` join `$table2`
