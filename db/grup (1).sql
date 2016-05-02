@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 27, 2016 at 11:15 
+-- Generation Time: Apr 30, 2016 at 01:26 
 -- Server version: 10.1.13-MariaDB
 -- PHP Version: 5.6.20
 
@@ -32,18 +32,20 @@ CREATE TABLE `grup` (
   `nama` varchar(50) NOT NULL,
   `kdprogram` varchar(255) NOT NULL,
   `direktorat` varchar(255) NOT NULL,
-  `kdoutput` text NOT NULL
+  `kdoutput` text NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `grup`
 --
 
-INSERT INTO `grup` (`id`, `kode`, `nama`, `kdprogram`, `direktorat`, `kdoutput`) VALUES
-(4, '3802', 'Biro Humas dan Hukum', '06', '06-5696', '06-5696-001'),
-(5, '3803', 'Biro Perencanaan dan Organisasi', '06', '06-5698,06-5700', '06-5698-003,06-5698-007'),
-(6, '3804', 'Biro Keuangan dan Rumah Tangga', '06', '06-5697,06-5699', '06-5697-003,06-5697-006,06-5699-002'),
-(7, '3806', 'Biro Keuangan dan Rumah Tangga', '06', '06-5696,06-5697,06-5698,06-5699,06-5700', '06-5696-001,06-5696-002,06-5696-003,06-5696-004,06-5696-005,06-5696-007,06-5696-994,06-5697-001,06-5697-003,06-5697-004,06-5697-005,06-5697-006,06-5697-007,06-5698-001,06-5698-003,06-5698-005,06-5698-006,06-5698-007,06-5698-008,06-5698-009,06-5699-001,06-5699-002,06-5699-003,06-5699-004,06-5699-005,06-5700-001,06-5700-002,06-5700-003,06-5700-004');
+INSERT INTO `grup` (`id`, `kode`, `nama`, `kdprogram`, `direktorat`, `kdoutput`, `status`) VALUES
+(4, '3802', 'Biro Humas dan Hukum', '06', '06-5696', '06-5696-001', 1),
+(5, '3803', 'Biro Perencanaan dan Organisasi', '06', '06-5698,06-5700', '06-5698-003,06-5698-007', 1),
+(6, '3804', 'Biro Keuangan dan Rumah Tangga', '06', '06-5697,06-5699', '06-5697-003,06-5697-006,06-5699-002', 1),
+(7, '3806', 'Biro Keuangan dan Rumah Tangga', '06', '06-5696,06-5697,06-5698,06-5699,06-5700', '06-5696-001,06-5696-002,06-5696-003,06-5696-004,06-5696-005,06-5696-007,06-5696-994,06-5697-001,06-5697-003,06-5697-004,06-5697-005,06-5697-006,06-5697-007,06-5698-001,06-5698-003,06-5698-005,06-5698-006,06-5698-007,06-5698-008,06-5698-009,06-5699-001,06-5699-002,06-5699-003,06-5699-004,06-5699-005,06-5700-001,06-5700-002,06-5700-003,06-5700-004', 1),
+(8, '3810', 'gunadarma', '06', '06-5697,06-5699', '06-5697-003,06-5697-006,06-5699-002', 1);
 
 --
 -- Indexes for dumped tables

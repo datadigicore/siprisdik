@@ -104,7 +104,7 @@ switch ($process) {
       array( 'db' => 'nama',  'dt' => 2),
       array( 'db' => 'kdoutput',  'dt' => 3 )
     );
-    $where = "";
+    $where = "status = 1";
     $datatable->get_table($table, $key, $column, $where);
   break;
   case 'activate':
@@ -181,6 +181,11 @@ switch ($process) {
     $id = $_POST['id'];
     $pengguna->deletePengguna($id);
     $utility->load("content/user","success","Data Pengguna berhasil dihapus");
+  break;
+  case 'deletegroup':
+    $id = $_POST['id'];
+    $pengguna->deleteGroup($id);
+    $utility->load("content/user","success","Data Group berhasil dihapus");
   break;
   case 'kuitansi':
     $report->kuitansi($data_pengguna);

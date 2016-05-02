@@ -267,6 +267,38 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="hapusModalGroup">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST" action="<?php echo $url_rewrite;?>process/user/deletegroup">
+        <div class="modal-header" style="background-color:#d33724 !important; color:white;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" style="color:white">×</span></button>
+          <h4 class="modal-title">Hapus Group</h4>
+        </div>
+        <div class="modal-body">
+          <p>Anda yakin ingin menghapus group ini?</p>
+          <input type="hidden" name="id" id="modidgroup"></input>
+          <table>
+            <tr>
+              <td>Kode</td>
+              <td>&nbsp;:&nbsp;</td>
+              <td id="modkodegroup"></td>
+            </tr>
+            <tr>
+              <td>Nama</td>
+              <td>&nbsp;:&nbsp;</td>
+              <td id="modnamagroup"></td>
+            </tr>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-flat btn-danger">Delete</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <script>
   $(function () {
     $( "#edit-group-form" ).validate({
@@ -349,7 +381,7 @@
          "data": null,
          "defaultContent":  '<div class="text-center">'+
                               '<a style="margin:0 2px;" id="btn-edt" href="#editModal" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Edit</a>'+
-                              '<a style="margin:0 2px;" id="btn-del-group" href="#hapusModal" class="open-deleteProject btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-trash-o"></i> Hapus</a>'+
+                              '<a style="margin:0 2px;" id="btn-del" href="#hapusModal" class="open-deleteProject btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-trash-o"></i> Hapus</a>'+
                             '</div>',
          "targets": 7 },
       ],
@@ -376,7 +408,7 @@
          "data": null,
          "defaultContent":  '<div class="text-center">'+
                               '<a style="margin:0 2px;" id="btn-edt-group" href="#editModalGroup" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Edit</a>'+
-                              '<a style="margin:0 2px;" id="btn-del" href="#hapusModal" class="open-deleteProject btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-trash-o"></i> Hapus</a>'+
+                              '<a style="margin:0 2px;" id="btn-del-group" href="#hapusModalGroup" class="open-deleteProject btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-trash-o"></i> Hapus</a>'+
                             '</div>',
          "targets": 4 },
       ],
@@ -459,7 +491,7 @@
       });
       chDirektorat(kdprogram,kdgiat);
 
-      chOutput(kdprogram,kdgiat,kdoutput);
+      chOutput(kdprogram,kdgiat,kewenangan);
 
       $("#id-group").val(tabrow.data()[0]);
       $("#kode").val(tabrow.data()[1]);
@@ -469,11 +501,20 @@
       var tr = $(this).closest('tr');
       tabrow = table.row( tr );
       $("#modid").val(tabrow.data()[0]);
-      $("#modnama").text(tabrow.data()[1]);
-      $("#modemail").text(tabrow.data()[4]);
-      $("#modkewenangan").text(tabrow.data()[5]);
+      $("#modnama").html(tabrow.data()[1]);
+      $("#modemail").html(tabrow.data()[4]);
+      $("#modkewenangan").html(tabrow.data()[5]);
     });
+    $(document).on("click", "#btn-del-group", function (){
 
+      var tr = $(this).closest('tr');
+      tabrow = table_group.row( tr );
+      // alert(JSON.stringify(tabrow));
+      $("#modidgroup").val(tabrow.data()[1]);
+      $("#modnamagroup").html(tabrow.data()[2]);
+      $("#modkodegroup").html(tabrow.data()[1]);
+      // alert(tabrow.data()[1]);
+    });
 
   });
 
@@ -590,7 +631,8 @@
           var obj = jQuery.parseJSON(data);
           var ckbx = "";
           for (var i = 0; i < obj.KDOUTPUT.length; i++) {
-            if($.inArray(obj.KDOUTPUT[i],kdoutput)==-1){
+            var val =  obj.KDPROGRAM[i]+'-'+obj.KDGIAT[i]+'-'+obj.KDOUTPUT[i];
+            if($.inArray(val,kdoutput)==-1){
 
               ckbx= ckbx+' <div class=" col-md-4 ">'+
                       '<div class="checkbox">'+
