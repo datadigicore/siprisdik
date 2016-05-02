@@ -285,7 +285,7 @@ var table;
     var tahun = $('#tahun2').val();
     var direktorat = $('#direktorat2').val();
     table = $("#table").DataTable({
-      "info":false,
+      "info":true,
         "oLanguage": {
           "sInfoFiltered": ""
         },

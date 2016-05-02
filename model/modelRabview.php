@@ -553,7 +553,7 @@
       return $result;
     }
 
-    public function insertRealisasi($rab, $akun, $item, $total, $usulan){
+    public function insertRealisasi($rab, $akun, $item, $total){
       $query = "UPDATE rkakl_full SET realisasi='$total' WHERE THANG     = '".$rab['thang']."'
                                                       AND KDPROGRAM   = '".$rab['kdprogram']."'
                                                       AND KDGIAT      = '".$rab['kdgiat']."'
@@ -589,9 +589,9 @@
       return $jumrkakl;
     }
 
-    public function moveRealisasi($dataAkun, $item, $total, $usul){
+    public function moveRealisasi($dataAkun, $item, $total){
       $rab = $dataAkun;
-      $query = "UPDATE rkakl_full SET REALISASI='$total', USULAN='$usul' 
+      $query = "UPDATE rkakl_full SET realisasi='$total', usulan=null 
                       WHERE THANG='$rab->thang'
                         AND KDPROGRAM='$rab->kdprogram'
                         AND KDGIAT='$rab->kdgiat'
