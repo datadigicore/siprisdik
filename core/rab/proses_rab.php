@@ -227,15 +227,15 @@ switch ($process) {
       array( 'db' => 'SUM(JUMLAH)',      'dt' => 6, 'formatter' => function($d,$row){
         return number_format($row[6],0,".",".");
       }),
-      array( 'db' => 'SUM(realisasi)',      'dt' => 7, 'formatter' => function($d,$row){
-        if(is_null($row[7])){
+      array( 'db' => 'SUM(REALISASI)',      'dt' => 7, 'formatter' => function($d,$row){
+        if($row[7]<=0){
           return 0;
         } else {
-          return number_format(abs($d),0,".",".");
+          return number_format(abs($row[7]),0,".",".");
         }
         
       }),
-      array( 'db' => 'SUM(usulan)',      'dt' => 8, 'formatter' => function($d,$row){
+      array( 'db' => 'SUM(USULAN)',      'dt' => 8, 'formatter' => function($d,$row){
         if(is_null($row[8])){
           return 0;
         } else {
@@ -244,7 +244,7 @@ switch ($process) {
         
       }),
       array( 'db' => 'KDSKMPNEN',      'dt' => 9, 'formatter' => function($d,$row){
-        return number_format($row[6]+$row[7],0,".",".");
+        return number_format($row[6]-$row[7],0,".",".");
       }),
       array( 'db' => 'NMOUTPUT',      'dt' => 10, 'formatter' => function($d,$row, $dataArray){
         $button = '<div class="btn-group"><a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rab/'.$row[14].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a><div>';
