@@ -2677,6 +2677,8 @@
 
                     deskripsi   = '".$data['deskripsi']."',
                     tanggal     = '".$data['tanggal']."',
+                    tanggal_akhir = '".$data['tanggal_akhir']."',
+                    tempat     = '".$data['tempat']."',
                     lokasi      = '".$data['lokasi']."',
 
                     asal       = '".$data['asal']."',
