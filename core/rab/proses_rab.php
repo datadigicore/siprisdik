@@ -443,7 +443,7 @@ switch ($process) {
     $akun = $mdl_rab->getakun($id_rabview);
     for ($i=0; $i < count($akun); $i++) { 
       $valrab = $akun[$i]->value;
-      $akun = $akun[$i]->kdakun;
+      $kodeakun = $akun[$i]->kdakun;
       if ($akun[$i]->kdakun == 521211) {  //belanja bahan
         $rab = $mdl_rab->getRabItem($akun[$i]);
         for ($j=0; $j < count($rab); $j++) { 
@@ -451,7 +451,7 @@ switch ($process) {
           $usulan = $jum_rkakl->usulan;
           $total =  $usulan - $valrab;
           $item = $rab[$j]->noitem;
-          $mdl_rab->insertUsulan($akun[$i],$akun, $item, $total);
+          $mdl_rab->insertUsulan2($akun[$i],$kodeakun, $item, $total);
         }
       }elseif($akun[$i]->kdakun != ""){  // bukan belanja bahan
         $jum_rkakl = $mdl_rab->getJumRkakl($akun[$i]);
@@ -471,16 +471,15 @@ switch ($process) {
 
         $totalperitem = floor($totalusul/$banyakitem);
         $sisaitem = $totalusul % $banyakitem;
-
         for ($x=0; $x < $banyakitem; $x++) { 
           if ($sisaitem == 0) {
-            $mdl_rab->insertUsulan($akun[$i], $akun, $pecah_item[$x], $totalperitem);
+            $mdl_rab->insertUsulan2($akun[$i], $kodeakun, $pecah_item[$x], $totalperitem);
           }else{
             if ($x == ($banyakitem-1)) {
               $totalperitem = $totalperitem + $sisaitem;
-              $mdl_rab->insertUsulan($akun[$i], $akun, $pecah_item[$x], $totalperitem);
+              $mdl_rab->insertUsulan2($akun[$i], $kodeakun, $pecah_item[$x], $totalperitem);
             }else{
-              $mdl_rab->insertUsulan($akun[$i], $akun, $pecah_item[$x], $totalperitem);
+              $mdl_rab->insertUsulan2($akun[$i], $kodeakun, $pecah_item[$x], $totalperitem);
             }
           }
         }

@@ -553,6 +553,21 @@
       return $result;
     }
 
+    public function insertUsulan2($rab, $akun, $item, $total){
+      $query = "UPDATE rkakl_full SET usulan='$total' WHERE THANG     = '".$rab->thang."'
+                                                      AND KDPROGRAM   = '".$rab->kdprogram."'
+                                                      AND KDGIAT      = '".$rab->kdgiat."'
+                                                      AND KDOUTPUT    = '".$rab->kdoutput."'
+                                                      AND KDSOUTPUT   = '".$rab->kdsoutput."'
+                                                      AND KDKMPNEN    = '".$rab->kdkmpnen."'
+                                                      AND KDSKMPNEN   = '".$rab->kdskmpnen."'
+                                                      AND KDAKUN      = '".$akun."'
+                                                      AND NOITEM      = '".$item."'
+                                                      ";
+      $result = $this->query($query);
+      return $result;
+    }
+
     public function insertRealisasi($rab, $akun, $item, $total, $usulan){
       $query = "UPDATE rkakl_full SET realisasi='$total' WHERE THANG     = '".$rab['thang']."'
                                                       AND KDPROGRAM   = '".$rab['kdprogram']."'
