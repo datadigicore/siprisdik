@@ -231,7 +231,7 @@ switch ($process) {
 	        $harga_tiket  = str_replace(".", "", $_POST['harga_tiket'][0]);
 	        $uang_harian  = str_replace(".", "", $_POST['uang_harian'][0]);
 	        $lama_hari    = $_POST['lama_hari'][0];
-          	$biaya_akom   = str_replace(".", "", $data['biaya_akom'][$i]);
+          	$biaya_akom   = str_replace(".", "", $_POST['biaya_akom'][$i]);
 	        $value  	  = $taxi_asal + $taxi_tujuan + $harga_tiket + ($uang_harian * $lama_hari) + $biaya_akom;
 		}else{
 			$value = $_POST['value'];

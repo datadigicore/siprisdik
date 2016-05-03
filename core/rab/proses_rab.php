@@ -272,6 +272,7 @@ switch ($process) {
         }else{
           $where[$i] .= ' AND KDPROGRAM = "'.$value.'"';
         }
+        $where[$i] .= ' AND status = 1';
         $i++;
       }
       $i=0;
@@ -282,6 +283,7 @@ switch ($process) {
         }else{
           $where[$i] .= ' AND KDGIAT = "'.$value.'"';
         }
+        $where[$i] .= ' AND status = 1';
         $i++;
       }
       $i=0;
@@ -292,6 +294,7 @@ switch ($process) {
         }else{
           $where[$i] .= ' AND KDOUTPUT = "'.$value.'"';
         }
+        $where[$i] .= ' AND status = 1';
         $i++;
       }
     }

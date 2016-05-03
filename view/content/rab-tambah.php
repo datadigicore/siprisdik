@@ -33,22 +33,22 @@
                 </select> -->
                 <input class="form-control " type="text" id="tahun" name="tahun" value="<?php echo $datarkakl[0]->THANG ?>" readonly/>
               </div>
-              <input type="hidden" id="prog" name="prog" value="06" />
-              <?php if ($_SESSION['direktorat'] == "") { ?>
+              <input type="hidden" id="prog" name="prog" value="<?php echo $datarkakl[0]->KDPROGRAM ?>" />
+              
               <div class="form-group">
-                <label>Kode Kegiatan</label>
-                <select class="form-control" id="direktorat" name="direktorat" onchange="chout()">
-                    <option value="5696">5696</option>
-                    <option value="5697">5697</option>
-                    <option value="5698">5698</option>
-                    <option value="5699">5699</option>
-                    <option value="5700">5700</option>
+                <label>Output</label>
+                <?php if($datarkakl[0]->KDGIAT!=""){?>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon2"><?php echo $datarkakl[0]->NMGIAT ?></span>
+                  <input class="form-control " type="text" id="direktorat" name="direktorat" value="<?php echo $datarkakl[0]->KDGIAT ?>" readonly/>
+
+                  </div>
+                  <?php } else {?>
+                <select class="form-control" id="direktorat" name="direktorat" onchange="chout()" required>
+                  <option value="">-- Pilih Output --</option>
                 </select>
-              </div>
-              <?php } else{ ?>
-              <input  type="hidden" id="direktorat" name="direktorat" value="<?php echo $_SESSION['direktorat']; ?>" />
-              <?php } ?>
-              <div class="form-group">
+                <?php }?>
+              </div><div class="form-group">
                 <label>Output</label>
                 <?php if($datarkakl[0]->KDOUTPUT!=""){?>
                 <div class="input-group">

@@ -961,6 +961,8 @@
 
         $deskripsi  = $cekfetch->deskripsi;
         $tanggal    = $cekfetch->tanggal;
+        $tanggal_akhir = $cekfetch->tanggal_akhir;
+        $tempat    = $cekfetch->tempat;
         $lokasi     = $cekfetch->lokasi;
 
         $jenis      = $cekfetch->jenis;
@@ -998,6 +1000,8 @@
 
           deskripsi   = '$deskripsi',
           tanggal     = '$tanggal',
+          tanggal_akhir = '$tanggal_akhir',
+          tempat     = '$tempat',
           lokasi      = '$lokasi',
 
           jenis       = '$jenis',
@@ -1096,6 +1100,7 @@
 
       $jenis      = $cekfetch->jenis;
       $penerima   = $cekfetch->penerima;
+      $nip       = $cekfetch->nip;
       $npwp       = $cekfetch->npwp;
       $golongan   = $cekfetch->golongan;
       $jabatan    = $cekfetch->jabatan;
