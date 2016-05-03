@@ -553,6 +553,21 @@
       return $result;
     }
 
+    public function insertUsulan2($rab, $akun, $item, $total){
+      $query = "UPDATE rkakl_full SET usulan='$total' WHERE THANG     = '".$rab->thang."'
+                                                      AND KDPROGRAM   = '".$rab->kdprogram."'
+                                                      AND KDGIAT      = '".$rab->kdgiat."'
+                                                      AND KDOUTPUT    = '".$rab->kdoutput."'
+                                                      AND KDSOUTPUT   = '".$rab->kdsoutput."'
+                                                      AND KDKMPNEN    = '".$rab->kdkmpnen."'
+                                                      AND KDSKMPNEN   = '".$rab->kdskmpnen."'
+                                                      AND KDAKUN      = '".$akun."'
+                                                      AND NOITEM      = '".$item."'
+                                                      ";
+      $result = $this->query($query);
+      return $result;
+    }
+
     public function insertRealisasi($rab, $akun, $item, $total, $usulan){
       $query = "UPDATE rkakl_full SET realisasi='$total' WHERE THANG     = '".$rab['thang']."'
                                                       AND KDPROGRAM   = '".$rab['kdprogram']."'
@@ -961,6 +976,8 @@
 
         $deskripsi  = $cekfetch->deskripsi;
         $tanggal    = $cekfetch->tanggal;
+        $tanggal_akhir = $cekfetch->tanggal_akhir;
+        $tempat    = $cekfetch->tempat;
         $lokasi     = $cekfetch->lokasi;
 
         $jenis      = $cekfetch->jenis;
@@ -998,6 +1015,8 @@
 
           deskripsi   = '$deskripsi',
           tanggal     = '$tanggal',
+          tanggal_akhir = '$tanggal_akhir',
+          tempat     = '$tempat',
           lokasi      = '$lokasi',
 
           jenis       = '$jenis',
@@ -1096,6 +1115,7 @@
 
       $jenis      = $cekfetch->jenis;
       $penerima   = $cekfetch->penerima;
+      $nip       = $cekfetch->nip;
       $npwp       = $cekfetch->npwp;
       $golongan   = $cekfetch->golongan;
       $jabatan    = $cekfetch->jabatan;

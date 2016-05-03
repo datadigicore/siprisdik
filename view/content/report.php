@@ -33,19 +33,19 @@
                   <label class="col-sm-3 control-label">Direktorat</label>
                   <div class="col-sm-4">
                   <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
-                    <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                    <?php if($_SESSION['kdgrup'] =="5696" or $_SESSION['level'] == 0){ ?>
                         <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
                     <?php } ?>
-                    <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                    <?php if($_SESSION['kdgrup'] =="5697" or $_SESSION['level'] == 0){ ?>
                         <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
                     <?php } ?>
-                    <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                    <?php if($_SESSION['kdgrup'] =="5698" or $_SESSION['level'] == 0){ ?>
                         <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
                     <?php } ?>
-                    <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                    <?php if($_SESSION['kdgrup'] =="5699" or $_SESSION['level'] == 0){ ?>
                           <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
                     <?php } ?>
-                    <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                    <?php if($_SESSION['kdgrup'] =="5700" or $_SESSION['level'] == 0){ ?>
                           <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
                     <?php } ?>
                   </select>
@@ -100,19 +100,19 @@
                   <label class="col-sm-3 control-label">Direktorat</label>
                   <div class="col-sm-4">
                   <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
-                      <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5696" or $_SESSION['level'] == 0){ ?>
                           <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5697" or $_SESSION['level'] == 0){ ?>
                           <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5698" or $_SESSION['level'] == 0){ ?>
                           <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5699" or $_SESSION['level'] == 0){ ?>
                             <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5700" or $_SESSION['level'] == 0){ ?>
                             <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
                       <?php } ?>
                   </select>
@@ -196,19 +196,19 @@
                   <label class="col-sm-3 control-label">Direktorat</label>
                   <div class="col-sm-4">
                   <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
-                      <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5696" or $_SESSION['level'] == 0){ ?>
                           <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5697" or $_SESSION['level'] == 0){ ?>
                           <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5698" or $_SESSION['level'] == 0){ ?>
                           <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5699" or $_SESSION['level'] == 0){ ?>
                             <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5700" or $_SESSION['level'] == 0){ ?>
                             <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
                       <?php } ?>
                   </select>
@@ -265,19 +265,19 @@
                       <?php if($_SESSION['level'] == 0){ ?>
                           <!-- <option value="">Semua Direktorat</option> -->
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5696" or $_SESSION['level'] == 0){ ?>
                           <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5697" or $_SESSION['level'] == 0){ ?>
                           <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5698" or $_SESSION['level'] == 0){ ?>
                           <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5699" or $_SESSION['level'] == 0){ ?>
                             <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5700" or $_SESSION['level'] == 0){ ?>
                             <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
                       <?php } ?>
                   </select>
@@ -322,19 +322,19 @@
                       <?php if($_SESSION['level'] == 0){ ?>
                           <option value="">Semua Direktorat</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5696" or $_SESSION['level'] == 0){ ?>
                           <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5697" or $_SESSION['level'] == 0){ ?>
                           <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5698" or $_SESSION['level'] == 0){ ?>
                           <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5699" or $_SESSION['level'] == 0){ ?>
                             <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5700" or $_SESSION['level'] == 0){ ?>
                             <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
                       <?php } ?>
                   </select>
@@ -379,19 +379,19 @@
                       <?php if($_SESSION['level'] == 0){ ?>
                           <option value="">Semua Direktorat</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5696" or $_SESSION['level'] == 0){ ?>
                           <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5697" or $_SESSION['level'] == 0){ ?>
                           <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5698" or $_SESSION['level'] == 0){ ?>
                           <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5699" or $_SESSION['level'] == 0){ ?>
                             <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5700" or $_SESSION['level'] == 0){ ?>
                             <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
                       <?php } ?>
                   </select>
@@ -434,19 +434,19 @@
                       <?php if($_SESSION['level'] == 0){ ?>
                           <option value="">Semua Direktorat</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5696" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5696" or $_SESSION['level'] == 0){ ?>
                           <option value="5696">5696-Dukungan Manajemen untuk Program Peningkatan Kualitas Kelembagaan Iptek dan Dikti</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5697" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5697" or $_SESSION['level'] == 0){ ?>
                           <option value="5697">5697-Pengembangan Kelembagaan Perguruan Tinggi</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5698" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5698" or $_SESSION['level'] == 0){ ?>
                           <option value="5698">5698-Pembinaan Kelembagaan Perguruan Tinggi</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5699" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5699" or $_SESSION['level'] == 0){ ?>
                             <option value="5699">5699-Penguatan dan Pengembangan Lembaga Penelitian dan Pengembangan</option>
                       <?php } ?>
-                      <?php if($_SESSION['direktorat'] =="5700" or $_SESSION['level'] == 0){ ?>
+                      <?php if($_SESSION['kdgrup'] =="5700" or $_SESSION['level'] == 0){ ?>
                             <option value="5700">5700-Pengembangan Taman Sains dan Teknologi (TST) dan Lembaga Penunjang Lainnya</option>
                       <?php } ?>
                   </select>

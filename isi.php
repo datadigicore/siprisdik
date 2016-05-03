@@ -202,18 +202,34 @@ else {
                   $utility->load("./content/rab-rkakl",'warning','ID RKAKL tidak dapat ditemukan !');
                 }
           } else if($data[2]=='edit'){
-            $direktorat = $_SESSION['direktorat'];
-            $tahun = $mdl_rab->getYear();
             $idview = $data[3];
             $idrkakl = $data[4];
-            $getview = $mdl_rab->getview($idview);
-            $rabfull = $mdl_rab->getjumlahgiat($idview);
-            if ($rabfull->jumlah == "") {
-              $readonly = "";
-            }else{
-              $readonly = "disabled";
+            $kdgrup = $_SESSION['kdgrup'];
+            $cek = $mdl_rab->cekRkaklEksis($idrkakl);
+            if($cek)
+            {
+              $cek = $mdl_rab->cekRkaklGrup($idrkakl,$kdgrup);
+              if($cek==true){
+                $datarkakl = $mdl_rab->getrkaklfull3($idrkakl);
+                $tahun = $mdl_rab->getYear();
+                $getview = $mdl_rab->getview($idview);
+                $rabfull = $mdl_rab->getjumlahgiat($idview);
+                if ($rabfull->jumlah == "") {
+                  $readonly = "";
+                }else{
+                  $readonly = "disabled";
+                }
+                include ('view/content/rab-edit.php');
+              }
+              else {
+                $utility->load("./content/rab-rkakl",'warning','Anda tidak punya kewenangan untuk mengubah RAB direktorat lain !');
+              }
+
+              
+            } else {
+              $utility->load("./content/rab-rkakl",'warning','ID RKAKL tidak dapat ditemukan !');
             }
-            include ('view/content/rab-edit.php');
+            
           } else {
             $kdgrup = $_SESSION['kdgrup'];
             // $tahun = $mdl_rab->getYear();
