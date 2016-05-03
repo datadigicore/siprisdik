@@ -308,6 +308,10 @@ var table;
             {"targets" : 4},
             {"targets" : 5},
             {"targets" : 6},
+            {"targets" : 7},
+            {"targets" : 8},
+            {"targets" : 9,"searchable": false,},
+            {"targets" : 10},
           ],
         <?php }else{?>
           "columnDefs" : [
@@ -320,6 +324,11 @@ var table;
             {"targets" : 4},
             {"targets" : 5},
             {"targets" : 6},
+            {"targets" : 6},
+            {"targets" : 7},
+            {"targets" : 8},
+            {"targets" : 9,"searchable": false,},
+            {"targets" : 10},
           ],
         <?php } ?>
         "order": [[ 0, "desc" ]]
@@ -381,6 +390,11 @@ var table;
             {"targets" : 4},
             {"targets" : 5},
             {"targets" : 6},
+            {"targets" : 6},
+            {"targets" : 7},
+            {"targets" : 8},
+            {"targets" : 9,"searchable": false,},
+            {"targets" : 10},
           ],
         <?php }else{?>
           "columnDefs" : [
@@ -393,6 +407,11 @@ var table;
             {"targets" : 4},
             {"targets" : 5},
             {"targets" : 6},
+            {"targets" : 6},
+            {"targets" : 7},
+            {"targets" : 8},
+            {"targets" : 9,"searchable": false,},
+            {"targets" : 10},
           ],
         <?php } ?>
         "order": [[ 0, "desc" ]]

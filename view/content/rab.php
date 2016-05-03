@@ -302,6 +302,7 @@ var table;
     var tahun = $('#tahun2').val();
     var direktorat = $('#direktorat2').val();
     table = $("#table").DataTable({
+      "searching": false,
       "info":false,
         "oLanguage": {
           "sInfoFiltered": ""
@@ -331,7 +332,7 @@ var table;
             {"targets" : 3},
             {"targets" : 4},
             {"targets" : 5},
-            {"targets" : 6},
+            {"targets" : 6,"searchable": false,},
           ],
         <?php }else{?>
           "columnDefs" : [
@@ -344,7 +345,7 @@ var table;
             {"targets" : 3},
             {"targets" : 4},
             {"targets" : 5},
-            {"targets" : 6},
+            {"targets" : 6,"searchable": false,},
           ],
         <?php } ?>
         "order": [[ 0, "desc" ]]
@@ -383,6 +384,7 @@ var table;
     var direktorat = $('#direktorat2').val();
     table.destroy();
     table = $("#table").DataTable({
+      "searching": false,
         "oLanguage": {
           "sInfoFiltered": ""
         },
@@ -405,7 +407,7 @@ var table;
             {"targets" : 3},
             {"targets" : 4},
             {"targets" : 5},
-            {"targets" : 6},
+            {"targets" : 6,"searchable": false,},
           ],
         <?php }else{?>
           "columnDefs" : [
@@ -417,7 +419,7 @@ var table;
             {"targets" : 3},
             {"targets" : 4},
             {"targets" : 5},
-            {"targets" : 6},
+            {"targets" : 6,"searchable": false,},
           ],
         <?php } ?>
         "order": [[ 0, "desc" ]]
