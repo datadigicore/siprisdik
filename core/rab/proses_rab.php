@@ -52,7 +52,7 @@ switch ($process) {
       array( 'db' => 'lokasi',  'dt' => 5, 'formatter' => function($d,$row){
         return $row[14].', '.$d;
       }),
-      array( 'db' => '(SELECT SUM(rabfull.value) from rabfull where rabfull.rabview_id = rabview.id group by rabfull.rabview_id)','dt' => 6, 'formatter' => function($d,$row){
+      array( 'db' => '(SELECT SUM(rabfull.value) from rabfull where rabfull.rabview_id = rabview.id group by rabfull.rabview_id) AS sumRABFULL','field' => 'sumRABFULL', 'as' => 'sumRABFULL','dt' => 6, 'formatter' => function($d,$row){
         return 'Rp '.number_format($d,2,',','.');
       }),
       array( 'db' => 'status', 'dt' => 7, 'formatter' => function($d,$row){ 
@@ -206,23 +206,23 @@ switch ($process) {
     $arrKdoutput = $kewenangan['kdoutput'];
 
     $column = array(
-      array( 'db' => 'KDGIAT',      'dt' => 0, 'formatter' => function($d,$row){
+      array( 'db' => 'IDRKAKL',      'dt' => 0, 'formatter' => function($d,$row){
         return $row[0];
       }),
-      array( 'db' => 'NMGIAT',      'dt' => 1, 'formatter' => function($d,$row){
-        return $row[0]." - ".$row[1];
+      array( 'db' => 'CONCAT(KDGIAT," - ",NMGIAT) AS NMGIAT',   'field' => 'NMGIAT', 'as' => 'NMGIAT',   'dt' => 1, 'formatter' => function($d,$row){
+        return $row[1];
       }),
-      array( 'db' => 'KDOUTPUT',      'dt' => 2, 'formatter' => function($d,$row){
-        return $row[2]." - ".$row[10];
+      array( 'db' => 'CONCAT(KDOUTPUT," - ",NMOUTPUT) AS NMOUTPUT',   'field' => 'NMOUTPUT', 'as' => 'NMOUTPUT',   'dt' => 2, 'formatter' => function($d,$row){
+        return $row[2];
       }),
-      array( 'db' => 'KDSOUTPUT',      'dt' => 3, 'formatter' => function($d,$row){
-        return $row[3]." - ".$row[11];
+      array( 'db' => 'CONCAT(KDSOUTPUT," - ",NMSOUTPUT) AS NMSOUTPUT',   'field' => 'NMSOUTPUT', 'as' => 'NMSOUTPUT',   'dt' => 3, 'formatter' => function($d,$row){
+        return $row[3];
       }),
-      array( 'db' => 'KDKMPNEN',      'dt' => 4, 'formatter' => function($d,$row){
-        return $row[4]." - ". $row[12];
+      array( 'db' => 'CONCAT(KDKMPNEN," - ",NMKMPNEN) AS NMKMPNEN',   'field' => 'NMKMPNEN', 'as' => 'NMKMPNEN',   'dt' => 4, 'formatter' => function($d,$row){
+        return $row[4];
       }),
-      array( 'db' => 'KDSKMPNEN',      'dt' => 5, 'formatter' => function($d,$row){
-        return $row[5]." - ".$row[13];
+      array( 'db' => 'CONCAT(KDSKMPNEN," - ",NMSKMPNEN) AS NMSKMPNEN',   'field' => 'NMSKMPNEN', 'as' => 'NMSKMPNEN',   'dt' => 5, 'formatter' => function($d,$row){
+        return $row[5];
       }),
       array( 'db' => 'SUM(JUMLAH) as JUMLAH', 'field' => 'JUMLAH', 'as' => 'JUMLAH',    'dt' => 6, 'formatter' => function($d,$row){
         return number_format($row[6],0,".",".");
@@ -243,11 +243,11 @@ switch ($process) {
         }
         
       }),
-      array( 'db' => 'KDSKMPNEN',      'dt' => 9, 'formatter' => function($d,$row){
-        return number_format($row[6]-$row[7],0,".",".");
+      array( 'db' => 'SUM(JUMLAH-REALISASI) as SISA',   'field' => 'SISA', 'as' => 'SISA',   'dt' => 9, 'formatter' => function($d,$row){
+        return number_format($row[9],0,".",".");
       }),
       array( 'db' => 'NMOUTPUT',      'dt' => 10, 'formatter' => function($d,$row, $dataArray){
-        $button = '<div class="btn-group"><a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rab/'.$row[14].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a><div>';
+        $button = '<div class="btn-group"><a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rab/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a><div>';
         return $button;
       }),
       // array( 'db' => 'NMOUTPUT',      'dt' => 10, 'formatter' => function($d,$row, $dataArray){
@@ -256,10 +256,10 @@ switch ($process) {
       // }),
 
       //kode
-      array( 'db' => 'NMSOUTPUT',      'dt' => 11),
-      array( 'db' => 'NMKMPNEN',      'dt' => 12),
-      array( 'db' => 'NMSKMPNEN',      'dt' => 13),
-      array( 'db' => 'IDRKAKL',      'dt' => 14),
+      // array( 'db' => 'NMSOUTPUT',      'dt' => 11),
+      // array( 'db' => 'NMKMPNEN',      'dt' => 12),
+      // array( 'db' => 'NMSKMPNEN',      'dt' => 13),
+      // array( 'db' => 'IDRKAKL',      'dt' => 14),
       //kode
     );
     $where=[];

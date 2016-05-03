@@ -188,7 +188,7 @@ class SSP {
 
                 if ( $requestColumn['searchable'] == 'true' ) {
                     $binding = self::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
-                    $globalSearch[] = "`".$column['db']."` LIKE ".$binding;
+                    $globalSearch[] = ($column['as']!="") ? "`".$column['as']."` LIKE ".$binding : "`".$column['db']."` LIKE ".$binding;
                 }
             }
         }
@@ -204,7 +204,7 @@ class SSP {
             if ( $requestColumn['searchable'] == 'true' &&
              $str != '' ) {
                 $binding = self::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
-                $columnSearch[] = "`".$column['db']."` LIKE ".$binding;
+                $columnSearch[] = ($column['as']!="") ? "`".$column['as']."` LIKE ".$binding : "`".$column['db']."` LIKE ".$binding;
             }
         }
 
@@ -613,16 +613,21 @@ class SSP {
         // }
         // Main query to actually get the data
         $qry ="";
+        if($where!=""){
+            $conj= "AND";
+        } else {
+            $conj= "WHERE";
+        }
         if(count($arrayWhere)!=0){
             foreach ($arrayWhere as $key => $value) {
                 if($qry == ""){
-                    $qry .="SELECT SQL_CALC_FOUND_ROWS ".implode(", ",self::pluck($columns, 'db'))."
-                     FROM `$table` WHERE $value
-                     $group";
+                    $qry .="(SELECT SQL_CALC_FOUND_ROWS ".implode(", ",self::pluck($columns, 'db'))."
+                     FROM `$table` $where $conj $value
+                     $group)";
                 } else {
-                    $qry .=" UNION SELECT ".implode(", ",self::pluck($columns, 'db'))."
-                     FROM `$table` WHERE $value
-                     $group";
+                    $qry .=" UNION (SELECT ".implode(", ",self::pluck($columns, 'db'))."
+                     FROM `$table` $where $conj $value
+                     $group)";
                 }
             }
         } else {
@@ -631,14 +636,16 @@ class SSP {
                      $group";
         }
         
-
+        // echo "$qry
+        //      $order
+        //      $limit";exit;
         $data = self::sql_exec( $db, $bindings,
             "$qry
              $order
              $limit"
         );
 
-        
+        // echo $qry;exit;
 
         // echo "SELECT SQL_CALC_FOUND_ROWS ".implode(", ",self::pluck($columns, 'db'))."
         //      FROM `$table` join `$table2`
