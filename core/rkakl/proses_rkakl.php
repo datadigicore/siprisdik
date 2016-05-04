@@ -8,6 +8,7 @@ switch ($process) {
     // $thang['tahun']   = '2016';
     // $rkakl->updDelRowHadRealisasi($thang);
     // die();
+    ini_set('memory_limit', '-1');
     $thang    = $purifier->purify($_POST['thang']);
     $revisi   = $purifier->purify($_POST['revisi']);
     $tanggal  = $purifier->purify($_POST['tanggal']);

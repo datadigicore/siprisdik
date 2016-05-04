@@ -25,39 +25,82 @@
             <div class="box-body">
               <div class="form-group">
                 <label>Tahun Anggaran</label>
-                <select  <?php echo $readonly;?> class="form-control" name="tahun" id="tahun" required>
-                  <?php for ($i=0; $i < count($tahun); $i++) { 
-                    echo "<option value='".$tahun[$i]."'>".$tahun[$i].'</option>';
-                  }?>
-                </select>
+                <!-- <select class="form-control" name="tahun" id="tahun" required>
+                  <?php 
+                  // // for ($i=0; $i < count($tahun); $i++) { 
+                  //   // echo "<option value='".$tahun[$i]."'>".$tahun[$i].'</option>';
+                  // }
+                  ?>
+                </select> -->
+                <input class="form-control " type="text" id="tahun" name="tahun" value="<?php echo $datarkakl[0]->THANG ?>" readonly/>
               </div>
-              
-              <input type="hidden" id="prog" name="prog" value="06" />
-              <input type="hidden" id="direktorat" name="direktorat" value="<?php echo $_SESSION['direktorat']; ?>" />
+              <input type="hidden" id="prog" name="prog" value="<?php echo $datarkakl[0]->KDPROGRAM ?>" />
               
               <div class="form-group">
                 <label>Output</label>
-                <select <?php echo $readonly;?> class="form-control" id="output" name="output" onchange="chout()" required>
-                  <option>-- Pilih Output --</option>
+                <?php if($datarkakl[0]->KDGIAT!=""){?>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon2"><?php echo $datarkakl[0]->NMGIAT ?></span>
+                  <input class="form-control " type="text" id="direktorat" name="direktorat" value="<?php echo $datarkakl[0]->KDGIAT ?>" readonly/>
+
+                  </div>
+                  <?php } else {?>
+                <select class="form-control" id="direktorat" name="direktorat" onchange="chout()" required>
+                  <option value="">-- Pilih Output --</option>
                 </select>
+                <?php }?>
+              </div><div class="form-group">
+                <label>Output</label>
+                <?php if($datarkakl[0]->KDOUTPUT!=""){?>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon2"><?php echo $datarkakl[0]->NMOUTPUT ?></span>
+                  <input class="form-control " type="text" id="output" name="output" value="<?php echo $datarkakl[0]->KDOUTPUT ?>" readonly/>
+
+                  </div>
+                  <?php } else {?>
+                <select class="form-control" id="output" name="output" onchange="chout()" required>
+                  <option value="">-- Pilih Output --</option>
+                </select>
+                <?php }?>
               </div>
               <div class="form-group">
                 <label>Suboutput</label>
-                <select <?php echo $readonly;?> class="form-control" id="soutput" name="soutput" onchange="chsout()" required>
-                  <option>-- Pilih Sub Output --</option>
+                <?php if($datarkakl[0]->KDSOUTPUT!=""){?>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon2"><?php echo $datarkakl[0]->NMSOUTPUT ?></span>
+                  <input class="form-control" type="text" id="soutput" name="soutput" value="<?php echo $datarkakl[0]->KDSOUTPUT ?>" readonly/>
+                  </div>
+                  <?php } else {?>
+                <select class="form-control" id="soutput" name="soutput" onchange="chsout()" required>
+                  <option value="">-- Pilih Sub Output --</option>
                 </select>
+                <?php }?>
               </div>
               <div class="form-group">
                 <label>Komponen</label>
-                <select <?php echo $readonly;?> class="form-control" id="komp" name="komp" onchange="chkomp()" required>
-                  <option>-- Pilih Komponen --</option>
+                <?php if($datarkakl[0]->KDKMPNEN!=""){?>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon2"><?php echo $datarkakl[0]->NMKMPNEN ?></span>
+                  <input class="form-control" type="text" id="komp" name="komp" value="<?php echo $datarkakl[0]->KDKMPNEN ?>" readonly/>
+                  </div>
+                  <?php } else {?>
+                <select class="form-control" id="komp" name="komp" onchange="chkomp()" required>
+                  <option value="">-- Pilih Komponen --</option>
                 </select>
+                <?php }?>
               </div>
               <div class="form-group">
                 <label>Sub Komponen</label>
-                <select <?php echo $readonly;?> class="form-control" id="skomp" name="skomp" onchange="chskomp()" required>
-                  <option>-- Pilih Sub Komponen --</option>
+                <?php if($datarkakl[0]->KDSKMPNEN!=""){?>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon2"><?php echo $datarkakl[0]->NMSKMPNEN ?></span>
+                  <input class="form-control" type="text" id="skomp" name="skomp" value="<?php echo $datarkakl[0]->KDSKMPNEN ?>" readonly/>
+                  </div>
+                  <?php } else {?>
+                <select class="form-control" id="skomp" name="skomp" onchange="chskomp()" required>
+                  <option value="">-- Pilih Sub Komponen --</option>
                 </select>
+                <?php }?>
               </div>
               <div class="form-group">
                 <label>Uraian Acara</label>
