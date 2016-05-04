@@ -227,6 +227,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       $kdakun= $res[kdskmpnen];
       $npwp= $res[npwp];
       $nip= $res[nip];
+      $penerima = $res[penerima];
       $npwp_dan_nip = $npwp.$nip.$penerima;
 
       $result_pb = $this->query("SELECT bpp, nama, nip_bpp, ppk, nip_ppk from direktorat where kode='$kdgiat' ");
@@ -293,6 +294,8 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       $id_akun;
       $nama_item;
       $count_item=0;
+      $uang_harian_lokal=0;
+      $akun_dinas="";
       while($res=$this->fetch_array($result)){
         $golongan=$res[golongan];
         $pns = $res[pns];
@@ -335,9 +338,13 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
           
         }
         else if($res[kdakun]=="524114"){
+          $akun_dinas = "524114";
           if(substr($res[NMITEM],1,8)!=="ransport"){
             $item_uangsaku = "1";
             $uang_saku_dalam_114 +=$res[value];
+          }
+          elseif ($res[uang_harian]>0) {
+            $uang_harian_lokal = $res[uang_harian];
           }
           else{
             $item_transport = "1";
@@ -345,6 +352,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
           }
         }
         else if($res[kdakun]=="524119"){
+          $akun_dinas = "524119";
           if($res[kota_tujuan]!=""){
             $item = "Perjalanan Dinas Keluar";
             $dinas=1;
@@ -459,7 +467,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
 
       
       if($dinas==1){
-        $query = "SELECT no_surat, tgl_surat, golongan, npwp, lokasi,  jabatan, kota_asal, tgl_mulai,tanggal_akhir as tgl_akhir, kota_tujuan, rute, harga_tiket, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima, value, kdakun FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
+        $query = "SELECT no_surat, tgl_surat, golongan, npwp, lokasi,  jabatan, kota_asal, tgl_mulai,tanggal_akhir as tgl_akhir, kota_tujuan, rute, harga_tiket, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima, value, kdakun FROM rabfull where rabview_id='$rabv_id' and concat(nip,npwp,penerima)='$npwp_dan_nip' ";
         // print_r($query);
         $nmr_kuitansi = $this->log_kwitansi($det_giat,"524119");
         $result = $this->query($query);
