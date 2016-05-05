@@ -3402,37 +3402,39 @@ public function daftar_peng_riil($result,$det){
               <tr>
                 <td colspan="20"><br></br></td>
               </tr>
+              <thead style="display: table-header-group;" >
               <tr>
-              <td rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Kode Satker'."\n".'/keg/'."\n".'sub keg</td>
-              <td rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Uraian Satker/'."\n".'Kegiatan/'."\n".'Sub Kegiatan</td>
-              <td colspan="3" style="font-weight:bold; text-align:center; border:1px solid; ">Sasaran</td>
-              <td rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Sumber Dana</td>
-              <td colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Belanja Pegawai</td>
-              <td colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Belanja Barang</td>
-              <td colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Belanja Modal</td>
-              <td colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Belanja Bantuan Sosial</td>
-              <td colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Jumlah</td>
-              <td colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Presentase Daya Serap</td>
-              <td rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Sisa Anggaram</td>
-              <td rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Ket</td>
-            </tr>
+                <th rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Kode Satker'."\n".'/keg/'."\n".'sub keg</th>
+                <th rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Uraian Satker/'."\n".'Kegiatan/'."\n".'Sub Kegiatan</th>
+                <th colspan="3" style="font-weight:bold; text-align:center; border:1px solid; ">Sasaran</th>
+                <th rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Sumber Dana</th>
+                <th colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Belanja Pegawai</th>
+                <th colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Belanja Barang</th>
+                <th colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Belanja Modal</th>
+                <th colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Belanja Bantuan Sosial</th>
+                <th colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Jumlah</th>
+                <th colspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Presentase Daya Serap</th>
+                <th rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Sisa Anggaran</th>
+                <th rowspan="2" style="font-weight:bold; text-align:center; border:1px solid; ">Ket</th>
+              </tr>
             <tr>
-              <td style="font-weight:bold; text-align:center; border:1px solid; ">Satuan</td>
-              <td style="font-weight:bold; text-align:center; border:1px solid; ">Sasaran</td>
-              <td style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</td>
-              <td style="font-weight:bold; text-align:center; border:1px solid; ">Alokasi</td>
-              <td style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</td>
-              <td style="font-weight:bold; text-align:center; border:1px solid; ">Alokasi</td>
-              <td style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</td>
-              <td style="font-weight:bold; text-align:center; border:1px solid;">Alokasi</td>
-              <td style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</td>
-              <td style="font-weight:bold; text-align:center; border:1px solid; ">Alokasi</td>
-              <td style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</td>
-              <td style="font-weight:bold; text-align:center; border:1px solid; ">Alokasi</td>
-              <td style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</td>
-              <td style="font-weight:bold; text-align:center; border:1px solid; ">% Fisik</td>
-              <td style="font-weight:bold; text-align:center; border:1px solid; ">% Keu</td>
-             </tr>';
+              <th style="font-weight:bold; text-align:center; border:1px solid; ">Satuan</th>
+              <th style="font-weight:bold; text-align:center; border:1px solid; ">Sasaran</th>
+              <th style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</th>
+              <th style="font-weight:bold; text-align:center; border:1px solid; ">Alokasi</th>
+              <th style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</th>
+              <th style="font-weight:bold; text-align:center; border:1px solid; ">Alokasi</th>
+              <th style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</th>
+              <th style="font-weight:bold; text-align:center; border:1px solid;">Alokasi</th>
+              <th style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</th>
+              <th style="font-weight:bold; text-align:center; border:1px solid; ">Alokasi</th>
+              <th style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</th>
+              <th style="font-weight:bold; text-align:center; border:1px solid; ">Alokasi</th>
+              <th style="font-weight:bold; text-align:center; border:1px solid; ">Realisasi</th>
+              <th style="font-weight:bold; text-align:center; border:1px solid; ">% Fisik</th>
+              <th style="font-weight:bold; text-align:center; border:1px solid; ">% Keu</th> 
+             </tr>
+             </thead>';
       $kd_dir=""; $kdout=""; $kdsout=""; $kdkmp=""; $kdskmp="";
       $tot_dipa_51 = 0;
       $tot_dipa_52 = 0;
