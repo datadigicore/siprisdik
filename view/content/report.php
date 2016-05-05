@@ -30,6 +30,14 @@
               <form class="form-horizontal" method="POST" action="<?php echo $url_rewrite;?>process/report/Rincian_Permintaan_Pengeluaran">
               <div class="box-body well" style="padding-bottom:0;">
                 <div class="form-group">
+                  <label class="col-sm-3 control-label">Nomor</label>
+                  <div class="col-sm-4">
+                  <input type="text" name="nomor" class="form-control" id="nomor" placeholder="Nomor">
+                  </div>
+                  <div class="col-sm-5">
+                  </div>
+                </div>
+                <div class="form-group">
                   <label class="col-sm-3 control-label">Direktorat</label>
                   <div class="col-sm-4">
                   <select style="margin:5px auto" class="form-control" id="direktorat" name="direktorat" onchange="" >
@@ -96,6 +104,14 @@
             <div class="tab-pane  active" id="tab_6">
               <form class="form-horizontal" method="POST" action="<?php echo $url_rewrite;?>process/report/SPTB">
               <div class="box-body well" style="padding-bottom:0;">
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Nomor</label>
+                  <div class="col-sm-4">
+                  <input type="text" name="nomor" class="form-control" id="nomor" placeholder="Nomor">
+                  </div>
+                  <div class="col-sm-5">
+                  </div>
+                </div>
                 <div class="form-group">
                   <label class="col-sm-3 control-label">Direktorat</label>
                   <div class="col-sm-4">

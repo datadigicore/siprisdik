@@ -238,20 +238,6 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       $ppk = $arr_pb[ppk];
       $nip_ppk = $arr_pb[nip_ppk];
 
-      // echo "Npwp : ".$npwp;
-
-      
-
-      // { PENGUJIAN VARIABEL }
-      // echo ' No Kwitansi : '.$no_kw." No Kw Update : ".$no_kw_up;
-      // $deskripsi = $res[deskripsi];
-      // $tanggal = $res[tanggal];
-      // $lokasi = $res[lokasi];
-      // $uang_muka = $res[uang_muka];
-      // echo "Nama : ".$nama."RABV ID ".$rabv_id." KD PROGRAM : ".$kdgiat." ".$kdprogram." ".$kdoutput." ".$kdsoutput." ".$kdkmpnen;
-      
-      // { PENGUJIAN KONDISI YANG LAMA }
-      // $this->log_kwitansi($det_giat);
       $dinas = 0;
       $lokal = 0;
       $dt_akun = array();
@@ -281,14 +267,11 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       else{
         $kondisi_akun = " rab.rabview_id='$rabv_id' and concat(rab.npwp,rab.nip,rab.penerima) like '$npwp_dan_nip%' order by rab.kdakun, rab.id asc ";
       }
-      // $result = $this->query("SELECT rab.alat_trans, rab.kota_asal, rab.kota_tujuan, rab.lama_hari, rab.tgl_mulai, rab.tgl_akhir, rab.rabview_id, rab.penerima, rab.kdprogram, rab.kdgiat, rab.kdoutput, rab.kdsoutput, rab.kdkmpnen, rab.kdakun, rkkl.NMGIAT, rab.value, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where rab.rabview_id='$rabv_id' and rab.npwp='$npwp' order by rab.kdakun asc ");
-      $sql = "SELECT rab.penerima, rab.nip, rab.jabatan, rab.pns, rab.golongan, rab.kdakun, rkkl.NMGIAT, rab.kota_tujuan, rab.biaya_akom, rab.value, rab.pajak, rab.ppn, rab.pph, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM, rab.tanggal_akhir, rab.lokasi, rab.deskripsi FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where ".$kondisi_akun." ";
+
+      $sql = "SELECT rab.penerima, rab.nip, rab.jabatan, rab.pns, rab.golongan, rab.kdakun, rkkl.NMGIAT, rab.kota_tujuan, rab.biaya_akom, rab.value, rab.uang_harian, rab.pajak, rab.ppn, rab.pph, rkkl.NMOUTPUT, rkkl.NMKMPNEN, rkkl.NMSKMPNEN, rkkl.NMAKUN, rkkl.NMITEM, rab.tanggal_akhir, rab.lokasi, rab.deskripsi FROM rabfull as rab LEFT JOIN rkakl_full as rkkl on rab.kdgiat = rkkl.KDGIAT and rab.kdoutput = rkkl.KDOUTPUT and rab.kdsoutput = rkkl.KDSOUTPUT and rab.kdkmpnen = rkkl.KDKMPNEN and rab.kdskmpnen = rkkl.KDSKMPNEN  and rab.kdakun = rkkl.KDAKUN and rab.noitem = rkkl.NOITEM  where ".$kondisi_akun." ";
       // print($sql);
       $result = $this->query($sql);
-      // while($res=$this->fetch_array($result)){
-      //   if($res[kdakun]=="524119" || $res[kdakun]=="524114"  || $res[kdakun]=="524113" || $res[kdakun]=="524219")   $dinas=1;
-      //   if($res[kdakun]=="524114"  || $res[kdakun]=="524113")   $lokal=1;
-      // }
+
       $pajak;
       $counter="";
       $id_akun;
@@ -339,16 +322,19 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
         }
         else if($res[kdakun]=="524114"){
           $akun_dinas = "524114";
+          // echo $akun_dinas;
           if(substr($res[NMITEM],1,8)!=="ransport"){
             $item_uangsaku = "1";
             $uang_saku_dalam_114 +=$res[value];
           }
-          elseif ($res[uang_harian]>0) {
-            $uang_harian_lokal = $res[uang_harian];
-          }
           else{
             $item_transport = "1";
             $transport_lokal_114 +=$res[value];
+          }
+          if ($res[uang_harian]>0) {
+            $uang_harian_lokal = $res[uang_harian];
+            $dinas = 1;
+            // echo "Ada uang Harian";
           }
         }
         else if($res[kdakun]=="524119"){
@@ -467,9 +453,9 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
 
       
       if($dinas==1){
-        $query = "SELECT no_surat, tgl_surat, golongan, npwp, lokasi,  jabatan, kota_asal, tgl_mulai,tanggal_akhir as tgl_akhir, kota_tujuan, rute, harga_tiket, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima, value, kdakun FROM rabfull where rabview_id='$rabv_id' and concat(nip,npwp,penerima)='$npwp_dan_nip' ";
+        $query = "SELECT no_surat, tgl_surat, golongan, npwp, lokasi,  jabatan, kota_asal, tgl_mulai,tanggal_akhir as tgl_akhir, kota_tujuan, rute, harga_tiket, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima, value, kdakun FROM rabfull where rabview_id='$rabv_id' and concat(nip,npwp,penerima)='$npwp_dan_nip' and kdakun='$akun_dinas' ";
         // print_r($query);
-        $nmr_kuitansi = $this->log_kwitansi($det_giat,"524119");
+        $nmr_kuitansi = $this->log_kwitansi($det_giat,$akun_dinas);
         $result = $this->query($query);
         $array = $this->fetch_array($result, $det_giat);
         // print_r($array);
@@ -479,24 +465,8 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
         echo '<pagebreak />';
         $this->daftar_peng_riil($result, $det_giat);
       }
-        // echo "<br>Item Terpilih : ".$item."<br> Honorarium : ".$honor."<br> Uang saku : ".$uang_saku_dalam."Transport Lokal  : ".$transport_lokal;
+
         
-      // ob_start();
-      // if($lokal==0) {
-      //   $this->Kuitansi_Honor_Uang_Saku($result, $no_kw, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen, $npwp);
-      //   echo '<pagebreak />';
-      // }
-      // else{
-      //   $this->Kuitansi_Honorarium($result, $no_kw, $kdgiat, $kdoutput, $kdsoutput, $kdkmpnen, $kdskmpnen);
-      //   echo '<pagebreak />';
-      // }
-      // if($dinas==1){ 
-      //   $this->Rincian_Biaya_PD($result);
-      //   echo '<pagebreak />';
-      //   $this->SPPD($result);
-      //   echo '<pagebreak />';
-      // }
-      // $this->daftar_peng_riil($result);
       $html = ob_get_contents();
       if($format=="pdf"){
       $this->create_pdf($npwp."_".$no_kw,"A4",$html);
@@ -506,7 +476,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       }
     }
 
-    public function SPTB($data, $direktorat){
+    public function SPTB($data, $direktorat, $nomor){
       $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
       $arr_pb = $this->fetch_array($result_pb);
       $bpp = $arr_pb[bpp];
@@ -532,7 +502,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                 <td style="font-weight:bold; text-decoration: underline; font-size:1.0em;" align="center" colspan="4">SURAT PERNYATAAN TANGGUNG JAWAB BELANJA</td>
               </tr>
               <tr>
-                <td style="font-weight:bold; font-size:1.0em;"  align="center" colspan="4">Nomor : ___/SPTB/401196/XII/2016</td>
+                <td style="font-weight:bold; font-size:1.0em;"  align="center" colspan="4">Nomor : '.$nomor.'/SPTB/401196/XII/2016</td>
               </tr>
               <tr>
                 <td align="center" colspan="4"><br></br><br></br></td>
@@ -1267,7 +1237,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
             $this->create_pdf("SPTB","A4",$html);
     }
     // DAFTAR RINCIAN PERMINTAAN PENGELUARAN
-    public function Rincian_Permintaan_Pengeluaran($data, $direktorat, $bulan, $bulan_kata){
+    public function Rincian_Permintaan_Pengeluaran($data, $direktorat, $bulan, $bulan_kata, $nomor){
       $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
       $arr_pb = $this->fetch_array($result_pb);
       $bpp = $arr_pb[bpp];
@@ -1625,7 +1595,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       // $query = "SELECT kota_asal, golongan, tingkat_jalan,  jabatan, kota_tujuan, alat_trans, lama_hari, tgl_mulai, tgl_akhir, uang_harian, penerima FROM rabfull where rabview_id='$rabv_id' and npwp='$npwp' ";
       // $data = $this->query($query);
       $no_surat; $tgl_surat;
-      $golongan=null;
+      $golongan="";
       $jabatan=null;
       $tingkat_jalan=null;
       $transportasi=null;
@@ -1644,7 +1614,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
 
       $jumlah_record = $this->num_rows($data);
       foreach ($data as $value) {
-      if($value[kdakun]!='524119') continue;
+      if($value[kdakun]!='524119' and $value[kdakun]!='524114') continue;
         if($value[golongan]!=""){ $golongan = $value[golongan]; }
         if($value[jabatan]!=""){ $jabatan = $value[jabatan]; }
         if($value[tingkat_jalan]!=""){ $tingkat_jalan = $value[tingkat_jalan]; }
@@ -1809,10 +1779,10 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
               </tr>
 
               </table>';
-        if($jumlah_record>1){ 
-          echo '<pagebreak />';
-          $jumlah_record-=1;
-        }
+        // if($jumlah_record>1){ 
+        //   echo '<pagebreak />';
+        //   $jumlah_record-=1;
+        // }
       
 
     }
@@ -1835,10 +1805,14 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       $tgl_mulai = null;
       $tgl_akhir = null;
       $jumlah_record = $this->num_rows($result);
+      $nilai_transport_lokal=0;
+      $nilai_uangHarian_lokal=0;
+      $jml_uangHarian_lokal=0;
       // print_r($result);
       $counter=0;
         foreach ($result as $val) {
-          if($val[kdakun]!="524119") continue;
+          $akun_dinas = $val[kdakun];
+          if($val[kdakun]!="524119" and $val[kdakun]!="524114") continue;
           if($val[no_surat]!="") $no_surat = $val[no_surat];
           if($val[tgl_surat]!="") $tgl_surat = $val[tgl_surat];
           if($val[alat_trans]!="") $alat_trans = $val[alat_trans];
@@ -1866,12 +1840,18 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
           $array_transport[$counter]["uang_harian"] = $uang_harian;
           $array_transport[$counter]["jml_hari"] = $jml_hari;
           $array_transport[$counter]["total_uang_harian"] = $jml_uang_harian;
-      
-          
+          if(substr($val[NMITEM],1,8)!=="ransport" and $val[kdakun]=="524114"){
+            $nilai_transport_lokal = $val[value];
+            $nilai_uangHarian_lokal = $val[uang_harian];
+            
+            $total+= $val[value]+(val[uang_harian] * $jml_hari);
+          }      
+           
           $total += $tiket + $airport_tax + $taxi_asal + $taxi_tujuan+ $jml_uang_harian;
           if($total==0) continue;
           $counter++;
           }
+           $jml_uangHarian_lokal = $jml_hari * $nilai_uangHarian_lokal;
           // $total +=$jml_uang_harian;
           require __DIR__ . "/../utility/report/header_rbpd.php";
           echo '<p align="center" style="font-weight:bold; font-size:1.0em">RINCIAN BIAYA PERJALANAN DINAS</p>';
@@ -1908,7 +1888,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
               //       </tr>';
               //       $jml+=$value[value];
               // }
-          
+            if($akun_dinas=="524119"){
               echo '<tr>
                       <td style="border-left:1px solid; border-right:1px solid; text-align:center;">1</td>
                       <td style="border-left:1px solid; border-right:1px solid;">Transport : </td>
@@ -1979,6 +1959,28 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                      } 
 
               }
+          }
+          else{
+            echo '<tr>
+                    <td style="border-left:1px solid; border-right:1px solid; text-align:center;">1</td>
+                    <td style="border-left:1px solid; border-right:1px solid;">Transport Lokal </td>
+                    <td style="border-left:1px solid; border-right:1px solid;">Rp. '.number_format($nilai_transport_lokal,0,",",".").'</td>
+                    <td style="border-left:1px solid; border-right:1px solid;"></td>
+                  </tr>';
+
+            echo '<tr>
+                    <td style="border-left:1px solid; border-right:1px solid; text-align:center;">2</td>
+                    <td style="border-left:1px solid; border-right:1px solid;">Uang Harian </td>
+                    <td style="border-left:1px solid; border-right:1px solid;"></td>
+                    <td style="border-left:1px solid; border-right:1px solid;"></td>
+                  </tr>';
+            echo '<tr>
+                    <td style="border-left:1px solid; border-right:1px solid;"></td>
+                    <td style="border-left:1px solid; border-right:1px solid;">'.$jml_hari." Hari X Rp. ".number_format($nilai_uangHarian_lokal,0,",",".")." ".''.'</td>
+                    <td style="border-left:1px solid; border-right:1px solid;">Rp. '.number_format($jml_uangHarian_lokal,0,",",".").'</td>
+                    <td style="border-left:1px solid; border-right:1px solid;"></td>
+                  </tr>';
+          }
               echo '<tr>
                       <td style="border-left:1px solid; border-right:1px solid;"></td>
                       <td style="border-left:1px solid; border-right:1px solid;">'."Jumlah".'</td>
@@ -2076,10 +2078,10 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                       </tr>  
                       </table>';
 
-            if($jumlah_record>1){
-              echo '<pagebreak />';
-              $jumlah_record-=1;
-            } 
+            // if($jumlah_record>1){
+            //   echo '<pagebreak />';
+            //   $jumlah_record-=1;
+            // } 
           
        // }               
     }
@@ -2463,7 +2465,7 @@ public function daftar_peng_riil($result,$det){
         $no=0;
         $total_rincian=0;
         if($tiket>0){    
-          $no+=1;
+          
           if($airport_tax>0){  
           echo '<tr>
                   <td></td>
@@ -2473,10 +2475,7 @@ public function daftar_peng_riil($result,$det){
                   <td style="border-left:1px solid; border-right:1px solid; text-align:right;">'.number_format($tiket,0,",",".").'</td>
                 </tr>';
           $total_rincian +=$tiket;
-          } 
-        }
-        if($airport_tax>0){    
-          $no+=1; 
+
           echo '<tr>
                   <td></td>
                   <td style="border-left:1px solid; border-right:1px solid;">'.$no.'</td>
@@ -2485,7 +2484,20 @@ public function daftar_peng_riil($result,$det){
                   <td style="border-left:1px solid; border-right:1px solid; text-align:right;">Rp. '.number_format($airport_tax,0,",",".").'</td>
                 </tr>';
           $total_rincian +=$airport_tax; 
-          
+
+          } 
+        }
+        if(substr($val[NMITEM],1,8)!=="ransport"){
+          $no+=1;
+          echo '<tr>
+                  <td></td>
+                  <td style="border-left:1px solid; border-right:1px solid;">'.$no.'</td>
+                  <td style="border-left:1px solid; border-right:1px solid;">Transport Lokal '.$asal.'</td>
+                  <td width="4">Rp. </td>
+                  <td style=" border-right:1px solid; text-align:right;">'.number_format($val[value],0,",",".").'</td>
+                </tr>';
+          $total_rincian +=$val[value]; 
+
         }
         if($taxi_asal>0){
           $no+=1;

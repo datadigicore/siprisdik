@@ -69,6 +69,7 @@ switch ($data[2]) {
     $tanggal_DIPA = $purifier->purify($_POST[tanggal_DIPA]);
     $no_DIPA = $purifier->purify($_POST[no_DIPA]);
     $klasifikasi_MA = $purifier->purify($_POST[klasifikasi_MA]); // Klasifikasi Mata Anggaran
+    $nomor = $_POST['nomor'];
     $data = array(
       "kode_satker"  => $kode_satker,
       "nama_satker"  => $nama_satker,
@@ -76,7 +77,7 @@ switch ($data[2]) {
       "no_DIPA"      => $no_DIPA,
       "klasifikasi_MA"=> $klasifikasi_MA
     );
-    $report->SPTB($kode_akun, $_POST['direktorat']);
+    $report->SPTB($kode_akun, $_POST['direktorat'],$nomor);
   break;
   case 'Rincian_Permintaan_Pengeluaran':
     $kode_mak = $purifier->purify($_POST['kode-mak']);
@@ -84,8 +85,9 @@ switch ($data[2]) {
     $month = explode("-", $_POST['bulan']);
     $bulan = $month[0];
     $bulan_kata = $month[1];
+    $nomor = $_POST['nomor'];
     // print_r($bulan);
-    $report->Rincian_Permintaan_Pengeluaran($kode_mak, $direktorat, $bulan, $bulan_kata);
+    $report->Rincian_Permintaan_Pengeluaran($kode_mak, $direktorat, $bulan, $bulan_kata, $nomor);
     // $report->rincian_kebutuhan_dana($direktorat);
   break;
   case 'Daya_Serap':
