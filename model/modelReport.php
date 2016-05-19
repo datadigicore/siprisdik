@@ -84,14 +84,15 @@
       $kdskmpnen = $res[kdskmpnen];
       $npwp= $res[npwp];
       $nip= $res[nip];
+      $penerima = $res[penerima];
       $condition;
       // echo substr($kode, 0,2);
-      // echo $npwp;
+      // echo "NAMA l ".$penerima;
       if(substr($kode_akun, 0,2)=="51"){
         $condition=" and id='$id' ";
       }
       else{
-        $condition="and rabview_id='$rabv_id' and npwp like '$npwp%' and nip like '$nip%' and kdakun='$kode_akun'";
+        $condition="and rabview_id='$rabv_id' and npwp like '$npwp%' and nip like '$nip%' and penerima like '$penerima%' and kdakun='$kode_akun'";
       }
 
       // $sql_org = "SELECT no_kuitansi from kuitansi 
@@ -109,7 +110,7 @@
                     and kdsoutput = '$kdsoutput'
                     and kdkmpnen = '$kdkmpnen'
                     and kdskmpnen = '$kdskmpnen'
-                    and npwp like '$npwp%' and nip like '$nip%' and kdakun='$kode_akun' ";
+                    and npwp like '$npwp%' and nip like '$nip%' and penerima like '$penerima%' and kdakun='$kode_akun' ";
       $sql_org2 = "SELECT no_kuitansi_update from kuitansi
                   where kdgiat = '$kdgiat' 
                     and kdprogram='$kdprogram' 
@@ -149,7 +150,7 @@
         $no_kw = 501;
         $no_kw_up = 501;
           // Masukkin data baru degan no_kuitansi = 1
-          $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' and kdakun='$kode_akun' ");
+          $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' and penerima like '$penerima%' and kdakun='$kode_akun' ");
           $this->query("INSERT into kuitansi(no_kuitansi,nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi,  
  
 status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_harian, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax,  harga_tiket, lama_hari,  pns,  biaya_akom)
@@ -167,7 +168,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
           $no_kw++;
           $no_kw_up+=1;
           // Masukkin data baru degan no_kuitansi = 1++
-          $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' and kdakun='$kode_akun' ");
+          $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' and penerima like '$penerima%' and kdakun='$kode_akun' ");
           $this->query("INSERT into kuitansi(no_kuitansi, nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi,  
  
  status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_harian, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax,  harga_tiket, lama_hari,  pns,  biaya_akom)
@@ -204,7 +205,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                     and kdsoutput = '$kdsoutput'
                     and kdkmpnen = '$kdkmpnen'
                     and kdskmpnen = '$kdskmpnen'
-                    and npwp like '$npwp%' and nip like '$nip%' and kdakun='$kode_akun'
+                    and npwp like '$npwp%' and nip like '$nip%' and penerima like '$penerima%' and kdakun='$kode_akun'
                     order by no_kuitansi desc limit 1";
       $exec_get_nmr_kw = $this->query($query);
       $array_nmr_kw = $this->fetch_array($exec_get_nmr_kw);
@@ -385,6 +386,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                           'rabview_id'   => $rabv_id,
                           'pajak'   => $pajak,
                           'nip'   => $nip,
+                          'penerima' => $penerima,
                           'npwp'      => $npwp );
       ob_start();
       // print_r($dt_akun);
