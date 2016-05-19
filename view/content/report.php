@@ -136,7 +136,16 @@
                   <div class="col-sm-5">
                   </div>
                 </div>
-                <div class="form-group">
+                 <div class="form-group">
+                  <label class="col-sm-3 control-label">Tanggal</label>
+                  <div class="col-sm-4">
+                   <input class="form-control tanggal" onchange="cektanggal()" type="text" id="tanggal" name="tanggal" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" required />
+                </div>
+                <div class="col-sm-5">
+                </div>
+                </div>
+
+<!--                 <div class="form-group">
                   <label class="col-sm-3 control-label">Bulan</label>
                   <div class="col-sm-4">
                     <select style="margin:5px auto" class="form-control" id="bulan" name="bulan" onchange="" >
@@ -156,7 +165,7 @@
                 </div>
                 <div class="col-sm-5">
                 </div>
-                </div>
+                </div> -->
                 <div class="form-group">
                   <label class="col-sm-3 control-label">Kode Akun</label>
                   <div class="col-sm-4">
@@ -518,7 +527,7 @@
     $(".tanggal").datepicker({ 
       changeMonth: true,
       changeYear: true,
-      format: 'dd/mm/yyyy' 
+      dateFormat: 'dd/mm/yy' 
     });
   }
 

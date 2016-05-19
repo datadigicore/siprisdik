@@ -84,14 +84,15 @@
       $kdskmpnen = $res[kdskmpnen];
       $npwp= $res[npwp];
       $nip= $res[nip];
+      $penerima = $res[penerima];
       $condition;
       // echo substr($kode, 0,2);
-      // echo $npwp;
+      // echo "NAMA l ".$penerima;
       if(substr($kode_akun, 0,2)=="51"){
         $condition=" and id='$id' ";
       }
       else{
-        $condition="and rabview_id='$rabv_id' and npwp like '$npwp%' and nip like '$nip%' and kdakun='$kode_akun'";
+        $condition="and rabview_id='$rabv_id' and npwp like '$npwp%' and nip like '$nip%' and penerima like '$penerima%' and kdakun='$kode_akun'";
       }
 
       // $sql_org = "SELECT no_kuitansi from kuitansi 
@@ -109,7 +110,7 @@
                     and kdsoutput = '$kdsoutput'
                     and kdkmpnen = '$kdkmpnen'
                     and kdskmpnen = '$kdskmpnen'
-                    and npwp like '$npwp%' and nip like '$nip%' and kdakun='$kode_akun' ";
+                    and npwp like '$npwp%' and nip like '$nip%' and penerima like '$penerima%' and kdakun='$kode_akun' ";
       $sql_org2 = "SELECT no_kuitansi_update from kuitansi
                   where kdgiat = '$kdgiat' 
                     and kdprogram='$kdprogram' 
@@ -149,7 +150,7 @@
         $no_kw = 501;
         $no_kw_up = 501;
           // Masukkin data baru degan no_kuitansi = 1
-          $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' and kdakun='$kode_akun' ");
+          $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' and penerima like '$penerima%' and kdakun='$kode_akun' ");
           $this->query("INSERT into kuitansi(no_kuitansi,nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi,  
  
 status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_harian, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax,  harga_tiket, lama_hari,  pns,  biaya_akom)
@@ -167,7 +168,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
           $no_kw++;
           $no_kw_up+=1;
           // Masukkin data baru degan no_kuitansi = 1++
-          $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' and kdakun='$kode_akun' ");
+          $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' and penerima like '$penerima%' and kdakun='$kode_akun' ");
           $this->query("INSERT into kuitansi(no_kuitansi, nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi,  
  
  status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_harian, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax,  harga_tiket, lama_hari,  pns,  biaya_akom)
@@ -204,7 +205,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                     and kdsoutput = '$kdsoutput'
                     and kdkmpnen = '$kdkmpnen'
                     and kdskmpnen = '$kdskmpnen'
-                    and npwp like '$npwp%' and nip like '$nip%' and kdakun='$kode_akun'
+                    and npwp like '$npwp%' and nip like '$nip%' and penerima like '$penerima%' and kdakun='$kode_akun'
                     order by no_kuitansi desc limit 1";
       $exec_get_nmr_kw = $this->query($query);
       $array_nmr_kw = $this->fetch_array($exec_get_nmr_kw);
@@ -385,6 +386,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                           'rabview_id'   => $rabv_id,
                           'pajak'   => $pajak,
                           'nip'   => $nip,
+                          'penerima' => $penerima,
                           'npwp'      => $npwp );
       ob_start();
       // print_r($dt_akun);
@@ -476,7 +478,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       }
     }
 
-    public function SPTB($data, $direktorat, $nomor){
+    public function SPTB($data, $direktorat, $nomor, $tanggal){
       $result_pb = $this->query("SELECT bpp, nip_bpp, ppk, nip_ppk from direktorat where kode='$direktorat' ");
       $arr_pb = $this->fetch_array($result_pb);
       $bpp = $arr_pb[bpp];
@@ -486,15 +488,16 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
 
       $res_sql = $this->query("SELECT * from rkakl_view where status=1 ");
       $rkl_view = $this->fetch_array($res_sql);
-
+      $dates = explode('-', $tanggal);
+      $tanggal_surat = $dates[2]."/".$dates[1]."/".$dates[0];
 
       $sql = "SELECT view.deskripsi as deskripsi, r.NMITEM as nmitem, r.NMGIAT as nmgiat, r.NMAKUN as nmakun, f.kdgiat as kdgiat, f.kdprogram as kdprogram, f.kdoutput as kdoutput, f.kdsoutput as kdsoutput, f.kdkmpnen as kdkmpnen, f.kdskmpnen as kdskmpnen,  f.kdakun as kdakun, f.penerima as penerima, f.tanggal as tanggal,f.thang as thang, f.value  as value, f.pajak as pajak, f.ppn as ppn, f.pph as pph, f.no_kuitansi as no_kuitansi FROM rabfull as f LEFT JOIN rkakl_full as r on f.kdgiat = r.KDGIAT and f.kdoutput = r.KDOUTPUT and f.kdsoutput = r.KDSOUTPUT and f.kdkmpnen = r.KDKMPNEN and f.kdskmpnen = r.KDSKMPNEN  and f.kdakun = r.KDAKUN and f.noitem = r.NOITEM  
                 LEFT JOIN rabview as view on f.rabview_id = view.id
-                where f.kdakun ='$data' and f.kdgiat='$direktorat' and f.status in(2,4,6,7)";
+                where f.kdakun ='$data' and f.kdgiat='$direktorat' and f.status in (2,4,6) and f.tanggal<= '$tanggal' ";
       // print_r($sql);
       $res = $this->query($sql);
       $id = $this->fetch_array($res);
-      ob_start();
+      
       // echo '<p align="center" style="font-weight:bold; text-decoration: underline;">SURAT PERNYATAAN TANGGUNG JAWAB BELANJA</p>';
       // echo '<p align="center" style="font-weight:bold;">Nomor : ___/SPTB/401196/XII/2016</p>';
       echo '<table style="width: 100%; font-size:0.8em;"  border="0">               
@@ -530,7 +533,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                 <td align="left" width="1%">4.</td>
                 <td align="left" width="30%">Klasifikasi Mata Anggaran</td>
                 <td align="left" width="2%">:</td>
-                <td align="left" >: 10.03.'.$id[kdprogram].'.'.$id[kdgiat].'.'.$id[kdoutput].'.'.$id[kdakun].'</td>
+                <td align="left" >10.03.'.$id[kdprogram].'.'.$id[kdgiat].'.'.$id[kdoutput].'.'.$id[kdakun].'</td>
               </tr>
               <tr>
                 <td colspan="4" style="border-top:1px solid;"></td>
@@ -594,8 +597,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
 
                   <td></td>
                   <td  width="10%"></td>
-                  <td>Jakarta, .............................................</td>
-                  </tr>
+                  <td>Jakarta, '.$tanggal_surat.'
 
                   <tr>
                     
@@ -626,14 +628,13 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                     <td>NIP. 19750721 200912 1 001</td>
                   </tr>  
                   </table>';
-      $html = ob_get_contents();
-      $this->create_pdf("SPTB","A4",$html);
+      
     }
 
-    public function SPP($kdgiat, $bulan ,$post, $kdmak, $bulan_kata){
-      $sql = $this->query("SELECT kdakun, sum(case when month(tanggal)='$bulan' then value else 0 end) as jumlah, sum(case when month(tanggal)<'$bulan' then value else 0 end) as jml_lalu FROM `rabfull` where  kdgiat='$kdgiat' and kdakun like '$kdmak%' GROUP BY kdakun order by kdakun asc ");
+    public function SPP($kdgiat, $bulan ,$post, $kdmak, $tanggal_surat){
+      $sql = $this->query("SELECT kdakun, sum(case when month(tanggal)='$bulan' then value else 0 end) as jumlah, sum(case when month(tanggal)<'$bulan' then value else 0 end) as jml_lalu FROM `rabfull` where  kdgiat='$kdgiat' and kdakun like '$kdmak%' and status in(2,4,6) GROUP BY kdakun order by kdakun asc ");
       // $sql2 = $this->query("SELECT substring(kdakun,1,2) as kdakun, sum(case when month(tanggal)='$bulan' then value else 0 end) as jumlah, sum(case when month(tanggal)<'$bulan' then value else 0 end) as jml_lalu FROM `rabfull` where  kdgiat='$kdgiat' GROUP BY kdakun order by kdakun asc ");
-      $sql2 = $this->query("SELECT sum(value) as jumlah FROM `rabfull` where  kdgiat='$kdgiat' and kdakun like '$kdmak%' and month(tanggal)='$bulan' ");
+      $sql2 = $this->query("SELECT sum(value) as jumlah FROM `rabfull` where  kdgiat='$kdgiat' and kdakun like '$kdmak%' and month(tanggal)='$bulan' and status in (2,4,6)");
       $arr_sql2 = $this->fetch_array($sql2);
       $nilai_spp = $arr_sql2['jumlah'];
 
@@ -675,7 +676,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       $nip_bpp = $arr_pb[nip_bpp];
       $ppk = $arr_pb[ppk];
       $nip_ppk = $arr_pb[nip_ppk];
-      ob_start();
+      // ob_start();
       echo '<table cellpadding="1" style="border-collapse:collapse; font-size:0.7em;">
 
              <tr>
@@ -687,7 +688,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
               <td></td>
               <td></td>
               <td width="2%"></td>
-              <td style="font-weight:bold;" colspan="3" align="right">Tanggal : 31 '.$bulan_kata.' 2016  Nomor :</td>
+              <td style="font-weight:bold;" colspan="3" align="right">Tanggal : '.$this->konversi_tanggal($tanggal_surat).'  Nomor :</td>
               <td style="font-weight:bold;"  colspan="5" >'.$post['nomor'].'</td>
              </tr>
              <tr>
@@ -1233,8 +1234,8 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
               <td colspan=3>NIP. '.$nip_ppk.'</td>
              </tr>
              </table>';
-            $html = ob_get_contents();
-            $this->create_pdf("SPTB","A4",$html);
+            // $html = ob_get_contents();
+            // $this->create_pdf("SPTB","A4",$html);
     }
     // DAFTAR RINCIAN PERMINTAAN PENGELUARAN
     public function Rincian_Permintaan_Pengeluaran($data, $direktorat, $bulan, $bulan_kata, $nomor){
@@ -1244,7 +1245,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       $nip_bpp = $arr_pb[nip_bpp];
       $ppk = $arr_pb[ppk];
       $nip_ppk = $arr_pb[nip_ppk];
-      $sql = $this->query("SELECT kdakun, penerima, tanggal, sum(value) as jumlah FROM `rabfull` where kdakun like '$data%' and kdgiat='$direktorat' and month(tanggal)='$bulan' GROUP BY kdakun order by kdakun asc ");
+      $sql = $this->query("SELECT kdakun, penerima, tanggal, sum(value) as jumlah FROM `rabfull` where kdakun like '$data%' and kdgiat='$direktorat' and month(tanggal)='$bulan' and status=4 GROUP BY kdakun order by kdakun asc ");
       $sql_pagu = $this->query("SELECT SUM(JUMLAH) as jumlah from rkakl_full where KDAKUN like '$data%' and KDGIAT='$direktorat' ");
       $data_pagu = $this->fetch_array($sql_pagu);
       $jumlah_pagu = $data_pagu['jumlah'];
@@ -2205,17 +2206,17 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
         
         
         echo '<br></br>
-              <table style="text-align: center; width: 100%; font-size:0.7em;"  >
+              <table style="text-align: left; width: 100%; font-size:0.7em;"  >
           
               <tr>
-                <td style="text-align: center;"> Mengetahui/Setuju dibayar  </td>
-                <td style="text-align: center;">Lunas Dibayar</td>
-                <td style="text-align: center;">'.$lokasi.', '.$this->konversi_tanggal($tanggal_akhir,"").'</td>
+                <td style="text-align: left;"> Mengetahui/Setuju dibayar  </td>
+                <td style="text-align: left;">Lunas Dibayar</td>
+                <td style="text-align: left;">'.$lokasi.', '.$this->konversi_tanggal($tanggal_akhir,"").'</td>
               </tr>              
               <tr>
-                <td style="text-align: center;">Pejabat Pembuat Komitmen,</td>
-                <td style="text-align center;">Tgl '.'...........................'.'</td>
-                <td style="text-align: center;">Penerima</td>
+                <td style="text-align: left;">Pejabat Pembuat Komitmen,</td>
+                <td style="text-align left;">Tgl '.'...........................'.'</td>
+                <td style="text-align: left;">Penerima</td>
               </tr>
               <tr>
                 <td></td>
@@ -2226,14 +2227,14 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                 <td colspan="3"><br></br> <br></br> <br></br></td>
               </tr>
               <tr>
-                <td style="text-align: center;">'.$det['ppk'].'</td>
-                <td style="text-align: center;">'.$det['bpp'].'</td>
-                <td style="text-align: center;">'.'('.$penerima.')'.'</td>
+                <td style="text-align: left;">'.$det['ppk'].'</td>
+                <td style="text-align: left;">'.$det['bpp'].'</td>
+                <td style="text-align: left;">'.'('.$penerima.')'.'</td>
               </tr>              
               <tr>
-                <td style="text-align: center;">NIP'.$det['nip_ppk'].'</td>
-                <td style="text-align: center;">NIP'.$det['nip_bpp'].'</td>
-                <td style="text-align: center;"></td>
+                <td style="text-align: left;">NIP'.$det['nip_ppk'].'</td>
+                <td style="text-align: left;">NIP'.$det['nip_bpp'].'</td>
+                <td style="text-align: left;"></td>
               </tr>
               </table>';
               echo '<p>__ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __</p>';
@@ -3814,7 +3815,7 @@ public function daftar_peng_riil($result,$det){
         
       }
       // echo "akuns : ".$kdakun;
-      $query = " SELECT SUM(case when month(tanggal)<'$tanggal' then value else 0 end) as jml_lalu, SUM(case when month(tanggal)='$tanggal' then value else 0 end) as jumlah FROM rabfull WHERE kdgiat LIKE '%$kdgiat%' ".$q_out.$q_sout.$q_kmp.$q_skmp.$q_akun.' and status in (2,4,6,7)';
+      $query = " SELECT SUM(case when month(tanggal)<'$tanggal' then value else 0 end) as jml_lalu, SUM(case when month(tanggal)='$tanggal' then value else 0 end) as jumlah FROM rabfull WHERE kdgiat LIKE '%$kdgiat%' ".$q_out.$q_sout.$q_kmp.$q_skmp.$q_akun.' and status in (2,4,6) ';
       // print_r($query);
       
       $res = $this->query($query);
@@ -4037,8 +4038,8 @@ public function daftar_peng_riil($result,$det){
               ->setCellValue('L12', 'Pajak')
               ->setCellValue('M12', 'Jumlah');
 
-      $no=0;
-      $row=12; 
+      $no=1;
+      $row=13; 
       $sheet->getStyle("A1")->applyFromArray($horizontal);    
       $sheet->getStyle("A1")->applyFromArray($vertical);
       $sheet->getStyle('A1')->getFont()->setBold(true);
