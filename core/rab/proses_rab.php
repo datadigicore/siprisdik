@@ -204,63 +204,86 @@ switch ($process) {
     $arrKdprogram = $kewenangan['kdprogram'];
     $arrDirektorat = $kewenangan['kdgiat'];
     $arrKdoutput = $kewenangan['kdoutput'];
+    // print_r($kewenangan);die;
+    $kdprog = implode("','", $arrKdprogram);
+    $kddir = implode("','", $arrDirektorat);
+    $kdout = implode("','", $arrKdoutput);
+    if($_SESSION['level']!=0){
+      $whererab = "WHERE kdprogram in ('$kdprog') and kdgiat in ('$kddir') and kdoutput in ('$kdout') ";
+    }
+    #realisasi
+    $query="SELECT `id`, `thang`, `kdprogram`, `kdgiat`, `kdoutput`, `kdsoutput`, `kdkmpnen`, `kdskmpnen`, `deskripsi`, `tanggal`, `tanggal_akhir`, `tempat`, `lokasi`, `value`, `status` 
+            FROM `rabfull` $whererab " ;
+    $result=$db->_fetch_array($query,1);
+
+    $rabview =array();
+    $key_stack=array();
+    if (!is_null($result)) {
+      foreach ($result as $key => $value) {
+        $id=$value['id'];
+        $thang=$value['thang'];
+        $kdprogram=$value['kdprogram'];
+        $kdgiat=$value['kdgiat'];
+        $kdoutput=$value['kdoutput'];
+        $kdsoutput=$value['kdsoutput'];
+        $kdkmpnen=$value['kdkmpnen'];
+        $kdskmpnen=$value['kdskmpnen'];
+        $idtriwulan=$value['idtriwulan'];
+        $jumlah=$value['value'];
+        $status=$value['status'];
+        $key="$kdprogram-$kdgiat-$kdoutput-$kdsoutput-$kdkmpnen-$kdskmpnen";
+        $dataArray["$kdprogram-$kdgiat-$kdoutput-$kdsoutput-$kdkmpnen-$kdskmpnen"]['key']=$key;
+        if ($status == 2 || $status == 4 || $status == 5 || $status == 6) {
+          $dataArray["$kdprogram-$kdgiat-$kdoutput-$kdsoutput-$kdkmpnen-$kdskmpnen"]['realisasi'] += $jumlah;
+        }elseif($status == 0 || $status == 1 || $status == 3){
+          $dataArray["$kdprogram-$kdgiat-$kdoutput-$kdsoutput-$kdkmpnen-$kdskmpnen"]['usulan'] += $jumlah;
+        }
+      }
+    }
 
     $column = array(
       array( 'db' => 'IDRKAKL',      'dt' => 0, 'formatter' => function($d,$row){
         return $row[0];
       }),
-      array( 'db' => 'CONCAT(KDGIAT," - ",NMGIAT) AS NMGIAT',   'field' => 'NMGIAT', 'as' => 'NMGIAT',   'dt' => 1, 'formatter' => function($d,$row){
+      array( 'db' => 'KDGIAT',   'field' => 'KDGIAT', 'as' => 'KDGIAT',   'dt' => 1, 'formatter' => function($d,$row){
         return $row[1];
       }),
-      array( 'db' => 'CONCAT(KDOUTPUT," - ",NMOUTPUT) AS NMOUTPUT',   'field' => 'NMOUTPUT', 'as' => 'NMOUTPUT',   'dt' => 2, 'formatter' => function($d,$row){
+      array( 'db' => 'CONCAT(KDOUTPUT," - ",NMOUTPUT) AS KDOUTPUT',   'field' => 'KDOUTPUT', 'as' => 'KDOUTPUT',   'dt' => 2, 'formatter' => function($d,$row){
         return $row[2];
       }),
-      array( 'db' => 'CONCAT(KDSOUTPUT," - ",NMSOUTPUT) AS NMSOUTPUT',   'field' => 'NMSOUTPUT', 'as' => 'NMSOUTPUT',   'dt' => 3, 'formatter' => function($d,$row){
+      array( 'db' => 'CONCAT(KDSOUTPUT," - ",NMSOUTPUT) AS KDSOUTPUT',   'field' => 'KDSOUTPUT', 'as' => 'KDSOUTPUT',   'dt' => 3, 'formatter' => function($d,$row){
         return $row[3];
       }),
-      array( 'db' => 'CONCAT(KDKMPNEN," - ",NMKMPNEN) AS NMKMPNEN',   'field' => 'NMKMPNEN', 'as' => 'NMKMPNEN',   'dt' => 4, 'formatter' => function($d,$row){
+      array( 'db' => 'CONCAT(KDKMPNEN," - ",NMKMPNEN) AS KDKMPNEN',   'field' => 'KDKMPNEN', 'as' => 'KDKMPNEN',   'dt' => 4, 'formatter' => function($d,$row){
         return $row[4];
       }),
-      array( 'db' => 'CONCAT(KDSKMPNEN," - ",NMSKMPNEN) AS NMSKMPNEN',   'field' => 'NMSKMPNEN', 'as' => 'NMSKMPNEN',   'dt' => 5, 'formatter' => function($d,$row){
+      array( 'db' => 'CONCAT(KDSKMPNEN," - ",NMSKMPNEN) AS KDSKMPNEN',   'field' => 'KDKMPNEN', 'as' => 'KDSKMPNEN',   'dt' => 5, 'formatter' => function($d,$row){
         return $row[5];
       }),
       array( 'db' => 'SUM(JUMLAH) as JUMLAH', 'field' => 'JUMLAH', 'as' => 'JUMLAH',    'dt' => 6, 'formatter' => function($d,$row){
         return number_format($row[6],0,".",".");
       }),
-      array( 'db' => 'SUM(REALISASI) as REALISASI',  'field' => 'REALISASI', 'as' => 'REALISASI',   'dt' => 7, 'formatter' => function($d,$row){
-        if(is_null($row[7]) || $row[7] == 0 || $row[7] == ''){
+      array( 'db' => 'CONCAT(KDPROGRAM,"-",KDGIAT,"-",KDOUTPUT,"-",KDSOUTPUT,"-",KDKMPNEN,"-",KDSKMPNEN) ',  'field' => 'CONCAT(KDPROGRAM,"-",KDGIAT,"-",KDOUTPUT,"-",KDSOUTPUT,"-",KDKMPNEN,"-",KDSKMPNEN)', 'as' => 'CONCAT(KDPROGRAM,"-",KDGIAT,"-",KDOUTPUT,"-",KDSOUTPUT,"-",KDKMPNEN,"-",KDSKMPNEN)',   'dt' => 7, 'formatter' => function($d,$row,$data){
+        if(!isset($data["$row[7]"]['realisasi']) || $data["$row[7]"]['realisasi'] == 0 || $data["$row[7]"]['realisasi'] == ''){
           return 0;
         } else {
-          return number_format(abs($row[7]),0,".",".");
+          return number_format($data["$row[7]"]['realisasi'],0,".",".");
         }
-        
       }),
-      array( 'db' => 'SUM(USULAN) as USULAN',  'field' => 'USULAN', 'as' => 'USULAN',   'dt' => 8, 'formatter' => function($d,$row){
-        if(is_null($row[8]) || $row[8] == 0 || $row[8] == ''){
+      array( 'db' => 'CONCAT(KDPROGRAM,"-",KDGIAT,"-",KDOUTPUT,"-",KDSOUTPUT,"-",KDKMPNEN,"-",KDSKMPNEN) ',  'field' => 'CONCAT(KDPROGRAM,"-",KDGIAT,"-",KDOUTPUT,"-",KDSOUTPUT,"-",KDKMPNEN,"-",KDSKMPNEN)', 'as' => 'CONCAT(KDPROGRAM,"-",KDGIAT,"-",KDOUTPUT,"-",KDSOUTPUT,"-",KDKMPNEN,"-",KDSKMPNEN)',   'dt' => 8, 'formatter' => function($d,$row,$data){
+        if(!isset($data["$row[8]"]['usulan']) || $data["$row[8]"]['usulan'] == 0 || $data["$row[8]"]['usulan'] == ''){
           return 0;
         } else {
-          return number_format($row[8],0,".",".");
+          return number_format($data["$row[8]"]['usulan'],0,".",".");
         }
-        
       }),
-      array( 'db' => 'SUM(JUMLAH-REALISASI) as SISA',   'field' => 'SISA', 'as' => 'SISA',   'dt' => 9, 'formatter' => function($d,$row){
-        return number_format($row[9],0,".",".");
+      array( 'db' => 'CONCAT(KDPROGRAM,"-",KDGIAT,"-",KDOUTPUT,"-",KDSOUTPUT,"-",KDKMPNEN,"-",KDSKMPNEN) as i',   'field' => 'SISA', 'as' => 'SISA',   'dt' => 9, 'formatter' => function($d,$row){
+        return ($row[6]-($row[7]+$row[8]));
       }),
       array( 'db' => 'NMOUTPUT',      'dt' => 10, 'formatter' => function($d,$row, $dataArray){
         $button = '<div class="btn-group"><a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rab/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a><div>';
         return $button;
       }),
-      // array( 'db' => 'NMOUTPUT',      'dt' => 10, 'formatter' => function($d,$row, $dataArray){
-      //   $button = '<div class="btn-group"><a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rab/?kdoutput='.$row[2].'&kdsoutput='.$row[3].'&kdkmpnen='.$row[4].'&kdskmpnen='.$row[5].'&tahun='.$row[14].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a><div>';
-      //   return $button;
-      // }),
-
-      //kode
-      // array( 'db' => 'NMSOUTPUT',      'dt' => 11),
-      // array( 'db' => 'NMKMPNEN',      'dt' => 12),
-      // array( 'db' => 'NMSKMPNEN',      'dt' => 13),
-      // array( 'db' => 'IDRKAKL',      'dt' => 14),
-      //kode
     );
     $where=[];
     if($_SESSION['level']!=0){
@@ -298,7 +321,7 @@ switch ($process) {
         $i++;
       }
     }
-    
+
     // if ($tahun != "") {
     //   $where = 'thang = "'.$tahun.'"';
     // }
@@ -311,7 +334,7 @@ switch ($process) {
     //   }
     // }
 
-    $group='KDOUTPUT, KDSOUTPUT, KDKMPNEN, KDSKMPNEN';
+    $group='KDGIAT, KDOUTPUT, KDSOUTPUT, KDKMPNEN, KDSKMPNEN';
     $datatable->get_table_union($table, $key, $column,$where,$group,$dataArray);
     break;
   case 'getnpwp':
