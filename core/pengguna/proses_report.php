@@ -70,6 +70,10 @@ switch ($data[2]) {
     $no_DIPA = $purifier->purify($_POST[no_DIPA]);
     $klasifikasi_MA = $purifier->purify($_POST[klasifikasi_MA]); // Klasifikasi Mata Anggaran
     $nomor = $_POST['nomor'];
+
+    $date = explode('/',$_POST['tanggal']);
+    $tanggal = $date[2]."-".$date[1]."-".$date[0];
+    // print_r($tanggal);
     $data = array(
       "kode_satker"  => $kode_satker,
       "nama_satker"  => $nama_satker,
@@ -77,7 +81,10 @@ switch ($data[2]) {
       "no_DIPA"      => $no_DIPA,
       "klasifikasi_MA"=> $klasifikasi_MA
     );
-    $report->SPTB($kode_akun, $_POST['direktorat'],$nomor);
+    ob_start();
+    $report->SPTB($kode_akun, $_POST['direktorat'],$nomor, $tanggal);
+    $html = ob_get_contents();
+    $report->create_pdf("SPTB","A4",$html);
   break;
   case 'Rincian_Permintaan_Pengeluaran':
     $kode_mak = $purifier->purify($_POST['kode-mak']);
