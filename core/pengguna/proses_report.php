@@ -81,7 +81,17 @@ switch ($data[2]) {
       "no_DIPA"      => $no_DIPA,
       "klasifikasi_MA"=> $klasifikasi_MA
     );
+
+  $kode_mak = $purifier->purify($_POST['kode-mak']);
+    $direktorat = $purifier->purify($_POST['direktorat']);
+    $month = explode("-", $_POST['bulan']);
+    $bulan = $month[0];
+    $bulan_kata = $month[1];
+    
+
     ob_start();
+    $report->SPP($_POST['direktorat'],$date[1], $_POST,$kode_akun, $_POST['tanggal']);
+    echo "<pagebreak />";
     $report->SPTB($kode_akun, $_POST['direktorat'],$nomor, $tanggal);
     $html = ob_get_contents();
     $report->create_pdf("SPTB","A4",$html);

@@ -629,7 +629,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       
     }
 
-    public function SPP($kdgiat, $bulan ,$post, $kdmak, $bulan_kata){
+    public function SPP($kdgiat, $bulan ,$post, $kdmak, $tanggal_surat){
       $sql = $this->query("SELECT kdakun, sum(case when month(tanggal)='$bulan' then value else 0 end) as jumlah, sum(case when month(tanggal)<'$bulan' then value else 0 end) as jml_lalu FROM `rabfull` where  kdgiat='$kdgiat' and kdakun like '$kdmak%' and status in(2,4,6) GROUP BY kdakun order by kdakun asc ");
       // $sql2 = $this->query("SELECT substring(kdakun,1,2) as kdakun, sum(case when month(tanggal)='$bulan' then value else 0 end) as jumlah, sum(case when month(tanggal)<'$bulan' then value else 0 end) as jml_lalu FROM `rabfull` where  kdgiat='$kdgiat' GROUP BY kdakun order by kdakun asc ");
       $sql2 = $this->query("SELECT sum(value) as jumlah FROM `rabfull` where  kdgiat='$kdgiat' and kdakun like '$kdmak%' and month(tanggal)='$bulan' and status in (2,4,6)");
@@ -674,7 +674,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       $nip_bpp = $arr_pb[nip_bpp];
       $ppk = $arr_pb[ppk];
       $nip_ppk = $arr_pb[nip_ppk];
-      ob_start();
+      // ob_start();
       echo '<table cellpadding="1" style="border-collapse:collapse; font-size:0.7em;">
 
              <tr>
@@ -686,7 +686,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
               <td></td>
               <td></td>
               <td width="2%"></td>
-              <td style="font-weight:bold;" colspan="3" align="right">Tanggal : 31 '.$bulan_kata.' 2016  Nomor :</td>
+              <td style="font-weight:bold;" colspan="3" align="right">Tanggal : '.$this->konversi_tanggal($tanggal_surat).'  Nomor :</td>
               <td style="font-weight:bold;"  colspan="5" >'.$post['nomor'].'</td>
              </tr>
              <tr>
@@ -1232,8 +1232,8 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
               <td colspan=3>NIP. '.$nip_ppk.'</td>
              </tr>
              </table>';
-            $html = ob_get_contents();
-            $this->create_pdf("SPTB","A4",$html);
+            // $html = ob_get_contents();
+            // $this->create_pdf("SPTB","A4",$html);
     }
     // DAFTAR RINCIAN PERMINTAAN PENGELUARAN
     public function Rincian_Permintaan_Pengeluaran($data, $direktorat, $bulan, $bulan_kata, $nomor){
