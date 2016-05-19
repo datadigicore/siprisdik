@@ -139,27 +139,27 @@ switch ($process) {
 		  }),
 		  array('db' => 'status', 'dt'=>8, 'formatter' => function($d,$row, $dataArray){
 		  	
-		  	if ($_SESSION['level'] == 0) {
-		  		if ($row[7] != "" && $d == 4 ) {
-		  			$button =  '<div class="text-center btn-group-vertical">'.
-		  						'<a style="margin:0 2px;" id="btn-batal" href="#batal" class="btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-close"></i> Batal</a>'.
-		  						'</div>';
-		  		}elseif ($row[7] != "" && $d == 6 ) {
-		  			$button =  '<div class="text-center btn-group-vertical">'.
-		  						'<a style="margin:0 2px;" id="btn-batal-adn" href="#batal" class="btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-close"></i> Batal</a>'.
-		  						'</div>';
-		  		}else{
-		  			$button = '<center>-</center>';
-		  		}
-		  	}elseif ($_SESSION['level'] == 2) {
-		  		if ($row[7] != "" && ($d == 2 || $d == 8)) {
-		  			$button =  '<div class="text-center btn-group-vertical">'.
-		  						'<a style="margin:0 2px;" id="btn-sah" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
-		  						'</div>';
-		  		}elseif ($row[7] != "" && ($d == 5 || $d == 9)) {
-		  			$button =  '<div class="text-center btn-group-vertical">'.
-		  						'<a style="margin:0 2px;" id="btn-sah-adn" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
-		  						'</div>';
+		  	if ($_SESSION['level'] == 2) {
+		  		if ($row[7] != "") {
+		  			if ($d == 4 ) {
+			  			$button =  '<div class="text-center btn-group-vertical">'.
+			  						'<a style="margin:0 2px;" id="btn-batal" href="#batal" class="btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-close"></i> Batal</a>'.
+			  						'</div>';
+			  		}elseif ($d == 6 ) {
+			  			$button =  '<div class="text-center btn-group-vertical">'.
+			  						'<a style="margin:0 2px;" id="btn-batal-adn" href="#batal" class="btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-close"></i> Batal</a>'.
+			  						'</div>';
+			  		}elseif ($d == 2) {
+			  			$button =  '<div class="text-center btn-group-vertical">'.
+			  						'<a style="margin:0 2px;" id="btn-sah" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
+			  						'</div>';
+			  		}elseif ($d == 5) {
+			  			$button =  '<div class="text-center btn-group-vertical">'.
+			  						'<a style="margin:0 2px;" id="btn-sah-adn" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i> Sahkan</a>'.
+			  						'</div>';
+			  		}else{
+			  			$button = '<center>-</center>';
+			  		}
 		  		}else{
 		  			$button = '<center>-</center>';
 		  		}

@@ -440,7 +440,7 @@ var table;
             {"targets" : 10},
           ],
         <?php } ?>
-        "order": [[ 0, "asc" ]]
+        "order": [[ 0, "asc" ],[ 1, "asc" ],[ 2, "asc" ],[ 3, "asc" ],[ 4, "asc" ],[ 5, "asc" ]],
     });
   }
 

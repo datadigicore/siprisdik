@@ -9,26 +9,39 @@ switch ($process) {
     $dataArray['direktorat'] = $direk; 
     $dataArray['idrkakl'] = $_POST['idrkakl'];
     $tahun = $_POST['tahun'];
-    $direktorat = $_POST['direktorat'];
-    // print_r($_POST);die;
+    $kdprogram = $_POST['kdprogram'];
+    $kdgiat = $_POST['direktorat'];
     $kdoutput = $_POST['kdoutput'];
     $kdsoutput = $_POST['kdsoutput'];
     $kdkmpnen = $_POST['kdkmpnen'];
     $kdskmpnen = $_POST['kdskmpnen'];
+
+    #realisasi
+    $query="SELECT `id`,`rabview_id`, `value`, `status`
+            FROM `rabfull` WHERE kdprogram = '$kdprogram' AND kdgiat = '$kdgiat' and kdoutput = '$kdoutput' and kdsoutput = '$kdsoutput' and kdkmpnen = '$kdkmpnen' and kdskmpnen = '$kdskmpnen' " ;
+    $result=$db->_fetch_array($query,1);
+
+    $rabview =array();
+    $key_stack=array();
+    $jumlah = 0;
+    if (!is_null($result)) {
+      foreach ($result as $a => $b) {
+        $id=$b['id'];
+        $rabview_id=$b['rabview_id'];
+        $jumlah=$b['value'];
+        $status=$b['status'];
+        if ($status == 2 || $status == 4 || $status == 5 || $status == 6 || $status == 0 || $status == 1 || $status == 3) {
+          $dataArray['jumlah']["$rabview_id"] += $jumlah;
+        }else{
+          $dataArray['jumlah']["$rabview_id"] += 0;
+        }
+      }
+    }
+
     $column = array(
       array( 'db' => 'id',      'dt' => 0 ),
-      array( 'db' => 'kdprogram',  'dt' => 1, 'formatter' => function($d,$row, $dataArray){ 
-          return '<table><tr><td>Program</td><td> :&nbsp;</td><td>'.$d.'</td></tr>'.
-                 '<tr><td>Output</td><td> :&nbsp;</td><td>'.$row[9].'</td></tr>'.
-                 '<tr><td>Sub Output</td><td> :&nbsp;</td><td>'.$row[10].'</td></tr>'.
-                 '<tr><td>Komponen</td><td> :&nbsp;</td><td>'.$row[11].'</td></tr>'.
-                 '<tr><td>Sub Komponen</td><td> :&nbsp;</td><td>'.$row[12].'</td></tr></table>';
-      }),
-      array( 'db' => 'kdgiat',  'dt' => 2, 'formatter' => function($d, $row, $dataArray){
-        return $dataArray['direktorat'][$d];
-      }),
-      array( 'db' => 'deskripsi',  'dt' => 3),
-      array( 'db' => 'tanggal',  'dt' => 4, 'formatter' => function( $d, $row ) {
+      array( 'db' => 'deskripsi',  'dt' => 1),
+      array( 'db' => 'tanggal',  'dt' => 2, 'formatter' => function( $d, $row ) {
         $arrbulan = array(
                 '01'=>"Januari",
                 '02'=>"Februari",
@@ -45,17 +58,17 @@ switch ($process) {
         );
         $pecahtgl1 = explode("-", $d);
         $tglawal = $pecahtgl1[2].' '.$arrbulan[$pecahtgl1[1]].' '.$pecahtgl1[0];
-        $pecahtgl2 = explode("-", $row[15]);
+        $pecahtgl2 = explode("-", $row[9]);
         $tglakhir = $pecahtgl2[2].' '.$arrbulan[$pecahtgl2[1]].' '.$pecahtgl2[0];
         return $tglawal.' - '.$tglakhir;
       }),
-      array( 'db' => 'lokasi',  'dt' => 5, 'formatter' => function($d,$row){
-        return $row[14].', '.$d;
+      array( 'db' => 'lokasi',  'dt' => 3, 'formatter' => function($d,$row){
+        return $row[8].', '.$d;
       }),
-      array( 'db' => '(SELECT SUM(rabfull.value) from rabfull where rabfull.rabview_id = rabview.id group by rabfull.rabview_id) AS sumRABFULL','field' => 'sumRABFULL', 'as' => 'sumRABFULL','dt' => 6, 'formatter' => function($d,$row){
-        return 'Rp '.number_format($d,2,',','.');
+      array( 'db' => 'id', 'dt' => 4, 'formatter' => function($d,$row,$data){
+        return 'Rp '.number_format($data['jumlah'][$row[4]],2,',','.');
       }),
-      array( 'db' => 'status', 'dt' => 7, 'formatter' => function($d,$row){ 
+      array( 'db' => 'status', 'dt' => 5, 'formatter' => function($d,$row){ 
         if($d==0){
           return '<i>Belum Diajukan</i>';
         }
@@ -81,75 +94,70 @@ switch ($process) {
           return '<i>Penutupan Anggaran</i>';
         }
       }),
-      array( 'db' => 'status',  'dt' => 8, 'formatter' => function($d,$row, $dataArray){ 
-        $button = '<div class="btn-group">';
+      array( 'db' => 'status',  'dt' => 6, 'formatter' => function($d,$row, $dataArray){ 
+        $button = '<div class="btn-group col-sm-12"> <b>';
         if($d==0 && $_SESSION['level'] != 0){
-          $button .= '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a>';
+          $button .= '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="col-sm-12 btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a>';
           if ($_SESSION['level'] == 2) {
-            $button .= '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="btn btn-flat btn-success btn-sm col-sm" data-toggle="modal"><i class="fa fa-check"></i>&nbsp; Ajukan</a>';
+            $button .= '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="col-sm-12 btn btn-flat btn-success btn-sm col-sm" data-toggle="modal"><i class="fa fa-check"></i>&nbsp; Ajukan</a>';
           }
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rab/edit/'.$row[0].'/'.$dataArray['idrkakl'].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i>&nbsp; Edit</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-del" href="#delete" class="btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-close"></i>&nbsp; Delete</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Pengajuan UMK</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Rincian Keb. Dana</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rab/edit/'.$row[0].'/'.$dataArray['idrkakl'].'" class="col-sm-12 btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i>&nbsp; Edit</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-del" href="#delete" class="col-sm-12 btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-close"></i>&nbsp; Delete</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="col-sm-12 btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Pengajuan UMK</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'" class="col-sm-12 btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Rincian Keb. Dana</a>';
         }
         elseif ($d==0 && $_SESSION['level'] == 0) {
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; Rincian</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Pengajuan UMK</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Rincian Keb. Dana</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="col-sm-12 btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; Rincian</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="col-sm-12 btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Pengajuan UMK</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'" class="col-sm-12 btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Rincian Keb. Dana</a>';
         }
         elseif($d==1  && $_SESSION['level'] != 0){
-          $button .= '<a style="margin:0 2px;" class="btn btn-flat btn-primary btn-sm" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" ><i class="fa fa-list"></i>&nbsp; Rincian</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Pengajuan UMK</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Rincian Keb. Dana</a>';        
+          $button .= '<a style="margin:0 2px;" class="col-sm-12 btn btn-flat btn-primary btn-sm" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" ><i class="fa fa-list"></i>&nbsp; Rincian</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="col-sm-12 btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Pengajuan UMK</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'" class="col-sm-12 btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Rincian Keb. Dana</a>';        
         }
 
         elseif ($d==1  && $_SESSION['level'] == 0) {
-          $button .= '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; Rincian</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-sah" href="#sahkan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i>&nbsp; Sahkan</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-rev" href="#revisi" class="btn btn-flat btn-warning btn-sm" data-toggle="modal"><i class="fa fa-edit"></i>&nbsp; Revisi</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Pengajuan UMK</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Rincian Keb. Dana</a>';
+          $button .= '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="col-sm-12 btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; Rincian</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-sah" href="#sahkan" class="col-sm-12 btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i>&nbsp; Sahkan</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-rev" href="#revisi" class="col-sm-12 btn btn-flat btn-warning btn-sm" data-toggle="modal"><i class="fa fa-edit"></i>&nbsp; Revisi</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="col-sm-12 btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Pengajuan UMK</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'" class="col-sm-12 btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Rincian Keb. Dana</a>';
         }
         elseif($d==3 && $_SESSION['level'] != 0){
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="col-sm-12 btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a>';
           if ($_SESSION['level'] == 2) {
-            $button .= '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i>&nbsp; Ajukan Revisi</a>';
+            $button .= '<a style="margin:0 2px;" id="btn-aju" href="#ajuan" class="col-sm-12 btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i>&nbsp; Ajukan Revisi</a>';
           }
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rab/edit/'.$row[0].'/'.$dataArray['idrkakl'].'" class="btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i>&nbsp; Edit</a>';
-          if ($row[13] != "") {
-            $button .= '<a style="margin:0 2px;" id="btn-pesan" href="#pesanrevisi" class="btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-envelope"></i>&nbsp; Pesan </a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rab/edit/'.$row[0].'/'.$dataArray['idrkakl'].'" class="col-sm-12 btn btn-flat btn-warning btn-sm" ><i class="fa fa-pencil"></i>&nbsp; Edit</a>';
+          if ($row[7] != "") {
+            $button .= '<a style="margin:0 2px;" id="btn-pesan" href="#pesanrevisi" class="col-sm-12 btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-envelope"></i>&nbsp; Pesan </a>';
           }
         }
         elseif ($d==3 && $_SESSION['level'] == 0) {
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; Rincian</a>';
-          if ($row[13] != "") {
-            $button .= '<a style="margin:0 2px;" id="btn-pesan" href="#pesanrevisi" class="btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-envelope"></i>&nbsp; Pesan </a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="col-sm-12 col-sm-12 btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; Rincian</a>';
+          if ($row[7] != "") {
+            $button .= '<a style="margin:0 2px;" id="btn-pesan" href="#pesanrevisi" class="col-sm-12 btn btn-flat btn-danger btn-sm" data-toggle="modal"><i class="fa fa-envelope"></i>&nbsp; Pesan </a>';
           }
         }
         elseif($d==6 && $_SESSION['level'] != 0){
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="col-sm-12 btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a>';
         }
         elseif ($d==6 && $_SESSION['level'] == 0) {
-          $button .= '<a style="margin:0 2px;" id="btn-aju" href="#tutup" class="btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i>&nbsp; Penutupan Anggaran</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; Rincian</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-aju" href="#tutup" class="col-sm-12 btn btn-flat btn-success btn-sm" data-toggle="modal"><i class="fa fa-check"></i>&nbsp; Penutupan Anggaran</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="col-sm-12 btn btn-flat btn-primary btn-sm"><i class="fa fa-list"></i>&nbsp; Rincian</a>';
         }
         else{
-          $button .= '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Pengajuan UMK</a>';
-          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'/1'.'" class="btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Daftar PJ UMK</a>';
+          $button .= '<a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rabdetail/'.$row[0].'" class="col-sm-12 btn btn-flat btn-primary btn-sm " ><i class="fa fa-list"></i>&nbsp; Rincian</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/pengajuan_UMK/'.$row[0].'" class="col-sm-12 btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Pengajuan UMK</a>';
+          $button .= '<a style="margin:0 2px;" id="btn-trans" href="'.$dataArray['url_rewrite'].'process/report/rincian_kebutuhan_dana/'.$row[0].'/1'.'" class="col-sm-12 btn btn-flat btn-default btn-sm" ><i class="fa fa-file-text-o"></i>&nbsp; Cetak Daftar PJ UMK</a>';
         }
-        
-        $button .= '</div>';
+        $button .= '</b></div>';
         return $button;
       }),
-      array( 'db' => 'kdoutput',  'dt' => 9),
-      array( 'db' => 'kdsoutput',  'dt' => 10),
-      array( 'db' => 'kdkmpnen',  'dt' => 11),
-      array( 'db' => 'kdskmpnen',  'dt' => 12),
-      array( 'db' => 'pesan',  'dt' => 13),
-      array( 'db' => 'tempat',  'dt' => 14),
-      array( 'db' => 'tanggal_akhir',  'dt' => 15),
+      array( 'db' => 'pesan',  'dt' => 7),
+      array( 'db' => 'tempat',  'dt' => 8),
+      array( 'db' => 'tanggal_akhir',  'dt' => 9),
     );
     $where="";
     if ($tahun != "") {
@@ -204,14 +212,14 @@ switch ($process) {
     $arrKdprogram = $kewenangan['kdprogram'];
     $arrDirektorat = $kewenangan['kdgiat'];
     $arrKdoutput = $kewenangan['kdoutput'];
-    // print_r($kewenangan);die;
+    
+    #realisasi
     $kdprog = implode("','", $arrKdprogram);
     $kddir = implode("','", $arrDirektorat);
     $kdout = implode("','", $arrKdoutput);
     if($_SESSION['level']!=0){
       $whererab = "WHERE kdprogram in ('$kdprog') and kdgiat in ('$kddir') and kdoutput in ('$kdout') ";
     }
-    #realisasi
     $query="SELECT `id`, `thang`, `kdprogram`, `kdgiat`, `kdoutput`, `kdsoutput`, `kdkmpnen`, `kdskmpnen`, `deskripsi`, `tanggal`, `tanggal_akhir`, `tempat`, `lokasi`, `value`, `status` 
             FROM `rabfull` $whererab " ;
     $result=$db->_fetch_array($query,1);
@@ -245,7 +253,7 @@ switch ($process) {
       array( 'db' => 'IDRKAKL',      'dt' => 0, 'formatter' => function($d,$row){
         return $row[0];
       }),
-      array( 'db' => 'KDGIAT',   'field' => 'KDGIAT', 'as' => 'KDGIAT',   'dt' => 1, 'formatter' => function($d,$row){
+      array( 'db' => 'CONCAT(KDGIAT," - ",NMGIAT) AS KDGIAT',   'field' => 'KDGIAT', 'as' => 'KDGIAT',   'dt' => 1, 'formatter' => function($d,$row){
         return $row[1];
       }),
       array( 'db' => 'CONCAT(KDOUTPUT," - ",NMOUTPUT) AS KDOUTPUT',   'field' => 'KDOUTPUT', 'as' => 'KDOUTPUT',   'dt' => 2, 'formatter' => function($d,$row){
@@ -261,24 +269,24 @@ switch ($process) {
         return $row[5];
       }),
       array( 'db' => 'SUM(JUMLAH) as JUMLAH', 'field' => 'JUMLAH', 'as' => 'JUMLAH',    'dt' => 6, 'formatter' => function($d,$row){
-        return number_format($row[6],0,".",".");
+        return number_format($row[6],2,".",".");
       }),
       array( 'db' => 'CONCAT(KDPROGRAM,"-",KDGIAT,"-",KDOUTPUT,"-",KDSOUTPUT,"-",KDKMPNEN,"-",KDSKMPNEN) ',  'field' => 'CONCAT(KDPROGRAM,"-",KDGIAT,"-",KDOUTPUT,"-",KDSOUTPUT,"-",KDKMPNEN,"-",KDSKMPNEN)', 'as' => 'CONCAT(KDPROGRAM,"-",KDGIAT,"-",KDOUTPUT,"-",KDSOUTPUT,"-",KDKMPNEN,"-",KDSKMPNEN)',   'dt' => 7, 'formatter' => function($d,$row,$data){
         if(!isset($data["$row[7]"]['realisasi']) || $data["$row[7]"]['realisasi'] == 0 || $data["$row[7]"]['realisasi'] == ''){
           return 0;
         } else {
-          return number_format($data["$row[7]"]['realisasi'],0,".",".");
+          return number_format($data["$row[7]"]['realisasi'],2,".",".");
         }
       }),
       array( 'db' => 'CONCAT(KDPROGRAM,"-",KDGIAT,"-",KDOUTPUT,"-",KDSOUTPUT,"-",KDKMPNEN,"-",KDSKMPNEN) ',  'field' => 'CONCAT(KDPROGRAM,"-",KDGIAT,"-",KDOUTPUT,"-",KDSOUTPUT,"-",KDKMPNEN,"-",KDSKMPNEN)', 'as' => 'CONCAT(KDPROGRAM,"-",KDGIAT,"-",KDOUTPUT,"-",KDSOUTPUT,"-",KDKMPNEN,"-",KDSKMPNEN)',   'dt' => 8, 'formatter' => function($d,$row,$data){
         if(!isset($data["$row[8]"]['usulan']) || $data["$row[8]"]['usulan'] == 0 || $data["$row[8]"]['usulan'] == ''){
           return 0;
         } else {
-          return number_format($data["$row[8]"]['usulan'],0,".",".");
+          return number_format($data["$row[8]"]['usulan'],2,".",".");
         }
       }),
       array( 'db' => 'CONCAT(KDPROGRAM,"-",KDGIAT,"-",KDOUTPUT,"-",KDSOUTPUT,"-",KDKMPNEN,"-",KDSKMPNEN) as i',   'field' => 'SISA', 'as' => 'SISA',   'dt' => 9, 'formatter' => function($d,$row){
-        return ($row[6]-($row[7]+$row[8]));
+        return number_format(($row[6]-($row[7]+$row[8])),2,",",".");
       }),
       array( 'db' => 'NMOUTPUT',      'dt' => 10, 'formatter' => function($d,$row, $dataArray){
         $button = '<div class="btn-group"><a style="margin:0 2px;" href="'.$dataArray['url_rewrite'].'content/rab/'.$row[0].'" class="btn btn-flat btn-primary btn-sm" ><i class="fa fa-list"></i>&nbsp; Rincian</a><div>';
