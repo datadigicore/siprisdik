@@ -97,15 +97,15 @@
             </select>
           </div>
           <div class="form-group">
-                <select class="form-control" name="kdgrup" data-toggle="tooltip" data-placement="top" title="Group" id="group-select" required>
-                  <option value="" disabled selected>-- Pilih Grup --</option>
-                  <?php foreach ($group as $key => $value){ ?>
-                  <option value="<?php echo $key ?>"><?php echo $key." - ".$value ?></option>
-                     
+            <select class="form-control" name="kdgrup" data-toggle="tooltip" data-placement="top" title="Group" id="group-select" required>
+              <option value="" disabled selected>-- Pilih Grup --</option>
+              <?php foreach ($group as $key => $value){ ?>
+              <option value="<?php echo $key ?>"><?php echo $key." - ".$value ?></option>
+                 
 
-                   <?php } ?>
-                </select>
-              </div>
+               <?php } ?>
+            </select>
+          </div>
           <!-- <div class="form-group">
             <select class="form-control" id="kdprogram" name="kdprogram" required>
               <option value="" disabled selected>-- Pilih Kode Program --</option>
@@ -477,7 +477,7 @@
             kdprogram.push(splitted[0]);
           }
           if($.inArray(splitted[1],kdgiat)==-1){
-            kdgiat.push(splitted[1]);
+            kdgiat.push(splitted[0]+'-'+splitted[1]);
           }
           if($.inArray(splitted[2],kdoutput)==-1){
             kdoutput.push(splitted[2]);
@@ -546,7 +546,7 @@
           var ckbx = '';
           for (var i = 0; i < obj.KDGIAT.length; i++) {
             // $ckbx = $ckbx + '<option value="'+obj.KDGIAT[i]+'"">'+obj.KDGIAT[i]+' - '+obj.NMGIAT[i]+'</option>';
-            if($.inArray(obj.KDGIAT[i],direktorat)==-1){
+            if($.inArray(obj.KDPROGRAM[i]+'-'+obj.KDGIAT[i],direktorat)==-1){
               ckbx+=' <div class=" col-md-4 ">'+
                       '<div class="checkbox">'+
                         '<label><input type="checkbox" class="kdgiat" name="direktorat[]" value="'+obj.KDPROGRAM[i]+'-'+obj.KDGIAT[i]+'"> '+obj.KDGIAT[i]+' - '+obj.NMGIAT[i]+'</label>'+
@@ -600,7 +600,7 @@
 
     if(direktorat.length==0){
       $.each($('input:checkbox.kdgiat:checked'), function() {
-        values2.push($(this).val().split("-")[1]);
+        values2.push($(this).val());
         // or you can do something to the actual checked checkboxes by working directly with  'this'
         // something like $(this).hide() (only something useful, probably) :P
       });

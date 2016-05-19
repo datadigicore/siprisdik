@@ -170,7 +170,7 @@
             // $ckbx = $ckbx + '<option value="'+obj.KDGIAT[i]+'" id="kdgiat-div">'+obj.KDGIAT[i]+' - '+obj.NMGIAT[i]+'</option>';
             ckbx+=' <div class=" col-md-4 ">'+
                       '<div class="checkbox">'+
-                        '<label><input type="checkbox" class="kdgiat" name="direktorat[]" value="'+obj.KDPROGRAM[i]+'-'+obj.KDGIAT[i]+'"> '+obj.KDGIAT[i]+' - '+obj.NMGIAT[i]+'</label>'+
+                        '<label><input type="checkbox" class="kdgiat" name="direktorat[]" value="'+obj.KDPROGRAM[i]+'-'+obj.KDGIAT[i]+'"> '+obj.KDGIAT[i]+' - '+obj.NMGIAT[i]+' ('+obj.KDPROGRAM[i]+')</label>'+
                       '</div>'+
                     '</div>';
           };
@@ -197,8 +197,8 @@
       // something like $(this).hide() (only something useful, probably) :P
     });
     $.each($('input:checkbox.kdgiat:checked'), function() {
-      var str = $(this).val().split("-");
-      values2.push(str[1]);
+      var str = $(this).val();
+      values2.push(str);
       // or you can do something to the actual checked checkboxes by working directly with  'this'
       // something like $(this).hide() (only something useful, probably) :P
     });
@@ -217,7 +217,7 @@
           for (var i = 0; i < obj.KDOUTPUT.length; i++) {
             ckbx= ckbx+' <div class=" col-md-4 ">'+
                       '<div class="checkbox">'+
-                        '<label><input type="checkbox" id="kdoutput" class="kdoutput" name="kdoutput[]" value="'+obj.KDPROGRAM[i]+'-'+obj.KDGIAT[i]+'-'+obj.KDOUTPUT[i]+'"> '+obj.KDOUTPUT[i]+' - '+obj.NMOUTPUT[i]+' ('+obj.KDGIAT[i]+')</label>'+
+                        '<label><input type="checkbox" id="kdoutput" class="kdoutput" name="kdoutput[]" value="'+obj.KDPROGRAM[i]+'-'+obj.KDGIAT[i]+'-'+obj.KDOUTPUT[i]+'"> '+obj.KDOUTPUT[i]+' - '+obj.NMOUTPUT[i]+' ('+obj.KDPROGRAM[i]+'-'+obj.KDGIAT[i]+')</label>'+
                       '</div>'+
                     '</div>';
           };

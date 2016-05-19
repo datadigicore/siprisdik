@@ -115,24 +115,83 @@
       return $data;
     }
     public function getout2($prog, $kdgiat) {
-      $WHERE = "";
-      foreach ($kdProg as $value) {
-        if($where == ""){
-          $where = "WHERE KDPROGRAM = '$value' ";
-        } else {
-          $where = $where."OR KDPROGRAM = '$value' ";
-        }
-      }
-      foreach ($kdgiat as $value) {
-        if($where == ""){
-          $where = "WHERE KDGIAT = '$value' ";
-        } else {
-          $where = $where."OR KDGIAT = '$value' ";
-        }
-      }
+      // $WHERE = "";
+      // foreach ($kdProg as $value) {
+      //   if($where == ""){
+      //     $where = "WHERE KDPROGRAM = '$value' ";
+      //   } else {
+      //     $where = $where."OR KDPROGRAM = '$value' ";
+      //   }
+      // }
+      // foreach ($kdgiat as $value) {
+      //   if($where == ""){
+      //     $where = "WHERE KDGIAT = '$value' ";
+      //   } else {
+      //     $where = $where."OR KDGIAT = '$value' ";
+      //   }
+      // }
 
-      $query  = "SELECT KDPROGRAM, KDGIAT ,KDOUTPUT, NMOUTPUT FROM rkakl_full as r 
-                $where group by r.KDGIAT, r.KDOUTPUT";
+      // $query  = "SELECT KDPROGRAM, KDGIAT ,KDOUTPUT, NMOUTPUT FROM rkakl_full as r 
+      //           $where group by r.KDGIAT, r.KDOUTPUT";
+      // $result = $this->query($query);
+      // $i=0;
+      // while($fetch  = $this->fetch_object($result)) {
+      //   $data['KDPROGRAM'][$i] = $fetch->KDPROGRAM;
+      //   $data['KDGIAT'][$i] = $fetch->KDGIAT;
+      //   $data['KDOUTPUT'][$i] = $fetch->KDOUTPUT;
+      //   $data['NMOUTPUT'][$i] = $fetch->NMOUTPUT;
+      //   $i++;
+      // }
+      // return $data;
+
+      
+      $where = "";
+      $arrItem  = array();
+      // foreach ($prog as $value) {
+      //   if($where == ""){
+      //     $where = "WHERE KDPROGRAM = '$value' ";
+      //   } else {
+      //     $where = $where."AND KDPROGRAM = '$value' ";
+      //   }
+      // }
+      // print_r($kdgiat);exit;
+      foreach ($kdgiat as $value) {
+        $item = explode("-",$value);
+        $key = $item[0];
+        $val = $item[1];
+        $arrItem[$key][]=$val;
+        // array_push($arrItem[$key][$val], "set");
+      }
+      // print_r($arrItem);exit;
+      $str="";
+      foreach ($arrItem as $key => $arrValue) {
+        $where = "WHERE KDPROGRAM = '$key' ";
+        $nestedWhere="";
+        $where.="AND ( ";
+
+        foreach ($arrValue as $key => $value) {
+          if($nestedWhere==""){
+
+            $nestedWhere .="KDGIAT = '$value' ";
+          } else {
+            $nestedWhere .="OR KDGIAT = '$value' ";
+          }
+          
+        }
+        $where.="$nestedWhere )";
+        
+        if($str==""){
+          $str= "SELECT KDPROGRAM, KDGIAT ,KDOUTPUT, NMOUTPUT FROM rkakl_full as r 
+                $where ";
+        } else {
+          $str.= "UNION SELECT KDPROGRAM, KDGIAT ,KDOUTPUT, NMOUTPUT FROM rkakl_full as r 
+                $where ";
+        }
+        
+      }
+      
+      $query  = "$str group by KDGIAT, KDOUTPUT";
+      // echo $query ;exit;
       $result = $this->query($query);
       $i=0;
       while($fetch  = $this->fetch_object($result)) {
