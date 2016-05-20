@@ -4090,8 +4090,10 @@ public function daftar_peng_riil($result,$det){
         $lama_hari = 1;
         if($identitas != $val[identitas]){
           $identitas = $val[identitas];
-          $row++;
-          $no++;
+          if($this->num_rows($res)>1){
+            $row++;
+            $no++;
+          }
           $tot_honor_perorang = 0;   
           $tot_uangHarian_perorang = 0;   
           $tot_uangSaku_perorang = 0;   
