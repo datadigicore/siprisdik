@@ -455,7 +455,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
 
       
       if($dinas==1){
-        $query = "SELECT no_surat, tgl_surat, golongan, npwp, lokasi,  jabatan, kota_asal, tgl_mulai,tanggal_akhir as tgl_akhir, kota_tujuan, rute, harga_tiket, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, penerima, value, kdakun FROM rabfull where rabview_id='$rabv_id' and concat(nip,npwp,penerima)='$npwp_dan_nip' and kdakun='$akun_dinas' ";
+        $query = "SELECT no_surat, tgl_surat, golongan, npwp, lokasi,  jabatan, kota_asal, tgl_mulai,tanggal_akhir as tgl_akhir, kota_tujuan, rute, harga_tiket, alat_trans, taxi_asal, taxi_tujuan, lama_hari, uang_harian, uang_representatif, biaya_akom, penerima, value, kdakun FROM rabfull where rabview_id='$rabv_id' and concat(nip,npwp,penerima)='$npwp_dan_nip' and kdakun='$akun_dinas' order by id asc";
         // print_r($query);
         $nmr_kuitansi = $this->log_kwitansi($det_giat,$akun_dinas);
         $result = $this->query($query);
@@ -1800,12 +1800,22 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       $array_transport = array();
       $array_taxi = array();
       $array_uang_harian = array();
-      $asal=""; $tujuan=""; $alat_trans; $tiket=0; $airport_tax=0;
-      $taxi_asal=0; $taxi_tujuan=0; $jml_hari=1; $uang_harian=0; $lokasi;
+      $asal         ="";
+      $tujuan       =""; 
+      $alat_trans; 
+      $tiket        =0; 
+      $airport_tax  =0;
+      $taxi_asal    =0; 
+      $taxi_tujuan  =0; 
+      $jml_hari     =1; 
+      $uang_harian  =0; 
+      $uang_representatif =0; 
+      $akomodasi =0; 
+      $lokasi;
       $jml_uang_harian;
-      $tgl_mulai = null;
-      $tgl_akhir = null;
-      $jumlah_record = $this->num_rows($result);
+      $tgl_mulai      = null;
+      $tgl_akhir      = null;
+      $jumlah_record  = $this->num_rows($result);
       $nilai_transport_lokal=0;
       $nilai_uangHarian_lokal=0;
       $jml_uangHarian_lokal=0;
@@ -1813,33 +1823,43 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
       $counter=0;
         foreach ($result as $val) {
           $akun_dinas = $val[kdakun];
-          if($val[kdakun]!="524119" and $val[kdakun]!="524114") continue;
-          if($val[no_surat]!="") $no_surat = $val[no_surat];
-          if($val[tgl_surat]!="") $tgl_surat = $val[tgl_surat];
-          if($val[alat_trans]!="") $alat_trans = $val[alat_trans];
-          if($val[kota_asal]!="") $asal = $val[kota_asal];
-          if($val[kota_tujuan]!="") $tujuan = $val[kota_tujuan];
-          if($val[harga_tiket]>0) $tiket = $val[harga_tiket];
-          if($val[airport_tax]>0) $airport_tax = $val[airport_tax];
-          if($val[taxi_asal]>0)   $taxi_asal = $val[taxi_asal];
-          if($val[taxi_tujuan]>0) $taxi_tujuan = $val[taxi_tujuan];
-          if($val[lama_hari]>0)   $jml_hari = $val[lama_hari];
-          if($val[tgl_mulai]!="") $tgl_mulai = $this->konversi_tanggal($val[tgl_mulai],"");
-          if($val[tgl_akhir]!="") $tgl_akhir = $this->konversi_tanggal($val[tgl_akhir],"");
-          if($val[uang_harian]>0) $uang_harian = $val[uang_harian];   
-          if($val[lokasi]!="") $lokasi = $val[lokasi];   
+          if($val[kdakun]!="524119"         and $val[kdakun]!="524114") continue;
+          if($val[no_surat]!="")            $no_surat           = $val[no_surat];
+          if($val[tgl_surat]!="")           $tgl_surat          = $val[tgl_surat];
+          if($val[alat_trans]=="Darat"){
+            $alat_trans = "Kendaraan Darat";
+          }
+          elseif($val[alat_trans]=="Udara"){
+            $alat_trans = "Pesawat";
+          }
+          else{
+            $alat_trans = "";
+          }
+          if($val[kota_asal]!="")           $asal               = $val[kota_asal];
+          if($val[kota_tujuan]!="")         $tujuan             = $val[kota_tujuan];
+          if($val[harga_tiket]>0)           $tiket              = $val[harga_tiket];
+          if($val[airport_tax]>0)           $airport_tax        = $val[airport_tax];
+          if($val[taxi_asal]>0)             $taxi_asal          = $val[taxi_asal];
+          if($val[taxi_tujuan]>0)           $taxi_tujuan        = $val[taxi_tujuan];
+          if($val[lama_hari]>0)             $jml_hari           = $val[lama_hari];
+          if($val[tgl_mulai]!="0000-00-00")           $tgl_mulai          = $this->konversi_tanggal($val[tgl_mulai],"");
+          if($val[tgl_akhir]!="")           $tgl_akhir          = $this->konversi_tanggal($val[tgl_akhir],"");
+          if($val[uang_harian]>0)           $uang_harian        = $val[uang_harian];   
+          if($val[uang_representatif]>0)    $uang_representatif = $val[uang_representatif];   
+          if($val[biaya_akom]>0)            $akomodasi          = $val[biaya_akom];   
+          if($val[lokasi]!="")              $lokasi             = $val[lokasi];   
           $penerima=$val[penerima];
           // array_push($array_transport, $asal." - ".$tujuan, $tiket);
           $jml_uang_harian = $jml_hari * $uang_harian;
-          $array_transport[$counter]["rute_asal"] = $asal;
-          $array_transport[$counter]["rute_tujuan"] = $tujuan;
-          $array_transport[$counter]["alat_trans"] = $alat_trans;
-          $array_transport[$counter]["harga"] = $tiket;
-          $array_airporttax[$counter]["tax"] = $airport_tax;
-          $array_transport[$counter]["taxi_asal"] = $taxi_asal;
-          $array_transport[$counter]["taxi_tujuan"] = $taxi_tujuan;
-          $array_transport[$counter]["uang_harian"] = $uang_harian;
-          $array_transport[$counter]["jml_hari"] = $jml_hari;
+          $array_transport[$counter]["rute_asal"]   = $val[kota_asal];
+          $array_transport[$counter]["rute_tujuan"] = $val[kota_tujuan];
+          $array_transport[$counter]["alat_trans"]  = $alat_trans;
+          $array_transport[$counter]["harga"]       = $tiket;
+          $array_airporttax[$counter]["tax"]        = $airport_tax;
+          $array_transport[$counter]["taxi_asal"]   = $val[taxi_asal];
+          $array_transport[$counter]["taxi_tujuan"] = $val[taxi_tujuan];
+          $array_transport[$counter]["uang_harian"] = $val[uang_harian];
+          $array_transport[$counter]["jml_hari"]    = $jml_hari;
           $array_transport[$counter]["total_uang_harian"] = $jml_uang_harian;
           if(substr($val[NMITEM],1,8)!=="ransport" and $val[kdakun]=="524114"){
             $nilai_transport_lokal = $val[value];
@@ -1848,7 +1868,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
             $total+= $val[value]+(val[uang_harian] * $jml_hari);
           }      
            
-          $total += $tiket + $airport_tax + $taxi_asal + $taxi_tujuan+ $jml_uang_harian;
+          $total += $tiket + $airport_tax + $val[taxi_asal] + $val[taxi_tujuan] + $jml_uang_harian+$uang_representatif+$akomodasi;
           if($total==0) continue;
           $counter++;
           }
@@ -1902,7 +1922,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                         <td style="border-left:1px solid; border-right:1px solid;"></td>
                         <td style="border-left:1px solid; border-right:1px solid;">'.$value["rute_asal"]." - ".$value["rute_tujuan"].'</td>
                         <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($value["harga"],0,",",".").'</td>
-                        <td style="border-left:1px solid; border-right:1px solid;">Kendaraan'." ".$value["alat_trans"].'</td>
+                        <td style="border-left:1px solid; border-right:1px solid;">'.$value["alat_trans"].'</td>
                       </tr>';
               }
               if($airport_tax>0){
@@ -1960,6 +1980,22 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                      } 
 
               }
+              if($uang_representatif>0){
+                   echo '<tr>
+                      <td style="border-left:1px solid; border-right:1px solid; text-align:center;">2</td>
+                      <td style="border-left:1px solid; border-right:1px solid;">'."Uang Representatif :".'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($uang_representatif,0,",",".").'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                        </tr>';
+              }
+              if($akomodasi>0){
+                    echo '<tr>
+                      <td style="border-left:1px solid; border-right:1px solid; text-align:center;">3</td>
+                      <td style="border-left:1px solid; border-right:1px solid;">'."Penginapan / Akomodasi :".'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;">Rp.'.number_format($akomodasi,0,",",".").'</td>
+                      <td style="border-left:1px solid; border-right:1px solid;"></td>
+                        </tr>';
+              }
           }
           else{
             echo '<tr>
@@ -2011,7 +2047,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
 
                 <td></td>
                 <td width="23%"></td>
-                <td>'.$lokasi.','.$this->konversi_tanggal($tgl_mulai).'</td>
+                <td>'.$lokasi.','.$tgl_mulai.'</td>
               </tr>
 
               <tr>
