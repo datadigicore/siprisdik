@@ -1851,8 +1851,9 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
           $penerima=$val[penerima];
           // array_push($array_transport, $asal." - ".$tujuan, $tiket);
           $jml_uang_harian = $jml_hari * $uang_harian;
-          $array_transport[$counter]["rute_asal"]   = $val[kota_asal];
-          $array_transport[$counter]["rute_tujuan"] = $val[kota_tujuan];
+          $rute = explode("-", $val[rute]);
+          $array_transport[$counter]["rute_asal"]   = $rute[0];
+          $array_transport[$counter]["rute_tujuan"] = $rute[1];
           $array_transport[$counter]["alat_trans"]  = $alat_trans;
           $array_transport[$counter]["harga"]       = $tiket;
           $array_airporttax[$counter]["tax"]        = $airport_tax;
@@ -1942,6 +1943,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
                       <td style="border-left:1px solid; border-right:1px solid;"></td>
                       <td style="border-left:1px solid; border-right:1px solid;"></td>
                     </tr>';
+              
               foreach ($array_transport as $key => $value) {
 
                 echo '<tr>
