@@ -144,6 +144,7 @@
 
       $no_kw_up = $arr_kw[no_kuitansi_update];
 
+      $daftar_kolom = "no_kuitansi,nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_harian, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax,  harga_tiket, lama_hari,  pns,  biaya_akom, uang_representatif, tgl_surat";
 
       if ($this->num_rows($hsl_nomor)==0) { 
         // echo "Belum Ada Nomor Kwitansi";
@@ -151,14 +152,7 @@
         $no_kw_up = 501;
           // Masukkin data baru degan no_kuitansi = 1
           $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' and penerima like '$penerima%' and kdakun='$kode_akun' ");
-          $this->query("INSERT into kuitansi(no_kuitansi,nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi,  
- 
-status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_harian, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax,  harga_tiket, lama_hari,  pns,  biaya_akom)
-                        select
-                          no_kuitansi,nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi,  
- 
-status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_harian, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax,  harga_tiket, lama_hari,  pns,  biaya_akom
-                        from rabfull where no_kuitansi='$no_kw' ".$condition." ");
+          $this->query("INSERT into kuitansi(".$daftar_kolom.") SELECT ".$daftar_kolom." from rabfull where no_kuitansi='$no_kw' ".$condition." ");
           $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw' and no_kuitansi_update is null ".$condition." ");
           return $no_kw;
       }
@@ -169,14 +163,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
           $no_kw_up+=1;
           // Masukkin data baru degan no_kuitansi = 1++
           $this->query("UPDATE rabfull set no_kuitansi='$no_kw' where rabview_id='$rabv_id' and npwp='$npwp' and penerima like '$penerima%' and kdakun='$kode_akun' ");
-          $this->query("INSERT into kuitansi(no_kuitansi, nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi,  
- 
- status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_harian, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax,  harga_tiket, lama_hari,  pns,  biaya_akom)
-                        select
-                          no_kuitansi, nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi,  
- 
- status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_harian, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax,  harga_tiket, lama_hari,  pns,  biaya_akom
-                        from rabfull where no_kuitansi='$no_kw' ".$condition." ");
+          $this->query("INSERT into kuitansi(".$daftar_kolom.") select ".$daftar_kolom." from rabfull where no_kuitansi='$no_kw' ".$condition." ");
           $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw' and no_kuitansi_update is null ".$condition." ");
           return $no_kw;
         }
@@ -188,10 +175,7 @@ status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_har
 
 
           // echo "Sudah ada orang dengan kwitansi nomor yg lama";
-          $this->query("INSERT into kuitansi(no_kuitansi, nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,     uang_harian, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax,  harga_tiket, lama_hari,  pns,  biaya_akom)
-                        select
-                          no_kuitansi, nip, rabview_id, thang, kdprogram, kdgiat, kdoutput, kdsoutput, kdkmpnen, kdskmpnen, kdakun, noitem, deskripsi, tanggal, lokasi, status, jenis, penerima, npwp, ppn, pph, golongan, jabatan, value,      uang_harian, tgl_mulai, tgl_akhir, tingkat_jalan, alat_trans, kota_asal, kota_tujuan, taxi_asal, taxi_tujuan, airport_tax,  harga_tiket, lama_hari,  pns,  biaya_akom
-                        from rabfull where no_kuitansi='$no_kw_org' ".$condition." ");
+          $this->query("INSERT into kuitansi(".$daftar_kolom.") select ".$daftar_kolom." from rabfull where no_kuitansi='$no_kw_org' ".$condition." ");
           $this->query("UPDATE kuitansi set no_kuitansi_update='$no_kw_up' where no_kuitansi='$no_kw_org' and no_kuitansi_update is null  ".$condition." ");
 
         }
